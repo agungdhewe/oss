@@ -1,0 +1,11 @@
+{
+	"title" : "Register",
+	"allowanonymous" : true,
+	"allowedgroups" : ["public"],
+	"apis" : {
+		"testapi" :  { "allowanonymous": true },
+		"doregister" : { "allowanonymous": true },
+		"confirm" : { "allowanonymous": true },
+		"pass" : { "allowanonymous": true }
+	}	
+}

@@ -1,0 +1,84 @@
+.dashcontainer {
+	display: flex;
+	justify-content: space-between;
+	min-height: 100vh;
+	padding-bottom: 100px;
+}
+
+
+.dashcontainer .title {
+	text-align: center;
+	font-weight: bold;
+}
+
+.dashcontainer .widget {
+	margin-top: 40px;
+}
+
+.dashcol-01 {
+	flex-grow: 1;
+	width:33vw
+	/* background-color: firebrick; */
+}
+
+.dashcol-02 {
+	flex-grow: 2;
+	width:66vw
+	/* background-color: gold; */
+}
+
+
+
+
+.widgettable {
+	width: 100%;
+}
+
+.widgettable .head {
+	background-color: rgb(48, 13, 49);
+	padding: 4px 8px 4px 8px;
+	color: rgb(216, 216, 216);
+	
+}
+
+.widgettable .row {
+	border-bottom: 1px dashed rgb(48, 13, 49);;
+}
+
+@media only screen and (max-width: 768px) {
+	.dashcontainer {
+		flex-direction: column;
+		justify-content: flex-start;
+	}
+
+	.dashcol-01 {
+		width:100vw;
+		flex-grow: 0;
+
+	}
+
+
+	.dashcol-02 {
+		width:100vw;
+		flex-grow: 0;
+	}	
+}
+
+
+.chartcontainer {
+	margin: 5px;
+}
+
+.chart {
+	display: block;
+	width: 100%;
+	/* border: 1px solid #000; */
+
+}
+
+.loadmessage {
+	margin: 5px;
+	font-weight: bold;
+}
+
+/* CSS Dashboard Specific */

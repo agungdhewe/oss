@@ -1,0 +1,32 @@
+<?php $pnlname=$this->BeginForm('pnl_form_1', 'Registrasi') ?>
+
+
+	<div style="margin-bottom: 30px">
+		Apabila sudah terdaftar, silakan ke halaman <a href="index.php/module/crm/eclient/login">login</a>
+	</div>
+
+	<div class="form_cell">
+		<label for="<?=$pnlname?>-partner_name" class="form_label_col">Perusahaan</label>
+		<input id="<?=$pnlname?>-partner_name" class="form_input_col" type="text" title="Masukkan nama perusahaan" style="text-transform: uppercase;" invalidMessage="masukkan nama perusahaan dengan benar" required/>
+	</div>
+	
+	
+	<div class="form_cell">
+		<label for="<?=$pnlname?>-partner_email" class="form_label_col">Email</label>
+		<input id="<?=$pnlname?>-partner_email" 
+		      class="form_input_col" type="email" 
+			  title="email perusahaan akan digunakan untuk login utama" 
+			  style="text-transform: lowercase;" 
+			  invalidMessage="email harus diisi dengan benar" required/>
+	</div>
+
+
+	<div class="form_cell" style="margin-top: 30px">
+		<div class="form_label_col">&nbsp;</div>
+		<div class="form_input_col">
+			<button type="submit" id="<?=$pnlname?>-btn_next">Next</button>
+		</div>	
+	</div>
+	
+
+<?php $this->EndForm() ?>

@@ -1,0 +1,57 @@
+.col_head {
+	font-size: 9px;
+	font-weight: bold;
+}
+
+.col_head.val {
+	text-align: right;
+}
+
+.col_content {
+	font-size: 10px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+
+.col_content.val {
+	text-align: right;
+}
+
+
+.col_content.val.total {
+	font-weight: bold;
+}
+
+
+.col_group_head {
+	font-weight: bold;
+	padding-top: 30px;
+	padding-bottom: 10px;
+}
+
+
+.col_group_foot {
+	font-size: 11px;
+	font-weight: bold;
+}
+
+#obj_reporttable {
+	border-spacing: 0px;	
+}
+
+.rptrow {
+	border-top: 1px dotted #ccc;
+}
+
+.rptrowsubtotal {
+	border-top: 1px solid #999;
+	font-weight: bold;
+}
+
+
+.rptrowfoot {
+	font-weight: bold;
+	font-size: 11px;
+	padding-top: 0px;
+}

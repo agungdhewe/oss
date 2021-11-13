@@ -1,0 +1,39 @@
+<div id="pnl_list">
+	<div class="fgta-page-title">Konsolidasi PPH</div>
+
+	<div  style="display: flex; justify-content: space-between">
+		<div style="display: flex">
+			<a id="pnl_list-btn_download" href="javascript:void(0)" class="easyui-linkbutton" style="margin-right: 50px;">Download Template</a>
+			<label style="margin-top: 10px; margin-right: 5px;">Bulan</label>
+			<input id="pnl_edit-cbo_month" class="easyui-combo" style="width: 150px;" mapping="hrgrd_id" display="hrgrd_name" data-options="editable:false, valueField:'id', textField:'text'" >
+			<div id="pnl_list-obj_pastebox" class="pastebox" contenteditable placeholder="Paste template disini..." oninput="if(this.innerHTML.trim()==='<br>')this.innerHTML=''" ></div>
+		</div>
+
+		<a id="pnl_list-btn_kalkulasi" href="javascript:void(0)" class="easyui-linkbutton">Kalkulasi</a>
+	</div>
+
+	<div style="margin-top: 10px">
+		<table id="pnl_list-tbl_list" paging="true" cellspacing="0" width="100%">
+			<thead>
+				<tr>
+					<th mapping="no">no</th>
+					<th mapping="nik">nik</th>
+					<th mapping="nama">nama</th>
+					<th mapping="bruto">bruto</th>
+					<th mapping="pph">pph</th>
+				</tr>
+				<tr style="background-color: #cccccc; height: 30px">
+					<td class="fgtable-head" style="width: 100px; border-bottom: 1px solid #000000">No</td>
+					<td class="fgtable-head" style="width: 100px; border-bottom: 1px solid #000000">NIK</td>
+					<td class="fgtable-head" style="width: 100px; border-bottom: 1px solid #000000">Nama</td>
+					<td class="fgtable-head" style="width: 100px; border-bottom: 1px solid #000000">Bruto</td>
+					<td class="fgtable-head" style="width: 100px; border-bottom: 1px solid #000000">PPH</td>
+				</tr>
+			</thead>
+		</table>
+	</div>
+
+
+
+
+</div>

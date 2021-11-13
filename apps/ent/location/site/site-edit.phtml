@@ -1,0 +1,151 @@
+<div id="pnl_edit">
+	<div class="fgta-page-title" style="display: flex; align-items: center ">
+		<div>Edit Site</div>
+		<a id="pnl_edit-btn_edit" href="javascript:void(0)" class="easyui-linkbutton" style="margin-left:10px;" data-options="plain:true,iconCls:'fgta-icon-edit'">edit</a>
+	</div>
+
+
+	<form id="pnl_edit-form">
+
+		<div class="form_row">
+			<div class="form_label_col">ID</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-txt_site_id" class="easyui-textbox" mapping="site_id" uppercase="true" maxlength="30" style="width: 400px" data-options="multiline: false , required: true, invalidMessage: 'ID harus diisi' ">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Site Name</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-txt_site_name" class="easyui-textbox" mapping="site_name" uppercase="true" maxlength="90" style="width: 400px" data-options="multiline: false , required: true, invalidMessage: 'Nama Site harus diisi' ">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Address</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-txt_site_address" class="easyui-textbox" mapping="site_address" uppercase="true" maxlength="250" style="width: 400px" data-options="multiline: false , required: true, invalidMessage: 'Alamat harus diisi' ">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Phone</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-txt_site_phone" class="easyui-textbox" mapping="site_phone" uppercase="true" maxlength="30" style="width: 400px" data-options="multiline: false  ">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Email</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-txt_site_email" class="easyui-textbox" mapping="site_email" uppercase="true" maxlength="150" style="width: 400px" data-options="multiline: false , validType: 'email', invalidMessage: 'Email harus salah' ">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Wide (sqm)</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-txt_site_sqmwide" class="easyui-numberbox" mapping="site_sqmwide" style="width: 400px" data-options="precision: 2, decimalSeparator:'.', groupSeparator:','  ">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col"></div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-chk_site_isdisabled" class="easyui-checkbox c1" mapping="site_isdisabled" data-options="label: 'Disabled', labelPosition: 'after', disabled:false, checked: false ">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Geo Location</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-txt_site_geoloc" class="easyui-textbox" mapping="site_geoloc"  maxlength="30" style="width: 400px" data-options="multiline: false  ">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Date</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-dt_site_opendate" class="easyui-datebox" style="width: 400px" mapping="site_opendate" data-options="editable:false ">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Site Model</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-cbo_sitemodel_id" class="easyui-combo" style="width: 400px" mapping="sitemodel_id" display="sitemodel_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Sitemodel harus diisi', prompt: '-- PILIH --'">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Site Group</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-cbo_sitegroup_id" class="easyui-combo" style="width: 400px" mapping="sitegroup_id" display="sitegroup_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Zone harus diisi', prompt: '-- PILIH --'">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Land</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-cbo_land_id" class="easyui-combo" style="width: 400px" mapping="land_id" display="land_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Land harus diisi', prompt: '-- PILIH --'">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Dept</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-cbo_dept_id" class="easyui-combo" style="width: 400px" mapping="dept_id" display="dept_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Departemen harus diisi', prompt: '-- PILIH --'">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Config</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-cbo_config_id" class="easyui-combo" style="width: 400px" mapping="config_id" display="config_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Config harus diisi', prompt: '-- PILIH --'">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Tax</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-cbo_taxtype_id" class="easyui-combo" style="width: 400px" mapping="taxtype_id" display="taxtype_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Taxtype harus diisi', prompt: '-- PILIH --'">
+			</div>
+		</div>
+
+	</form>
+
+
+	<div class="form_row" style="margin-top: 30px">
+		<div class="form_label_col"></div>
+		<div class="form_input_col" style="border: 0px solid black">
+			<a id="pnl_edit-btn_save" class="easyui-linkbutton c1" style="width">Simpan</a>
+		</div>
+	</div>	
+
+
+
+		<div id="pnl_edit-detil" class="form_row" style="margin-top: 30px">
+			<div class="form_label_col"></div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<div class="fgtable-head" style="height: 25px; padding: 5px 0px 0px 5px">Detil Informations</div>
+				<div class="fgtable-head-drow" style="height: 25px; padding: 5px 0px 0px 5px" onclick="$ui.getPages().ITEMS['pnl_edit'].handler.detil_open('pnl_editunitgrid')">Unit</div>
+				<div class="fgtable-head-drow" style="height: 25px; padding: 5px 0px 0px 5px" onclick="$ui.getPages().ITEMS['pnl_edit'].handler.detil_open('pnl_editmappinggrid')">Mapping</div>
+				<div class="fgtable-head-drow" style="height: 25px; padding: 5px 0px 0px 5px" onclick="$ui.getPages().ITEMS['pnl_edit'].handler.detil_open('pnl_editeventgrid')">Event</div>
+
+			</div>		
+		</div>		
+		
+		
+
+
+	<div style="margin-top: 30px; margin-left:-5px; margin-right: -5px; background-color: #cccccc; height: 40px; display: flex; justify-content: space-between; padding: 5px 2px 2px 2px ">
+		<div>
+			<!-- letakkan tombol yang lin disini -->
+		</div>
+		<div>
+			<a id="pnl_edit-btn_delete" class="easyui-linkbutton c5" style="width">Hapus</a>
+		</div>
+	</div>
+
+</div>
+

@@ -1,0 +1,20 @@
+.form_disable .form_input_col > span {
+	background: honeydew;
+	opacity: 1;
+}
+.form_disable .form_input_col > span > input {
+	background: honeydew;
+	color: navy;
+	font-weight: bold;
+	font-size:  1.2em;
+}
+
+.corpbudget_row_iscommit{
+	background: #acd9f7;
+	color: #0e1220;
+}
+
+.corpbudget_row_isapproved  {
+	background: #95d4a8;
+	color: #0e2014;
+}

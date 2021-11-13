@@ -1,0 +1,45 @@
+<div id="pnl_editdetilgrid">
+	<div class="fgta-page-title">Daftar Detil</div>
+	<div id="pnl_editdetilgrid-title" style="margin-top: 0px; margin-bottom: 30px; font-weight: bold; font-size: 1.2em">XXXXXXX</div>
+
+	<div style="display: flex">
+		<a href="javascript:void(0)" id="pnl_editdetilgrid-btn_summary" class="easyui-linkbutton c8" style="margin-right: 5px">Summary From Dept</a>
+		<a href="javascript:void(0)" id="pnl_editdetilgrid-btn_download" class="easyui-linkbutton c8">Download</a>
+		<div id="pnl_editdetilgrid-paste-box" class="pastebox" contenteditable placeholder="Paste template disini..." oninput="if(this.innerHTML.trim()==='<br>')this.innerHTML=''" ></div>
+	</div>
+
+	<div style="margin-top: 10px; margin-bottom: 15px">
+		<table id="pnl_editdetilgrid-tbl_list" paging="true" cellspacing="0" width="100%" class="deftable">
+			<thead>
+				<tr>
+					<th type="check">chk</th>					
+					<th mapping="accbudget_id">accbudget_id</th>
+					<th mapping="accbudget_name">accbudget_name</th>
+					<th mapping="corpbudgetdet_total" style="text-align: right" formatter="row_format_number">corpbudgetdet_total</th>
+				</tr>
+				<tr style="background-color: #cccccc; height: 30px">
+					<td class="fgtable-head" style="width: 30px; border-bottom: 1px solid #000000; text-align: center">*</td>
+					<td class="fgtable-head" style="width: 100px; border-bottom: 1px solid #000000">Account</td>
+					<td class="fgtable-head" style="border-bottom: 1px solid #000000">Keterangan</td>
+					<td class="fgtable-head" style="width: 100px; text-align: right; border-bottom: 1px solid #000000">Total</td>
+				</tr>
+			</thead>
+		</table>
+	</div>
+
+	<div id="pnl_editdetilgrid-control" style="display: flex; justify-content: space-between; margin-bottom: 100px">
+		<div>
+			<a id="pnl_editdetilgrid-removechecked" href="javascript:void(0)" class="easyui-linkbutton c8">Hapus Checked</a>
+		</div>
+
+		<div>
+			<a id="pnl_editdetilgrid-addrow" href="javascript:void(0)" class="easyui-linkbutton c8">Tambah Baris</a>
+		</div>
+
+		<div>
+		</div>
+
+	</div>
+
+
+</div>	

@@ -1,0 +1,122 @@
+<?php
+
+	$doc_iso_reg = "<yout form iso number>";
+	$report_title['id'] = "Collector Target";
+	$report_title['en'] = "";
+
+	$report_printid = strtoupper(uniqid());
+	$report_printdate = date('d/m/Y');
+	$report_date = $this->periodemo_name;
+
+	$doc_descr = "per tanggal " . $this->periodemo_name;
+?>
+
+
+
+<!-- <div style="position: absolute; z-index: -100">
+	<div  id="pagemeasure">&nbsp;</div>
+</div> -->
+
+
+<div id="wrapper" style="z-index: 10">
+
+	<!-- page header: selalu ditampilkan pada tiap halaman, kecuali halaman 1 -->
+	<div id="pageheader" class="fullwidth">
+		<div>
+			<div><?=$report_title['id']?></div>
+			<div style="font-style: italic"><?=$doc_descr?></div>
+		</div>
+		<div style="text-align: right; width: 70mm;">
+			<div style="display:inline-block; width: 38mm;"><b>Print Id</b> <?=$report_printid?></div>
+			<div style="display:inline-block; width: 30mm;">&nbsp;</div>
+			
+		</div>
+	</div>
+
+
+	<!-- report header --->
+	<div id="reporttitle" class="fullwidth">
+		<div style="display: flex; justify-content: space-between">
+
+			<div >
+				<div style="font-size: 7pt; font-style: italic"><?=$doc_iso_reg?></div>
+				<div style="font-weight: bold; font-size: 12pt; margin-top: 2mm"><?=$report_title['id']?></div>
+				<div style="font-weight: bold; font-style: italic; font-size: 10pt; color: #666"><?=$report_title['en']?></div>
+			</div>	
+			<div style="text-align: right">
+				<img id="ellogo" src="index.php/public/assets/logo-printform-right.svg">
+			</div>			
+		</div>
+	</div>
+
+
+	<div class="fullwidth" style="position: relative; margin-top: 2mm; ">
+		<div style="font-size: 8pt;">
+			<b>per tanggal</b> <?=$report_date?>
+		</div>
+		<div style="display: flex; justify-content: space-between; margin-top: 2mm">
+			<div style="font-size: 8pt;"><b>Page</b> 1 <b>of</b> <span id="reporttotalpage">1</span></div>
+			<div style="text-align: right; font-size: 8pt"><b>Print Id</b> <?=$report_printid?></div>
+		</div>
+	</div>
+
+
+	<!-- report content -->
+	<div id="reportcontent" class="fullwidth">
+		<table id="obj_reporttable" width="100%" data-cols-width="10,60,30">
+			<thead>
+				<tr>
+					<th class="rowhead rptdata-col-no" data-fill-color='CCCCCC'>No</th>
+					<th class="rowhead rptdata-col-collector" data-fill-color='CCCCCC'>Collector</th>
+					<th class="rowhead rptdata-col-payment" data-fill-color='CCCCCC'>Payment</th>
+					<th class="rowhead rptdata-col-pph" data-fill-color='CCCCCC'>PPH</th>
+					<th class="rowhead rptdata-col-discount" data-fill-color='CCCCCC'>Discount</th>
+				</tr>
+			</thead>
+			<tbody>
+				<!-- 45 -->
+				<?php 
+				$i=0;
+				$total_idrtopay = 0;
+				$total_pphtopay = 0;
+				$total_discval = 0;
+				foreach ($this->rows as $row) { 
+					$i++;
+					$total_idrtopay += (float)$row['idrtopay'];
+					$total_pphtopay += (float)$row['pphtopay'];
+					$total_discval += (float)$row['discval'];
+				?>
+				<tr>
+					<td class="row rptdata-col-no"><?=$i?></td>
+					<td class="row rptdata-col-collector"><?=$row['empl_name']?></td>
+					<td class="row rptdata-col-collector decimal"><?=number_format($row['idrtopay'])?></td>
+					<td class="row rptdata-col-pph decimal"><?=number_format($row['pphtopay'])?></td>
+					<td class="row rptdata-col-discount decimal" data-t="n" data-num-fmt="#,##0"><?=number_format($row['discval'])?></td>
+				</tr>
+				<?php } ?>
+				<!-- <tr>
+					<td class="rowfoot" colspan="2" style="text-align: center" data-fill-color='CCCCCC'>TOTAL</td>
+					<td class="rowfoot rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'>10000</td>
+				</tr>				 -->
+			</tbody>
+			<tfoot>
+				<tr>
+					<td class="rowfoot rptdata-col-no">&nbsp;</td>
+					<td class="rowfoot rptdata-col-collector">TOTAL</td>
+					<td class="rowfoot rptdata-col-collector decimal"><?=number_format($total_idrtopay)?></td>
+					<td class="rowfoot rptdata-col-pph decimal"><?=number_format($total_pphtopay)?></td>
+					<td class="rowfoot rptdata-col-discount decimal" data-t="n" data-num-fmt="#,##0"><?=number_format($total_discval)?></td>
+				</tr>
+			</tfoot>			
+		</table>
+		<script>global.totalrowcount = '<?=($i-1)?>'</script>
+	</div>
+
+
+</div>
+
+<div id="wrapperfooter" class="fullwidth" style="z-index: 20">
+	<div id="reportfooter" style="display: flex; justify-content: space-between; height: 10mm; ">
+		&nbsp;
+	<div>				
+</div>

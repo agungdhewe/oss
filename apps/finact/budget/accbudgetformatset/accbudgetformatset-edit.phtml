@@ -1,0 +1,159 @@
+<div id="pnl_edit">
+	<div class="fgta-page-title" style="display: flex; align-items: center ">
+		<div>Edit Account Budget Format Setup</div>
+		<a id="pnl_edit-btn_edit" href="javascript:void(0)" class="easyui-linkbutton" style="margin-left:10px;" data-options="plain:true,iconCls:'fgta-icon-edit'">edit</a>
+	</div>
+
+
+	<form id="pnl_edit-form">
+
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">ID</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-txt_accbudgetformatset_id" class="easyui-textbox" mapping="accbudgetformatset_id"  maxlength="17" style="width: 400px" data-options="multiline: false , required: true, invalidMessage: 'ID harus diisi' ">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Order</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-txt_accbudgetformatset_order" class="easyui-numberbox" mapping="accbudgetformatset_order" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  ">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Nama Baris Report</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-txt_accbudgetformatset_name" class="easyui-textbox" mapping="accbudgetformatset_name"  maxlength="90" style="width: 400px" data-options="multiline: false , required: true, invalidMessage: 'Nama Baris Report harus diisi' ">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Descr</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-txt_accbudgetformatset_descr" class="easyui-textbox" mapping="accbudgetformatset_descr"  maxlength="255" style="width: 400px" data-options="multiline: false  ">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+
+
+		<div class="form_row" >
+			<div class="form_label_col">Style</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-chk_accbudgetformatset_isbold" class="easyui-checkbox c1" mapping="accbudgetformatset_isbold" data-options="label: 'Bold', labelPosition: 'after', checked: false ">
+			</div>
+		</div>
+
+		<div class="form_row" >
+			<div class="form_label_col"></div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-chk_accbudgetformatset_isitalic" class="easyui-checkbox c1" mapping="accbudgetformatset_isitalic" data-options="label: 'Italic', labelPosition: 'after', checked: false ">
+			</div>
+		</div>
+
+		<div class="form_row" >
+			<div class="form_label_col"></div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-chk_accbudgetformatset_isunderline" class="easyui-checkbox c1" mapping="accbudgetformatset_isunderline" data-options="label: 'Underline', labelPosition: 'after', checked: false ">
+			</div>
+		</div>
+
+
+
+
+		<div class="form_row" style="margin-top: 30px">
+			<div class="form_label_col"></div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-chk_accbudgetformatset_isparent" class="easyui-checkbox c1" mapping="accbudgetformatset_isparent" data-options="label: 'Parent', labelPosition: 'after', checked: false ">
+			</div>
+		</div>
+
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Parent</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-cbo_accbudgetformatset_parent" class="easyui-combo" style="width: 400px" mapping="accbudgetformatset_parent" display="accbudgetformatset_parent_name" data-options="editable:false, valueField:'id', textField:'text' , prompt: 'NONE'"  >
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Path</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-txt_accbudgetformatset_path" class="easyui-textbox" mapping="accbudgetformatset_path" uppercase="true" maxlength="340" style="width: 400px" data-options="multiline: false , disabled: true ">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">PathId</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-txt_accbudgetformatset_pathid" class="easyui-textbox" mapping="accbudgetformatset_pathid" uppercase="true" maxlength="17" style="width: 400px" data-options="multiline: false , disabled: true ">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Level</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-txt_accbudgetformatset_level" class="easyui-numberbox" mapping="accbudgetformatset_level" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  , disabled: true">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Format</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-cbo_accbudgetformat_id" class="easyui-combo" style="width: 400px" mapping="accbudgetformat_id" display="accbudgetformat_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Format harus diisi', prompt: '-- PILIH --', disabled: true"   validType="requiredcombo['pnl_edit-cbo_accbudgetformat_id']" >
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+	</form>
+
+
+	<div class="form_row" style="margin-top: 30px">
+		<div class="form_label_col"></div>
+		<div class="form_input_col" style="border: 0px solid black">
+			<a id="pnl_edit-btn_save" class="easyui-linkbutton c1" style="width">Simpan</a>
+		</div>
+	</div>	
+
+
+
+		<div id="pnl_edit-detil" class="form_row" style="margin-top: 30px">
+			<div class="form_label_col"></div>
+			<div class="form_input_col detilbox" style="border: 0px solid black">
+				<div class="fgtable-head" style="height: 25px; padding: 5px 0px 0px 5px">Detil Informations</div>
+				<div class="fgtable-head-drow" style="height: 25px; padding: 5px 5px 0px 5px" onclick="$ui.getPages().ITEMS['pnl_edit'].handler.detil_open('pnl_editaccountgrid')">
+					<div id="pnl_edit-txt_account_title" class="detilgrid-text">Account Budget</div>
+					<div id="pnl_edit-txt_account_value" class="detilgrid-value">&nbsp;</div>
+				</div>
+				<div class="fgtable-head-drow" style="height: 25px; padding: 5px 5px 0px 5px" onclick="$ui.getPages().ITEMS['pnl_edit'].handler.detil_open('pnl_editmultiadd')">
+					<div id="pnl_edit-txt_multiadd_title" class="detilgrid-text">Select Account Budget</div>
+					<div id="pnl_edit-txt_multiadd_value" class="detilgrid-value">&nbsp;</div>
+				</div>
+
+			</div>		
+		</div>		
+		
+		
+
+
+	<div style="margin-top: 30px; margin-left:-5px; margin-right: -5px; background-color: #cccccc; display: flex; justify-content: space-between; padding: 10px 2px 2px 2px ">
+		<div>
+			<!-- letakkan tombol yang lin disini -->
+		
+		
+		
+		</div>
+		<div>
+			<a id="pnl_edit-btn_delete" class="easyui-linkbutton c5" style="margin-bottom: 10px; margin-right: 10px">Hapus</a>
+		</div>
+	</div>
+
+</div>
+

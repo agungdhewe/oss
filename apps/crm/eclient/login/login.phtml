@@ -1,0 +1,13 @@
+<script>
+	window.$fgta.showaccount = false;
+</script>
+
+<?php
+$loginform = dirname(__FILE__).'/login-eclient.phtml';
+$loginform_local = __LOCAL_PUBLIC_DIR. '/login-eclient-' .__APPNAME .  '.phtml';
+
+if (is_file($loginform_local)) {
+	$loginform = $loginform_local;
+}
+ 
+require_once $loginform;

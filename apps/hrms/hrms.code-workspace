@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../../server/core/database/menus"
+		},
+		{
+			"path": "../../server/public/images/icons"
+		}
+	],
+	"settings": {}
+}

@@ -1,0 +1,164 @@
+<?php
+
+	$doc_iso_reg = "<yout form iso number>";
+	$report_title['id'] = "NERACA";
+	$report_title['en'] = "";
+
+	$report_printid = strtoupper(uniqid());
+	$report_printdate = date('d/m/Y');
+	$report_date = $this->report_date;
+
+	$doc_descr = "per tanggal $report_printdate";
+?>
+
+
+
+<div style="position: absolute; z-index: 1">
+	<div  id="pagemeasure">&nbsp;</div>
+</div>
+
+
+<div id="wrapper" style="z-index: 10">
+
+	<!-- page header: selalu ditampilkan pada tiap halaman, kecuali halaman 1 -->
+	<div id="pageheader" class="fullwidth">
+		<div>
+			<div><?=$report_title['id']?></div>
+			<div style="font-style: italic"><?=$doc_descr?></div>
+		</div>
+		<div style="text-align: right; width: 70mm;">
+			<div style="display:inline-block; width: 38mm;"><b>Print Id</b> <?=$report_printid?></div>
+			<div style="display:inline-block; width: 30mm;">&nbsp;</div>
+			
+		</div>
+	</div>
+
+
+	<!-- report header --->
+	<div id="reporttitle" class="fullwidth">
+		<div style="display: flex; justify-content: space-between">
+
+			<div >
+				<div style="font-size: 7pt; font-style: italic"><?=$doc_iso_reg?></div>
+				<div style="font-weight: bold; font-size: 12pt; margin-top: 2mm"><?=$report_title['id']?></div>
+				<div style="font-weight: bold; font-style: italic; font-size: 10pt; color: #666"><?=$report_title['en']?></div>
+			</div>	
+			<div style="text-align: right">
+				<img id="ellogo" src="index.php/public/assets/logo-printform-right.svg">
+			</div>			
+		</div>
+	</div>
+
+
+	<div class="fullwidth" style="position: relative; margin-top: 2mm; ">
+		<div style="font-size: 8pt;">
+			<b>per tanggal</b> <?=$report_date?>
+		</div>
+		<div style="display: flex; justify-content: space-between; margin-top: 2mm">
+			<div style="font-size: 8pt;"><b>Page</b> 1 <b>of</b> <span id="reporttotalpage">1</span></div>
+			<div style="text-align: right; font-size: 8pt"><b>Print Id</b> <?=$report_printid?></div>
+		</div>
+	</div>
+
+
+
+	<!-- report content -->
+	<div id="reportcontent" class="fullwidth">
+		<table id="obj_reporttable" width="100%" data-cols-width="10,20,60,30">
+			<thead>
+				<tr>
+					<th class="rowhead ptdata-col-no" data-fill-color='CCCCCC'>No</th>
+					<th class="rowhead rptdata-col-coacode" data-fill-color='CCCCCC'>Group 1</th>
+					<th class="rowhead rptdata-col-coaname" data-fill-color='CCCCCC'>Group 2</th>
+					<th class="rowhead rptdata-col-val" data-fill-color='CCCCCC'>Saldo</th>
+				</tr>
+
+			</thead>
+			<tbody>
+				<!-- 45 -->
+				<?php 
+
+				$no=1; $i=0;
+				$prev_coatype_group = '';
+				$prev_coatype_name = '';
+				$max = count($this->rows);
+
+
+				$total_coatype_group = 0;
+
+				foreach ($this->rows as $row) { 
+					$i++;
+					$curr_coatype_group = $row['coatype_group'];
+					$next_coatype_group = ($i==$max) ? "" : $this->rows[$i]['coatype_group'];
+					$show_group_subtotal = ($next_coatype_group!=$curr_coatype_group) ? true : false;
+				
+					$total_coatype_group += $row['saldo'];
+
+				?>
+
+
+				<?php if ($curr_coatype_group!=$prev_coatype_group) { ?>
+				<tr>
+					<td class="row rptdata-col-no"><?=$no++?></td>
+					<td class="row rptdata-col-decoacodescr" colspan="3" style="font-weight: bold; font-size: 8pt; padding-top: 5mm; padding-bottom: 2mm">
+						<?=$curr_coatype_group?>
+					</td>
+					
+				</tr>
+				<?php } ?>	
+
+
+				<?php if ($row['coatype_name']!=$prev_coatype_name) { ?>
+				<tr>
+					<td class="row rptdata-col-no"><?=$no++?></td>
+					<td class="row rptdata-col-decoacodescr" colspan="3"  style="font-weight: bold; font-size: 8pt; padding-top: 3mm; padding-left:5mm">
+						<?=$row['coatype_name']?>
+					</td>
+					
+				</tr>
+				<?php } ?>	
+
+
+				<tr>
+					<td class="row rptdata-col-no"><?=$no++?></td>
+					<td class="row rptdata-col-decoacodescr"></td>
+					<td class="row rptdata-col-coaname"><?=$row['coagroup_name']?></td>
+					<td class="row rptdata-col-val" data-t="n" data-num-fmt="#,##0"><?=number_format($row['saldo'])?></td>
+				</tr>
+
+
+
+
+				<?php if ($show_group_subtotal) { ?>
+				<tr>
+					<td class="row coatype_group rptdata-col-no"><?=$no++?></td>
+					<td class="row coatype_group rptdata-col-decoacodescr" colspan="2" >Total <?=$curr_coatype_group?></td>
+					<td class="row coatype_group rptdata-col-val" data-t="n" data-num-fmt="#,##0"><?=number_format( $total_coatype_group)?></td>
+				</tr>	
+				<?php $total_coatype_group = 0; } ?>
+
+
+				<?php 
+				$prev_coatype_group = $row['coatype_group'];
+				$prev_coatype_name  = $row['coatype_name'];
+				} ?>
+
+			
+			</tbody>
+			<tfoot>
+			</tfoot>			
+		</table>
+		<script>global.totalrowcount = '<?=($i-1)?>'</script>
+	</div>
+
+
+</div>
+
+<div id="wrapperfooter" class="fullwidth" style="z-index: 20">
+	<div id="reportfooter" style="display: flex; justify-content: space-between; height: 10mm; ">
+		&nbsp;
+	<div>				
+</div>
+
+
+

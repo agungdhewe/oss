@@ -1,0 +1,315 @@
+<?php
+
+	$doc_iso_reg = "ISO/Number/xxxx";
+	$report_title['id'] = "ANGGARAN PERUSAHAAN";
+	$report_title['en'] = "CORPORATE BUDGET";
+
+	$report_printid = strtoupper(uniqid());
+	$report_printdate = date('d/m/Y');
+
+	$doc_id = $this->corpbudget_id;
+	$doc_descr = 'Corporate Budget ';
+?>
+
+<div style="position: absolute; z-index: 1">
+	<div  id="pagemeasure">&nbsp;</div>
+</div>
+
+
+<div id="wrapper" style="z-index: 10">
+	<!-- page header: selalu ditampilkan pada tiap halaman, kecuali halaman 1 -->
+	<div id="pageheader" class="fullwidth">
+		<div>
+			<div><?=$doc_id?></div>
+			<div style="font-style: italic"><?=$doc_descr?></div>
+		</div>
+		<div style="text-align: right; width: 70mm;">
+			<div style="display:inline-block; width: 38mm;"><b>Print Id</b> <?=$report_printid?></div>
+			<div style="display:inline-block; width: 30mm;">&nbsp;</div>
+			
+		</div>
+	</div>
+
+
+
+	<!-- report header --->
+	<div id="reporttitle" class="fullwidth">
+		<div style="display: flex; justify-content: space-between">
+			<div>
+				<img id="ellogo" src="index.php/public/assets/logo-printform.svg">
+			</div>
+			<div style="text-align: right">
+				<div style="font-size: 7pt; font-style: italic"><?=$doc_iso_reg?></div>
+				<div style="font-weight: bold; font-size: 12pt; margin-top: 2mm"><?=$report_title['id']?></div>
+				<div style="font-weight: bold; font-style: italic; font-size: 10pt; color: #666"><?=$report_title['en']?></div>
+			</div>	
+		</div>
+	</div>
+
+	<div class="fullwidth" style="position: relative; margin-top: 2mm; display: flex; justify-content: space-between; background-color: #fff">
+		<div id="reporthead-col-dochead-1" style="flex: 1; margin-right: 1mm">
+			<table width="100%" cellpadding="0" cellspacing="0">
+				<!--
+				<tr>
+					<td class="rhead-tcol-label-1">label 1</td>
+					<td class="rhead-tcol-value-1">value 1</td>
+					<td class="rhead-tcol-label-2">label 2</td>
+					<td class="rhead-tcol-value-2">value 2</td>
+				</tr>
+				-->
+				<tr>
+					<td class="rhead-tcol-label-1">ID</td>
+					<td class="rhead-tcol-value-1"><?=$doc_id?></td>
+					<td class="rhead-tcol-value-2" style="vertical-align: top; padding: 0px; border-bottom: 0px" colspan="2">
+						<div style="display: flex; justify-content: space-between; " >
+							<div>
+								<div class="rhead-label-c" style="margin-left: 5mm; margin-right: 2mm">Print Id</div>
+								<div class="rhead-value-c" style="width: 25mm"><?=$report_printid?></div>
+							</div>
+							<div>
+								<div class="rhead-label-c" style="margin-left: 5mm; margin-right: 2mm">Print Date</div>
+								<div class="rhead-value-c" style="width: 25mm"><?=$report_printdate?></div>
+							</div>							
+							<div>
+								<div class="rhead-label-c">Page</div>
+								<div class="rhead-value-c">1</div>
+								<div class="rhead-label-c">of</div>
+								<div class="rhead-value-c" id="reporttotalpage" style="font-weight: normal">1</div>
+							</div>
+						</div>
+					</td>
+					<!-- <td class="rhead-tcol-value-2">......</td> -->
+				</tr>
+
+				<!-- <tr>
+					<td class="rhead-tcol-label-1">Descr</td>
+					<td class="rhead-tcol-value-1" colspan="3"><?=$doc_descr?></td>
+				</tr> -->
+			</table>
+		</div>
+		<div id="reporthead-col-qrcode" style="text-align: right; margin-left: 4mm; display: none">
+			<div style="text-align: center;"><img id="elqrcode" value="<?=$doc_id?>" size="250"></div>
+		</div>
+	</div>
+
+
+	<!-- report content -->
+	<div id="reportcontent" class="fullwidth">
+		<table id="obj_reporttable" width="100%" data-cols-width="50,11,11,11,11,11,11,11,11,11,11,11,11,11">
+			<thead>
+				<tr>
+					<td class="rowhead col_name" data-fill-color='CCCCCC'>Account Budget</td>
+					<td class="rowhead col_val" data-fill-color='CCCCCC'>JAN</td>
+					<td class="rowhead col_val" data-fill-color='CCCCCC'>FEB</td>
+					<td class="rowhead col_val" data-fill-color='CCCCCC'>MAR</td>
+					<td class="rowhead col_val" data-fill-color='CCCCCC'>APR</td>
+					<td class="rowhead col_val" data-fill-color='CCCCCC'>MEI</td>
+					<td class="rowhead col_val" data-fill-color='CCCCCC'>JUN</td>
+					<td class="rowhead col_val" data-fill-color='CCCCCC'>JUL</td>
+					<td class="rowhead col_val" data-fill-color='CCCCCC'>AGS</td>
+					<td class="rowhead col_val" data-fill-color='CCCCCC'>SEP</td>
+					<td class="rowhead col_val" data-fill-color='CCCCCC'>OKT</td>
+					<td class="rowhead col_val" data-fill-color='CCCCCC'>NOV</td>
+					<td class="rowhead col_val" data-fill-color='CCCCCC'>DES</td>
+					<td class="rowhead col_total" data-fill-color='CCCCCC'>TOTAL</td>
+				</tr>				
+			</thead>
+			<tbody>
+			<?php 
+				$show_group = false;
+				$show_cat = false;
+				$prev_coatype_name = "";
+				$prev_coatype_group = "";
+				$i=0;
+				$max = count($this->rows);
+				$JAN=0; $FEB=0; $MAR=0; $APR=0; $MEI=0; $JUN=0; $JUL=0; $AGS=0; $SEP=0; $OKT=0; $NOV=0; $DES=0;
+				$JAN_LALU=0; $FEB_LALU=0; $MAR_LALU=0; $APR_LALU=0; $MEI_LALU=0; $JUN_LALU=0; $JUL_LALU=0; $AGS_LALU=0; $SEP_LALU=0; $OKT_LALU=0; $NOV_LALU=0; $DES_LALU=0;
+				$SUBTOTAL = 0;
+				$SUBTOTAL_LALU = 0;
+				$T_JAN=0;$T_FEB=0;$T_MAR=0;$T_APR=0;$T_MEI=0;$T_JUN=0;$T_JUL=0;$T_AGS=0;$T_SEP=0;$T_OKT=0;$T_NOV=0;$T_DES=0;
+				$T_SUBTOTAL = 0;
+
+				foreach ($this->rows as $row) {
+
+					$i++;
+					$curr_coatype_name = $row['coatype_name'];
+					$curr_coatype_group = $row['coatype_group'];
+					$next_coatype_name = ($i==$max) ? "" : $this->rows[$i]['coatype_name'];
+					$next_coatype_group = ($i==$max) ? "" : $this->rows[$i]['coatype_group'];
+					$show_group = ($curr_coatype_name==$prev_coatype_name) ? false : true;
+					$show_subtotalrow = ($next_coatype_name==$curr_coatype_name) ? false : true;
+					
+					$show_cat = ($curr_coatype_group==$prev_coatype_group) ? false : true;
+					$show_total_row = ($next_coatype_group==$curr_coatype_group) ? false : true;
+
+					// subtotal per group
+					$JAN += $row['jan'];
+					$T_JAN += $row['jan'];
+					$JAN_LALU += $row['jan_lalu'];			
+					$FEB += $row['feb'];
+					$T_FEB += $row['feb'];
+					$FEB_LALU += $row['feb_lalu'];
+					$MAR += $row['mar'];
+					$T_MAR += $row['mar'];
+					$MAR_LALU += $row['mar_lalu'];
+					$APR += $row['apr'];
+					$T_APR += $row['apr'];
+					$APR_LALU += $row['apr_lalu'];
+					$MEI += $row['mei'];
+					$T_MEI += $row['mei'];
+					$MEI_LALU += $row['mei_lalu'];
+					$JUN += $row['jun'];
+					$T_JUN += $row['jun'];
+					$JUN_LALU += $row['jun_lalu'];
+					$JUL += $row['jul'];
+					$T_JUL += $row['jul'];
+					$JUL_LALU += $row['jul_lalu'];
+					$AGS += $row['ags'];
+					$T_AGS += $row['ags'];
+					$AGS_LALU += $row['ags_lalu'];
+					$SEP += $row['sep'];
+					$T_SEP += $row['sep'];
+					$SEP_LALU += $row['sep_lalu'];
+					$OKT += $row['okt'];
+					$T_OKT += $row['okt'];
+					$OKT_LALU += $row['okt_lalu'];
+					$NOV += $row['nov'];
+					$T_NOV += $row['nov'];
+					$NOV_LALU += $row['nov_lalu'];
+					$DES += $row['des'];
+					$T_DES += $row['des'];
+					$DES_LALU += $row['des_lalu'];
+					$SUBTOTAL += $row['corpbudgetdet_total'];
+					$T_SUBTOTAL += $row['corpbudgetdet_total'];
+					$SUBTOTAL_LALU += $row['corpbudgetdet_total_lalu'];
+				?>
+				<!--
+				<?php //if($show_cat) { ?>
+				<tr>
+					<td class="rowcat" colspan="14"><?//=$row['coatype_group']?></td>
+				</tr>
+				<?php //} ?>
+				-->
+
+				<?php if($show_group) { ?>
+				<tr>
+					<td class="rowgroup" colspan="14"><?=$row['coatype_name']?></td>	
+				</tr>
+				<?php } ?>
+
+				<tr>
+					<td class="row col_name"><?=$row['accbudget_name']?></td>
+					<td class="row col_val" style="vertical-align: top" data-t="n" data-num-fmt="#,##0"><?=$this->injuta($row['jan'])?></td>
+					<td class="row col_val" style="vertical-align: top" data-t="n" data-num-fmt="#,##0"><?=$this->injuta($row['feb'])?></td>
+					<td class="row col_val" style="vertical-align: top" data-t="n" data-num-fmt="#,##0"><?=$this->injuta($row['mar'])?></td>
+					<td class="row col_val" style="vertical-align: top" data-t="n" data-num-fmt="#,##0"><?=$this->injuta($row['apr'])?></td>
+					<td class="row col_val" style="vertical-align: top" data-t="n" data-num-fmt="#,##0"><?=$this->injuta($row['mei'])?></td>
+					<td class="row col_val" style="vertical-align: top" data-t="n" data-num-fmt="#,##0"><?=$this->injuta($row['jun'])?></td>
+					<td class="row col_val" style="vertical-align: top" data-t="n" data-num-fmt="#,##0"><?=$this->injuta($row['jul'])?></td>
+					<td class="row col_val" style="vertical-align: top" data-t="n" data-num-fmt="#,##0"><?=$this->injuta($row['ags'])?></td>
+					<td class="row col_val" style="vertical-align: top" data-t="n" data-num-fmt="#,##0"><?=$this->injuta($row['sep'])?></td>
+					<td class="row col_val" style="vertical-align: top" data-t="n" data-num-fmt="#,##0"><?=$this->injuta($row['okt'])?></td>
+					<td class="row col_val" style="vertical-align: top" data-t="n" data-num-fmt="#,##0"><?=$this->injuta($row['nov'])?></td>
+					<td class="row col_val" style="vertical-align: top" data-t="n" data-num-fmt="#,##0"><?=$this->injuta($row['des'])?></td>
+					<td class="row col_total" style="vertical-align: top" data-t="n" data-num-fmt="#,##0"><?=$this->injuta($row['corpbudgetdet_total'])?></td>
+				</tr>
+
+				<?php if($show_subtotalrow) { ?>
+				<tr>
+					<td class="rowsubtotal col_name" style="font-weight: bold" data-fill-color='CCCCCC'>TOTAL <?=$row['coatype_name']?></td>	
+					<td class="rowsubtotal col_val"  data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=$this->injuta($JAN)?></td>
+					<td class="rowsubtotal col_val"  data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=$this->injuta($FEB)?></td>
+					<td class="rowsubtotal col_val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=$this->injuta($MAR)?></td>
+					<td class="rowsubtotal col_val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=$this->injuta($APR)?></td>
+					<td class="rowsubtotal col_val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=$this->injuta($MEI)?></td>
+					<td class="rowsubtotal col_val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=$this->injuta($JUN)?></td>
+					<td class="rowsubtotal col_val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=$this->injuta($JUL)?></td>
+					<td class="rowsubtotal col_val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=$this->injuta($AGS)?></td>
+					<td class="rowsubtotal col_val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=$this->injuta($SEP)?></td>
+					<td class="rowsubtotal col_val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=$this->injuta($OKT)?></td>
+					<td class="rowsubtotal col_val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=$this->injuta($NOV)?></td>
+					<td class="rowsubtotal col_val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=$this->injuta($DES)?></td>
+					<td class="rowsubtotal col_total" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=$this->injuta($SUBTOTAL)?></td>
+				</tr>
+				<tr>
+					<td class="rowgrowth col_name" style="padding-left: 10mm;">Growth</td>
+					<td class="rowgrowth col_val" data-a-h="right"><?=$this->inpercent($JAN_LALU, $JAN).'%'?></td>
+					<td class="rowgrowth col_val" data-a-h="right"><?=$this->inpercent($FEB_LALU, $FEB).'%'?></td>
+					<td class="rowgrowth col_val" data-a-h="right"><?=$this->inpercent($MAR_LALU, $MAR).'%'?></td>
+					<td class="rowgrowth col_val" data-a-h="right"><?=$this->inpercent($APR_LALU, $APR).'%'?></td>
+					<td class="rowgrowth col_val" data-a-h="right"><?=$this->inpercent($MEI_LALU, $MEI).'%'?></td>
+					<td class="rowgrowth col_val" data-a-h="right"><?=$this->inpercent($JUN_LALU, $JUN).'%'?></td>
+					<td class="rowgrowth col_val" data-a-h="right"><?=$this->inpercent($JUL_LALU, $JUL).'%'?></td>
+					<td class="rowgrowth col_val" data-a-h="right"><?=$this->inpercent($AGS_LALU, $AGS).'%'?></td>
+					<td class="rowgrowth col_val" data-a-h="right"><?=$this->inpercent($SEP_LALU, $SEP).'%'?></td>
+					<td class="rowgrowth col_val" data-a-h="right"><?=$this->inpercent($OKT_LALU, $OKT).'%'?></td>
+					<td class="rowgrowth col_val" data-a-h="right"><?=$this->inpercent($NOV_LALU, $NOV).'%'?></td>
+					<td class="rowgrowth col_val" data-a-h="right"><?=$this->inpercent($DES_LALU, $DES).'%'?></td>
+					<td class="rowgrowth col_total" data-a-h="right"><?=$this->inpercent($SUBTOTAL_LALU, $SUBTOTAL).'%'?></td>
+				</tr>
+				<?php 
+					$JAN=0; $FEB=0; $MAR=0; $APR=0; $MEI=0; $JUN=0; $JUL=0; $AGS=0; $SEP=0; $OKT=0; $NOV=0; $DES=0;
+					$JAN_LALU=0; $FEB_LALU=0; $MAR_LALU=0; $APR_LALU=0; $MEI_LALU=0; $JUN_LALU=0; $JUL_LALU=0; $AGS_LALU=0; $SEP_LALU=0; $OKT_LALU=0; $NOV_LALU=0; $DES_LALU=0;
+					$SUBTOTAL = 0;
+					$SUBTOTAL_LALU = 0;
+				} ?>
+
+				<?php if($show_total_row) { ?>
+				<tr>
+					<td class="rowcategory col_name" style="font-weight: bold" data-fill-color='CCCCCC'>TOTAL <?=$row['coatype_group']?></td>	
+					<td class="rowcategory col_val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=$this->injuta($T_JAN)?></td>
+					<td class="rowcategory col_val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=$this->injuta($T_FEB)?></td>
+					<td class="rowcategory col_val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=$this->injuta($T_MAR)?></td>
+					<td class="rowcategory col_val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=$this->injuta($T_APR)?></td>
+					<td class="rowcategory col_val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=$this->injuta($T_MEI)?></td>
+					<td class="rowcategory col_val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=$this->injuta($T_JUN)?></td>
+					<td class="rowcategory col_val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=$this->injuta($T_JUL)?></td>
+					<td class="rowcategory col_val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=$this->injuta($T_AGS)?></td>
+					<td class="rowcategory col_val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=$this->injuta($T_SEP)?></td>
+					<td class="rowcategory col_val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=$this->injuta($T_OKT)?></td>
+					<td class="rowcategory col_val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=$this->injuta($T_NOV)?></td>
+					<td class="rowcategory col_val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=$this->injuta($T_DES)?></td>
+					<td class="rowcategory col_val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=$this->injuta($T_SUBTOTAL)?></td>
+				</tr>
+				<?php 
+					$T_JAN=0;$T_FEB=0;$T_MAR=0;$T_APR=0;$T_MEI=0;$T_JUN=0;$T_JUL=0;$T_AGS=0;$T_SEP=0;$T_OKT=0;$T_NOV=0;$T_DES=0;
+					$T_SUBTOTAL=0;
+				} ?>
+				<?php 
+					$prev_coatype_name = $curr_coatype_name;
+					$prev_coatype_group = $curr_coatype_group;
+				} 
+				?>
+			</tbody>
+
+
+
+			<tfoot>
+			</tfoot>			
+		</table>
+		<script>global.totalrowcount = '<?=($i-1)?>'</script>
+	</div>
+
+</div>
+
+<div id="wrapperfooter" class="fullwidth" style="z-index: 20">
+	<div id="reportfooter" style="display: flex; justify-content: space-between; height: 50mm; ">
+		<div style="width: 30mm;">
+			<div style="height: 17mm; font-weight: bold;">Dibuat Oleh,</div>
+			<div style="height: 20mm">&nbsp;</div>
+			<div style="height: 7mm; border-top: 1px dotted #000"><?=$this->empl_name?></div>		
+		</div>
+		<div style="flex: 1">
+			<div style="height: 10mm; font-weight: bold; margin-left: 10mm">Disetujui Oleh</div>		
+			<div style="display: flex; justify-content: space-between; margin-left: 10mm">
+
+			<div style="width: 30mm;">
+					<div style="height: 7mm; font-weight: bold;">Manager</div>
+					<div style="height: 20mm">&nbsp;</div>
+					<div style="height: 7mm; border-top: 1px dotted #000">. . . . </div>		
+				</div>
+	
+			</div>
+		</div>
+	<div>				
+</div>

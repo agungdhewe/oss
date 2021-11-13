@@ -1,0 +1,223 @@
+<div id="pnl_edit">
+	<div class="fgta-page-title" style="display: flex; align-items: center ">
+		<div>Edit Employee</div>
+		<a id="pnl_edit-btn_edit" href="javascript:void(0)" class="easyui-linkbutton" style="margin-left:10px;" data-options="plain:true,iconCls:'fgta-icon-edit'">edit</a>
+	</div>
+
+
+	<form id="pnl_edit-form">
+
+		<div class="form_row">
+			<div class="form_label_col">ID</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-txt_empl_id" class="easyui-textbox" mapping="empl_id" uppercase="true" maxlength="30" style="width: 400px" data-options="multiline: false  ">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">NIK</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-txt_empl_nik" class="easyui-textbox" mapping="empl_nik" uppercase="true" maxlength="30" style="width: 400px" data-options="multiline: false , required: true, invalidMessage: 'NIK harus diisi' ">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Name</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-txt_empl_name" class="easyui-textbox" mapping="empl_name" uppercase="true" maxlength="60" style="width: 400px" data-options="multiline: false , required: true, invalidMessage: 'Nama Karyawan harus diisi' ">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col"></div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-chk_empl_isdisabled" class="easyui-checkbox c1" mapping="empl_isdisabled" data-options="label: 'Disabled', labelPosition: 'after', disabled:false, checked: false ">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Join Date</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-dt_empl_dtjoin" class="easyui-datebox" style="width: 400px" mapping="empl_dtjoin" data-options="editable:false , required: true, invalidMessage: 'Tanggal masuk harus diisi'">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Exit Date</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-dt_empl_dtexit" class="easyui-datebox" style="width: 400px" mapping="empl_dtexit" data-options="editable:false ">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Birth Place</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-txt_empl_birthplace" class="easyui-textbox" mapping="empl_birthplace" uppercase="true" maxlength="30" style="width: 400px" data-options="multiline: false , required: true, invalidMessage: 'Tempat lahir harus diisi' ">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Join Date</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-dt_empl_birthdate" class="easyui-datebox" style="width: 400px" mapping="empl_birthdate" data-options="editable:false , required: true, invalidMessage: 'Tanggal lahir harus diisi'">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Address</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-txt_empl_address" class="easyui-textbox" mapping="empl_address" uppercase="true" maxlength="255" style="width: 400px" data-options="multiline: false , required: true, invalidMessage: 'Alamat harus diisi' ">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">City</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-txt_empl_city" class="easyui-textbox" mapping="empl_city" uppercase="true" maxlength="20" style="width: 400px" data-options="multiline: false , required: true, invalidMessage: 'Kota harus diisi' ">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Prov</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-txt_empl_prov" class="easyui-textbox" mapping="empl_prov" uppercase="true" maxlength="20" style="width: 400px" data-options="multiline: false , required: true, invalidMessage: 'Propinsi harus diisi' ">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">HP</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-txt_empl_hp" class="easyui-textbox" mapping="empl_hp" uppercase="true" maxlength="30" style="width: 400px" data-options="multiline: false , required: true, invalidMessage: 'HP harus diisi' ">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Email</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-txt_empl_email" class="easyui-textbox" mapping="empl_email" lowercase="true" maxlength="120" style="width: 400px" data-options="multiline: false , required: true, validType: 'email', invalidMessage: 'Email harus diisi' ">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">KK</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-txt_empl_kk" class="easyui-textbox" mapping="empl_kk" uppercase="true" maxlength="30" style="width: 400px" data-options="multiline: false  ">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">KTP</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-txt_empl_ktp" class="easyui-textbox" mapping="empl_ktp" uppercase="true" maxlength="30" style="width: 400px" data-options="multiline: false , required: true, invalidMessage: 'No KTP harus diisi' ">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">NPWP</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-txt_empl_npwp" class="easyui-textbox" mapping="empl_npwp" uppercase="true" maxlength="30" style="width: 400px" data-options="multiline: false , required: true, invalidMessage: 'NPWP harus diisi' ">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">BPJS Tk</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-txt_empl_bpjstk" class="easyui-textbox" mapping="empl_bpjstk" uppercase="true" maxlength="30" style="width: 400px" data-options="multiline: false  ">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">BPJS Kes</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-txt_empl_bpjskes" class="easyui-textbox" mapping="empl_bpjskes" uppercase="true" maxlength="30" style="width: 400px" data-options="multiline: false  ">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Job</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-cbo_hrjob_id" class="easyui-combo" style="width: 400px" mapping="hrjob_id" display="hrjob_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Job harus diisi', prompt: '-- PILIH --'">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Status</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-cbo_hrstatus_id" class="easyui-combo" style="width: 400px" mapping="hrstatus_id" display="hrstatus_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Status harus diisi', prompt: '-- PILIH --'">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Dept</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-cbo_dept_id" class="easyui-combo" style="width: 400px" mapping="dept_id" display="dept_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Dept harus diisi', prompt: '-- PILIH --'">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Site</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-cbo_site_id" class="easyui-combo" style="width: 400px" mapping="site_id" display="site_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Site harus diisi', prompt: '-- PILIH --'">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Auth Override</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-cbo_auth_id" class="easyui-combo" style="width: 400px" mapping="auth_id" display="auth_name" data-options="editable:false, valueField:'id', textField:'text' , prompt: 'NONE'">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Marital</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-cbo_marital_id" class="easyui-combo" style="width: 400px" mapping="marital_id" display="marital_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Status marital harus diisi', prompt: '-- PILIH --'">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Gender</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-cbo_gender_id" class="easyui-combo" style="width: 400px" mapping="gender_id" display="gender_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Gender harus diisi', prompt: '-- PILIH --'">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Education</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-cbo_edu_id" class="easyui-combo" style="width: 400px" mapping="edu_id" display="edu_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Education harus diisi', prompt: '-- PILIH --'">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Religion</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-cbo_religion_id" class="easyui-combo" style="width: 400px" mapping="religion_id" display="religion_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Religion harus diisi', prompt: '-- PILIH --'">
+			</div>
+		</div>
+
+	</form>
+
+
+	<div class="form_row" style="margin-top: 30px">
+		<div class="form_label_col"></div>
+		<div class="form_input_col" style="border: 0px solid black">
+			<a id="pnl_edit-btn_save" class="easyui-linkbutton c1" style="width">Simpan</a>
+		</div>
+	</div>	
+
+
+
+
+
+	<div style="margin-top: 30px; margin-left:-5px; margin-right: -5px; background-color: #cccccc; height: 40px; display: flex; justify-content: space-between; padding: 5px 2px 2px 2px ">
+		<div>
+			<!-- letakkan tombol yang lin disini -->
+		</div>
+		<div>
+			<a id="pnl_edit-btn_delete" class="easyui-linkbutton c5" style="width">Hapus</a>
+		</div>
+	</div>
+
+</div>
+

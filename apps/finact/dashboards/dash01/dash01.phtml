@@ -1,0 +1,85 @@
+<!-- TEMPLATE DASHBOARD 
+<div class="dashcontainer">
+	<div class="dashcol-01">satu</div>
+	<div class="dashcol-02">dua</div>
+</div>
+-->
+
+<div style="
+	position: fixed;
+	bottom: 0;
+	height: 100px;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+">
+	<div>
+		<!-- shorcut disini //-->
+	</div>
+</div>
+
+
+<div class="dashcontainer main-bgmenu">
+	<div class="dashcol-01">
+	
+		<!-- Revenue YTD -->
+		<div>
+			<div class="chartcontainer">
+				<canvas id="chart-revenue" class="chart"></canvas>
+			</div>
+		</div>
+
+
+		<!-- Collection YTD -->
+		<div style="display: none">
+			<div class="chartcontainer">
+				<canvas id="chart-collection" class="chart"></canvas>
+			</div>			
+		</div>
+	</div>
+	
+	
+	<div class="dashcol-02">
+	
+		<!-- Ebit -->
+		<div>
+			<div class="chartcontainer widget">
+				<canvas id="chart-ebit" class="chart"></canvas>
+			</div>				
+		</div>
+
+
+		<!-- Monthly Cost -->
+		<div style="display: none">
+			<div class="chartcontainer">
+				<canvas id="chart-cost" class="chart"></canvas>
+			</div>				
+		</div>
+	
+
+		<div class="widget">
+			<div class="title">Top 10 Advertiser</div>
+			<table class="widgettable">
+				<tr>
+					<td class="head" style="width: 30px; text-align:right">No</td>
+					<td class="head" >Name</td>
+					<td class="head" style="width: 100px; text-align:right">% Contrib</td>
+				</tr>
+				<?php for ($i=0; $i<10; $i++) { ?>
+				<tr>
+					<td class="row"  style="text-align:right"><?=$i?>.</td>
+					<td class="row">&nbsp;</td>
+					<td class="row">&nbsp;</td>
+				</tr>
+				<?php } ?>
+			</table>
+		</div>
+
+
+		<div class="widget">
+			<div class="title">Sales Stat</div>
+
+		</div>
+
+	</div>
+</div>

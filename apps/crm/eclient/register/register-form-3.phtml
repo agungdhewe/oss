@@ -1,0 +1,27 @@
+<?php $pnlname=$this->BeginForm('pnl_form_3', 'Password') ?>
+
+	<div class="form_cell">
+		<label for="<?=$pnlname?>-username" class="form_label_col">Username</label>
+		<input id="<?=$pnlname?>-username" class="form_input_col" type="text" disabled/>
+	</div>
+
+	<div class="form_cell">
+		<label for="<?=$pnlname?>-pass" class="form_label_col">Password</label>
+		<input id="<?=$pnlname?>-pass" class="form_input_col" type="password" required/>
+	</div>
+
+	<div class="form_cell">
+		<label for="<?=$pnlname?>-passre" class="form_label_col">re-enter</label>
+		<input id="<?=$pnlname?>-passre" class="form_input_col" type="password" required/>
+	</div>
+
+	<div class="form_cell" style="margin-top: 30px">
+		<div class="form_label_col">&nbsp;</div>
+		<div class="form_input_col">
+			<button type="submit" id="<?=$pnlname?>-btn_next">Next</button>
+		</div>	
+	</div>
+
+
+
+<?php $this->EndForm() ?>

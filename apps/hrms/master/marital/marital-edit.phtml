@@ -1,0 +1,62 @@
+<div id="pnl_edit">
+	<div class="fgta-page-title" style="display: flex; align-items: center ">
+		<div>Edit Marital</div>
+		<a id="pnl_edit-btn_edit" href="javascript:void(0)" class="easyui-linkbutton" style="margin-left:10px;" data-options="plain:true,iconCls:'fgta-icon-edit'">edit</a>
+	</div>
+
+
+	<form id="pnl_edit-form">
+
+		<div class="form_row">
+			<div class="form_label_col">ID</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-txt_marital_id" class="easyui-textbox" mapping="marital_id" uppercase="true" maxlength="2" style="width: 400px" data-options="multiline: false , required: true, invalidMessage: 'ID harus diisi' ">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Marital Name</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-txt_marital_name" class="easyui-textbox" mapping="marital_name" uppercase="true" maxlength="30" style="width: 400px" data-options="multiline: false , required: true, invalidMessage: 'Marital name harus diisi' ">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Descr</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-txt_marital_descr" class="easyui-textbox" mapping="marital_descr"  maxlength="90" style="width: 400px" data-options="multiline: false  ">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Ptkp Tambahan</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-txt_marital_ptkpval" class="easyui-numberbox" mapping="marital_ptkpval" style="width: 400px" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  ">
+			</div>
+		</div>
+
+	</form>
+
+
+	<div class="form_row" style="margin-top: 30px">
+		<div class="form_label_col"></div>
+		<div class="form_input_col" style="border: 0px solid black">
+			<a id="pnl_edit-btn_save" class="easyui-linkbutton c1" style="width">Simpan</a>
+		</div>
+	</div>	
+
+
+
+
+
+	<div style="margin-top: 30px; margin-left:-5px; margin-right: -5px; background-color: #cccccc; height: 40px; display: flex; justify-content: space-between; padding: 5px 2px 2px 2px ">
+		<div>
+			<!-- letakkan tombol yang lin disini -->
+		</div>
+		<div>
+			<a id="pnl_edit-btn_delete" class="easyui-linkbutton c5" style="width">Hapus</a>
+		</div>
+	</div>
+
+</div>
+

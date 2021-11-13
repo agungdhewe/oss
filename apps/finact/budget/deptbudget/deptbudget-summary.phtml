@@ -1,0 +1,36 @@
+<div id="pnl_summary">
+	<div class="fgta-page-title" style="display: flex; align-items: center ">
+		<div>Budget Summary</div>
+	</div>
+	<div id="pnl_summary-subtitle">budget subtitle</div>
+
+
+	<div style="margin-top: 10px">
+		<table id="pnl_summary-tbl_list" cellspacing="0" width="100%" class="deftable">
+			<thead>
+				<tr>
+					<th mapping="month_name">deptbudget_id</th>
+					<th mapping="prevvalue" style="text-align: right" formatter="row_format_number">prevvalue</th>
+					<th mapping="value" style="text-align: right" formatter="row_format_number">value</th>
+					<th mapping="variance" style="text-align: right" formatter="row_format_number">variance</th>
+				</tr>
+				<tr style="background-color: #cccccc; height: 30px">
+					<td class="fgtable-head" style="border-bottom: 1px solid #000000">Month</td>
+					<td class="fgtable-head" style="width: 100px; text-align: right; border-bottom: 1px solid #000000">Prev</td>
+					<td class="fgtable-head" style="width: 100px; text-align: right; border-bottom: 1px solid #000000">Current</td>
+					<td class="fgtable-head" style="width: 100px; text-align: right; border-bottom: 1px solid #000000">Variance</td>
+				</tr>
+			</thead>
+		</table>
+	</div>
+
+
+	<div style="margin-top: 30px; margin-left:-5px; margin-right: -5px; background-color: #cccccc; display: flex; justify-content: space-between; padding: 10px 2px 2px 2px ">
+		<div>
+			<a id="pnl_summary-btn_approve" href="javascript:void(0)" class="easyui-linkbutton c8" style="margin-left:10px; margin-bottom: 10px;" data-options="plain:true,iconCls:'fgta-icon-posting'">Approve</a>
+			<a id="pnl_summary-btn_decline" href="javascript:void(0)" class="easyui-linkbutton c8" style="margin-left:10px; margin-bottom: 10px;" data-options="plain:true,iconCls:'fgta-icon-unposting'">Decline</a>
+		</div>
+		<div>
+		</div>
+	</div>
+</div>

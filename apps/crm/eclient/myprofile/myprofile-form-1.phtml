@@ -1,0 +1,86 @@
+<?php $pname=$this->BeginForm('pnl_form_1', 'Profile') ?>
+
+
+	<div class="form_cell">
+		<label for="<?=$pname?>-partner_name" class="form_label_col">Perusahaan</label>
+		<input id="<?=$pname?>-partner_name" mapping="partner_name" class="form_input_col inputtext" type="text" title="Masukkan nama perusahaan" style="text-transform: uppercase;" invalidMessage="masukkan nama perusahaan dengan benar" required/>
+	</div>	
+
+	<div class="form_cell">
+		<label for="<?=$pname?>-partner_dirut" class="form_label_col">Direktur Utama</label>
+		<input id="<?=$pname?>-partner_dirut" mapping="partner_dirut" class="form_input_col inputtext" type="text" title="Masukkan nama direktur utama" style="text-transform: uppercase;" invalidMessage="data direktur utama tidak boleh kosong" required/>
+	</div>
+
+	<div class="form_cell">
+		<label for="<?=$pname?>-partner_direktur" class="form_label_col">Direktur</label>
+		<input id="<?=$pname?>-partner_direktur" mapping="partner_dir" class="form_input_col inputtext" type="text" title="Masukkan nama direktur utama" style="text-transform: uppercase;" invalidMessage="data direktur tidak boleh kosong" required/>
+	</div>
+
+
+	<div class="form_cell">
+		<label for="<?=$pname?>-partner_alamat" class="form_label_col">Alamat</label>
+		<div style="display:flex; flex-direction: column" class="form_input_col">
+			<input id="<?=$pname?>-partner_alamat" mapping="partner_addressline1" class="inputtext" type="text" title="Masukkan alamat" style="text-transform: uppercase;" invalidMessage="data alamat tidak boleh kosong" required/>
+			<input id="<?=$pname?>-partner_alamat_l2" mapping="partner_addressline2" class="inputtext" type="text" style="text-transform: uppercase;"/>
+			<input id="<?=$pname?>-partner_alamat_l3" mapping="partner_addressline3" class="inputtext" type="text" style="text-transform: uppercase;"/>
+		</div>
+	</div>
+
+	<div class="form_cell">
+		<label for="<?=$pname?>-partner_alamattagih" class="form_label_col">Alamat Penagihan</label>
+		<div style="display:flex; flex-direction: column" class="form_input_col">
+			<input id="<?=$pname?>-partner_alamattagih" mapping="partner_billaddrline1" class="inputtext" type="text" title="Masukkan alamat" style="text-transform: uppercase;" invalidMessage="data alamat penagihan tidak boleh kosong" required/>
+			<input id="<?=$pname?>-partner_alamattagih_l2" mapping="partner_billaddrline2" class="inputtext" type="text" style="text-transform: uppercase;"/>
+			<input id="<?=$pname?>-partner_alamattagih_l3" mapping="partner_billaddrline3" class="inputtext" type="text" style="text-transform: uppercase;"/>
+		</div>
+	</div>
+
+	<div class="form_cell">
+		<label for="<?=$pname?>-partner_kota" class="form_label_col">Kota</label>
+		<input id="<?=$pname?>-partner_kota" mapping="partner_city" class="form_input_col inputtext" type="text" title="Masukkan kota" style="text-transform: uppercase;" invalidMessage="data kota tidak boleh kosong" required/>
+	</div>
+
+	<div class="form_cell">
+		<label for="<?=$pname?>-partner_kodepos" class="form_label_col">Kodepos</label>
+		<input id="<?=$pname?>-partner_kodepos" mapping="partner_postcode" class="form_input_col inputtext" type="text" title="Masukkan kodepos" style="text-transform: uppercase;" invalidMessage="data kodepos tidak boleh kosong" required/>
+	</div>
+
+	<div class="form_cell">
+		<label for="<?=$pname?>-partner_negara" class="form_label_col">Negara</label>
+		<input id="<?=$pname?>-partner_negara" mapping="partner_negara" class="form_input_col inputtext" type="text" title="Masukkan negara" style="text-transform: uppercase;" invalidMessage="data tidak negara boleh kosong" required/>
+	</div>
+
+	<div class="form_cell">
+		<label for="<?=$pname?>-partner_telp" class="form_label_col">Telp</label>
+		<div style="display:flex; flex-direction: column" class="form_input_col">
+			<input id="<?=$pname?>-partner_telp" mapping="partner_phone1" class="inputtext" type="text" title="Masukkan no telp" style="text-transform: uppercase;" invalidMessage="data no telp tidak boleh kosong" required/>
+			<input id="<?=$pname?>-partner_telp_2" mapping="partner_phone2" class="inputtext" type="text" style="text-transform: uppercase;"/>
+			<input id="<?=$pname?>-partner_telp_3" mapping="partner_phone3" class="inputtext" type="text" style="text-transform: uppercase;"/>
+			<input id="<?=$pname?>-partner_telp_4" mapping="partner_phone4" class="inputtext" type="text" style="text-transform: uppercase;"/>
+		</div>
+	</div>
+
+	<div class="form_cell">
+		<label for="<?=$pname?>-partner_fax" class="form_label_col">Fax</label>
+		<div style="display:flex; flex-direction: column" class="form_input_col">
+			<input id="<?=$pname?>-partner_fax" mapping="partner_fax1" class="inputtext" type="text" title="Masukkan no fax" style="text-transform: uppercase;"/>
+			<input id="<?=$pname?>-partner_fax_2" mapping="partner_fax2" class="inputtext" type="text" style="text-transform: uppercase;"/>
+		</div>
+	</div>
+
+	<div class="form_cell">
+		<label for="<?=$pname?>-partner_email" class="form_label_col">Email</label>
+		<div style="display:flex; flex-direction: column" class="form_input_col">
+			<input id="<?=$pname?>-partner_email" mapping="partner_email1" class="inputtext" type="text" title="Masukkan no fax" style="text-transform: lowercase;" invalidMessage="data email tidak boleh kosong" readonly required/>
+			<input id="<?=$pname?>-partner_email_2" mapping="partner_email2"  class="inputtext" type="text" style="text-transform: lowercase;"/>
+		</div>
+	</div> 
+
+	<div class="form_cell" style="margin-top: 30px">
+		<div class="form_label_col">&nbsp;</div>
+		<div class="form_input_col">
+			<button id="pnl_form_1-btn_next" onclick="return false">Save</button>
+		</div>	
+	</div>
+
+<?php $this->EndForm() ?>

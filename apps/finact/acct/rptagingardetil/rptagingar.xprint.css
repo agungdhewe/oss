@@ -1,0 +1,44 @@
+.ptdata-col-no {
+	width: 10mm;
+}
+
+.rptdata-col-coacode {
+	width: 15mm;
+}
+
+.rptdata-col-date {
+	text-align: center;
+}
+
+
+.rptdata-col-age {
+	text-align: right;
+}
+
+
+.rptdata-col-descr {
+	font-style: italic;
+}
+
+
+.rptdata-col-partner_id {
+	font-weight: bold;	
+}
+
+
+.rptdata-col-partner_name {
+	font-weight: bold;	
+}
+
+
+
+
+.rptdata-col-val {
+	width: 20mm;
+	text-align: right;
+}
+
+
+.rowfoot {
+	font-weight: bold;
+}

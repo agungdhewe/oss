@@ -1,0 +1,19 @@
+.ptdata-col-no {
+	width: 10mm;
+}
+
+.rptdata-col-coacode {
+	width: 15mm;
+}
+
+
+
+.rptdata-col-val {
+	width: 20mm;
+	text-align: right;
+}
+
+
+.rowfoot {
+	font-weight: bold;
+}

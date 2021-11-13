@@ -1,0 +1,35 @@
+<?php $pname=$this->BeginForm('pnl_login', 'Login') ?>
+
+
+<div>
+Jika anda sudah mendaftar, silakan login pada form di bawah.<br>
+Apabila belum, silahkan <a href="index.php/module/crm/eclient/register">mendaftarkan</a> diri terlebih dahulu.
+</div>
+
+
+
+	<div>
+		<input id="txt_username" type="text" placeholder="Username" />
+	</div>
+
+	<div>
+		<input id="txt_password" type="password" placeholder="Password"/>
+	</div>
+
+	<div>
+		<input type="checkbox" id="chk_rememberme" style="cursor:pointer">
+		<label for="chk_rememberme" style="cursor:pointer">Ingat saya</label>
+	</div>
+
+	<div style="margin-top: 10px">
+		<!-- <button id="btn_login" style="cursor:pointer">Login</button> -->
+		<button type="submit" id="btn_login" style="cursor:pointer">Login</button>
+	</div>
+
+
+	<div style="margin-top: 20px">
+	Lupa password ? silakan klik <a href="index.php/module/crm/eclient/lupapassword">disini</a>
+	</div>
+
+
+<?php $this->EndForm() ?>

@@ -1,0 +1,41 @@
+<div id="pnl_list">
+	<div class="fgta-page-title">Summary Penggunaan Budget</div>
+
+	<div id="pnl_list-pnl_head" style="display: flex; align-items: flex-end">
+
+		<div class="list-search-wrap" style="width: calc(100% - 65px); display: flex;">
+			<!-- <div class="list-search-item" style="width: 50px;">Cari</div>
+			<div class="list-search-item">
+				<input id="pnl_list-txt_search" class="easyui-textbox" style="width: 100%" value="50424393">
+			</div> -->
+			<div class="list-search-item" style="width: 45px">
+				<a href="javascript:void(0)" id="pnl_list-btn_search" class="easyui-linkbutton c8" style="width: 55px">Refresh</a>
+			</div>
+		</div>
+	</div>
+
+
+	<div style="margin-top: 10px">
+		<table id="pnl_list-tbl_list" paging="true" cellspacing="0" width="100%">
+			<thead>
+				<tr>
+					<th mapping="projbudget_name">projbudget_name</th>
+					<th mapping="accbudget_name">accbudget_name</th>
+					<th mapping="budgetted">budgetted</th>
+					<th mapping="requested">requested</th>
+					<th mapping="applied">applied</th>
+					<th mapping="realisasi">realisasi</th>
+				</tr>
+				<tr style="background-color: #cccccc; height: 30px">
+					<td class="fgtable-head" style="width: 100px; border-bottom: 1px solid #000000">Budget</td>
+					<td class="fgtable-head" style="width: 100px; border-bottom: 1px solid #000000">Account</td>
+					<td class="fgtable-head" style="width: 100px; border-bottom: 1px solid #000000; text-align: right">Budgetted</td>
+					<td class="fgtable-head" style="width: 100px; border-bottom: 1px solid #000000; text-align: right">Requested</td>
+					<td class="fgtable-head" style="width: 100px; border-bottom: 1px solid #000000; text-align: right">Applied</td>
+					<td class="fgtable-head" style="width: 100px; border-bottom: 1px solid #000000; text-align: right">Realisasi</td>
+				</tr>
+			</thead>
+		</table>
+	</div>
+
+</div>

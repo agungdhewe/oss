@@ -1,0 +1,40 @@
+.rptdata-col-no {
+	width: 10mm;
+	padding-right: 3mm;
+	text-align: right;
+}
+
+
+.rptdata-col-coaname {
+	font-weight: normal;
+}
+
+.rptdata-col-coaname.parent {
+	font-weight: bold;
+}
+
+.rptdata-col-coaname.detil  {
+	font-weight: normal;
+}
+
+
+.rptdata-col-coacode {
+	width: 20mm;
+	text-align: center;
+}
+
+
+.rptdata-col-val {
+	width: 20mm;
+	text-align: right;
+}
+
+.rptdata-col-val.parent {
+	font-weight: bold;
+}
+
+
+
+.rowgroup-suppress-value {
+	visibility: hidden;
+}

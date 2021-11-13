@@ -1,0 +1,35 @@
+<div id="pnl_list">
+	<!-- <div class="fgta-page-title">Trial Balance</div> -->
+
+	<div id="pnl_list-pnl_head" style="display: flex; justify-content: space-between; margin-top: 10px ">
+		<div>
+			<span>Report</span>
+			<select id="pnl_list-cbo_report_type" class="easyui-combobox" name="dept" style="width:100px;">
+				<option value="projection">Projection</option>
+				<option value="realisasi">Projection vs Realisasi</option>
+			</select>
+
+			<span id="pnl_list-lbl_search_empl">Coll</span>	
+			<span style="width: 150px">
+				<input id="pnl_list-cbo_search_empl" class="easyui-combo" style="width: 150px">
+			</span>
+
+			<span style="margin-left: 10px">Per Periode</span>
+			<span style="width: 200px">
+				<input id="pnl_list-cbo_search_periodemo" class="easyui-combo" style="width: 200px">
+			</span>
+
+			<a href="javascript:void(0)" id="pnl_list-btn_load" class="easyui-linkbutton c8" style="width: 45px">Load</a>
+		</div>
+
+		
+		<div style="text-align: right">
+		<a href="javascript:void(0)" id="pnl_list-btn_export" class="easyui-linkbutton c8" style="width: 100px">Export</a>
+		<a href="javascript:void(0)" id="pnl_list-btn_print" class="easyui-linkbutton c8" style="width: 45px">Print</a>
+		</div>
+	</div>
+	<div id="rpt_container"  style="margin-top: 10px; border: 1px solid #000">
+		<iframe id="obj_report" style="border: 0px; width:100%; height:100%;">
+		</iframe>
+	</div>
+</div>	

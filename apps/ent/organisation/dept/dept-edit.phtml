@@ -1,0 +1,140 @@
+<div id="pnl_edit">
+	<div class="fgta-page-title" style="display: flex; align-items: center ">
+		<div>Edit Department</div>
+		<a id="pnl_edit-btn_edit" href="javascript:void(0)" class="easyui-linkbutton" style="margin-left:10px;" data-options="plain:true,iconCls:'fgta-icon-edit'">edit</a>
+	</div>
+
+
+	<form id="pnl_edit-form">
+
+		<div class="form_row">
+			<div class="form_label_col">ID</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-txt_dept_id" class="easyui-textbox" mapping="dept_id" uppercase="true" maxlength="30" style="width: 400px" data-options="multiline: false , required: true, invalidMessage: 'ID Group harus diisi' ">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Dept Name</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-txt_dept_name" class="easyui-textbox" mapping="dept_name" maxlength="60" style="width: 400px" data-options="multiline: false , required: true, invalidMessage: 'Nama Group harus diisi' ">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Descr</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-txt_dept_descr" class="easyui-textbox" mapping="dept_descr"  maxlength="90" style="width: 400px" data-options="multiline: false  ">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col"></div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-chk_dept_isparent" class="easyui-checkbox c1" mapping="dept_isparent" data-options="label: 'Parent Dept', labelPosition: 'after', disabled:false, checked: false ">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col"></div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-chk_dept_isdisabled" class="easyui-checkbox c1" mapping="dept_isdisabled" data-options="label: 'Disabled', labelPosition: 'after', disabled:false, checked: false ">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col"></div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-chk_dept_isbudgetmandatory" class="easyui-checkbox c1" mapping="dept_isbudgetmandatory" data-options="label: 'Budget is Mandatory', labelWidth:'200px', labelPosition: 'after', disabled:false, checked: false ">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col"></div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-chk_dept_issingleprojectbudget" class="easyui-checkbox c1" mapping="dept_issingleprojectbudget" data-options="label: 'Single Project Budget', labelWidth:'200px', labelPosition: 'after', disabled:false, checked: false ">
+			</div>
+		</div>
+
+
+		<div class="form_row">
+			<div class="form_label_col">Path</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-txt_dept_path" class="easyui-textbox" mapping="dept_path"  maxlength="390" style="width: 400px" data-options="multiline: false , disabled: true ">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Level</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-txt_dept_level" class="easyui-numberbox" mapping="dept_level" style="width: 400px" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  , disabled: true">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Group</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-cbo_deptgroup_id" class="easyui-combo" style="width: 400px" mapping="deptgroup_id" display="deptgroup_name" data-options="editable:false, valueField:'id', textField:'text' , prompt: 'NONE'">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Parent</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-cbo_dept_parent" class="easyui-combo" style="width: 400px" mapping="dept_parent" display="dept_name" data-options="editable:false, valueField:'id', textField:'text' , prompt: 'NONE'">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Type</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-cbo_depttype_id" class="easyui-combo" style="width: 400px" mapping="depttype_id" display="depttype_name" data-options="editable:false, valueField:'id', textField:'text' , prompt: 'NONE'">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Model</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-cbo_deptmodel_id" class="easyui-combo" style="width: 400px" mapping="deptmodel_id" display="deptmodel_name" data-options="editable:false, valueField:'id', textField:'text' , prompt: 'NONE'">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Auth</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-cbo_auth_id" class="easyui-combo" style="width: 400px" mapping="auth_id" display="auth_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Authorisasi harus diisi', prompt: '-- PILIH --'">
+			</div>
+		</div>
+
+		<div class="form_row">
+			<div class="form_label_col">Default Project</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-cbo_project_id" class="easyui-combo" style="width: 400px" mapping="project_id" display="project_name" data-options="editable:false, valueField:'id', textField:'text' , prompt: 'NONE'">
+			</div>
+		</div>
+
+	</form>
+
+
+	<div class="form_row" style="margin-top: 30px">
+		<div class="form_label_col"></div>
+		<div class="form_input_col" style="border: 0px solid black">
+			<a id="pnl_edit-btn_save" class="easyui-linkbutton c1" style="width">Simpan</a>
+		</div>
+	</div>	
+
+
+
+
+
+	<div style="margin-top: 30px; margin-left:-5px; margin-right: -5px; background-color: #cccccc; height: 40px; display: flex; justify-content: space-between; padding: 5px 2px 2px 2px ">
+		<div>
+			<!-- letakkan tombol yang lin disini -->
+		</div>
+		<div>
+			<a id="pnl_edit-btn_delete" class="easyui-linkbutton c5" style="width">Hapus</a>
+		</div>
+	</div>
+
+</div>
+

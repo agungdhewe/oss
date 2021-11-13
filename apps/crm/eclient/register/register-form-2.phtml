@@ -1,0 +1,24 @@
+<?php $this->BeginForm('pnl_form_2', 'Konfirmasi') ?>
+
+
+	<div style="margin-bottom: 30px">
+		Email konfirmasi telah dikirimkan ke <span id="pnl_form_2-txt_email">email</span>.<br>
+		Masukkan kode konformasi sesuai dengan yang telah dikirimkan ke email tersebut.
+	</div>
+
+	<div class="form_cell">
+		<label for="pnl_form_2-kode" class="form_label_col">Kode</label>
+		<input id="pnl_form_2-kode" class="form_input_col" type="text" maxlength="6"  title="Masukkan kode konfirmasi" invalidMessage="masukkan kode dengan benar" required/>
+	</div>
+
+
+	<div class="form_cell" style="margin-top: 30px">
+		<div class="form_label_col">&nbsp;</div>
+		<div class="form_input_col">
+			<button type="submit" id="pnl_form_2-btn_next">Next</button>
+		</div>	
+	</div>
+
+
+
+<?php $this->EndForm() ?>

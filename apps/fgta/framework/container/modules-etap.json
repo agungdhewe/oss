@@ -1,0 +1,11 @@
+{
+	"title": "home",
+	"modules": [
+		"etap/client/config",
+		"fgta/framework/role",
+		"fgta/framework/formdev",
+		"fgta/framework/formgen",
+		"retail/inv/sea",
+		"fgta/framework/test"
+	]
+}

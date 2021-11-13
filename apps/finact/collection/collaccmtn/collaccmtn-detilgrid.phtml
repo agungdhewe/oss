@@ -1,0 +1,86 @@
+<div id="pnl_editdetilgrid">
+	<div class="fgta-page-title">Daftar Detil</div>
+	<div id="pnl_editdetilgrid-title" style="margin-top: 0px; margin-bottom: 30px; font-weight: bold; font-size: 1.2em">XXXXXXX</div>
+
+	<!--// Untuk keperluan search di detil
+	<div id="pnl_editdetilgrid-pnl_head" style="display: flex; align-items: flex-end">
+		<div class="list-search-wrap" style="width: calc(100% - 65px); display: flex;">
+			<div class="list-search-item" style="width: 50px;">Cari</div>
+			<div class="list-search-item">
+				<input id="pnl_editdetilgrid-txt_search" class="easyui-textbox" style="width: 100%">
+			</div>
+			<div class="list-search-item" style="width: 45px">
+				<a href="javascript:void(0)" id="pnl_editdetilgrid-btn_load" class="easyui-linkbutton c8" style="width: 45px">Load</a>
+			</div>
+		</div>
+	</div>	
+	//-->
+
+	<div style="margin-top: 10px; margin-bottom: 15px">
+		<table id="pnl_editdetilgrid-tbl_list" paging="true" cellspacing="0" width="100%" class="deftable">
+			<thead>
+				<tr>
+					<th type="check">chk</th>					
+					<th mapping="billout_descr">billout_descr</th>
+					<th mapping="billout_datedue">billout_datedue</th>
+					<th mapping="billout_daystotarget" style="text-align: right" formatter="row_format_number">billout_daystotarget</th>
+					<th mapping="billout_idrnett" style="text-align: right" formatter="row_format_number">billout_idrnett</th>
+					<th mapping="billout_ppnval" style="text-align: right" formatter="row_format_number">billout_ppnval</th>
+					<th mapping="billout_pphval" style="text-align: right" formatter="row_format_number">billout_pphval</th>
+					<th mapping="billout_discp" style="text-align: right" formatter="row_format_number">billout_discp</th>
+					<th mapping="billout_discval" style="text-align: right" formatter="row_format_number">billout_discval</th>
+					<th mapping="billout_idrtopay" style="text-align: right" formatter="row_format_number">billout_idrtopay</th>
+					<th mapping="billout_ppntopay" style="text-align: right" formatter="row_format_number">billout_ppntopay</th>
+					<th mapping="billout_totalpayment" style="text-align: right" formatter="row_format_number">billout_totalpayment</th>
+				</tr>
+				<tr style="background-color: #cccccc; height: 30px">
+					<td class="fgtable-head" style="width: 30px; border-bottom: 1px solid #000000; text-align: center">*</td>
+					<td class="fgtable-head" style="border-bottom: 1px solid #000000">Tagihan</td>
+					<td class="fgtable-head" style="width: 100px; border-bottom: 1px solid #000000">Bill Due Date</td>
+					<td class="fgtable-head" style="width: 100px; text-align: right; border-bottom: 1px solid #000000">Age</td>
+					<td class="fgtable-head" style="width: 100px; text-align: right; border-bottom: 1px solid #000000">Nett</td>
+					<td class="fgtable-head" style="width: 100px; text-align: right; border-bottom: 1px solid #000000">PPN</td>
+					<td class="fgtable-head" style="width: 100px; text-align: right; border-bottom: 1px solid #000000">PPh</td>
+					<td class="fgtable-head" style="width: 100px; text-align: right; border-bottom: 1px solid #000000">Disc (%)</td>
+					<td class="fgtable-head" style="width: 100px; text-align: right; border-bottom: 1px solid #000000">Discount</td>
+					<td class="fgtable-head" style="width: 100px; text-align: right; border-bottom: 1px solid #000000">Payment</td>
+					<td class="fgtable-head" style="width: 100px; text-align: right; border-bottom: 1px solid #000000">Payment PPN</td>
+					<td class="fgtable-head" style="width: 100px; text-align: right; border-bottom: 1px solid #000000">Total Payment</td>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr style="background-color: #cccccc; height: 30px">
+					<td class="fgtable-foot" style="width: 30px; border-bottom: 1px solid #000000; text-align: center">*</td>
+					<td class="fgtable-foot" style="border-bottom: 1px solid #000000">&nbsp;</td>
+					<td class="fgtable-foot" style="width: 100px; border-bottom: 1px solid #000000">&nbsp;</td>
+					<td class="fgtable-foot" style="width: 100px; text-align: right; border-bottom: 1px solid #000000; font-weight: bold;">&nbsp;</td>
+					<td id="pnl_editdetilgrid-totalnett" class="fgtable-foot" style="width: 100px; text-align: right; border-bottom: 1px solid #000000; font-weight: bold;">0</td>
+					<td id="pnl_editdetilgrid-totalppn" class="fgtable-foot" style="width: 100px; text-align: right; border-bottom: 1px solid #000000; font-weight: bold;">0</td>
+					<td id="pnl_editdetilgrid-totalpph" class="fgtable-foot" style="width: 100px; text-align: right; border-bottom: 1px solid #000000; font-weight: bold;">0</td>
+					<td id="pnl_editdetilgrid-totaldisc" class="fgtable-foot" style="width: 100px; text-align: right; border-bottom: 1px solid #000000; font-weight: bold;">&nbsp;</td>
+					<td id="pnl_editdetilgrid-totaldiscval"  class="fgtable-foot" style="width: 100px; text-align: right; border-bottom: 1px solid #000000; font-weight: bold;">0</td>
+					<td id="pnl_editdetilgrid-totalidrtopay" class="fgtable-foot" style="width: 100px; text-align: right; border-bottom: 1px solid #000000; font-weight: bold;">0</td>
+					<td id="pnl_editdetilgrid-totalppntopay" class="fgtable-foot" style="width: 100px; text-align: right; border-bottom: 1px solid #000000; font-weight: bold;">0</td>
+					<td id="pnl_editdetilgrid-totalpayment"  class="fgtable-foot" style="width: 100px; text-align: right; border-bottom: 1px solid #000000; font-weight: bold;">0</td>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
+
+	<div id="pnl_editdetilgrid-control" style="display: flex; justify-content: space-between; margin-bottom: 100px">
+		<div>
+			<a id="pnl_editdetilgrid-removechecked" href="javascript:void(0)" class="easyui-linkbutton c8">Hapus Checked</a>
+		</div>
+
+		<div>
+			<a id="pnl_editdetilgrid-addrow" href="javascript:void(0)" class="easyui-linkbutton c8">Tambah Baris Multi</a>
+			<span style="display:none"><a href="javascript:void(0)" class="pnl_edititemsgrid-addrow-multi easyui-linkbutton c8">Tambah Baris</a></span>
+		</div>
+
+		<div>
+		</div>
+
+	</div>
+
+
+</div>	

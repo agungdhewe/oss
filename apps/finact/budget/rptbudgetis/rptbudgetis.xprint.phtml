@@ -1,0 +1,188 @@
+<?php
+
+	$doc_iso_reg = "<yout form iso number>";
+	$report_title['id'] = "Budget Income Statement";
+	$report_title['en'] = "";
+
+	$report_printid = strtoupper(uniqid());
+	$report_printdate = date('d/m/Y');
+	$report_date = $report_printdate; //$this->report_date;
+
+	$doc_descr = "per tanggal $report_printdate";
+
+	function number_format_accounting($number) {
+		if ($number<0) {
+			return "(" . number_format($number * -1) . ")";
+		} else {
+			return number_format($number);
+		}
+	}
+
+?>
+
+
+
+<!-- <div style="position: absolute; z-index: -100">
+	<div  id="pagemeasure">&nbsp;</div>
+</div> -->
+
+
+<div id="wrapper" style="z-index: 10">
+
+	<!-- page header: selalu ditampilkan pada tiap halaman, kecuali halaman 1 -->
+	<div id="pageheader" class="fullwidth">
+		<div>
+			<div><?=$report_title['id']?></div>
+			<div style="font-style: italic"><?=$doc_descr?></div>
+		</div>
+		<div style="text-align: right; width: 70mm;">
+			<div style="display:inline-block; width: 38mm;"><b>Print Id</b> <?=$report_printid?></div>
+			<div style="display:inline-block; width: 30mm;">&nbsp;</div>
+			
+		</div>
+	</div>
+
+
+	<!-- report header --->
+	<div id="reporttitle" class="fullwidth">
+		<div style="display: flex; justify-content: space-between">
+
+			<div >
+				<div style="font-size: 7pt; font-style: italic"><?=$doc_iso_reg?></div>
+				<div style="font-weight: bold; font-size: 12pt; margin-top: 2mm"><?=$report_title['id']?></div>
+				<div style="font-weight: bold; font-style: italic; font-size: 10pt; color: #666"><?=$report_title['en']?></div>
+			</div>	
+			<div style="text-align: right">
+				<img id="ellogo" src="index.php/public/assets/logo-printform-right.svg">
+			</div>			
+		</div>
+	</div>
+
+
+	<div class="fullwidth" style="position: relative; margin-top: 2mm; ">
+		<div style="font-size: 8pt;">
+			<b>per tanggal</b> <?=$report_date?>
+		</div>
+		<div style="display: flex; justify-content: space-between; margin-top: 2mm">
+			<div style="font-size: 8pt;"><b>Page</b> 1 <b>of</b> <span id="reporttotalpage">1</span></div>
+			<div style="text-align: right; font-size: 8pt"><b>Print Id</b> <?=$report_printid?></div>
+		</div>
+	</div>
+
+
+	<!-- report content -->
+	<div id="reportcontent" class="fullwidth">
+		<table id="obj_reporttable" width="100%" data-cols-width="10,60,30">
+			<thead>
+				<tr>
+					<th class="rowhead ptdata-col-no" data-fill-color='CCCCCC'>Li</th>
+					<th class="rowhead rptdata-col-coacode" data-fill-color='CCCCCC'>Account</th>
+					<th class="rowhead rptdata-col-coaname" data-fill-color='CCCCCC'>Nama</th>
+					<th class="rowhead rptdata-col-val" data-fill-color='CCCCCC' style="text-align: center">JAN</th>
+					<th class="rowhead rptdata-col-val" data-fill-color='CCCCCC' style="text-align: center">FEB</th>
+					<th class="rowhead rptdata-col-val" data-fill-color='CCCCCC' style="text-align: center">MAR</th>
+					<th class="rowhead rptdata-col-val" data-fill-color='CCCCCC' style="text-align: center">APR</th>
+					<th class="rowhead rptdata-col-val" data-fill-color='CCCCCC' style="text-align: center">MEI</th>
+					<th class="rowhead rptdata-col-val" data-fill-color='CCCCCC' style="text-align: center">JUN</th>
+					<th class="rowhead rptdata-col-val" data-fill-color='CCCCCC' style="text-align: center">JUL</th>
+					<th class="rowhead rptdata-col-val" data-fill-color='CCCCCC' style="text-align: center">AGS</th>
+					<th class="rowhead rptdata-col-val" data-fill-color='CCCCCC' style="text-align: center">SEP</th>
+					<th class="rowhead rptdata-col-val" data-fill-color='CCCCCC' style="text-align: center">OKT</th>
+					<th class="rowhead rptdata-col-val" data-fill-color='CCCCCC' style="text-align: center">NOV</th>
+					<th class="rowhead rptdata-col-val" data-fill-color='CCCCCC' style="text-align: center">DES</th>
+					<th class="rowhead rptdata-col-val" data-fill-color='CCCCCC' style="text-align: center">TOTAL</th>
+					<th style="display: none" data-fill-color='CCCCCC'>RowSection</th>
+					
+				</tr>
+			</thead>
+			<tbody>
+				<!-- 45 -->
+				<?php 
+				$i=0;
+				$total = (float)0;
+				$deptbudgetdet_01 = (float)0; $deptbudgetdet_02 = (float)0; $deptbudgetdet_03 = (float)0; $deptbudgetdet_04 = (float)0; $deptbudgetdet_05 = (float)0; $deptbudgetdet_06 = (float)0; 
+				$deptbudgetdet_07 = (float)0; $deptbudgetdet_08 = (float)0; $deptbudgetdet_09 = (float)0; $deptbudgetdet_10 = (float)0; $deptbudgetdet_11 = (float)0; $deptbudgetdet_12 = (float)0; 
+				foreach ($this->rows as $row) { 
+					$i++;
+
+					$rowsection = $row['rowsection'];
+					$level = (int)$row['rowlevel'];
+					$padleft = $level==0 ? 0 : 2 * ($level-1);
+
+					$rowsectionclass = '';
+					if ($rowsection=='G' || $rowsection=='S') {
+						$cssclass = 'parent';
+						if ($rowsection=='G') {
+							$rowsectionclass = 'rowgroup-suppress-value';
+						} 
+					} else {
+						$cssclass = 'detil';
+						$deptbudgetdet_01 += (float)$row['deptbudgetdet_01'];
+						$deptbudgetdet_02 += (float)$row['deptbudgetdet_02'];
+						$deptbudgetdet_03 += (float)$row['deptbudgetdet_03'];
+						$deptbudgetdet_04 += (float)$row['deptbudgetdet_04'];
+						$deptbudgetdet_05 += (float)$row['deptbudgetdet_05'];
+						$deptbudgetdet_06 += (float)$row['deptbudgetdet_06'];
+						$deptbudgetdet_07 += (float)$row['deptbudgetdet_07'];
+						$deptbudgetdet_08 += (float)$row['deptbudgetdet_08'];
+						$deptbudgetdet_09 += (float)$row['deptbudgetdet_09'];
+						$deptbudgetdet_10 += (float)$row['deptbudgetdet_10'];
+						$deptbudgetdet_11 += (float)$row['deptbudgetdet_11'];
+						$deptbudgetdet_12 += (float)$row['deptbudgetdet_12'];
+						$total += (float)$row['deptbudgetdet_total'];
+					}
+
+					$csspaddleft = "padding-left: {$padleft}mm";
+				?>
+				<tr>
+					<td class="row rptdata-col-no"><?=$i?></td>
+					<td class="row rptdata-col-coacode"><?=$row['accbudget_id']?></td>
+					<td class="row rptdata-col-coaname <?=$cssclass?>" style="<?=$csspaddleft?>; "><?=$row['accbudget_name']?></td>
+					<td class="row rptdata-col-val <?=$cssclass?> <?=$rowsectionclass?>" data-t="n" data-num-fmt="#,##0"><?=number_format_accounting($row['deptbudgetdet_01'])?></td>
+					<td class="row rptdata-col-val <?=$cssclass?> <?=$rowsectionclass?>" data-t="n" data-num-fmt="#,##0"><?=number_format_accounting($row['deptbudgetdet_02'])?></td>
+					<td class="row rptdata-col-val <?=$cssclass?> <?=$rowsectionclass?>" data-t="n" data-num-fmt="#,##0"><?=number_format_accounting($row['deptbudgetdet_03'])?></td>
+					<td class="row rptdata-col-val <?=$cssclass?> <?=$rowsectionclass?>" data-t="n" data-num-fmt="#,##0"><?=number_format_accounting($row['deptbudgetdet_04'])?></td>
+					<td class="row rptdata-col-val <?=$cssclass?> <?=$rowsectionclass?>" data-t="n" data-num-fmt="#,##0"><?=number_format_accounting($row['deptbudgetdet_05'])?></td>
+					<td class="row rptdata-col-val <?=$cssclass?> <?=$rowsectionclass?>" data-t="n" data-num-fmt="#,##0"><?=number_format_accounting($row['deptbudgetdet_06'])?></td>
+					<td class="row rptdata-col-val <?=$cssclass?> <?=$rowsectionclass?>" data-t="n" data-num-fmt="#,##0"><?=number_format_accounting($row['deptbudgetdet_07'])?></td>
+					<td class="row rptdata-col-val <?=$cssclass?> <?=$rowsectionclass?>" data-t="n" data-num-fmt="#,##0"><?=number_format_accounting($row['deptbudgetdet_08'])?></td>
+					<td class="row rptdata-col-val <?=$cssclass?> <?=$rowsectionclass?>" data-t="n" data-num-fmt="#,##0"><?=number_format_accounting($row['deptbudgetdet_09'])?></td>
+					<td class="row rptdata-col-val <?=$cssclass?> <?=$rowsectionclass?>" data-t="n" data-num-fmt="#,##0"><?=number_format_accounting($row['deptbudgetdet_10'])?></td>
+					<td class="row rptdata-col-val <?=$cssclass?> <?=$rowsectionclass?>" data-t="n" data-num-fmt="#,##0"><?=number_format_accounting($row['deptbudgetdet_11'])?></td>
+					<td class="row rptdata-col-val <?=$cssclass?> <?=$rowsectionclass?>" data-t="n" data-num-fmt="#,##0"><?=number_format_accounting($row['deptbudgetdet_12'])?></td>
+					<td class="row rptdata-col-val <?=$cssclass?> <?=$rowsectionclass?>" data-t="n" data-num-fmt="#,##0"><?=number_format_accounting($row['deptbudgetdet_total'])?></td>
+					<td style="display: none"><?=$row['rowsection']?></td>
+					
+				</tr>
+				<?php } ?>
+				<tr>
+					<td class="rowfoot" colspan="3" style="text-align: center" data-fill-color='CCCCCC'>TOTAL</td>
+					<td class="rowfoot rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format_accounting($deptbudgetdet_01)?></td>
+					<td class="rowfoot rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format_accounting($deptbudgetdet_02)?></td>
+					<td class="rowfoot rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format_accounting($deptbudgetdet_03)?></td>
+					<td class="rowfoot rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format_accounting($deptbudgetdet_04)?></td>
+					<td class="rowfoot rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format_accounting($deptbudgetdet_05)?></td>
+					<td class="rowfoot rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format_accounting($deptbudgetdet_06)?></td>
+					<td class="rowfoot rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format_accounting($deptbudgetdet_07)?></td>
+					<td class="rowfoot rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format_accounting($deptbudgetdet_08)?></td>
+					<td class="rowfoot rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format_accounting($deptbudgetdet_09)?></td>
+					<td class="rowfoot rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format_accounting($deptbudgetdet_10)?></td>
+					<td class="rowfoot rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format_accounting($deptbudgetdet_11)?></td>
+					<td class="rowfoot rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format_accounting($deptbudgetdet_12)?></td>
+					<td class="rowfoot rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format_accounting($total)?></td>
+				</tr>				
+			</tbody>
+			<tfoot>
+			</tfoot>			
+		</table>
+		<script>global.totalrowcount = '<?=($i-1)?>'</script>
+	</div>
+
+
+</div>
+
+<div id="wrapperfooter" class="fullwidth" style="z-index: 20">
+	<div id="reportfooter" style="display: flex; justify-content: space-between; height: 10mm; ">
+		&nbsp;
+	<div>				
+</div>

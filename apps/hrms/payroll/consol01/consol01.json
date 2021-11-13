@@ -1,0 +1,8 @@
+{
+	"title" : "Konsolidasi PPH",
+	"allowanonymous" : true,
+	"allowedgroups" : ["public"],
+	"apis" : {
+	}	
+}
+

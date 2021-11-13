@@ -1,0 +1,23 @@
+{
+	"title" : "Event",
+	"icon" : "icon-crmevents-white.png",
+	"variance" : {
+		"commit" : {
+			"title" : "Event - Commit",
+			"icon" : "icon-crmevents-commit-white.png"
+		},
+		"uncommit" : {
+			"title" : "Event - UnCommit",
+			"icon" : "icon-crmevents-uncommit-white.png"
+		}		
+	},
+	"allowanonymous" : true,
+	"allowedgroups" : ["public"],
+	"apis" : {
+		"save" : { "allowanonymous": false, "allowedgroups" : ["public"] },
+		"delete" : { "allowanonymous": false, "allowedgroups" : ["public"] },
+		"open" : { "allowanonymous": false, "allowedgroups" : ["public"] },
+		"list" : { "allowanonymous": false, "allowedgroups" : ["public"] }
+	}	
+}
+

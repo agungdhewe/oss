@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX `mst_partner_empl_id` ON `mst_partner` (`empl_id`);
