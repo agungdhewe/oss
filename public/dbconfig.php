@@ -2,10 +2,11 @@
 
 define('DB_CONFIG', [
 	'FGTACLOUD' => [
-		'DSN' => "mysql:host=localhost;dbname=fgtadb",
+		'DSN' => "mysql:host=localhost;dbname=ossdb",
 		'user' => "root",
-		'pass' => ""
+		'pass' => "rahasia"
 	],
+
 
 	'FGTAFS' => [
 		'host' => 'localhost',
@@ -13,8 +14,8 @@ define('DB_CONFIG', [
 		'protocol' => 'http',
 		'username' => null,
 		'password' => null,
-		'database' => 'fgtadb'		
-	]
+		'database' => 'ossdbfs'		
+	]	
 
 ]);
 
@@ -23,4 +24,4 @@ define('DB_CONFIG', [
 $GLOBALS['MAINDB'] = 'FGTACLOUD';
 $GLOBALS['MAINDBTYPE'] = 'mariadb';
 
-$GLOBALS['MAIN_USERTABLE'] = 'fgtadb.fgt_user';
+$GLOBALS['MAIN_USERTABLE'] = 'ossdb.fgt_user';

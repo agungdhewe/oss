@@ -20,15 +20,10 @@ if (!defined('FGTA4')) {
 		<?php 
 		$fmt = array_key_exists('template', $_GET) ? $_GET['template'] : "";
 		switch ($fmt) {
-			case "format-01-a3-landscape" :
-				echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"templates/fgta-printout/asset/format-01-a3-landscape.css\" />";
-				break;
 			case "format-01-a4-landscape" :
 				echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"templates/fgta-printout/asset/format-01-a4-landscape.css\" />";
 				break;
-			case "format-01-a5-landscape" :
-				echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"templates/fgta-printout/asset/format-01-a5-landscape.css\" />";
-				break;
+
 			default:
 				echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"templates/fgta-printout/asset/format-01-a4.css\" />";
 				break;
@@ -88,18 +83,10 @@ if (!defined('FGTA4')) {
 				return check;
 			};
 
-			window.format_number = (value) => {
-				var val = parseFloat(value);
-				if (!isNaN(val)) {
-					return val.toLocaleString('en-US');	
-				} else {
-					return value;
-				}			
-			}
+
 
 			function adjustPage(param) {
-				// console.log(param);
-
+				// default value
 				param = Object.assign({
 					adjust_height_report: 3,
 					adjust_height_page: -2
@@ -130,6 +117,9 @@ if (!defined('FGTA4')) {
 				reporttotalpage.innerHTML = pcount;
 
 
+
+
+				
 				var top = 0
 				var height = 0;
 				pageheight_px = pageheight_px + param.adjust_height_report ;
@@ -142,26 +132,16 @@ if (!defined('FGTA4')) {
 						pagenumber.appendChild(document.createTextNode(`Page ${i} of ${pcount}`));
 					}
 
-
-					var adjusted_page_height = pageheight_px + param.adjust_height_page;
-
-					// top = (i*pageheight_px) - pageheight_px;
-					// height = pageheight_px + param.adjust_height_page;
-					top = (i*adjusted_page_height) - adjusted_page_height;
-					height = adjusted_page_height;
-
-
-					// console.log(height);
+					top = (i*pageheight_px) - pageheight_px;
+					height = pageheight_px + param.adjust_height_page;
 
 					ph.appendChild(pagenumber)
 					ph.classList.add('paging');
-					// ph.style.top = `${(i*pageheight_px) - pageheight_px}px`;
-					// ph.style.height = `${pageheight_px-2}px`
-					ph.style.top = `${top}px`;
-					ph.style.height = `${height}px`
+					ph.style.top = `${(i*pageheight_px) - pageheight_px}px`;
+					ph.style.height = `${pageheight_px-2}px`
 					document.body.appendChild(ph);
 				}
-				// document.body.style.height = `${top + height}px`;
+				document.body.style.height = `${top + height}px`;
 				document.body.style.justifyContent = "space-between";
 
 			}
@@ -195,16 +175,8 @@ if (!defined('FGTA4')) {
 				
 	</head>
 	<body>
-		<?php
-		$view = $this->reqinfo->moduleviewpath;
-		if (array_key_exists('view', $_GET)) {
-			$userview = dirname($this->reqinfo->moduleviewpath).'/'.$_GET['view'].'.phtml';
-			if (is_file($userview)) {
-				$view = $userview;
-			} 
-		}
-		require_once $view; 
-		?>
+		<?php require_once $this->reqinfo->moduleviewpath ?>
+
 	</body>
 
 
@@ -212,13 +184,11 @@ if (!defined('FGTA4')) {
 	<!-- Script Module <?php //echo($this->reqinfo->modulejspath) ?> -->	
 	<?php if (is_file($this->reqinfo->modulejspath)) { ?>
 	<script type="module">
-		import * as uibaseclass from './index.php/jslibs/uibase4.js'
-		import * as uiprintoutclass from './index.php/jslibs/uiprintout.js'
-		import * as uiclass from '<?=$this->reqinfo->modulejsurl?>';
+		import * as uiprintout from './index.php/jslibs/uiprintout.js'
+		import * as ui from '<?=$this->reqinfo->modulejsurl?>';
 
-		let uibase = Object.assign({}, uibaseclass);
-		let uiprintout = Object.assign(uibase, uiprintoutclass);
-		window.$ui = Object.assign(uiprintout, uiclass);
+		let uibase = Object.assign({}, uiprintout);
+		window.$ui = Object.assign(uibase, ui);
 
 	</script>
 	<?php } ?>
