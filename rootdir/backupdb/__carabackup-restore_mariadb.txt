@@ -14,6 +14,14 @@ mysql -u root -p --init-command="SET SESSION FOREIGN_KEY_CHECKS=0;" fgtadb < /ho
 
  
 
+##Windows, XAMPP
+# masuk ke direktori mysql XAMPP
+cd \xampp\mysql\bin
+
+#restore database
+# sesuaikan nama file backup database
+C:\xampp\mysql\bin>mysql -u root -p --init-command="SET SESSION FOREIGN_KEY_CHECKS=0" ossdb < C:\xampp\htdocs\oss\rootdir\backupdb\ossdb-backup-2021-11-04_1714.sql
+
 
 
 
