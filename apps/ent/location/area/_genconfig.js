@@ -3,6 +3,9 @@
 const dbtype = global.dbtype;
 const comp = global.comp;
 
+
+// ini ada perubahan
+
 module.exports = {
 	title: "Area",
 	autoid: false,
