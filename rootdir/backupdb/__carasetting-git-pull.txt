@@ -1,4 +1,4 @@
 Setup Git di windows
 git init
-git remote add git remote add origin https://github.com/agungdhewe/oss.git
+git remote add  origin https://github.com/agungdhewe/oss.git
 git pull origin main
