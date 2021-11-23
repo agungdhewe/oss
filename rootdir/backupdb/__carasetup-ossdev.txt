@@ -117,7 +117,17 @@ exit
 
 
 ;;; restore database
+mysql -u root -p --init-command="SET SESSION FOREIGN_KEY_CHECKS=0" ossdb < C:\xampp\htdocs\oss\rootdir\backupdb\ossdb-backup-2021-11-04_1714.sql
+mysql -u root -p --init-command="SET SESSION FOREIGN_KEY_CHECKS=0" ossdbblank < C:\xampp\htdocs\oss\rootdir\backupdb\ossdbblank_v4.sql
 
+
+
+
+
+;;;; Untuk yang versi kosong untuk testing, bisa copy ossblank ke htdocs
+; initial login
+username: root
+password: ossdev
 
 
 
