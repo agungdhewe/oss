@@ -272,3 +272,57 @@ a.c8:hover{
 .fgta-recordstatus-button > a {
 	color: #687b8a !important;
 }
+
+
+
+
+.deftable {
+	border: 1px solid #ffde00ff;
+	border-radius: 3px 3px 3px 3px;
+	-moz-border-radius: 3px 3px 3px 3px;
+	-webkit-border-radius: 3px 3px 3px 3px;
+}
+
+.deftable td:first-child {
+	border-radius: 3px 0 0 0;
+	-moz-border-radius: 3px 0 0 0;
+	-webkit-border-radius: 3px 0 0 0;
+}
+
+.deftable td:last-child {
+	border-radius: 0 3px 0 0;
+	-moz-border-radius: 0 3px 0 0;
+	-webkit-border-radius: 0 3px 0 0;
+}
+
+.deftable tr td:first-child {
+	padding-left: 10px;
+}
+
+.deftable tr td:last-child {
+	padding-right: 10px;
+}
+
+
+.detilbox {
+	border-radius: 3px 3px 3px 3px;
+	-moz-border-radius: 3px 3px 3px 3px;
+	-webkit-border-radius: 3px 3px 3px 3px;
+}
+
+.detilbox div:first-child {
+	border-radius: 3px 3px 0 0;
+	-moz-border-radius: 3px 3px 0 0;
+	-webkit-border-radius: 3px 3px 0 0;
+}
+
+.detilbox div:last-child {
+	border-radius: 0px 0px 3px 3px;
+	-moz-border-radius: 0px 0px 3px 3px;
+	-webkit-border-radius: 0px 0px 3px 3px;
+}
+
+
+
+
+
