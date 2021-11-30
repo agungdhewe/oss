@@ -5,27 +5,32 @@ if (!defined('FGTA4')) {
 }
 
 require_once __ROOT_DIR.'/core/sqlutil.php';
-
+require_once __DIR__ . '/xapi.base.php';
 
 use \FGTA4\exceptions\WebException;
 
 
 
-class DataOpen extends WebAPI {
-	function __construct() {
-		$this->debugoutput = true;
-		$DB_CONFIG = DB_CONFIG[$GLOBALS['MAINDB']];
-		$DB_CONFIG['param'] = DB_CONFIG_PARAM[$GLOBALS['MAINDBTYPE']];
-		$this->db = new \PDO(
-					$DB_CONFIG['DSN'], 
-					$DB_CONFIG['user'], 
-					$DB_CONFIG['pass'], 
-					$DB_CONFIG['param']
-		);
+/**
+ * finact/fin/banklink/apis/detil-open.php
+ *
+ * ==========
+ * Detil-Open
+ * ==========
+ * Menampilkan satu baris data/record sesuai PrimaryKey,
+ * dari tabel detil} banklink (trn_bankbook)
+ *
+ * Agung Nugroho <agung@fgta.net> http://www.fgta.net
+ * Tangerang, 26 Maret 2021
+ *
+ * digenerate dengan FGTA4 generator
+ * tanggal 19/11/2021
+ */
+$API = new class extends banklinkBase {
 
-	}
-	
 	public function execute($options) {
+		$tablename = 'trn_bankbookdetil';
+		$primarykey = 'bankbookdetil_id';
 		$userdata = $this->auth->session_get_user();
 		
 		try {
@@ -38,7 +43,7 @@ class DataOpen extends WebAPI {
 				]
 			);
 
-			$sql = \FGTA4\utils\SqlUtility::Select('trn_bankbookdetil', [
+			$sql = \FGTA4\utils\SqlUtility::Select('trn_bankbookdetil A', [
 				'bankbookdetil_id', 'bankbookdetil_ref', 'bankbookdetil_valfrgd', 'bankbookdetil_valfrgk', 'bankbookdetil_valfrgsaldo', 'bankbookdetil_validrd', 'bankbookdetil_validrk', 'bankbookdetil_validrsaldo', 'bankbookdetil_notes', 'jurnal_id', 'acc_fin', 'bankbook_id', '_createby', '_createdate', '_modifyby', '_modifydate' 
 			], $where->sql);
 
@@ -61,12 +66,14 @@ class DataOpen extends WebAPI {
 				'jurnal_descr' => \FGTA4\utils\SqlUtility::Lookup($record['jurnal_id'], $this->db, 'trn_jurnal', 'jurnal_id', 'jurnal_descr'),
 				'accfin_name' => \FGTA4\utils\SqlUtility::Lookup($record['acc_fin'], $this->db, 'mst_accfin', 'accfin_id', 'accfin_name'),
 				
-				'_createby_username' => \FGTA4\utils\SqlUtility::Lookup($record['_createby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
-				'_modifyby_username' => \FGTA4\utils\SqlUtility::Lookup($record['_modifyby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+				'_createby' => \FGTA4\utils\SqlUtility::Lookup($record['_createby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+				'_modifyby' => \FGTA4\utils\SqlUtility::Lookup($record['_modifyby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
 			]);
 
 			// $date = DateTime::createFromFormat('d/m/Y', "24/04/2012");
 			// echo $date->format('Y-m-d');
+
+	
 
 			return $result;
 		} catch (\Exception $ex) {
@@ -74,6 +81,4 @@ class DataOpen extends WebAPI {
 		}
 	}
 
-}
-
-$API = new DataOpen();
+};

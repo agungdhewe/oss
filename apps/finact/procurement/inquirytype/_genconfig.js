@@ -48,6 +48,10 @@ module.exports = {
 						api: 'finact/procurement/inquiryselect/list'
 					})
 				},
+				inquirytype_isperempl: { text: 'Per Employee', type: dbtype.boolean, null: false, default: '0',  suppresslist: true,options: { labelWidth: '300px' } },
+
+
+
 
 				itemmanage_id: {
 					text:'Manage As', type: dbtype.varchar(2), null:false, suppresslist: true,

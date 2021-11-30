@@ -1,3 +1,0 @@
-<?php
-
-// detil delete api

@@ -73,10 +73,17 @@ class DataList extends WebAPI {
 					$record[$key] = $value;
 				}
 
+
+				$hrgrd_id = \FGTA4\utils\SqlUtility::Lookup($record['hrjob_id'], $this->db, 'mst_hrjob', 'hrjob_id', 'hrgrd_id'); 
+				$hrgrd = \FGTA4\utils\SqlUtility::LookupRow($hrgrd_id, $this->db, 'mst_hrgrd', 'hrgrd_id');
+
+
 				array_push($records, array_merge($record, [
 					// // jikalau ingin menambah atau edit field di result record, dapat dilakukan sesuai contoh sbb: 
 					//'tanggal' => date("d/m/y", strtotime($record['tanggal'])),
 				 	//'tambahan' => 'dta'
+					'hrgrd_id' => $hrgrd_id,
+					'hrgrd_name' => $hrgrd['hrgrd_name'],
 					'hrjob_name' => \FGTA4\utils\SqlUtility::Lookup($record['hrjob_id'], $this->db, 'mst_hrjob', 'hrjob_id', 'hrjob_name'),
 					'hrstatus_name' => \FGTA4\utils\SqlUtility::Lookup($record['hrstatus_id'], $this->db, 'mst_hrstatus', 'hrstatus_id', 'hrstatus_name'),
 					'dept_name' => \FGTA4\utils\SqlUtility::Lookup($record['dept_id'], $this->db, 'mst_dept', 'dept_id', 'dept_name'),
@@ -86,7 +93,6 @@ class DataList extends WebAPI {
 					'gender_name' => \FGTA4\utils\SqlUtility::Lookup($record['gender_id'], $this->db, 'mst_gender', 'gender_id', 'gender_name'),
 					'edu_name' => \FGTA4\utils\SqlUtility::Lookup($record['edu_id'], $this->db, 'mst_edu', 'edu_id', 'edu_name'),
 					'religion_name' => \FGTA4\utils\SqlUtility::Lookup($record['religion_id'], $this->db, 'mst_religion', 'religion_id', 'religion_name'),
-					 
 				]));
 			}
 

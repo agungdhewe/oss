@@ -1,8 +1,0 @@
-{
-	"title" : "Post Data",
-	"allowanonymous" : true,
-	"allowedgroups" : ["public"],
-	"apis" : {
-	}	
-}
-

@@ -6,6 +6,8 @@
 
 	$report_printid = strtoupper(uniqid());
 	$report_printdate = date('d/m/Y');
+	$report_date = $report_printdate;
+
 
 	$doc_descr = "per tanggal $report_printdate";
 ?>
@@ -43,13 +45,12 @@ global.reportparameter = {
 	<!-- report header --->
 	<div id="reporttitle" class="fullwidth">
 		<div style="display: flex; justify-content: space-between">
-
 			<div >
-				<div style="font-size: 7pt; font-style: italic"><?=$doc_iso_reg?></div>
+				<div style="font-weight: bold; font-size: 12pt; "><?=__COMPANY_NAME__?></div>
 				<div style="font-weight: bold; font-size: 12pt; margin-top: 2mm"><?=$report_title['id']?></div>
-				<div style="font-weight: bold; font-style: italic; font-size: 10pt; color: #666"><?=$report_title['en']?></div>
 			</div>	
 			<div style="text-align: right">
+				<div style="text-align: right; font-size: 8pt"><b>Print Id</b> <?=$report_printid?></div>
 				<!-- <img id="ellogo" src="index.php/public/assets/logo-printform-right.svg"> -->
 			</div>			
 		</div>
@@ -57,15 +58,11 @@ global.reportparameter = {
 
 
 	<div class="fullwidth" style="position: relative; margin-top: 2mm; ">
-		<div style="font-size: 8pt;">
-			<b>per tanggal</b> ....
-		</div>
-		<div style="display: flex; justify-content: space-between; margin-top: 2mm">
+		<div style="display: flex; justify-content: space-between">
+			<div style="font-size: 8pt;"><b>per tanggal</b> <?=$report_date?></div>
 			<div style="font-size: 8pt;"><b>Page</b> 1 <b>of</b> <span id="reporttotalpage">1</span></div>
-			<div style="text-align: right; font-size: 8pt"><b>Print Id</b> <?=$report_printid?></div>
 		</div>
 	</div>
-
 
 	<!-- report content -->
 	<div id="reportcontent" class="fullwidth">

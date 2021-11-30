@@ -23,7 +23,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 18/04/2021
+ * tanggal 29/11/2021
  */
 $API = new class extends partnerBase {
 
@@ -38,12 +38,12 @@ $API = new class extends partnerBase {
 				throw new \Exception('your group authority is not allowed to do this action.');
 			}
 
-
+			// \FGTA4\utils\SqlUtility::setDefaultCriteria($options->criteria, '--fieldscriteria--', '--value--');
 			$where = \FGTA4\utils\SqlUtility::BuildCriteria(
 				$options->criteria,
 				[
 					"search" => " A.partner_id LIKE CONCAT('%', :search, '%') OR A.partner_name LIKE CONCAT('%', :search, '%') ",
-					"partnertype_id" => "A.partnertype_id = :partnertype_id "
+					"partnertype_id" => " A.partnertype_id = :partnertype_id "
 				]
 			);
 
@@ -59,7 +59,7 @@ $API = new class extends partnerBase {
 			$limit = " LIMIT $maxrow OFFSET $offset ";
 			$stmt = $this->db->prepare("
 				select 
-				partner_id, partner_name, partner_addressline1, partner_addressline2, partner_postcode, partner_city, partner_country, partner_phone, partner_mobilephone, partner_email, partner_isdisabled, partner_isparent, partner_parent, partnertype_id, partnerorg_id, partner_npwp, partner_isnonnpwp, empl_id, ae_empl_id, col_empl_id, _createby, _createdate, _modifyby, _modifydate 
+				A.partner_id, A.partner_name, A.partner_addressline1, A.partner_addressline2, A.partner_postcode, A.partner_city, A.partner_country, A.partner_phone, A.partner_mobilephone, A.partner_email, A.partner_isdisabled, A.partner_isparent, A.partner_parent, A.partnertype_id, A.partnerorg_id, A.partner_npwp, A.partner_isnonnpwp, A.empl_id, A.ae_empl_id, A.col_empl_id, A._createby, A._createdate, A._modifyby, A._modifydate 
 				from mst_partner A
 			" . $where->sql . $limit);
 			$stmt->execute($where->params);

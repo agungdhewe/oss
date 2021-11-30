@@ -24,7 +24,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 18/04/2021
+ * tanggal 29/11/2021
  */
 $API = new class extends partnerBase {
 	
@@ -51,7 +51,6 @@ $API = new class extends partnerBase {
 
 			$sql = \FGTA4\utils\SqlUtility::Select('mst_partner A', [
 				'partner_id', 'partner_name', 'partner_addressline1', 'partner_addressline2', 'partner_postcode', 'partner_city', 'partner_country', 'partner_phone', 'partner_mobilephone', 'partner_email', 'partner_isdisabled', 'partner_isparent', 'partner_parent', 'partnertype_id', 'partnerorg_id', 'partner_npwp', 'partner_isnonnpwp', 'empl_id', 'ae_empl_id', 'col_empl_id', '_createby', '_createdate', '_modifyby', '_modifydate'
-				, '_createby', '_createdate', '_modifyby', '_modifydate' 
 			], $where->sql);
 
 			$stmt = $this->db->prepare($sql);
@@ -71,7 +70,6 @@ $API = new class extends partnerBase {
 				// 'tambahan' => 'dta',
 				//'tanggal' => date("d/m/Y", strtotime($record['tanggal'])),
 				//'gendername' => $record['gender']
-				
 				'country_name' => \FGTA4\utils\SqlUtility::Lookup($record['partner_country'], $this->db, 'mst_country', 'country_id', 'country_name'),
 				'partner_parent_name' => \FGTA4\utils\SqlUtility::Lookup($record['partner_parent'], $this->db, 'mst_partner', 'partner_id', 'partner_name'),
 				'partnertype_name' => \FGTA4\utils\SqlUtility::Lookup($record['partnertype_id'], $this->db, 'mst_partnertype', 'partnertype_id', 'partnertype_name'),
@@ -79,8 +77,6 @@ $API = new class extends partnerBase {
 				'empl_name' => \FGTA4\utils\SqlUtility::Lookup($record['empl_id'], $this->db, 'mst_empl', 'empl_id', 'empl_name'),
 				'ae_empl_name' => \FGTA4\utils\SqlUtility::Lookup($record['ae_empl_id'], $this->db, 'mst_empl', 'empl_id', 'empl_name'),
 				'col_empl_name' => \FGTA4\utils\SqlUtility::Lookup($record['col_empl_id'], $this->db, 'mst_empl', 'empl_id', 'empl_name'),
-
-
 				'_createby' => \FGTA4\utils\SqlUtility::Lookup($record['_createby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
 				'_modifyby' => \FGTA4\utils\SqlUtility::Lookup($record['_modifyby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
 

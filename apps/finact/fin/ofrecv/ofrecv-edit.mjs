@@ -628,7 +628,7 @@ async function form_datasaving(data, options) {
 	//    options.cancel = true
 
 	// Modifikasi object data, apabila ingin menambahkan variabel yang akan dikirim ke server
-	options.skipmappingresponse = [partner_id, temprecv_id, ar_jurnaldetil_id, bankrekening_id, coa_id, dept_id, ];
+	options.skipmappingresponse = ['partner_id', 'temprecv_id', 'ar_jurnaldetil_id', 'bankrekening_id', 'coa_id, dept_id' ];
 }
 
 async function form_datasaveerror(err, options) {

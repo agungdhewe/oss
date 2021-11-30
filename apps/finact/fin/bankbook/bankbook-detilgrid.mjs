@@ -3,7 +3,7 @@ var this_page_options;
 
 const tbl_list = $('#pnl_editdetilgrid-tbl_list');
 const txt_title = $('#pnl_editdetilgrid-title');
-const pnl_control = $('#pnl_editdetilgrid-control');
+const pnl_control = $('.pnl_editdetilgrid-control');
 const btn_removechecked  = $('#pnl_editdetilgrid-removechecked');
 const btn_addrow = $('#pnl_editdetilgrid-addrow');
 

@@ -16,34 +16,38 @@
 	</div>	
 	//-->
 
+	<div class="pnl_editdetilgrid-control" style="display: flex; justify-content: space-between; margin-bottom: 10px">
+		<div>
+			<a id="pnl_editdetilgrid-upload" href="javascript:void(0)" class="easyui-linkbutton c8">Upload</a>
+		</div>
+
+	</div>
+
+
 	<div style="margin-top: 10px; margin-bottom: 15px">
-		<table id="pnl_editdetilgrid-tbl_list" paging="true" cellspacing="0" width="100%">
+		<table id="pnl_editdetilgrid-tbl_list" paging="true" cellspacing="0" width="100%" class="deftable">
 			<thead>
 				<tr>
-					<th type="check">chk</th>
+					<th type="check">chk</th>					
 					<th mapping="bankbookdetil_ref">bankbookdetil_ref</th>
+					<th mapping="bankbookdetil_notes">bankbookdetil_notes</th>
 					<th mapping="bankbookdetil_validrd" style="text-align: right" formatter="row_format_number">bankbookdetil_validrd</th>
 					<th mapping="bankbookdetil_validrk" style="text-align: right" formatter="row_format_number">bankbookdetil_validrk</th>
 					<th mapping="bankbookdetil_validrsaldo" style="text-align: right" formatter="row_format_number">bankbookdetil_validrsaldo</th>
-					<th mapping="bankbookdetil_notes">bankbookdetil_notes</th>
-
-					<th mapping=""></th>
 				</tr>
 				<tr style="background-color: #cccccc; height: 30px">
 					<td class="fgtable-head" style="width: 30px; border-bottom: 1px solid #000000; text-align: center">*</td>
 					<td class="fgtable-head" style="width: 100px; border-bottom: 1px solid #000000">Ref</td>
+					<td class="fgtable-head" style="border-bottom: 1px solid #000000">Notes</td>
 					<td class="fgtable-head" style="width: 100px; text-align: right; border-bottom: 1px solid #000000">IDR Debet</td>
 					<td class="fgtable-head" style="width: 100px; text-align: right; border-bottom: 1px solid #000000">IDR Kredit</td>
 					<td class="fgtable-head" style="width: 100px; text-align: right; border-bottom: 1px solid #000000">IDR Saldo</td>
-					<td class="fgtable-head" style="width: 100px; border-bottom: 1px solid #000000">Notes</td>
-
-					<td class="fgtable-head" style="border-bottom: 1px solid #000000; text-align: center">&nbsp;</td>
 				</tr>
 			</thead>
 		</table>
 	</div>
 
-	<div id="pnl_editdetilgrid-control" style="display: flex; justify-content: space-between; margin-bottom: 100px">
+	<div class="pnl_editdetilgrid-control" style="display: flex; justify-content: space-between; margin-bottom: 100px">
 		<div>
 			<a id="pnl_editdetilgrid-removechecked" href="javascript:void(0)" class="easyui-linkbutton c8">Hapus Checked</a>
 		</div>

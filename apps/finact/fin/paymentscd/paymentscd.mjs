@@ -5,11 +5,21 @@ import * as fgta4pageslider from '../../../../../index.php/asset/fgta/framework/
 import * as apis from './paymentscd.apis.mjs'
 import * as pList from './paymentscd-list.mjs'
 import * as pEdit from './paymentscd-edit.mjs'
+import * as pEditBillingrid from './paymentscd-billingrid.mjs'
+import * as pEditBillinform from './paymentscd-billinform.mjs'
+import * as pEditMultiadd from './paymentscd-multiadd.mjs'
+import * as pEditApprovalgrid from './paymentscd-approvalgrid.mjs'
+import * as pEditApprovalform from './paymentscd-approvalform.mjs'
 
 
 
 const pnl_list = $('#pnl_list')
 const pnl_edit = $('#pnl_edit')
+const pnl_editbillingrid = $('#pnl_editbillingrid')
+const pnl_editbillinform = $('#pnl_editbillinform')
+const pnl_editmultiadd = $('#pnl_editmultiadd')
+const pnl_editapprovalgrid = $('#pnl_editapprovalgrid')
+const pnl_editapprovalform = $('#pnl_editapprovalform')
 
 
 
@@ -35,7 +45,11 @@ export async function init(opt) {
 		.initPages([
 			{panel: pnl_list, handler: pList},
 			{panel: pnl_edit, handler: pEdit},
-			
+			{panel: pnl_editbillingrid, handler: pEditBillingrid},
+			{panel: pnl_editbillinform, handler: pEditBillinform},
+			{panel: pnl_editmultiadd, handler: pEditMultiadd},
+			{panel: pnl_editapprovalgrid, handler: pEditApprovalgrid},
+			{panel: pnl_editapprovalform, handler: pEditApprovalform}			
 		], opt)
 
 	$ui.setPages(pages)

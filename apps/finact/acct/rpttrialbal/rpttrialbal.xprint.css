@@ -1,3 +1,7 @@
+.itemrow {
+	vertical-align: top;
+}
+
 .ptdata-col-no {
 	width: 10mm;
 }

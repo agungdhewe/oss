@@ -1,18 +1,11 @@
 <?php namespace FGTA4\module; if (!defined('FGTA4')) { die('Forbiden'); } 
 
-require_once __ROOT_DIR.'/core/debug.php';
-require_once __DIR__.'/apis/neraca.php';
-
 
 
 use \FGTA4\debug;
 
 class PrintForm extends WebModule {
 	function __construct() {
-		$logfilepath = __LOCALDB_DIR . "/output/rpttrialbal.txt";
-		// debug::disable();
-		debug::start($logfilepath, "w");
-
 		$this->debugoutput = true;
 		$DB_CONFIG = DB_CONFIG[$GLOBALS['MAINDB']];
 		$DB_CONFIG['param'] = DB_CONFIG_PARAM[$GLOBALS['MAINDBTYPE']];
@@ -31,19 +24,21 @@ class PrintForm extends WebModule {
 
 		
 		$objdt = \DateTime::createFromFormat('d/m/Y',$dt);
-
+		$pertanggal = $objdt->format('Y-m-d');
 
 		try {
-
-			$neraca = new \Neraca((object)[
-				'db' => $this->db,
-				'currentuser' => $userdata
-			]);
-			$rows =  $neraca->getdata($objdt);
+			$stmt = $this->db->prepare("call ledger_report_format(:coaformat_id, :date)");
+			$stmt->execute([
+				':coaformat_id' => 'NR',
+				':date' => $pertanggal
+			]);	
+	
+			$stmt = $this->db->prepare("select * from RESULT_GL_FORMAT");
+			$stmt->execute();
+			$rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 			$this->rows = $rows; 
 
 		} catch (\Exception $ex) {
-			debug::log($ex->getMessage());
 			throw $ex;
 		}
 	}

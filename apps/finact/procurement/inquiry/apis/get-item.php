@@ -31,15 +31,38 @@ $API = new class extends inquiryBase {
 				[
 					"search" => " A.item_id LIKE CONCAT('%', :search, '%') OR A.item_name LIKE CONCAT('%', :search, '%') ",
 					"item_isdisabled" => " A.item_isdisabled = :item_isdisabled  " ,
-					"dept_id" => " A.dept_id "
+					"dept_id" => " A.dept_id ",
+					"inquirytype_id" => null
 				]
 			);
+
+
+			$inquirytype_id = $options->criteria->inquirytype_id;
+			$this->db->query("
+				DROP TABLE IF EXISTS TEMP_INQUIRYITEMCLASS;
+				CREATE TEMPORARY TABLE -- IF NOT EXISTS 
+					TEMP_INQUIRYITEMCLASS ( INDEX(itemclass_id) ) 
+					ENGINE=MyISAM 
+				AS (
+					select
+					itemclass_id
+					from
+					mst_inquirytypeitemclass
+					where
+					inquirytype_id = '$inquirytype_id'
+				);	
+			");
 
 			$result = new \stdClass; 
 			$maxrow = 30;
 			$offset = (property_exists($options, 'offset')) ? $options->offset : 0;
 
-			$stmt = $this->db->prepare("select count(*) as n from mst_item A" . $where->sql);
+			$stmt = $this->db->prepare("
+					select count(*) as n from 
+					mst_item A inner join TEMP_INQUIRYITEMCLASS B on B.itemclass_id = A.itemclass_id
+				" 
+				. $where->sql
+			);
 			$stmt->execute($where->params);
 			$row  = $stmt->fetch(\PDO::FETCH_ASSOC);
 			$total = (float) $row['n'];
@@ -48,7 +71,7 @@ $API = new class extends inquiryBase {
 			$stmt = $this->db->prepare("
 					select 
 					A.item_id, A.item_name,  A.item_stdcost,  A.itemclass_id
-					from mst_item A
+					from mst_item A inner join TEMP_INQUIRYITEMCLASS B on B.itemclass_id = A.itemclass_id
 				" 
 				. $where->sql 
 				. " order by A.item_name "

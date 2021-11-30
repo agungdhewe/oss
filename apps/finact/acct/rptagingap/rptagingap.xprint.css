@@ -1,3 +1,28 @@
+.grouphead {
+	background-color: #ccc;
+	padding: 3px;
+	font-weight: bold;
+}
+
+.groupfoot {
+	border-top: 1px solid;
+	padding: 3px;
+	font-weight: bold;
+}
+
+.tablefoot {
+	border-top: 1px solid #000;
+	border-bottom: 1px solid #000;
+	background-color: #ccc;
+	padding: 3px;
+	font-weight: bold;	
+}
+
+.itemrow {
+	border-top: 1px solid #ccc;
+	padding: 3px;
+}
+
 .ptdata-col-no {
 	width: 10mm;
 }

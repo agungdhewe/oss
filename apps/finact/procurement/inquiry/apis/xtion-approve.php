@@ -125,6 +125,12 @@ $API = new class extends inquiryBase {
 
 				if ( $param->approve) {
 					if ($ret->isfinalapproval) {
+						$currentdata->dataresponse = $dataresponse;
+
+						// Buat PA apabila request advance
+						if ($dataresponse->inquiry_isadvance=='1') {
+							$this->generate_advance($currentdata);
+						}	
 						\FGTA4\utils\SqlUtility::WriteLog($this->db, $this->reqinfo->modulefullname, $tablename, $id, 'FINAL APPROVAL', $userdata->username, (object)[]);
 					} else {
 						\FGTA4\utils\SqlUtility::WriteLog($this->db, $this->reqinfo->modulefullname, $tablename, $id, 'APPROVE', $userdata->username, (object)[]);
@@ -183,6 +189,139 @@ $API = new class extends inquiryBase {
 
 	}
 
+
+
+	public function generate_advance($currentdata) {
+		try {
+
+			// $this->log('generate advance');
+
+			$inquiry_id =  $currentdata->header->inquiry_id;
+			$billin_id = $currentdata->header->inquiry_id;
+
+			$stmt = $this->db->prepare("delete from trn_billindetil where billin_id=:billin_id");
+			$stmt->execute([":billin_id"=>$billin_id]);
+
+			$stmt = $this->db->prepare("delete from trn_billinpaym where billin_id=:billin_id");
+			$stmt->execute([":billin_id"=>$billin_id]);			
+
+			$stmt = $this->db->prepare("delete from trn_billin where billin_id=:billin_id");
+			$stmt->execute([":billin_id"=>$billin_id]);			
+
+
+
+			// total inquiry value;
+			$sql = "select sum(inquirydetil_estvalue) as total_inquiry_idr from trn_inquirydetil where inquiry_id = :inquiry_id";
+			$stmt = $this->db->prepare($sql);
+			$stmt->execute([":inquiry_id"=>$inquiry_id]);
+			$row = $stmt->fetch(\PDO::FETCH_ASSOC);
+			$total_inquiry_idr = $row['total_inquiry_idr'];
+			
+
+			// $this->log($currentdata->dataresponse);
+
+			// buat header PA
+			$obj = new \stdClass;
+			$obj->billin_id = $billin_id;
+			$obj->billtype_id = 'ADV';
+			$obj->inquiry_id = $inquiry_id;
+			$obj->billin_descr = $currentdata->dataresponse->inquiry_descr;
+			$obj->periodemo_id = date('Ym');
+			$obj->billin_date = date('Y-m-d');
+			$obj->billin_datedue = date('Y-m-d');
+			$obj->partner_id = $currentdata->dataresponse->partner_id;
+			$obj->billin_valfrg = $total_inquiry_idr;
+			$obj->curr_id = 'IDR';
+			$obj->billin_valfrgrate = 1;
+			$obj->billin_validr = $total_inquiry_idr;
+			$obj->paymtype_id = $currentdata->dataresponse->paymtype_id;
+			$obj->paymto_name = $currentdata->dataresponse->paymto_name;
+			$obj->partnerbank_id = $currentdata->dataresponse->partnerbank_id;
+			$obj->paymto_bankacc = $currentdata->dataresponse->paymto_bankacc;
+			$obj->paymto_bankaccname = $currentdata->dataresponse->paymto_bankaccname;
+			$obj->paymto_bankname = $currentdata->dataresponse->paymto_bankname;
+			$obj->partnercontact_id = $currentdata->dataresponse->partnercontact_id;
+			$obj->paymto_upname = $currentdata->dataresponse->paymto_upname;
+			$obj->paymto_upposition = $currentdata->dataresponse->paymto_upposition;
+			$obj->paymto_upphone = $currentdata->dataresponse->paymto_upphone;
+			$obj->project_id = $currentdata->dataresponse->project_id;
+			$obj->projecttask_id = $currentdata->dataresponse->projecttask_id;
+			$obj->projbudget_id = $currentdata->dataresponse->projbudget_id;
+			$obj->projbudgettask_id = $currentdata->dataresponse->projbudgettask_id;
+			$obj->trxmodel_id = $currentdata->dataresponse->trxmodel_id;
+			$obj->request_dept_id = $currentdata->dataresponse->user_dept_id;
+			$obj->orderout_dept_id = $currentdata->dataresponse->user_dept_id;
+			$obj->process_dept_id = $currentdata->dataresponse->user_dept_id;
+			$obj->doc_id = 'BILLIN';
+			$obj->billin_iscommit = 1;
+			$obj->billin_isapproved = 1;
+			$obj->_createby =  $currentdata->user->username;
+			$obj->_createdate = date("Y-m-d H:i:s");
+			$cmd = \FGTA4\utils\SqlUtility::CreateSQLInsert("trn_billin", $obj);
+			$stmt = $this->db->prepare($cmd->sql);
+			$stmt->execute($cmd->params);
+
+
+			// buat payment term PA
+			$obj = new \stdClass;
+			$obj->billin_id = $billin_id;
+			$obj->_createby =  $currentdata->user->username;
+			$obj->_createdate = date("Y-m-d H:i:s");
+			$obj->billinpaym_id = \uniqid();
+			$obj->billinpaym_date =  date('Y-m-d');
+			$obj->billinpaym_descr = $currentdata->dataresponse->inquiry_descr;
+			$obj->curr_id = 'IDR';
+			$obj->billinpaym_frgrate = 1;
+			$obj->billinpaym_itemfrg = $total_inquiry_idr;
+			$obj->billinpaym_itemidr = $total_inquiry_idr;
+			$obj->billinpaym_ppnfrg = 0;
+			$obj->billinpaym_ppnidr = 0;
+			$obj->billinpaym_pphfrg = 0;
+			$obj->billinpaym_pphidr = 0;
+			$obj->coa_id = '1104020001';
+			$cmd = \FGTA4\utils\SqlUtility::CreateSQLInsert("trn_billinpaym", $obj);
+			$stmt = $this->db->prepare($cmd->sql);
+			$stmt->execute($cmd->params);
+
+
+			// buat detil PA
+			$sql = "select * from trn_inquirydetil where inquiry_id = :inquiry_id";
+			$stmt = $this->db->prepare($sql);
+			$stmt->execute([":inquiry_id"=>$inquiry_id]);
+			$rows = $stmt->fetchall(\PDO::FETCH_ASSOC);
+			foreach ($rows as $row) {
+				$obj = new \stdClass;
+				$obj->billin_id = $billin_id;
+				$obj->_createby =  $currentdata->user->username;
+				$obj->_createdate = date("Y-m-d H:i:s");
+				$obj->billindetil_id = \uniqid();
+				$obj->rowitem_id = 'ITEM';
+				$obj->itemclass_id = $row['itemclass_id'];          
+				$obj->projbudgetdet_id = $row['projbudgetdet_id'];
+				$obj->billindetil_descr = $row['inquirydetil_descr'];
+				$obj->billindetil_valfrg  = $row['inquirydetil_estvalue'];
+				$obj->curr_id = 'IDR';
+				$obj->billindetil_valfrgrate = 1;
+				$obj->billindetil_validr = $row['inquirydetil_estvalue'];
+				$obj->projbudget_id  = $currentdata->dataresponse->projbudget_id;   
+				$obj->projbudgettask_id = $currentdata->dataresponse->projbudgettask_id;      
+				$obj->accbudget_id = $row['accbudget_id'];         
+				$obj->coa_id = $row['coa_id']; 
+				$cmd = \FGTA4\utils\SqlUtility::CreateSQLInsert("trn_billindetil", $obj);
+				$stmt = $this->db->prepare($cmd->sql);
+				$stmt->execute($cmd->params);         
+			}
+
+
+
+
+
+
+		} catch (\Exception $ex) {
+			$this->log($ex->getMessage());
+			throw $ex;
+		}
+	}
 
 
 

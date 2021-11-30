@@ -25,6 +25,8 @@ const obj = {
 	cbo_itemstock_id: $('#pnl_edititemform-cbo_itemstock_id'),
 	cbo_partner_id: $('#pnl_edititemform-cbo_partner_id'),
 	cbo_itemclass_id: $('#pnl_edititemform-cbo_itemclass_id'),
+	cbo_empl_id: $('#pnl_edititemform-cbo_empl_id'),
+	cbo_hrgrd_id: $('#pnl_edititemform-cbo_hrgrd_id'),
 	txt_inquirydetil_descr: $('#pnl_edititemform-txt_inquirydetil_descr'),
 	txt_inquirydetil_qty: $('#pnl_edititemform-txt_inquirydetil_qty'),
 	txt_inquirydetil_days: $('#pnl_edititemform-txt_inquirydetil_days'),
@@ -89,6 +91,7 @@ export async function init(opt) {
 	form.CreateRecordStatusPage(this_page_id)
 	form.CreateLogPage(this_page_id)
 
+	obj.chk_inquirydetil_isunbudget.checkbox({ onChange: (checked) => { chk_inquirydetil_isunbudget_changed(checked) }});
 
 
 
@@ -104,7 +107,9 @@ export async function init(opt) {
 			{mapping: 'itemasset_id', text: 'itemasset_id'},
 			{mapping: 'itemasset_name', text: 'itemasset_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+			criteria.inquirytype_id = header_data.inquirytype_id;
+		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({itemasset_id:'--NULL--', itemasset_name:'NONE'});	
 		},
@@ -118,12 +123,33 @@ export async function init(opt) {
 		}
 	})				
 
+	obj.cbo_itemstock_id.name = 'pnl_edititemform-cbo_itemstock_id'		
+	new fgta4slideselect(obj.cbo_itemstock_id, {
+		title: 'Pilih itemstock_id',
+		returnpage: this_page_id,
+		api: `${global.modulefullname}/get-itemstock`,
+		fieldValue: 'itemstock_id',
+		fieldValueMap: 'itemstock_id',
+		fieldDisplay: 'itemstock_name',
+		fields: [
+			{mapping: 'itemstock_id', text: 'itemstock_id'},
+			{mapping: 'itemstock_name', text: 'itemstock_name'},
+		],
+		OnDataLoading: (criteria) => {
+			criteria.inquirytype_id = header_data.inquirytype_id;
+		},
+		OnDataLoaded : (result, options) => {
+			result.records.unshift({itemstock_id:'--NULL--', itemstock_name:'NONE'});	
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+				form.setValue(obj.cbo_itemclass_id, record.itemclass_id, record.itemclass_name)
+				cbo_itemclass_id_selected(record.itemclass_id, (res)=>{
 
-
-	obj.chk_inquirydetil_isunbudget.checkbox({ onChange: (checked) => { chk_inquirydetil_isunbudget_changed(checked) }});
-
-
-
+				});
+			}			
+		}
+	})		
 	
 	obj.cbo_item_id.name = 'pnl_edititemform-cbo_item_id'		
 	new fgta4slideselect(obj.cbo_item_id, {
@@ -138,6 +164,7 @@ export async function init(opt) {
 			{mapping: 'item_name', text: 'item_name'},
 		],
 		OnDataLoading: (criteria) => {
+			criteria.inquirytype_id = header_data.inquirytype_id;
 			if (header_data.inquiry_isitemdeptowner) {
 				criteria.dept_id = header_data.owner_dept_id;
 			} else if (header_data.inquiry_isitemdeptuser) {
@@ -159,32 +186,7 @@ export async function init(opt) {
 			}			
 		}
 	})	
-
-	obj.cbo_itemstock_id.name = 'pnl_edititemform-cbo_itemstock_id'		
-	new fgta4slideselect(obj.cbo_itemstock_id, {
-		title: 'Pilih itemstock_id',
-		returnpage: this_page_id,
-		api: `${global.modulefullname}/get-itemstock`,
-		fieldValue: 'itemstock_id',
-		fieldValueMap: 'itemstock_id',
-		fieldDisplay: 'itemstock_name',
-		fields: [
-			{mapping: 'itemstock_id', text: 'itemstock_id'},
-			{mapping: 'itemstock_name', text: 'itemstock_name'},
-		],
-		OnDataLoading: (criteria) => {},
-		OnDataLoaded : (result, options) => {
-			result.records.unshift({itemstock_id:'--NULL--', itemstock_name:'NONE'});	
-		},
-		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {
-				form.setValue(obj.cbo_itemclass_id, record.itemclass_id, record.itemclass_name)
-				cbo_itemclass_id_selected(record.itemclass_id, (res)=>{
-
-				});
-			}			
-		}
-	})				
+		
 			
 	obj.cbo_partner_id.name = 'pnl_edititemform-cbo_partner_id'		
 	new fgta4slideselect(obj.cbo_partner_id, {
@@ -250,6 +252,35 @@ export async function init(opt) {
 		}
 	})				
 			
+
+
+	obj.cbo_empl_id.name = 'pnl_edititemform-cbo_empl_id'
+	new fgta4slideselect(obj.cbo_empl_id, {
+		title: 'Pilih empl_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_empl_id,
+		fieldValue: 'empl_id',
+		fieldValueMap: 'empl_id',
+		fieldDisplay: 'empl_name',
+		fields: [
+			{mapping: 'empl_id', text: 'empl_id'},
+			{mapping: 'empl_name', text: 'empl_name'},
+		],
+		OnDataLoading: (criteria, options) => {
+			criteria.dept_id = header_data.user_dept_id;
+			criteria.isdisabled = 0
+		},
+		OnDataLoaded : (result, options) => {
+			// result.records.unshift({empl_id:'--NULL--', empl_name:'NONE'});	
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {	
+				// console.log(record)	
+				form.setValue(obj.cbo_hrgrd_id, record.hrgrd_id, record.hrgrd_name);
+			}
+		}
+	})
+
 	obj.cbo_projbudgetdet_id.name = 'pnl_edititemform-cbo_projbudgetdet_id'		
 	new fgta4slideselect(obj.cbo_projbudgetdet_id, {
 		title: 'Pilih projbudgetdet_id',
@@ -378,6 +409,8 @@ export function open(data, rowid, hdata) {
 		if (result.record.itemstock_id==null) { result.record.itemstock_id='--NULL--'; result.record.itemstock_name='NONE'; }
 		if (result.record.partner_id==null) { result.record.partner_id='--NULL--'; result.record.partner_name='NONE'; }
 		if (result.record.projbudgetdet_id==null) { result.record.projbudgetdet_id='--NULL--'; result.record.projbudgetdet_descr='NONE'; }
+		if (result.record.empl_id==null) { result.record.empl_id='--NULL--'; result.record.empl_name='NONE'; }
+		if (result.record.hrgrd_id==null) { result.record.hrgrd_id='--NULL--'; result.record.hrgrd_name='NONE'; }
 
 
 		form.SuspendEvent(true);
@@ -389,6 +422,8 @@ export function open(data, rowid, hdata) {
 			.setValue(obj.cbo_partner_id, result.record.partner_id, result.record.partner_name)
 			.setValue(obj.cbo_itemclass_id, result.record.itemclass_id, result.record.itemclass_name)
 			.setValue(obj.cbo_projbudgetdet_id, result.record.projbudgetdet_id, result.record.projbudgetdet_descr)
+			.setValue(obj.cbo_empl_id, result.record.empl_id, result.record.empl_id)
+			.setValue(obj.cbo_hrgrd_id, result.record.hrgrd_id, result.record.hrgrd_name)
 			.setViewMode()
 			.rowid = rowid
 
@@ -491,6 +526,10 @@ export function createnew(hdata) {
 		data.itemclass_name = '-- PILIH --'
 		data.projbudgetdet_id = '--NULL--'
 		data.projbudgetdet_descr = 'NONE'
+		data.empl_id = header_data.empl_id
+		data.empl_name = header_data.empl_name
+		data.hrgrd_id = '--NULL--'
+		data.hrgrd_name = 'NONE'
 
 
 		chk_inquirydetil_isunbudget_changed(data.inquirydetil_isunbudget==1?true:false);

@@ -2,7 +2,7 @@
 
 	$doc_iso_reg = "<yout form iso number>";
 	$report_title['id'] = "AGING AP";
-	$report_title['en'] = "";
+	$report_title['en'] = "dddd";
 
 	$report_printid = strtoupper(uniqid());
 	$report_printdate = date('d/m/Y');
@@ -11,11 +11,6 @@
 	$doc_descr = "per tanggal $report_printdate";
 ?>
 
-
-
-<!-- <div style="position: absolute; z-index: -100">
-	<div  id="pagemeasure">&nbsp;</div>
-</div> -->
 
 
 <div id="wrapper" style="z-index: 10">
@@ -39,90 +34,75 @@
 		<div style="display: flex; justify-content: space-between">
 
 			<div >
-				<div style="font-size: 7pt; font-style: italic"><?=$doc_iso_reg?></div>
+				<div style="font-weight: bold; font-size: 12pt; "><?=__COMPANY_NAME__?></div>
 				<div style="font-weight: bold; font-size: 12pt; margin-top: 2mm"><?=$report_title['id']?></div>
-				<div style="font-weight: bold; font-style: italic; font-size: 10pt; color: #666"><?=$report_title['en']?></div>
 			</div>	
 			<div style="text-align: right">
-				<img id="ellogo" src="index.php/public/assets/logo-printform-right.svg">
+				<!-- <img id="ellogo" src="index.php/public/assets/logo-printform-right.svg"> -->
 			</div>			
 		</div>
 	</div>
 
-
 	<div class="fullwidth" style="position: relative; margin-top: 2mm; ">
-		<div style="font-size: 8pt;">
-			<b>per tanggal</b> <?=$report_date?>
-		</div>
-		<div style="display: flex; justify-content: space-between; margin-top: 2mm">
-			<div style="font-size: 8pt;"><b>Page</b> 1 <b>of</b> <span id="reporttotalpage">1</span></div>
-			<div style="text-align: right; font-size: 8pt"><b>Print Id</b> <?=$report_printid?></div>
+		<div style="display: flex; justify-content: space-between">
+			<div style="font-size: 8pt;"><b>per tanggal</b> <?=$report_date?></div>
+			<!-- <div style="font-size: 8pt;"><b>Page</b> 1 <b>of</b> <span id="reporttotalpage">1</span></div> -->
 		</div>
 	</div>
 
 
 	<!-- report content -->
 	<div id="reportcontent" class="fullwidth">
-		<table id="obj_reporttable" width="100%" data-cols-width="10,20,60,30,30,30,30">
+		<?php $i=0?>
+		<table id="obj_reporttable" width="100%" cellpadding="0" cellspacing="0" data-cols-width="10,20,60,30,30,30,30">
 			<thead>
-				<tr>
-					<th class="rowhead ptdata-col-no" data-fill-color='CCCCCC'>No</th>
-					<th class="rowhead rptdata-col-coacode" data-fill-color='CCCCCC'>ID</th>
-					<th class="rowhead rptdata-col-coaname" data-fill-color='CCCCCC'>Nama</th>
-					<th class="rowhead rptdata-col-val" data-fill-color='CCCCCC'>Not Yet Due</th>
-					<th class="rowhead rptdata-col-val" data-fill-color='CCCCCC'>0 s/d 30</th>
-					<th class="rowhead rptdata-col-val" data-fill-color='CCCCCC'>31 s/d 60</th>
-					<th class="rowhead rptdata-col-val" data-fill-color='CCCCCC'>61 s/d 90</th>
-					<th class="rowhead rptdata-col-val" data-fill-color='CCCCCC'>> 90</th>
-					<th class="rowhead rptdata-col-val" data-fill-color='CCCCCC'>TOTAL</th>
-				</tr>
+				<?php PrintTableHeader()?>
 			</thead>
 			<tbody>
-				<!-- 45 -->
-				<?php 
-				$i=0;
-				$total_value = 0;
-				$total_notyetdue = 0;
-				$total_due_030 = 0;
-				$total_due_060 = 0;
-				$total_due_090 = 0;
-				$total_due_more = 0;
+				<?php
+				$TOTAL = [
+					'age_0' => 0,
+					'age_30' => 0,
+					'age_60' => 0,
+					'age_90' => 0,
+					'age_120' => 0,
+					'outstanding_idr' => 0,
+				];
 
+				$SUBTOTAL = [
+					'age_0' => 0,
+					'age_30' => 0,
+					'age_60' => 0,
+					'age_90' => 0,
+					'age_120' => 0,
+					'outstanding_idr' => 0,
+				];
+
+				$last_partner_name = "";
+
+				$rownumber=0;
 				foreach ($this->rows as $row) { 
+					if ($row['partner_name']!=$last_partner_name) {
+						if ($i>0) {
+							PrintGroupFooter($SUBTOTAL);
+							$this->ArayValueReset($SUBTOTAL);
+							$rownumber = 0;
+						}
+						PrintGroupHeader($row);
+					}
 					$i++;
-
-				
-					$total_value += $row['value'];
-					$total_notyetdue += $row['notyetdue'];
-					$total_due_030 += $row['due_030'];
-					$total_due_060 += $row['due_060'];
-					$total_due_090 += $row['due_090'];
-					$total_due_more += $row['due_more'];
+					$rownumber++;
+					PrintRow($row, $rownumber);
+					$this->ArrayValueAdd($TOTAL, $row);
+					$this->ArrayValueAdd($SUBTOTAL, $row);
+					$last_partner_name = $row['partner_name'];
+				}
+				if ($i>0) { PrintGroupFooter($SUBTOTAL); }
 				?>
-				<tr>
-					<td class="row rptdata-col-no"><?=$i?></td>
-					<td class="row rptdata-col-decoacodescr"><?=$row['partner_id']?></td>
-					<td class="row rptdata-col-coaname" style="cursor:pointer" onclick="parent.test('<?=$row['partner_id']?>', '<?=$this->report_date?>')"><?=$row['partner_name']?></td>
-					<td class="row rptdata-col-val" data-t="n" data-num-fmt="#,##0"><?=number_format($row['notyetdue'])?></td>
-					<td class="row rptdata-col-val" data-t="n" data-num-fmt="#,##0"><?=number_format($row['due_030'])?></td>
-					<td class="row rptdata-col-val" data-t="n" data-num-fmt="#,##0"><?=number_format($row['due_060'])?></td>
-					<td class="row rptdata-col-val" data-t="n" data-num-fmt="#,##0"><?=number_format($row['due_090'])?></td>
-					<td class="row rptdata-col-val" data-t="n" data-num-fmt="#,##0"><?=number_format($row['due_more'])?></td>
-					<td class="row rptdata-col-val" data-t="n" data-num-fmt="#,##0"><?=number_format($row['value'])?></td>
-				</tr>
-				<?php } ?>
-
-				<tr>
-					<td class="rowfoot" colspan="3" style="text-align: center" data-fill-color='CCCCCC'>TOTAL</td>
-					<td class="rowfoot rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format($total_notyetdue)?></td>
-					<td class="rowfoot rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format($total_due_030)?></td>
-					<td class="rowfoot rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format($total_due_060)?></td>
-					<td class="rowfoot rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format($total_due_090)?></td>
-					<td class="rowfoot rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format($total_due_more)?></td>
-					<td class="rowfoot rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format($total_value)?></td>
-				</tr>				
+				
 			</tbody>
 			<tfoot>
+				<?php PrintTableFooter($TOTAL) ?>
 			</tfoot>			
 		</table>
 		<script>global.totalrowcount = '<?=($i-1)?>'</script>
@@ -136,3 +116,86 @@
 		&nbsp;
 	<div>				
 </div>
+
+
+
+
+
+
+<?php function PrintTableHeader() { ?>
+	<!-- <tr>
+		<th class="rowhead ptdata-col-no" data-fill-color='CCCCCC'>No</th>
+		<th class="rowhead rptdata-col-coacode" data-fill-color='CCCCCC'>ID</th>
+		<th class="rowhead rptdata-col-coaname" data-fill-color='CCCCCC'>Nama</th>
+		<th class="rowhead rptdata-col-val" data-fill-color='CCCCCC'>Not Yet Due</th>
+		<th class="rowhead rptdata-col-val" data-fill-color='CCCCCC'>0 s/d 30</th>
+		<th class="rowhead rptdata-col-val" data-fill-color='CCCCCC'>31 s/d 60</th>
+		<th class="rowhead rptdata-col-val" data-fill-color='CCCCCC'>61 s/d 90</th>
+		<th class="rowhead rptdata-col-val" data-fill-color='CCCCCC'>> 90</th>
+		<th class="rowhead rptdata-col-val" data-fill-color='CCCCCC'>TOTAL</th>
+	</tr> -->
+	<tr>
+		<td></td>
+	</tr>
+<?php } ?>	
+
+
+<?php function PrintGroupHeader($row) { ?>
+	<tr>
+		<td class="" style="vertical-align:top; font-weight: bold; padding-top: 20px; padding-bottom: 5px" colspan="9"><?=$row['partner_name']?></td>
+	</tr>
+	<tr>
+		<td class="grouphead" style="vertical-align:top; text-align: center" data-fill-color='CCCCCC'>No</td>
+		<td class="grouphead" style="vertical-align:top; " data-fill-color='CCCCCC'>Ref</td>
+		<td class="grouphead" style="vertical-align:top; " data-fill-color='CCCCCC'>Descr</td>
+		<td class="grouphead rptdata-col-val" data-t="n" data-fill-color='CCCCCC'>Current</td>
+		<td class="grouphead rptdata-col-val" data-t="n" data-fill-color='CCCCCC'>0 - 30</td>
+		<td class="grouphead rptdata-col-val" data-t="n" data-fill-color='CCCCCC'>31 - 60</td>
+		<td class="grouphead rptdata-col-val" data-t="n" data-fill-color='CCCCCC'>61 - 90</td>
+		<td class="grouphead rptdata-col-val" data-t="n" data-fill-color='CCCCCC'>> 90</td>
+		<td class="grouphead rptdata-col-val" data-t="n" data-fill-color='CCCCCC'>Total</td>
+	</tr>
+<?php } ?>
+
+
+<?php function PrintRow($row, $rownumber=0) { ?>
+	<tr>
+		<td class="itemrow" style="vertical-align:top; text-align: center" data-fill-color='CCCCCC'><?=$rownumber?></td>
+		<td class="itemrow" style="vertical-align:top; " data-fill-color='CCCCCC'><?=$row['jurnal_id']?></td>
+		<td class="itemrow" style="vertical-align:top; " data-fill-color='CCCCCC'><?=$row['jurnal_descr']?></td>
+		<td class="itemrow rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format($row['age_0'])?></td>
+		<td class="itemrow rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format($row['age_30'])?></td>
+		<td class="itemrow rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format($row['age_60'])?></td>
+		<td class="itemrow rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format($row['age_90'])?></td>
+		<td class="itemrow rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format($row['age_120'])?></td>
+		<td class="itemrow rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format($row['outstanding_idr'])?></td>
+	</tr>
+<?php } ?>
+
+
+<?php function PrintGroupFooter($SUBTOTAL, $args=null) { ?>
+	<tr>
+		<td class="groupfoot" style="vertical-align:top;" colspan="3" data-fill-color='CCCCCC'>Subtotal</td>
+		<td class="groupfoot rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format($SUBTOTAL['age_0'])?></td>
+		<td class="groupfoot rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format($SUBTOTAL['age_30'])?></td>
+		<td class="groupfoot rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format($SUBTOTAL['age_60'])?></td>
+		<td class="groupfoot rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format($SUBTOTAL['age_90'])?></td>
+		<td class="groupfoot rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format($SUBTOTAL['age_120'])?></td>
+		<td class="groupfoot rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format($SUBTOTAL['outstanding_idr'])?></td>
+	</tr>
+<?php } ?>
+
+<?php function PrintTableFooter($TOTAL, $args=null) { ?>
+	<tr>
+		<td>&nbsp;</td>
+	</tr>
+	<tr>
+		<td class="tablefoot" style="vertical-align:top;" colspan="3" data-fill-color='CCCCCC'>TOTAL</td>
+		<td class="tablefoot rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format($TOTAL['age_0'])?></td>
+		<td class="tablefoot rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format($TOTAL['age_30'])?></td>
+		<td class="tablefoot rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format($TOTAL['age_60'])?></td>
+		<td class="tablefoot rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format($TOTAL['age_90'])?></td>
+		<td class="tablefoot rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format($TOTAL['age_120'])?></td>
+		<td class="tablefoot rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format($TOTAL['outstanding_idr'])?></td>
+	</tr>
+<?php } ?>

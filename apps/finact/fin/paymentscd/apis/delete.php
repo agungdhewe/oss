@@ -19,19 +19,19 @@ use \FGTA4\exceptions\WebException;
  * Delete
  * ======
  * Menghapus satu baris data/record berdasarkan PrimaryKey
- * pada tabel header paymentscd (trn_billinpaym)
+ * pada tabel header paymentscd (trn_paymentscd)
  *
  * Agung Nugroho <agung@fgta.net> http://www.fgta.net
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 30/07/2021
+ * tanggal 18/11/2021
  */
 $API = new class extends paymentscdBase {
 	
 	public function execute($data, $options) {
-		$tablename = 'trn_billinpaym';
-		$primarykey = 'billinpaym_id';
+		$tablename = 'trn_paymentscd';
+		$primarykey = 'paymentscd_id';
 
 		$userdata = $this->auth->session_get_user();
 
@@ -51,6 +51,14 @@ $API = new class extends paymentscdBase {
 			$this->db->beginTransaction();
 
 			try {
+				
+				$tabletodelete = ['trn_paymentscdbillin', 'trn_paymentscdbillin'];
+				foreach ($tabletodelete as $reftablename) {
+					$cmd = \FGTA4\utils\SqlUtility::CreateSQLDelete($reftablename, $key);
+					$stmt = $this->db->prepare($cmd->sql);
+					$stmt->execute($cmd->params);
+				}
+		
 				$cmd = \FGTA4\utils\SqlUtility::CreateSQLDelete($tablename, $key);
 				$stmt = $this->db->prepare($cmd->sql);
 				$stmt->execute($cmd->params);

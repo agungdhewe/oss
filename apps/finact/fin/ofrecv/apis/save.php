@@ -49,38 +49,30 @@ $API = new class extends ofrecvBase {
 			$result = new \stdClass; 
 			
 			$key = new \stdClass;
-			$obj = new \stdClass;
 			foreach ($data as $fieldname => $value) {
 				if ($fieldname=='_state') { continue; }
 				if ($fieldname==$primarykey) {
 					$key->{$fieldname} = $value;
 				}
-				$obj->{$fieldname} = $value;
 			}
 
 			// apabila ada tanggal, ubah ke format sql sbb:
 			// $obj->tanggal = (\DateTime::createFromFormat('d/m/Y',$obj->tanggal))->format('Y-m-d');
-			$obj->jurnal_date = (\DateTime::createFromFormat('d/m/Y',$obj->jurnal_date))->format('Y-m-d');			$obj->paym_girodate = (\DateTime::createFromFormat('d/m/Y',$obj->paym_girodate))->format('Y-m-d');
 
-
-			// if ($obj->jurnal_ref=='--NULL--') { unset($obj->jurnal_ref); }
-			// if ($obj->partner_id=='--NULL--') { unset($obj->partner_id); }
-			// if ($obj->temprecv_id=='--NULL--') { unset($obj->temprecv_id); }
-			// if ($obj->ar_jurnaldetil_id=='--NULL--') { unset($obj->ar_jurnaldetil_id); }
-			// if ($obj->bankrekening_id=='--NULL--') { unset($obj->bankrekening_id); }
-			// if ($obj->paym_gironum=='--NULL--') { unset($obj->paym_gironum); }
-			// if ($obj->coa_id=='--NULL--') { unset($obj->coa_id); }
-			// if ($obj->dept_id=='--NULL--') { unset($obj->dept_id); }
-
-
-			unset($obj->jurnal_iscommit);
-			unset($obj->jurnal_commitby);
-			unset($obj->jurnal_commitdate);
-			unset($obj->jurnal_ispost);
-			unset($obj->jurnal_postby);
-			unset($obj->jurnal_postdate);
-			unset($obj->jurnal_isclose);
-			unset($obj->jurnal_isagingclose);
+			$obj = new \stdClass;
+			$obj->jurnal_id = $data->jurnal_id;
+			$obj->jurnal_ref = $data->jurnal_ref;
+			$obj->periodemo_id = $data->periodemo_id;	
+			$obj->jurnal_date = (\DateTime::createFromFormat('d/m/Y',$data->jurnal_date))->format('Y-m-d');
+			$obj->jurnal_datedue = $obj->jurnal_date;
+			$obj->jurnal_descr = $data->jurnal_descr;
+			$obj->partner_id = $data->partner_id;
+			$obj->jurnal_valfrg = $data->jurnal_valfrg;
+			$obj->jurnal_valfrgrate = $data->jurnal_valfrgrate;
+			$obj->jurnal_validr = $data->jurnal_validr;
+			$obj->curr_id = 'IDR'; //$data->curr_id;
+			$obj->jurnaltype_id = 'OR-DIRECT'; //$data->jurnaltype_id;
+			$obj->jurnalsource_id = 'OFRECV'; //$data->jurnalsource_id;	
 
 
 

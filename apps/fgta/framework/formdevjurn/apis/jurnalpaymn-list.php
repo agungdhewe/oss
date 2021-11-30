@@ -1,3 +1,0 @@
-<?php
-
-// detil list api

@@ -1,3 +1,9 @@
+-- SET FOREIGN_KEY_CHECKS=0;
+
+-- drop table if exists `trn_bankbook`;
+-- drop table if exists `trn_bankbookdetil`;
+
+
 CREATE TABLE `trn_bankbook` (
 	`bankbook_id` varchar(14) NOT NULL , 
 	`bankbook_date` date NOT NULL , 

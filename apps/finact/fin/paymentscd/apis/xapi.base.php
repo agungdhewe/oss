@@ -26,15 +26,39 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 30/07/2021
+ * tanggal 18/11/2021
  */
 class paymentscdBase extends WebAPI {
 
-	protected $main_tablename = "trn_billinpaym";
-	protected $main_primarykey = "billinpaym_id";
-	protected $main_field_version = "billinpaym_version";	
+	protected $main_tablename = "trn_paymentscd";
+	protected $main_primarykey = "paymentscd_id";
+	protected $main_field_version = "paymentscd_version";	
 	
+	protected $field_iscommit = "paymentscd_iscommit";
+	protected $field_commitby = "paymentscd_commitby";
+	protected $field_commitdate = "paymentscd_commitdate";		
+			
 	
+	protected $fields_isapprovalprogress = "paymentscd_isapprovalprogress";			
+	protected $field_isapprove = "paymentscd_isapproved";
+	protected $field_approveby = "paymentscd_approveby";
+	protected $field_approvedate = "paymentscd_approvedate";
+	protected $field_isdecline = "paymentscd_isdeclined";
+	protected $field_declineby = "paymentscd_declineby";
+	protected $field_declinedate = "paymentscd_declinedate";
+
+	protected $approval_tablename = "trn_paymentscdappr";
+	protected $approval_primarykey = "paymentscdappr_id";
+	protected $approval_field_approve = "paymentscdappr_isapproved";
+	protected $approval_field_approveby = "paymentscdappr_by";
+	protected $approval_field_approvedate = "paymentscdappr_date";
+	protected $approval_field_decline = "paymentscdappr_isdeclined";
+	protected $approval_field_declineby = "paymentscdappr_declinedby";
+	protected $approval_field_declinedate = "paymentscdappr_declineddate";
+	protected $approval_field_notes = "paymentscdappr_notes";
+	protected $approval_field_version = "paymentscd_version";
+
+			
 
 
 

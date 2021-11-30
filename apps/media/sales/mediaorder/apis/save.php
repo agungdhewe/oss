@@ -90,6 +90,8 @@ $API = new class extends mediaorderBase {
 			$this->db->setAttribute(\PDO::ATTR_AUTOCOMMIT,0);
 			$this->db->beginTransaction();
 
+			// $this->db->query('SET FOREIGN_KEY_CHECKS=0');	
+
 			try {
 
 				$action = '';

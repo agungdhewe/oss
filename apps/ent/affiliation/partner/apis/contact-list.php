@@ -24,7 +24,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 18/04/2021
+ * tanggal 29/11/2021
  */
 $API = new class extends partnerBase {
 
@@ -33,6 +33,7 @@ $API = new class extends partnerBase {
 		
 		try {
 
+			// \FGTA4\utils\SqlUtility::setDefaultCriteria($options->criteria, '--fieldscriteria--', '--value--');
 			$where = \FGTA4\utils\SqlUtility::BuildCriteria(
 				$options->criteria,
 				[
@@ -56,7 +57,7 @@ $API = new class extends partnerBase {
 			$limit = " LIMIT $maxrow OFFSET $offset ";
 			$stmt = $this->db->prepare("
 				select 
-				partnercontact_id, partnercontact_name, partnercontact_position, partnercontact_mobilephone, partnercontact_email, partnecontact_isdisabled, partner_id, _createby, _createdate, _modifyby, _modifydate 
+				A.partnercontact_id, A.partnercontact_name, A.partnercontact_position, A.partnercontact_mobilephone, A.partnercontact_email, A.partnecontact_isdisabled, A.partnecontact_iscontract, A.partnecontact_isinvoice, A.partner_id, A._createby, A._createdate, A._modifyby, A._modifydate 
 				from mst_partnercontact A
 			" . $where->sql . $limit);
 			$stmt->execute($where->params);

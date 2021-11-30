@@ -821,8 +821,12 @@ export function detil_open(pnlname) {
 	//$ui.getPages().show(pnlname)
 	$ui.getPages().show(pnlname, () => {
 		var partner_name = obj.cbo_partner_id.combo('getText');
+		var empl_name = obj.cbo_empl_id.combo('getText');
+		
 		var header_data = form.getData();
 		header_data.partner_name = partner_name;
+		header_data.empl_name = empl_name;
+		
 		$ui.getPages().ITEMS[pnlname].handler.OpenDetil(header_data)
 	})	
 }

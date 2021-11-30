@@ -109,7 +109,9 @@ $API = new class extends inquiryBase {
 				$where = \FGTA4\utils\SqlUtility::BuildCriteria((object)[$primarykey=>$obj->{$primarykey}], [$primarykey=>"$primarykey=:$primarykey"]);
 				$sql = \FGTA4\utils\SqlUtility::Select("$tablename  A", [
 					$primarykey
-					, 'inquirydetil_id', 'itemasset_id', 'item_id', 'itemstock_id', 'partner_id', 'itemclass_id', 'inquirydetil_descr'
+					, 'inquirydetil_id', 'itemasset_id', 'item_id', 'itemstock_id', 'partner_id', 'itemclass_id'
+					, 'empl_id', 'hrgrd_id'
+					, 'inquirydetil_descr'
 					, 'inquirydetil_qty', 'inquirydetil_days', 'inquirydetil_task', 'inquirydetil_estrate', 'inquirydetil_estvalue', 'inquirydetil_value'
 					, 'inquirydetil_isadvproces'
 					, 'projbudgetdet_id', 'inquirydetil_isoverbudget', 'inquirydetil_isunbudget' 
@@ -136,6 +138,10 @@ $API = new class extends inquiryBase {
 					'itemstock_name' => \FGTA4\utils\SqlUtility::Lookup($record['itemstock_id'], $this->db, 'mst_itemstock', 'itemstock_id', 'itemstock_name'),
 					'partner_name' => \FGTA4\utils\SqlUtility::Lookup($record['partner_id'], $this->db, 'mst_partner', 'partner_id', 'partner_name'),
 					'itemclass_name' => \FGTA4\utils\SqlUtility::Lookup($record['itemclass_id'], $this->db, 'mst_itemclass', 'itemclass_id', 'itemclass_name'),
+
+					'empl_name' => \FGTA4\utils\SqlUtility::Lookup($record['empl_id'], $this->db, 'mst_empl', 'empl_id', 'empl_name'),
+					'hrgrd_name' => \FGTA4\utils\SqlUtility::Lookup($record['hrgrd_id'], $this->db, 'mst_hrgrd', 'hrgrd_id', 'hrgrd_name'),
+	
 					'projbudgetdet_descr' => \FGTA4\utils\SqlUtility::Lookup($record['projbudgetdet_id'], $this->db, 'view_projbudgetdetacc', 'projbudgetdet_id', 'projbudgetdet_descr'),
 
 					'_createby' => \FGTA4\utils\SqlUtility::Lookup($record['_createby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),

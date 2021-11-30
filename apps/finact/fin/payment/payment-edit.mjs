@@ -204,20 +204,20 @@ export async function init(opt) {
 			{mapping: 'billin_valfrg', text: 'Total'}
 		],
 		OnDataLoading: (criteria) => {
-			var jurnaltype_id = form.getValue(obj.cbo_jurnaltype_id);
-			if (jurnaltype_id=='PV-ADVPAYM') {
-				criteria.billtype_id = 'ADV';
-			} else if (jurnaltype_id=='PV-APPAYM') {
-				criteria.billtype_id = 'INV';
-			}
+			// var jurnaltype_id = form.getValue(obj.cbo_jurnaltype_id);
+			// if (jurnaltype_id=='PV-ADVPAYM') {
+			// 	criteria.billtype_id = 'ADV';
+			// } else if (jurnaltype_id=='PV-APPAYM') {
+			// 	criteria.billtype_id = 'INV';
+			// }
 		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({billin_id:'--NULL--', billin_descr:'NONE'});	
 		},
 		OnSelected: (value, display, record) => {
-			form.setValue(obj.cbo_billinpaym_id, '0', '-- PILIH --');
-			form.setValue(obj.txt_jurnal_descr  , record.billin_descr);
-			form.setValue(obj.cbo_partner_id, record.partner_id, record.partner_name);
+			// form.setValue(obj.cbo_billinpaym_id, '0', '-- PILIH --');
+			// form.setValue(obj.txt_jurnal_descr  , record.billin_descr);
+			// form.setValue(obj.cbo_partner_id, record.partner_id, record.partner_name);
 			// form.setValue(obj.cbo_curr_id, record.curr_id, record.curr_name);
 			// form.setValue(obj.txt_jurnal_valfrg, record.billin_valfrg);
 			// form.setValue(obj.txt_jurnal_valfrgrate, record.curr_rate);
@@ -229,7 +229,7 @@ export async function init(opt) {
 	new fgta4slideselect(obj.cbo_billinpaym_id, {
 		title: 'Pilih Term Permintaan yang akan diproses',
 		returnpage: this_page_id,
-		api: $ui.apis.load_billinpaym_id,
+		api: `${global.modulefullname}/get-billinpaym`,
 		fieldValue: 'billinpaym_id',
 		fieldValueMap: 'billinpaym_id',
 		fieldDisplay: 'billinpaym_descr',
@@ -240,16 +240,20 @@ export async function init(opt) {
 			{mapping: 'curr_id', text: 'Curr'},
 		],
 		OnDataLoading: (criteria) => {
-			var billin_id = form.getValue(obj.cbo_billin_id);
-			console.log(billin_id);
-			criteria.billin_id = billin_id
+			var jurnaltype_id = form.getValue(obj.cbo_jurnaltype_id);
+			if (jurnaltype_id=='PV-ADVPAYM') {
+				criteria.billtype_id = 'ADV';
+			} else if (jurnaltype_id=='PV-APPAYM') {
+				criteria.billtype_id = 'INV';
+			}
 		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({billin_id:'--NULL--', billin_descr:'NONE'});	
 		},
 		OnSelected: (value, display, record) => {
-			// form.setValue(obj.txt_jurnal_descr  , record.billin_descr);
-			// form.setValue(obj.cbo_partner_id, record.partner_id, record.partner_name);
+			form.setValue(obj.cbo_billin_id, record.billin_id, record.billin_descr);
+			form.setValue(obj.cbo_partner_id, record.partner_id, record.partner_name);
+			form.setValue(obj.txt_jurnal_descr  , record.billinpaym_descr);
 			form.setValue(obj.cbo_curr_id, record.curr_id, record.curr_name);
 			form.setValue(obj.txt_jurnal_valfrg, record.billinpaym_totalfrg);
 			form.setValue(obj.txt_jurnal_valfrgrate, record.curr_rate);

@@ -7,7 +7,7 @@
 
 	<form id="pnl_edit-form">
 
-		<div class="form_row">
+		<div class="form_row" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">ID</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_edit-txt_bankbook_id" class="easyui-textbox" mapping="bankbook_id" uppercase="true" maxlength="14" style="width: 400px" data-options="multiline: false , required: true, invalidMessage: 'ID harus diisi' ">
@@ -15,34 +15,34 @@
 			</div>
 		</div>
 
-		<div class="form_row">
+		<div class="form_row" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Date</div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_edit-dt_bankbook_date" class="easyui-datebox" style="width: 400px" mapping="bankbook_date" data-options="editable:false ">
+				<input id="pnl_edit-dt_bankbook_date" class="easyui-datebox" style="width: 400px" mapping="bankbook_date" data-options="editable:false, disabled:true ">
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>
 
-		<div class="form_row">
+		<div class="form_row" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Periode</div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_edit-cbo_periodemo_id" class="easyui-combo" style="width: 400px" mapping="periodemo_id" display="periodemo_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Periode harus diisi', prompt: '-- PILIH --'"   validType="requiredcombo['pnl_edit-cbo_periodemo_id']" >
+				<input id="pnl_edit-cbo_periodemo_id" class="easyui-combo" style="width: 400px" mapping="periodemo_id" display="periodemo_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Periode harus diisi', prompt: '-- PILIH --', disabled:true"   validType="requiredcombo['pnl_edit-cbo_periodemo_id']" >
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>
 
-		<div class="form_row">
+		<div class="form_row" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Rekening Bank</div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_edit-cbo_bankrekening_id" class="easyui-combo" style="width: 400px" mapping="bankrekening_id" display="bankrekening_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Rekening Bank harus diisi', prompt: '-- PILIH --'"   validType="requiredcombo['pnl_edit-cbo_bankrekening_id']" >
+				<input id="pnl_edit-cbo_bankrekening_id" class="easyui-combo" style="width: 400px" mapping="bankrekening_id" display="bankrekening_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Rekening Bank harus diisi', prompt: '-- PILIH --', disabled:true"   validType="requiredcombo['pnl_edit-cbo_bankrekening_id']" >
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>
 
-		<div class="form_row">
+		<div class="form_row" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Currency</div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_edit-cbo_curr_id" class="easyui-combo" style="width: 400px" mapping="curr_id" display="curr_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Currency harus diisi', prompt: '-- PILIH --'"   validType="requiredcombo['pnl_edit-cbo_curr_id']" >
+				<input id="pnl_edit-cbo_curr_id" class="easyui-combo" style="width: 400px" mapping="curr_id" display="curr_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Currency harus diisi', prompt: '-- PILIH --', disabled:true"   validType="requiredcombo['pnl_edit-cbo_curr_id']" >
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>
@@ -61,7 +61,7 @@
 
 		<div id="pnl_edit-detil" class="form_row" style="margin-top: 30px">
 			<div class="form_label_col"></div>
-			<div class="form_input_col" style="border: 0px solid black">
+			<div class="form_input_col detilbox" style="border: 0px solid black">
 				<div class="fgtable-head" style="height: 25px; padding: 5px 0px 0px 5px">Detil Informations</div>
 				<div class="fgtable-head-drow" style="height: 25px; padding: 5px 5px 0px 5px" onclick="$ui.getPages().ITEMS['pnl_edit'].handler.detil_open('pnl_editdetilgrid')">
 					<div id="pnl_edit-txt_detil_title" class="detilgrid-text">Detil</div>
@@ -74,13 +74,15 @@
 		
 
 
-	<div style="margin-top: 30px; margin-left:-5px; margin-right: -5px; background-color: #cccccc; height: 40px; display: flex; justify-content: space-between; padding: 5px 2px 2px 2px ">
+	<div style="margin-top: 30px; margin-left:-5px; margin-right: -5px; background-color: #cccccc; display: flex; justify-content: space-between; padding: 10px 2px 2px 2px ">
 		<div>
 			<!-- letakkan tombol yang lin disini -->
-		<a id="pnl_edit-btn_print" href="javascript:void(0)" class="easyui-linkbutton c8" style="margin-left:10px;" data-options="iconCls:'icon-print'">print</a>
+		<a id="pnl_edit-btn_print" href="javascript:void(0)" class="easyui-linkbutton c8" style="margin-left:10px; margin-bottom: 10px;" data-options="iconCls:'icon-print'">print</a>
+		
+		
 		</div>
 		<div>
-			<a id="pnl_edit-btn_delete" class="easyui-linkbutton c5" style="width">Hapus</a>
+			<a id="pnl_edit-btn_delete" class="easyui-linkbutton c5" style="margin-bottom: 10px; margin-right: 10px">Hapus</a>
 		</div>
 	</div>
 

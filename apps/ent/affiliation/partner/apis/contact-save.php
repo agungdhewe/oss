@@ -26,7 +26,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 18/04/2021
+ * tanggal 29/11/2021
  */
 $API = new class extends partnerBase {
 	
@@ -55,12 +55,6 @@ $API = new class extends partnerBase {
 			// apabila ada tanggal, ubah ke format sql sbb:
 			// $obj->tanggal = (\DateTime::createFromFormat('d/m/Y',$obj->tanggal))->format('Y-m-d');
 
-			$obj->partnercontact_id = strtoupper($obj->partnercontact_id);
-			$obj->partnercontact_name = strtoupper($obj->partnercontact_name);
-			$obj->partnercontact_position = strtoupper($obj->partnercontact_position);
-			$obj->partnercontact_mobilephone = strtoupper($obj->partnercontact_mobilephone);
-			$obj->partnercontact_email = strtoupper($obj->partnercontact_email);
-			$obj->partner_id = strtoupper($obj->partner_id);
 
 
 
@@ -107,36 +101,38 @@ $API = new class extends partnerBase {
 
 
 
+
+				// result
+				$where = \FGTA4\utils\SqlUtility::BuildCriteria((object)[$primarykey=>$obj->{$primarykey}], [$primarykey=>"$primarykey=:$primarykey"]);
+				$sql = \FGTA4\utils\SqlUtility::Select($tablename , [
+					$primarykey
+					, 'partnercontact_id', 'partnercontact_name', 'partnercontact_position', 'partnercontact_mobilephone', 'partnercontact_email', 'partnecontact_isdisabled', 'partnecontact_iscontract', 'partnecontact_isinvoice', 'partner_id', '_createby', '_createdate', '_modifyby', '_modifydate', '_createby', '_createdate', '_modifyby', '_modifydate'
+				], $where->sql);
+				$stmt = $this->db->prepare($sql);
+				$stmt->execute($where->params);
+				$row  = $stmt->fetch(\PDO::FETCH_ASSOC);			
+
+				$record = [];
+				foreach ($row as $key => $value) {
+					$record[$key] = $value;
+				}
+				$result->dataresponse = (object) array_merge($record, [
+					// untuk lookup atau modify response ditaruh disini
+
+					'_createby' => \FGTA4\utils\SqlUtility::Lookup($record['_createby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+					'_modifyby' => \FGTA4\utils\SqlUtility::Lookup($record['_modifyby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+				]);
+
 				$this->db->commit();
+
+				return $result;
 			} catch (\Exception $ex) {
 				$this->db->rollBack();
 				throw $ex;
 			} finally {
 				$this->db->setAttribute(\PDO::ATTR_AUTOCOMMIT,1);
 			}
-
-
-			$where = \FGTA4\utils\SqlUtility::BuildCriteria((object)[$primarykey=>$obj->{$primarykey}], [$primarykey=>"$primarykey=:$primarykey"]);
-			$sql = \FGTA4\utils\SqlUtility::Select($tablename , [
-				$primarykey
-				, 'partnercontact_id', 'partnercontact_name', 'partnercontact_position', 'partnercontact_mobilephone', 'partnercontact_email', 'partnecontact_isdisabled', 'partner_id', '_createby', '_createdate', '_modifyby', '_modifydate', '_createby', '_createdate', '_modifyby', '_modifydate'
-			], $where->sql);
-			$stmt = $this->db->prepare($sql);
-			$stmt->execute($where->params);
-			$row  = $stmt->fetch(\PDO::FETCH_ASSOC);			
-
-			$record = [];
-			foreach ($row as $key => $value) {
-				$record[$key] = $value;
-			}
-			$result->dataresponse = (object) array_merge($record, [
-				// untuk lookup atau modify response ditaruh disini
-
-				'_createby' => \FGTA4\utils\SqlUtility::Lookup($record['_createby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
-				'_modifyby' => \FGTA4\utils\SqlUtility::Lookup($record['_modifyby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
-			]);
-
-			return $result;
+			
 		} catch (\Exception $ex) {
 			throw $ex;
 		}

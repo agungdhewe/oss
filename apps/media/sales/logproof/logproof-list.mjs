@@ -6,7 +6,6 @@ const tbl_list = $('#pnl_list-tbl_list')
 const txt_search = $('#pnl_list-txt_search')
 const btn_load = $('#pnl_list-btn_load')
 const btn_new = $('#pnl_list-btn_new')
-const btn_upload = $('#pnl_list-btn_upload');
 
 
 let grd_list = {}
@@ -42,10 +41,6 @@ export async function init(opt) {
 		onClick: () => { btn_new_click() }
 	})
 
-	btn_upload.linkbutton({
-		onClick: () => { btn_upload_click() }
-	})
-
 	document.addEventListener('OnSizeRecalculated', (ev) => {
 		OnSizeRecalculated(ev.detail.width, ev.detail.height)
 	})	
@@ -59,7 +54,7 @@ export async function init(opt) {
 		}
 	})	
 	
-
+	//button state
 
 	btn_load_click()
 }
@@ -90,11 +85,6 @@ export function scrolllast() {
 	$(window).scrollTop(last_scrolltop)
 
 }
-
-export function reload() {
-	btn_load_click();
-}
-
 
 function btn_load_click() {
 
@@ -178,9 +168,5 @@ function grd_list_rowrender(tr) {
 			td.classList.remove('fgtable-row-disabled')
 		}
 	})
-}
-
-function btn_upload_click() {
-	$ui.getPages().show('pnl_upload')	
 }
 

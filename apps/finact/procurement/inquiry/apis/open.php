@@ -78,17 +78,15 @@ $API = new class extends inquiryBase {
 			$approverow = \FGTA4\utils\SqlUtility::LookupRow((object)["$this->main_primarykey"=>$record[$this->main_primarykey], "$this->approval_field_approveby"=>$userdata->username, "$this->approval_field_approve"=>'1'], $this->db, $this->approval_tablename);
 			$declinerow = \FGTA4\utils\SqlUtility::LookupRow((object)["$this->main_primarykey"=>$record[$this->main_primarykey], "$this->approval_field_declineby"=>$userdata->username, "$this->approval_field_decline"=>'1'], $this->db, "$this->approval_tablename");
 		
-			$inquirytype = \FGTA4\utils\SqlUtility::LookupRow($record['inquirytype_id'], $this->db, 'mst_inquirytype', 'inquirytype_id');
-			$this->log($inquirytype);
+			$inquiryselect_id = \FGTA4\utils\SqlUtility::Lookup($record['inquirytype_id'], $this->db, 'mst_inquirytype', 'inquirytype_id', 'inquiryselect_id');
+			$inquiryselect = \FGTA4\utils\SqlUtility::LookupRow($inquiryselect_id, $this->db, 'mst_inquiryselect', 'inquiryselect_id');
+			$inquiry_selectfield =   $inquiryselect['inquiryselect_isshowitemasset'] 
+									.$inquiryselect['inquiryselect_isshowitem']
+									.$inquiryselect['inquiryselect_isshowitemstock']
+									.$inquiryselect['inquiryselect_isshowpartner']
+									.$inquiryselect['inquiryselect_isshowitemclass']
+									.$inquiryselect['inquiryselect_isitemclassdisabled'];
 
-			$inquiry_selectfield =   $inquirytype['inquiryselect_isshowitemasset'] 
-									.$inquirytype['inquiryselect_isshowitem']
-									.$inquirytype['inquiryselect_isshowitemstock']
-									.$inquirytype['inquiryselect_isshowpartner']
-									.$inquirytype['inquiryselect_isshowitemclass']
-									.$inquirytype['inquiryselect_isitemclassdisabled'];
-
-			$this->log($inquiry_selectfield);
 
 			$result->record = array_merge($record, [
 				'inquiry_dtstart' => date("d/m/Y", strtotime($record['inquiry_dtstart'])),
@@ -130,7 +128,7 @@ $API = new class extends inquiryBase {
 
 				// Ovveride Data
 				'inquiry_selectfield' => $inquiry_selectfield,
-				'inquiryselect_id' => $inquirytype['inquiryselect_id']
+				'inquiryselect_id' => $inquiryselect_id
 
 			]);
 

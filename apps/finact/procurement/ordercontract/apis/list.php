@@ -23,7 +23,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 17/09/2021
+ * tanggal 07/11/2021
  */
 $API = new class extends ordercontractBase {
 
@@ -58,7 +58,7 @@ $API = new class extends ordercontractBase {
 			$limit = " LIMIT $maxrow OFFSET $offset ";
 			$stmt = $this->db->prepare("
 				select 
-				A.ordercontract_id, A.ordercontract_ref, A.ordercontract_descr, A.partner_id, A._createby, A._createdate, A._modifyby, A._modifydate 
+				A.ordercontract_id, A.ordercontract_ref, A.ordercontract_descr, A.ordercontract_dtstart, A.ordercontract_dtend, A.partner_id, A.trxmodel_id, A.inquiryselect_id, A.ordercontract_days, A.owner_dept_id, A.doc_id, A.ordercontract_selectfield, A.ordercontract_version, A.ordercontract_isdateinterval, A.ordercontract_iscommit, A.ordercontract_commitby, A.ordercontract_commitdate, A.ordercontract_isapprovalprogress, A.ordercontract_isapproved, A.ordercontract_approveby, A.ordercontract_approvedate, A.ordercontract_isdeclined, A.ordercontract_declineby, A.ordercontract_declinedate, A._createby, A._createdate, A._modifyby, A._modifydate 
 				from trn_ordercontract A
 			" . $where->sql . $limit);
 			$stmt->execute($where->params);
@@ -76,6 +76,13 @@ $API = new class extends ordercontractBase {
 					//'tanggal' => date("d/m/y", strtotime($record['tanggal'])),
 				 	//'tambahan' => 'dta'
 					'partner_name' => \FGTA4\utils\SqlUtility::Lookup($record['partner_id'], $this->db, 'mst_partner', 'partner_id', 'partner_name'),
+					'trxmodel_name' => \FGTA4\utils\SqlUtility::Lookup($record['trxmodel_id'], $this->db, 'mst_trxmodel', 'trxmodel_id', 'trxmodel_name'),
+					'inquiryselect_name' => \FGTA4\utils\SqlUtility::Lookup($record['inquiryselect_id'], $this->db, 'mst_inquiryselect', 'inquiryselect_id', 'inquiryselect_name'),
+					'owner_dept_name' => \FGTA4\utils\SqlUtility::Lookup($record['owner_dept_id'], $this->db, 'mst_dept', 'dept_id', 'dept_name'),
+					'doc_name' => \FGTA4\utils\SqlUtility::Lookup($record['doc_id'], $this->db, 'mst_doc', 'doc_id', 'doc_name'),
+					'ordercontract_commitby' => \FGTA4\utils\SqlUtility::Lookup($record['ordercontract_commitby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+					'ordercontract_approveby' => \FGTA4\utils\SqlUtility::Lookup($record['ordercontract_approveby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+					'ordercontract_declineby' => \FGTA4\utils\SqlUtility::Lookup($record['ordercontract_declineby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
 					 
 				]));
 			}

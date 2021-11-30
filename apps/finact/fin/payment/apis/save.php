@@ -214,6 +214,8 @@ $API = new class extends paymentBase {
 				if ($billinfo!=null) {
 					$obj->billin_id = $data->billin_id;
 					$obj->billinpaym_id = $data->billinpaym_id;
+					$obj->paymtype_id =  $billinfo['paymtype_id'];
+					$obj->partnerbank_id = $billinfo['partnerbank_id'];
 					$obj->paymto_name = $billinfo['partner_name'];
 					$obj->paymto_bankacc = $billinfo['paymto_bankacc'];
 					$obj->paymto_bankaccname = $billinfo['paymto_bankaccname'];
@@ -253,7 +255,7 @@ $API = new class extends paymentBase {
 		try {
 			switch ($jurnal->jurnaltype_id) {
 				case 'PV-ADVPAYM' :
-					$this->Update_Pembayaran_Adv($jurnal, $data, $key, $extdata, $userdata);
+					$this->Update_Pembayaran_Adv($jurnal, $data, $key, $extdata, $userdata); // Debet
 					break;
 
 				case 'PV-APPAYM' :
@@ -280,8 +282,8 @@ $API = new class extends paymentBase {
 				  B.billinpaym_id,	
 				  B.billinpaym_id as jurnaldetil_id
 				, B.billinpaym_descr as jurnaldetil_descr
-				, '1104010000' as coa_id
-				, A.dept_id as dept_id
+				, B.coa_id
+				, A.request_dept_id as dept_id
 				, A.partner_id as partner_id
 				, B.curr_id as curr_id
 				, (select sum(billinpaym_itemfrg) + sum(billinpaym_ppnfrg) from trn_billinpaym where billin_id=A.billin_id and (billinpaym_itemfrg<>0 or billinpaym_ppnfrg<>0)) as jurnaldetil_valfrg
@@ -420,6 +422,16 @@ $API = new class extends paymentBase {
 			throw $ex;
 		}
 	}
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -60,7 +60,10 @@ $API = new class extends mediaorderBase {
 				select 
 				mediaorder_id, mediaordertype_id, mediaorder_date, mediaorder_descr, mediaorder_ref, ae_empl_id, agency_partner_id, advertiser_partner_id, brand_id, curr_id, mediaorder_istax, taxtype_id, mediapackage_id, salesordertype_id, trxmodel_id, dept_id, doc_id, mediaorder_version, mediaorder_iscommit, mediaorder_commitby, mediaorder_commitdate, mediaorder_isapprovalprogress, mediaorder_isapproved, mediaorder_approveby, mediaorder_approvedate, mediaorder_isdeclined, mediaorder_declineby, mediaorder_declinedate, mediaorder_notes, mediaorder_isclose, mediaorder_closeby, mediaorder_closedate, _createby, _createdate, _modifyby, _modifydate 
 				from trn_mediaorder A
-			" . $where->sql . $limit);
+			" 
+			. $where->sql 
+			. " order by mediaorder_date desc "
+			. $limit);
 			$stmt->execute($where->params);
 			$rows  = $stmt->fetchall(\PDO::FETCH_ASSOC);
 

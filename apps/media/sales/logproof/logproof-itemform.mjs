@@ -12,6 +12,7 @@ const btn_next = $('#pnl_edititemform-btn_next')
 const btn_addnew = $('#pnl_edititemform-btn_addnew')
 const chk_autoadd = $('#pnl_edititemform-autoadd')
 
+
 const pnl_form = $('#pnl_edititemform-form')
 const obj = {
 	txt_medialogproofitem_id: $('#pnl_edititemform-txt_medialogproofitem_id'),
@@ -21,14 +22,25 @@ const obj = {
 	txt_actual_timestart: $('#pnl_edititemform-txt_actual_timestart'),
 	txt_actual_timeend: $('#pnl_edititemform-txt_actual_timeend'),
 	txt_actual_duration: $('#pnl_edititemform-txt_actual_duration'),
-	txt_medialogproofitem_spot: $('#pnl_edititemform-txt_medialogproofitem_spot'),
+	txt_spot_id: $('#pnl_edititemform-txt_spot_id'),
+	txt_mediaorderitem_validr: $('#pnl_edititemform-txt_mediaorderitem_validr'),
+	txt_mediaorderitem_ppnidr: $('#pnl_edititemform-txt_mediaorderitem_ppnidr'),
+	cbo_pph_taxtype_id: $('#pnl_edititemform-cbo_pph_taxtype_id'),
+	cbo_mediaorder_id: $('#pnl_edititemform-cbo_mediaorder_id'),
 	cbo_mediaorderitem_id: $('#pnl_edititemform-cbo_mediaorderitem_id'),
+	txt_mediaordertype_id: $('#pnl_edititemform-txt_mediaordertype_id'),
+	txt_logproof_partnerinfo: $('#pnl_edititemform-txt_logproof_partnerinfo'),
+	txt_agency_partner_id: $('#pnl_edititemform-txt_agency_partner_id'),
+	txt_advertiser_partner_id: $('#pnl_edititemform-txt_advertiser_partner_id'),
+	txt_brand_id: $('#pnl_edititemform-txt_brand_id'),
+	txt_project_id: $('#pnl_edititemform-txt_project_id'),
+	txt_projecttask_id: $('#pnl_edititemform-txt_projecttask_id'),
 	txt_medialogproof_id: $('#pnl_edititemform-txt_medialogproof_id')
 }
 
 
-let form = {}
-let header_data = {}
+let form;
+let header_data;
 
 
 
@@ -60,6 +72,52 @@ export async function init(opt) {
 	form.CreateLogPage(this_page_id)
 
 
+
+
+	obj.cbo_pph_taxtype_id.name = 'pnl_edititemform-cbo_pph_taxtype_id'		
+	new fgta4slideselect(obj.cbo_pph_taxtype_id, {
+		title: 'Pilih pph_taxtype_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_pph_taxtype_id,
+		fieldValue: 'pph_taxtype_id',
+		fieldValueMap: 'taxtype_id',
+		fieldDisplay: 'taxtype_name',
+		fields: [
+			{mapping: 'taxtype_id', text: 'taxtype_id'},
+			{mapping: 'taxtype_name', text: 'taxtype_name'},
+		],
+		OnDataLoading: (criteria, options) => {},
+		OnDataLoaded : (result, options) => {
+			result.records.unshift({taxtype_id:'--NULL--', taxtype_name:'NONE'});	
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+			}			
+		}
+	})				
+			
+	obj.cbo_mediaorder_id.name = 'pnl_edititemform-cbo_mediaorder_id'		
+	new fgta4slideselect(obj.cbo_mediaorder_id, {
+		title: 'Pilih mediaorder_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_mediaorder_id,
+		fieldValue: 'mediaorder_id',
+		fieldValueMap: 'mediaorder_id',
+		fieldDisplay: 'mediaorder_descr',
+		fields: [
+			{mapping: 'mediaorder_id', text: 'mediaorder_id'},
+			{mapping: 'mediaorder_descr', text: 'mediaorder_descr'},
+		],
+		OnDataLoading: (criteria, options) => {},
+		OnDataLoaded : (result, options) => {
+			result.records.unshift({mediaorder_id:'--NULL--', mediaorder_descr:'NONE'});	
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+			}			
+		}
+	})				
+			
 	obj.cbo_mediaorderitem_id.name = 'pnl_edititemform-cbo_mediaorderitem_id'		
 	new fgta4slideselect(obj.cbo_mediaorderitem_id, {
 		title: 'Pilih mediaorderitem_id',
@@ -72,26 +130,21 @@ export async function init(opt) {
 			{mapping: 'mediaorderitem_id', text: 'mediaorderitem_id'},
 			{mapping: 'mediaorderitem_descr', text: 'mediaorderitem_descr'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria, options) => {},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({mediaorderitem_id:'--NULL--', mediaorderitem_descr:'NONE'});	
 		},
-		OnSelected: (value, display, record) => {}
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+			}			
+		}
 	})				
 			
 
 
-	btn_addnew.linkbutton({
-		onClick: () => { btn_addnew_click() }
-	})
-
-	btn_prev.linkbutton({
-		onClick: () => { btn_prev_click() }
-	})
-
-	btn_next.linkbutton({
-		onClick: () => { btn_next_click() }
-	})
+	btn_addnew.linkbutton({ onClick: () => { btn_addnew_click() }  })
+	btn_prev.linkbutton({ onClick: () => { btn_prev_click() } })
+	btn_next.linkbutton({ onClick: () => { btn_next_click() } })
 
 	document.addEventListener('keydown', (ev)=>{
 		if ($ui.getPages().getCurrentPage()==this_page_id) {
@@ -167,24 +220,50 @@ export function open(data, rowid, hdata) {
 	txt_title.html(hdata.medialogproof_date)
 	header_data = hdata
 
+	var pOpt = form.getDefaultPrompt(false)
 	var fn_dataopening = async (options) => {
 		options.api = `${global.modulefullname}/item-open`
 		options.criteria[form.primary.mapping] = data[form.primary.mapping]
 	}
 
 	var fn_dataopened = async (result, options) => {
+		var record = result.record;
+		updatefilebox(result.record);
+/*
+		if (record.pph_taxtype_id==null) { record.pph_taxtype_id='--NULL--'; record.pph_taxtype_name='NONE'; }
+		if (record.mediaorder_id==null) { record.mediaorder_id='--NULL--'; record.mediaorder_descr='NONE'; }
+		if (record.mediaorderitem_id==null) { record.mediaorderitem_id='--NULL--'; record.mediaorderitem_descr='NONE'; }
 
-		if (result.record.mediaorderitem_id==null) { result.record.mediaorderitem_id='--NULL--'; result.record.mediaorderitem_descr='NONE'; }
-
-
+*/
+		for (var objid in obj) {
+			let o = obj[objid]
+			if (o.isCombo() && !o.isRequired()) {
+				var value =  result.record[o.getFieldValueName()];
+				if (value==null ) {
+					record[o.getFieldValueName()] = pOpt.value;
+					record[o.getFieldDisplayName()] = pOpt.text;
+				}
+			}
+		}
 		form.SuspendEvent(true);
 		form
-			.fill(result.record)
-			.setValue(obj.cbo_mediaorderitem_id, result.record.mediaorderitem_id, result.record.mediaorderitem_descr)
-			.commit()
+			.fill(record)
+			.setValue(obj.cbo_pph_taxtype_id, record.pph_taxtype_id, record.pph_taxtype_name)
+			.setValue(obj.cbo_mediaorder_id, record.mediaorder_id, record.mediaorder_descr)
+			.setValue(obj.cbo_mediaorderitem_id, record.mediaorderitem_id, record.mediaorderitem_descr)
 			.setViewMode()
 			.rowid = rowid
 
+
+
+		/* tambahkan event atau behaviour saat form dibuka
+		   apabila ada rutin mengubah form dan tidak mau dijalankan pada saat opening,
+		   cek dengan form.isEventSuspended()
+		*/ 
+
+
+
+		form.commit()
 		form.SuspendEvent(false);
 
 
@@ -240,10 +319,17 @@ export function createnew(hdata) {
 		data.medialogproof_id= hdata.medialogproof_id
 		data.item_value = 0
 
-			data.actual_duration = 0
+		data.actual_duration = 0
+		data.mediaorderitem_validr = 0
+		data.mediaorderitem_ppnidr = 0
 
+			data.pph_taxtype_id = '--NULL--'
+			data.pph_taxtype_name = 'NONE'
+			data.mediaorder_id = '--NULL--'
+			data.mediaorder_descr = 'NONE'
 			data.mediaorderitem_id = '--NULL--'
 			data.mediaorderitem_descr = 'NONE'
+
 
 
 
@@ -258,17 +344,42 @@ export function createnew(hdata) {
 async function form_datasaving(data, options) {
 	options.api = `${global.modulefullname}/item-save`
 
-	options.skipmappingresponse = ["mediaorderitem_id"];
-
-
+	// options.skipmappingresponse = ['pph_taxtype_id', 'mediaorder_id', 'mediaorderitem_id', ];
+	options.skipmappingresponse = [];
+	for (var objid in obj) {
+		var o = obj[objid]
+		if (o.isCombo() && !o.isRequired()) {
+			var id = o.getFieldValueName()
+			options.skipmappingresponse.push(id)
+			console.log(id)
+		}
+	}	
 }
 
 async function form_datasaved(result, options) {
 	var data = {}
 	Object.assign(data, form.getData(), result.dataresponse)
 
+	/*
+	form.setValue(obj.cbo_pph_taxtype_id, result.dataresponse.pph_taxtype_name!=='--NULL--' ? result.dataresponse.pph_taxtype_id : '--NULL--', result.dataresponse.pph_taxtype_name!=='--NULL--'?result.dataresponse.pph_taxtype_name:'NONE')
+	form.setValue(obj.cbo_mediaorder_id, result.dataresponse.mediaorder_descr!=='--NULL--' ? result.dataresponse.mediaorder_id : '--NULL--', result.dataresponse.mediaorder_descr!=='--NULL--'?result.dataresponse.mediaorder_descr:'NONE')
 	form.setValue(obj.cbo_mediaorderitem_id, result.dataresponse.mediaorderitem_descr!=='--NULL--' ? result.dataresponse.mediaorderitem_id : '--NULL--', result.dataresponse.mediaorderitem_descr!=='--NULL--'?result.dataresponse.mediaorderitem_descr:'NONE')
 
+	*/
+
+	var pOpt = form.getDefaultPrompt(false)
+	for (var objid in obj) {
+		var o = obj[objid]
+		if (o.isCombo() && !o.isRequired()) {
+			var value =  result.dataresponse[o.getFieldValueName()];
+			var text = result.dataresponse[o.getFieldDisplayName()];
+			if (value==null ) {
+				value = pOpt.value;
+				text = pOpt.text;
+			}
+			form.setValue(o, value, text);
+		}
+	}
 	form.rowid = $ui.getPages().ITEMS['pnl_edititemgrid'].handler.updategrid(data, form.rowid)
 
 	var autoadd = chk_autoadd.prop("checked")
@@ -289,6 +400,11 @@ async function form_deleted(result, options) {
 		$ui.getPages().ITEMS['pnl_edititemgrid'].handler.removerow(form.rowid)
 	})
 	
+}
+
+function updatefilebox(record) {
+	// apabila ada keperluan untuk menampilkan data dari object storage
+
 }
 
 function form_viewmodechanged(viewonly) {

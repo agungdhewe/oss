@@ -12,6 +12,7 @@ const btn_next = $('#pnl_editdetilform-btn_next')
 const btn_addnew = $('#pnl_editdetilform-btn_addnew')
 const chk_autoadd = $('#pnl_editdetilform-autoadd')
 
+
 const pnl_form = $('#pnl_editdetilform-form')
 const obj = {
 	txt_bankbookdetil_id: $('#pnl_editdetilform-txt_bankbookdetil_id'),
@@ -25,12 +26,13 @@ const obj = {
 	txt_bankbookdetil_notes: $('#pnl_editdetilform-txt_bankbookdetil_notes'),
 	cbo_jurnal_id: $('#pnl_editdetilform-cbo_jurnal_id'),
 	cbo_acc_fin: $('#pnl_editdetilform-cbo_acc_fin'),
+	
 	txt_bankbook_id: $('#pnl_editdetilform-txt_bankbook_id')
 }
 
 
-let form = {}
-let header_data = {}
+let form;
+let header_data;
 
 
 
@@ -62,30 +64,28 @@ export async function init(opt) {
 	form.CreateLogPage(this_page_id)
 
 
+
+
 	obj.cbo_jurnal_id.name = 'pnl_editdetilform-cbo_jurnal_id'		
 	new fgta4slideselect(obj.cbo_jurnal_id, {
 		title: 'Pilih jurnal_id',
 		returnpage: this_page_id,
-		api: `${global.modulefullname}/list-get_jurnal_unlinked`,
+		api: $ui.apis.load_jurnal_id,
 		fieldValue: 'jurnal_id',
 		fieldValueMap: 'jurnal_id',
 		fieldDisplay: 'jurnal_descr',
 		fields: [
-			{mapping: 'jurnal_id', text: 'ID'},
-			{mapping: 'jurnal_dt', text: 'Date'},
-			{mapping: 'jurnal_descr', text: 'Descr'},
-			{mapping: 'curr_id', text: 'Curr'},
-			{mapping: 'jurnaldetil_valfrg', text: 'Value'},
-			{mapping: 'jurnaldetil_validr', text: 'IDR'}
+			{mapping: 'jurnal_id', text: 'jurnal_id'},
+			{mapping: 'jurnal_descr', text: 'jurnal_descr'},
+			{mapping: 'jurnal_validr', text: 'Amount', formatter: 'row_format_number', style: "text-align: right"}
 		],
-		OnDataLoading: (criteria) => {
-
-		},
+		OnDataLoading: (criteria, options) => {},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({jurnal_id:'--NULL--', jurnal_descr:'NONE'});	
 		},
-		OnSelected: (value, display, record) => {
-			form.setValue(obj.cbo_acc_fin, record.accfin_id, record.accfin_name)
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+			}			
 		}
 	})				
 			
@@ -101,26 +101,21 @@ export async function init(opt) {
 			{mapping: 'accfin_id', text: 'accfin_id'},
 			{mapping: 'accfin_name', text: 'accfin_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria, options) => {},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({accfin_id:'--NULL--', accfin_name:'NONE'});	
 		},
-		OnSelected: (value, display, record) => {}
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+			}			
+		}
 	})				
 			
 
 
-	btn_addnew.linkbutton({
-		onClick: () => { btn_addnew_click() }
-	})
-
-	btn_prev.linkbutton({
-		onClick: () => { btn_prev_click() }
-	})
-
-	btn_next.linkbutton({
-		onClick: () => { btn_next_click() }
-	})
+	btn_addnew.linkbutton({ onClick: () => { btn_addnew_click() }  })
+	btn_prev.linkbutton({ onClick: () => { btn_prev_click() } })
+	btn_next.linkbutton({ onClick: () => { btn_next_click() } })
 
 	document.addEventListener('keydown', (ev)=>{
 		if ($ui.getPages().getCurrentPage()==this_page_id) {
@@ -196,26 +191,48 @@ export function open(data, rowid, hdata) {
 	txt_title.html(hdata.bankbook_date)
 	header_data = hdata
 
+	var pOpt = form.getDefaultPrompt(false)
 	var fn_dataopening = async (options) => {
 		options.api = `${global.modulefullname}/detil-open`
 		options.criteria[form.primary.mapping] = data[form.primary.mapping]
 	}
 
 	var fn_dataopened = async (result, options) => {
+		var record = result.record;
+		updatefilebox(result.record);
+/*
+		if (record.jurnal_id==null) { record.jurnal_id='--NULL--'; record.jurnal_descr='NONE'; }
+		if (record.acc_fin==null) { record.acc_fin='--NULL--'; record.accfin_name='NONE'; }
 
-		if (result.record.jurnal_id==null) { result.record.jurnal_id='--NULL--'; result.record.jurnal_descr='NONE'; }
-		if (result.record.acc_fin==null) { result.record.acc_fin='--NULL--'; result.record.accfin_name='NONE'; }
-
-
+*/
+		for (var objid in obj) {
+			let o = obj[objid]
+			if (o.isCombo() && !o.isRequired()) {
+				var value =  result.record[o.getFieldValueName()];
+				if (value==null ) {
+					record[o.getFieldValueName()] = pOpt.value;
+					record[o.getFieldDisplayName()] = pOpt.text;
+				}
+			}
+		}
 		form.SuspendEvent(true);
 		form
-			.fill(result.record)
-			.setValue(obj.cbo_jurnal_id, result.record.jurnal_id, result.record.jurnal_descr)
-			.setValue(obj.cbo_acc_fin, result.record.acc_fin, result.record.accfin_name)
-			.commit()
+			.fill(record)
+			.setValue(obj.cbo_jurnal_id, record.jurnal_id, record.jurnal_descr)
+			.setValue(obj.cbo_acc_fin, record.acc_fin, record.accfin_name)
 			.setViewMode()
 			.rowid = rowid
 
+
+
+		/* tambahkan event atau behaviour saat form dibuka
+		   apabila ada rutin mengubah form dan tidak mau dijalankan pada saat opening,
+		   cek dengan form.isEventSuspended()
+		*/ 
+
+
+
+		form.commit()
 		form.SuspendEvent(false);
 
 
@@ -271,17 +288,18 @@ export function createnew(hdata) {
 		data.bankbook_id= hdata.bankbook_id
 		data.detil_value = 0
 
-			data.bankbookdetil_valfrgd = 0
-			data.bankbookdetil_valfrgk = 0
-			data.bankbookdetil_valfrgsaldo = 0
-			data.bankbookdetil_validrd = 0
-			data.bankbookdetil_validrk = 0
-			data.bankbookdetil_validrsaldo = 0
+		data.bankbookdetil_valfrgd = 0
+		data.bankbookdetil_valfrgk = 0
+		data.bankbookdetil_valfrgsaldo = 0
+		data.bankbookdetil_validrd = 0
+		data.bankbookdetil_validrk = 0
+		data.bankbookdetil_validrsaldo = 0
 
 			data.jurnal_id = '--NULL--'
 			data.jurnal_descr = 'NONE'
 			data.acc_fin = '--NULL--'
 			data.accfin_name = 'NONE'
+
 
 
 
@@ -296,19 +314,41 @@ export function createnew(hdata) {
 async function form_datasaving(data, options) {
 	options.api = `${global.modulefullname}/detil-save`
 
-	options.skipmappingresponse = ["jurnal_id"];
-	options.skipmappingresponse = ["acc_fin"];
-
-
+	// options.skipmappingresponse = ['jurnal_id', 'acc_fin', ];
+	options.skipmappingresponse = [];
+	for (var objid in obj) {
+		var o = obj[objid]
+		if (o.isCombo() && !o.isRequired()) {
+			var id = o.getFieldValueName()
+			options.skipmappingresponse.push(id)
+			console.log(id)
+		}
+	}	
 }
 
 async function form_datasaved(result, options) {
 	var data = {}
 	Object.assign(data, form.getData(), result.dataresponse)
 
+	/*
 	form.setValue(obj.cbo_jurnal_id, result.dataresponse.jurnal_descr!=='--NULL--' ? result.dataresponse.jurnal_id : '--NULL--', result.dataresponse.jurnal_descr!=='--NULL--'?result.dataresponse.jurnal_descr:'NONE')
 	form.setValue(obj.cbo_acc_fin, result.dataresponse.accfin_name!=='--NULL--' ? result.dataresponse.acc_fin : '--NULL--', result.dataresponse.accfin_name!=='--NULL--'?result.dataresponse.accfin_name:'NONE')
 
+	*/
+
+	var pOpt = form.getDefaultPrompt(false)
+	for (var objid in obj) {
+		var o = obj[objid]
+		if (o.isCombo() && !o.isRequired()) {
+			var value =  result.dataresponse[o.getFieldValueName()];
+			var text = result.dataresponse[o.getFieldDisplayName()];
+			if (value==null ) {
+				value = pOpt.value;
+				text = pOpt.text;
+			}
+			form.setValue(o, value, text);
+		}
+	}
 	form.rowid = $ui.getPages().ITEMS['pnl_editdetilgrid'].handler.updategrid(data, form.rowid)
 
 	var autoadd = chk_autoadd.prop("checked")
@@ -329,6 +369,11 @@ async function form_deleted(result, options) {
 		$ui.getPages().ITEMS['pnl_editdetilgrid'].handler.removerow(form.rowid)
 	})
 	
+}
+
+function updatefilebox(record) {
+	// apabila ada keperluan untuk menampilkan data dari object storage
+
 }
 
 function form_viewmodechanged(viewonly) {

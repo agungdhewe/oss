@@ -27,7 +27,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 17/09/2021
+ * tanggal 07/11/2021
  */
 $API = new class extends ordercontractBase {
 	
@@ -60,13 +60,24 @@ $API = new class extends ordercontractBase {
 
 			// apabila ada tanggal, ubah ke format sql sbb:
 			// $obj->tanggal = (\DateTime::createFromFormat('d/m/Y',$obj->tanggal))->format('Y-m-d');
+			$obj->ordercontract_dtstart = (\DateTime::createFromFormat('d/m/Y',$obj->ordercontract_dtstart))->format('Y-m-d');
+			$obj->ordercontract_dtend = (\DateTime::createFromFormat('d/m/Y',$obj->ordercontract_dtend))->format('Y-m-d');
 
-			$obj->ordercontract_descr = strtoupper($obj->ordercontract_descr);
 
 
 			if ($obj->ordercontract_ref=='') { $obj->ordercontract_ref = '--NULL--'; }
 
 
+			unset($obj->ordercontract_iscommit);
+			unset($obj->ordercontract_commitby);
+			unset($obj->ordercontract_commitdate);
+			unset($obj->ordercontract_isapprovalprogress);
+			unset($obj->ordercontract_isapproved);
+			unset($obj->ordercontract_approveby);
+			unset($obj->ordercontract_approvedate);
+			unset($obj->ordercontract_isdeclined);
+			unset($obj->ordercontract_declineby);
+			unset($obj->ordercontract_declinedate);
 
 
 
@@ -103,7 +114,7 @@ $API = new class extends ordercontractBase {
 				$where = \FGTA4\utils\SqlUtility::BuildCriteria((object)[$primarykey=>$obj->{$primarykey}], [$primarykey=>"$primarykey=:$primarykey"]);
 				$sql = \FGTA4\utils\SqlUtility::Select($tablename , [
 					$primarykey
-					, 'ordercontract_id', 'ordercontract_ref', 'ordercontract_descr', 'partner_id', '_createby', '_createdate', '_modifyby', '_modifydate', '_createby', '_createdate', '_modifyby', '_modifydate'
+					, 'ordercontract_id', 'ordercontract_ref', 'ordercontract_descr', 'ordercontract_dtstart', 'ordercontract_dtend', 'partner_id', 'trxmodel_id', 'inquiryselect_id', 'ordercontract_days', 'owner_dept_id', 'doc_id', 'ordercontract_selectfield', 'ordercontract_version', 'ordercontract_isdateinterval', 'ordercontract_iscommit', 'ordercontract_commitby', 'ordercontract_commitdate', 'ordercontract_isapprovalprogress', 'ordercontract_isapproved', 'ordercontract_approveby', 'ordercontract_approvedate', 'ordercontract_isdeclined', 'ordercontract_declineby', 'ordercontract_declinedate', '_createby', '_createdate', '_modifyby', '_modifydate', '_createby', '_createdate', '_modifyby', '_modifydate'
 				], $where->sql);
 				$stmt = $this->db->prepare($sql);
 				$stmt->execute($where->params);
@@ -115,7 +126,16 @@ $API = new class extends ordercontractBase {
 				}
 				$result->dataresponse = (object) array_merge($record, [
 					//  untuk lookup atau modify response ditaruh disini
+				'ordercontract_dtstart' => date("d/m/Y", strtotime($row['ordercontract_dtstart'])),
+				'ordercontract_dtend' => date("d/m/Y", strtotime($row['ordercontract_dtend'])),
 				'partner_name' => \FGTA4\utils\SqlUtility::Lookup($record['partner_id'], $this->db, 'mst_partner', 'partner_id', 'partner_name'),
+				'trxmodel_name' => \FGTA4\utils\SqlUtility::Lookup($record['trxmodel_id'], $this->db, 'mst_trxmodel', 'trxmodel_id', 'trxmodel_name'),
+				'inquiryselect_name' => \FGTA4\utils\SqlUtility::Lookup($record['inquiryselect_id'], $this->db, 'mst_inquiryselect', 'inquiryselect_id', 'inquiryselect_name'),
+				'owner_dept_name' => \FGTA4\utils\SqlUtility::Lookup($record['owner_dept_id'], $this->db, 'mst_dept', 'dept_id', 'dept_name'),
+				'doc_name' => \FGTA4\utils\SqlUtility::Lookup($record['doc_id'], $this->db, 'mst_doc', 'doc_id', 'doc_name'),
+				'ordercontract_commitby' => \FGTA4\utils\SqlUtility::Lookup($record['ordercontract_commitby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+				'ordercontract_approveby' => \FGTA4\utils\SqlUtility::Lookup($record['ordercontract_approveby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+				'ordercontract_declineby' => \FGTA4\utils\SqlUtility::Lookup($record['ordercontract_declineby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
 
 					'_createby' => \FGTA4\utils\SqlUtility::Lookup($record['_createby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
 					'_modifyby' => \FGTA4\utils\SqlUtility::Lookup($record['_modifyby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),

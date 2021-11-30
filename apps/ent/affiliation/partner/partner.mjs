@@ -5,6 +5,8 @@ import * as fgta4pageslider from '../../../../../index.php/asset/fgta/framework/
 import * as apis from './partner.apis.mjs'
 import * as pList from './partner-list.mjs'
 import * as pEdit from './partner-edit.mjs'
+import * as pEditTypegrid from './partner-typegrid.mjs'
+import * as pEditTypeform from './partner-typeform.mjs'
 import * as pEditBankgrid from './partner-bankgrid.mjs'
 import * as pEditBankform from './partner-bankform.mjs'
 import * as pEditContactgrid from './partner-contactgrid.mjs'
@@ -20,6 +22,8 @@ import * as pEditRefform from './partner-refform.mjs'
 
 const pnl_list = $('#pnl_list')
 const pnl_edit = $('#pnl_edit')
+const pnl_edittypegrid = $('#pnl_edittypegrid')
+const pnl_edittypeform = $('#pnl_edittypeform')
 const pnl_editbankgrid = $('#pnl_editbankgrid')
 const pnl_editbankform = $('#pnl_editbankform')
 const pnl_editcontactgrid = $('#pnl_editcontactgrid')
@@ -55,6 +59,8 @@ export async function init(opt) {
 		.initPages([
 			{panel: pnl_list, handler: pList},
 			{panel: pnl_edit, handler: pEdit},
+			{panel: pnl_edittypegrid, handler: pEditTypegrid},
+			{panel: pnl_edittypeform, handler: pEditTypeform},
 			{panel: pnl_editbankgrid, handler: pEditBankgrid},
 			{panel: pnl_editbankform, handler: pEditBankform},
 			{panel: pnl_editcontactgrid, handler: pEditContactgrid},

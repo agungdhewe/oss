@@ -13,6 +13,7 @@ CREATE TABLE `mst_inquirytype` (
 	`inquirytype_isdisabled` tinyint(1) NOT NULL DEFAULT 0, 
 	`inquirytype_descr` varchar(255)  , 
 	`inquiryselect_id` varchar(1) NOT NULL , 
+	`inquirytype_isperempl` tinyint(1) NOT NULL DEFAULT 0, 
 	`itemmanage_id` varchar(2) NOT NULL , 
 	`inquirytype_isallowadvance` tinyint(1) NOT NULL DEFAULT 0, 
 	`inquirytype_isemplaspartner` tinyint(1) NOT NULL DEFAULT 0, 

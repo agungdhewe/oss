@@ -37,14 +37,33 @@ $API = new class extends inquiryBase {
 				]
 			);
 
-
+			$inquirytype_id = $options->criteria->inquirytype_id;
+			$this->db->query("
+				DROP TABLE IF EXISTS TEMP_INQUIRYITEMCLASS;
+				CREATE TEMPORARY TABLE -- IF NOT EXISTS 
+					TEMP_INQUIRYITEMCLASS ( INDEX(itemclass_id) ) 
+					ENGINE=MyISAM 
+				AS (
+					select
+					itemclass_id
+					from
+					mst_inquirytypeitemclass
+					where
+					inquirytype_id = '$inquirytype_id'
+				);	
+			");
 
 
 			$result = new \stdClass; 
 			$maxrow = 30;
 			$offset = (property_exists($options, 'offset')) ? $options->offset : 0;
 
-			$stmt = $this->db->prepare("select count(*) as n from mst_itemclass A" . $where->sql);
+			$stmt = $this->db->prepare("
+					select count(*) as n 
+					from mst_itemclass A inner join TEMP_INQUIRYITEMCLASS B on B.itemclass_id = A.itemclass_id
+				" 
+				. $where->sql
+			);
 			$stmt->execute($where->params);
 			$row  = $stmt->fetch(\PDO::FETCH_ASSOC);
 			$total = (float) $row['n'];
@@ -53,7 +72,7 @@ $API = new class extends inquiryBase {
 			$stmt = $this->db->prepare("
 					select 
 					A.itemclass_id, A.itemclass_name
-					from mst_itemclass A
+					from mst_itemclass A inner join TEMP_INQUIRYITEMCLASS B on B.itemclass_id = A.itemclass_id
 				" 
 				. $where->sql 
 				. " order by A.itemclass_name "

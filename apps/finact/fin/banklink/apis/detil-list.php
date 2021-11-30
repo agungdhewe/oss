@@ -5,31 +5,35 @@ if (!defined('FGTA4')) {
 }
 
 require_once __ROOT_DIR.'/core/sqlutil.php';
-
+require_once __DIR__ . '/xapi.base.php';
 
 
 use \FGTA4\exceptions\WebException;
 
 
-class DataList extends WebAPI {
-	function __construct() {
-		$this->debugoutput = true;
-		$DB_CONFIG = DB_CONFIG[$GLOBALS['MAINDB']];
-		$DB_CONFIG['param'] = DB_CONFIG_PARAM[$GLOBALS['MAINDBTYPE']];
-		$this->db = new \PDO(
-					$DB_CONFIG['DSN'], 
-					$DB_CONFIG['user'], 
-					$DB_CONFIG['pass'], 
-					$DB_CONFIG['param']
-		);
-
-	}
+/**
+ * finact/fin/banklink/apis/detil-list.php
+ *
+ * ==============
+ * Detil-DataList
+ * ==============
+ * Menampilkan data-data pada tabel detil banklink (trn_bankbook)
+ * sesuai dengan parameter yang dikirimkan melalui variable $option->criteria
+ *
+ * Agung Nugroho <agung@fgta.net> http://www.fgta.net
+ * Tangerang, 26 Maret 2021
+ *
+ * digenerate dengan FGTA4 generator
+ * tanggal 19/11/2021
+ */
+$API = new class extends banklinkBase {
 
 	public function execute($options) {
 		$userdata = $this->auth->session_get_user();
 		
 		try {
 
+			// \FGTA4\utils\SqlUtility::setDefaultCriteria($options->criteria, '--fieldscriteria--', '--value--');
 			$where = \FGTA4\utils\SqlUtility::BuildCriteria(
 				$options->criteria,
 				[
@@ -53,7 +57,8 @@ class DataList extends WebAPI {
 			$limit = " LIMIT $maxrow OFFSET $offset ";
 			$stmt = $this->db->prepare("
 				select 
-				bankbookdetil_id, bankbookdetil_ref, bankbookdetil_valfrgd, bankbookdetil_valfrgk, bankbookdetil_valfrgsaldo, bankbookdetil_validrd, bankbookdetil_validrk, bankbookdetil_validrsaldo, bankbookdetil_notes, jurnal_id, acc_fin, bankbook_id, _createby, _createdate, _modifyby, _modifydate 
+				  A.bankbookdetil_id, A.bankbookdetil_ref, A.bankbookdetil_valfrgd, A.bankbookdetil_valfrgk, A.bankbookdetil_valfrgsaldo, A.bankbookdetil_validrd, A.bankbookdetil_validrk, A.bankbookdetil_validrsaldo, A.bankbookdetil_notes, A.jurnal_id, A.acc_fin, A.bankbook_id, A._createby, A._createdate, A._modifyby, A._modifydate 
+				, (select bankbook_date from trn_bankbook where bankbook_id=A.bankbook_id) as dt
 				from trn_bankbookdetil A
 			" . $where->sql . $limit);
 			$stmt->execute($where->params);
@@ -70,7 +75,7 @@ class DataList extends WebAPI {
 					// // jikalau ingin menambah atau edit field di result record, dapat dilakukan sesuai contoh sbb: 
 					//'tanggal' => date("d/m/y", strtotime($record['tanggal'])),
 				 	//'tambahan' => 'dta'
-
+					'bankbook_date' => date("d/m/y", strtotime($record['dt'])),
 					'jurnal_descr' => \FGTA4\utils\SqlUtility::Lookup($record['jurnal_id'], $this->db, 'trn_jurnal', 'jurnal_id', 'jurnal_descr'),
 					'accfin_name' => \FGTA4\utils\SqlUtility::Lookup($record['acc_fin'], $this->db, 'mst_accfin', 'accfin_id', 'accfin_name'),
 					 
@@ -88,6 +93,4 @@ class DataList extends WebAPI {
 		}
 	}
 
-}
-
-$API = new DataList();
+};

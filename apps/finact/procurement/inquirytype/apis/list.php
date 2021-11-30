@@ -23,7 +23,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 01/11/2021
+ * tanggal 08/11/2021
  */
 $API = new class extends inquirytypeBase {
 
@@ -58,7 +58,7 @@ $API = new class extends inquirytypeBase {
 			$limit = " LIMIT $maxrow OFFSET $offset ";
 			$stmt = $this->db->prepare("
 				select 
-				A.inquirytype_id, A.inquirymodel_id, A.inquirytype_name, A.inquirytype_isdisabled, A.inquirytype_descr, A.inquiryselect_id, A.itemmanage_id, A.inquirytype_isallowadvance, A.inquirytype_isemplaspartner, A.inquirytype_maxadvancevalue, A.related_dept_id, A.related_team_id, A.owner_dept_id, A.owner_team_id, A.site_id, A.room_id, A.orderout_dept_id, A.orderout_team_id, A.trxmodel_id, A.inquiry_title_ina, A.inquiry_title_eng, A.inquiry_doc_id, A.request_title_ina, A.request_title_eng, A.request_doc_id, A.orderout_title_ina, A.orderout_title_eng, A.orderout_doc_id, A.inquirytype_isuseqty, A.inquirytype_isusedays, A.inquirytype_isusetask, A.inquirytype_islimitqty, A.inquirytype_islimitdays, A.inquirytype_islimittask, A.inquirytype_islimitvalue, A.inquirytype_isallowoverbudget, A.inquirytype_isallowunbudget, A.inquirytype_isdeptuser, A.inquirytype_isdeptowner, A.inquirytype_isdeptmaintainer, A.inquirytype_isqtybreakdown, A.inquirytype_istoberequest, A.inquirytype_isautorequest, A.inquirytype_isautoorder, A.inquirytype_ismovinginit, A.inquirytype_isdateinterval, A._createby, A._createdate, A._modifyby, A._modifydate 
+				A.inquirytype_id, A.inquirymodel_id, A.inquirytype_name, A.inquirytype_isdisabled, A.inquirytype_descr, A.inquiryselect_id, A.inquirytype_isperempl, A.itemmanage_id, A.inquirytype_isallowadvance, A.inquirytype_isemplaspartner, A.inquirytype_maxadvancevalue, A.related_dept_id, A.related_team_id, A.owner_dept_id, A.owner_team_id, A.site_id, A.room_id, A.orderout_dept_id, A.orderout_team_id, A.trxmodel_id, A.inquiry_title_ina, A.inquiry_title_eng, A.inquiry_doc_id, A.request_title_ina, A.request_title_eng, A.request_doc_id, A.orderout_title_ina, A.orderout_title_eng, A.orderout_doc_id, A.inquirytype_isuseqty, A.inquirytype_isusedays, A.inquirytype_isusetask, A.inquirytype_islimitqty, A.inquirytype_islimitdays, A.inquirytype_islimittask, A.inquirytype_islimitvalue, A.inquirytype_isallowoverbudget, A.inquirytype_isallowunbudget, A.inquirytype_isdeptuser, A.inquirytype_isdeptowner, A.inquirytype_isdeptmaintainer, A.inquirytype_isqtybreakdown, A.inquirytype_istoberequest, A.inquirytype_isautorequest, A.inquirytype_isautoorder, A.inquirytype_ismovinginit, A.inquirytype_isdateinterval, A._createby, A._createdate, A._modifyby, A._modifydate 
 				from mst_inquirytype A
 			" . $where->sql . $limit);
 			$stmt->execute($where->params);

@@ -67,6 +67,8 @@ $API = new class extends jurnalBase {
 
 			if ($obj->jurnal_ref=='') { $obj->jurnal_ref = '--NULL--'; }
 
+			$this->log($obj);	
+
 
 			unset($obj->jurnal_iscommit);
 			unset($obj->jurnal_commitby);

@@ -5,31 +5,35 @@ if (!defined('FGTA4')) {
 }
 
 require_once __ROOT_DIR.'/core/sqlutil.php';
-
+require_once __DIR__ . '/xapi.base.php';
 
 
 use \FGTA4\exceptions\WebException;
 
 
-class DataList extends WebAPI {
-	function __construct() {
-		$this->debugoutput = true;
-		$DB_CONFIG = DB_CONFIG[$GLOBALS['MAINDB']];
-		$DB_CONFIG['param'] = DB_CONFIG_PARAM[$GLOBALS['MAINDBTYPE']];
-		$this->db = new \PDO(
-					$DB_CONFIG['DSN'], 
-					$DB_CONFIG['user'], 
-					$DB_CONFIG['pass'], 
-					$DB_CONFIG['param']
-		);
-
-	}
+/**
+ * media/sales/logproof/apis/item-list.php
+ *
+ * ==============
+ * Detil-DataList
+ * ==============
+ * Menampilkan data-data pada tabel item logproof (trn_medialogproof)
+ * sesuai dengan parameter yang dikirimkan melalui variable $option->criteria
+ *
+ * Agung Nugroho <agung@fgta.net> http://www.fgta.net
+ * Tangerang, 26 Maret 2021
+ *
+ * digenerate dengan FGTA4 generator
+ * tanggal 29/11/2021
+ */
+$API = new class extends logproofBase {
 
 	public function execute($options) {
 		$userdata = $this->auth->session_get_user();
 		
 		try {
 
+			// \FGTA4\utils\SqlUtility::setDefaultCriteria($options->criteria, '--fieldscriteria--', '--value--');
 			$where = \FGTA4\utils\SqlUtility::BuildCriteria(
 				$options->criteria,
 				[
@@ -53,7 +57,7 @@ class DataList extends WebAPI {
 			$limit = " LIMIT $maxrow OFFSET $offset ";
 			$stmt = $this->db->prepare("
 				select 
-				medialogproofitem_id, mediaadslot_timestart, mediaadslot_timeend, mediaadslot_descr, actual_timestart, actual_timeend, actual_duration, medialogproofitem_spot, mediaorderitem_id, medialogproof_id, _createby, _createdate, _modifyby, _modifydate 
+				A.medialogproofitem_id, A.mediaadslot_timestart, A.mediaadslot_timeend, A.mediaadslot_descr, A.actual_timestart, A.actual_timeend, A.actual_duration, A.spot_id, A.mediaorderitem_validr, A.mediaorderitem_ppnidr, A.pph_taxtype_id, A.mediaorder_id, A.mediaorderitem_id, A.mediaordertype_id, A.logproof_partnerinfo, A.agency_partner_id, A.advertiser_partner_id, A.brand_id, A.project_id, A.projecttask_id, A.medialogproof_id, A._createby, A._createdate, A._modifyby, A._modifydate 
 				from trn_medialogproofitem A
 			" . $where->sql . $limit);
 			$stmt->execute($where->params);
@@ -71,7 +75,15 @@ class DataList extends WebAPI {
 					//'tanggal' => date("d/m/y", strtotime($record['tanggal'])),
 				 	//'tambahan' => 'dta'
 
+					'pph_taxtype_name' => \FGTA4\utils\SqlUtility::Lookup($record['pph_taxtype_id'], $this->db, 'mst_taxtype', 'taxtype_id', 'taxtype_name'),
+					'mediaorder_descr' => \FGTA4\utils\SqlUtility::Lookup($record['mediaorder_id'], $this->db, 'trn_mediaorder', 'mediaorder_id', 'mediaorder_descr'),
 					'mediaorderitem_descr' => \FGTA4\utils\SqlUtility::Lookup($record['mediaorderitem_id'], $this->db, 'trn_mediaorderitem', 'mediaorderitem_id', 'mediaorderitem_descr'),
+					'mediaordertype_name' => \FGTA4\utils\SqlUtility::Lookup($record['mediaordertype_id'], $this->db, 'mst_mediaordertype', 'mediaordertype_id', 'mediaordertype_name'),
+					'partner_name' => \FGTA4\utils\SqlUtility::Lookup($record['agency_partner_id'], $this->db, 'mst_partner', 'partner_id', 'partner_name'),
+					'partner_name' => \FGTA4\utils\SqlUtility::Lookup($record['advertiser_partner_id'], $this->db, 'mst_partner', 'partner_id', 'partner_name'),
+					'brand_name' => \FGTA4\utils\SqlUtility::Lookup($record['brand_id'], $this->db, 'mst_brand', 'brand_id', 'brand_name'),
+					'project_name' => \FGTA4\utils\SqlUtility::Lookup($record['project_id'], $this->db, 'mst_project', 'project_id', 'project_name'),
+					'projecttask_name' => \FGTA4\utils\SqlUtility::Lookup($record['projecttask_id'], $this->db, 'mst_projecttask', 'projecttask_id', 'projecttask_name'),
 					 
 				]));
 			}
@@ -87,6 +99,4 @@ class DataList extends WebAPI {
 		}
 	}
 
-}
-
-$API = new DataList();
+};

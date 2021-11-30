@@ -20,7 +20,11 @@ const obj = {
 	cbo_itemstock_id: $('#pnl_edititemform-cbo_itemstock_id'),
 	cbo_itemclass_id: $('#pnl_edititemform-cbo_itemclass_id'),
 	txt_ordercontractitem_descr: $('#pnl_edititemform-txt_ordercontractitem_descr'),
+	txt_ordercontractitem_qty: $('#pnl_edititemform-txt_ordercontractitem_qty'),
+	txt_ordercontractitem_days: $('#pnl_edititemform-txt_ordercontractitem_days'),
+	txt_ordercontractitem_task: $('#pnl_edititemform-txt_ordercontractitem_task'),
 	txt_ordercontractitem_estrate: $('#pnl_edititemform-txt_ordercontractitem_estrate'),
+	txt_ordercontractitem_value: $('#pnl_edititemform-txt_ordercontractitem_value'),
 	txt_ordercontract_id: $('#pnl_edititemform-txt_ordercontract_id')
 }
 
@@ -72,7 +76,7 @@ export async function init(opt) {
 			{mapping: 'item_id', text: 'item_id'},
 			{mapping: 'item_name', text: 'item_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria, options) => {},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({item_id:'--NULL--', item_name:'NONE'});	
 		},
@@ -96,7 +100,7 @@ export async function init(opt) {
 			{mapping: 'itemstock_id', text: 'itemstock_id'},
 			{mapping: 'itemstock_name', text: 'itemstock_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria, options) => {},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({itemstock_id:'--NULL--', itemstock_name:'NONE'});	
 		},
@@ -120,7 +124,7 @@ export async function init(opt) {
 			{mapping: 'itemclass_id', text: 'itemclass_id'},
 			{mapping: 'itemclass_name', text: 'itemclass_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria, options) => {},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({itemclass_id:'--NULL--', itemclass_name:'NONE'});	
 		},
@@ -311,7 +315,11 @@ export function createnew(hdata) {
 		data.ordercontract_id= hdata.ordercontract_id
 		data.item_value = 0
 
+		data.ordercontractitem_qty = 0
+		data.ordercontractitem_days = 0
+		data.ordercontractitem_task = 0
 		data.ordercontractitem_estrate = 0
+		data.ordercontractitem_value = 0
 
 			data.item_id = '--NULL--'
 			data.item_name = 'NONE'

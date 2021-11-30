@@ -19,6 +19,7 @@ const obj = {
 	chk_inquirytype_isdisabled: $('#pnl_edit-chk_inquirytype_isdisabled'),
 	txt_inquirytype_descr: $('#pnl_edit-txt_inquirytype_descr'),
 	cbo_inquiryselect_id: $('#pnl_edit-cbo_inquiryselect_id'),
+	chk_inquirytype_isperempl: $('#pnl_edit-chk_inquirytype_isperempl'),
 	cbo_itemmanage_id: $('#pnl_edit-cbo_itemmanage_id'),
 	chk_inquirytype_isallowadvance: $('#pnl_edit-chk_inquirytype_isallowadvance'),
 	chk_inquirytype_isemplaspartner: $('#pnl_edit-chk_inquirytype_isemplaspartner'),
@@ -572,6 +573,7 @@ export function createnew() {
 
 		// set nilai-nilai default untuk form
 		data.inquirytype_isdisabled = '0'
+		data.inquirytype_isperempl = '0'
 		data.inquirytype_isallowadvance = '0'
 		data.inquirytype_isemplaspartner = '0'
 		data.inquirytype_maxadvancevalue = 0

@@ -24,7 +24,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 17/09/2021
+ * tanggal 07/11/2021
  */
 $API = new class extends ordercontractBase {
 
@@ -44,7 +44,7 @@ $API = new class extends ordercontractBase {
 			);
 
 			$sql = \FGTA4\utils\SqlUtility::Select('trn_ordercontractitem A', [
-				'ordercontractitem_id', 'item_id', 'itemstock_id', 'itemclass_id', 'ordercontractitem_descr', 'ordercontractitem_estrate', 'ordercontract_id', '_createby', '_createdate', '_modifyby', '_modifydate' 
+				'ordercontractitem_id', 'item_id', 'itemstock_id', 'itemclass_id', 'ordercontractitem_descr', 'ordercontractitem_qty', 'ordercontractitem_days', 'ordercontractitem_task', 'ordercontractitem_estrate', 'ordercontractitem_value', 'ordercontract_id', '_createby', '_createdate', '_modifyby', '_modifydate' 
 			], $where->sql);
 
 			$stmt = $this->db->prepare($sql);

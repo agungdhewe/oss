@@ -16,14 +16,14 @@ use \FGTA4\exceptions\WebException;
  * ========
  * DataList
  * ========
- * Menampilkan data-data pada tabel header paymentscd (trn_billinpaym)
+ * Menampilkan data-data pada tabel header paymentscd (trn_paymentscd)
  * sesuai dengan parameter yang dikirimkan melalui variable $option->criteria
  *
  * Agung Nugroho <agung@fgta.net> http://www.fgta.net
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 30/07/2021
+ * tanggal 18/11/2021
  */
 $API = new class extends paymentscdBase {
 
@@ -42,7 +42,7 @@ $API = new class extends paymentscdBase {
 			$where = \FGTA4\utils\SqlUtility::BuildCriteria(
 				$options->criteria,
 				[
-					"search" => " A.billinpaym_id LIKE CONCAT('%', :search, '%') "
+					"search" => " A.paymentscd_id LIKE CONCAT('%', :search, '%') "
 				]
 			);
 
@@ -50,7 +50,7 @@ $API = new class extends paymentscdBase {
 			$maxrow = 30;
 			$offset = (property_exists($options, 'offset')) ? $options->offset : 0;
 
-			$stmt = $this->db->prepare("select count(*) as n from trn_billinpaym A" . $where->sql);
+			$stmt = $this->db->prepare("select count(*) as n from trn_paymentscd A" . $where->sql);
 			$stmt->execute($where->params);
 			$row  = $stmt->fetch(\PDO::FETCH_ASSOC);
 			$total = (float) $row['n'];
@@ -58,11 +58,8 @@ $API = new class extends paymentscdBase {
 			$limit = " LIMIT $maxrow OFFSET $offset ";
 			$stmt = $this->db->prepare("
 				select 
-				  billinpaym_id, billin_id, billinpaym_date, billinpaym_descr, curr_id, billinpaym_frgrate, billinpaym_itemfrg, billinpaym_itemidr, billinpaym_ppnfrg, billinpaym_ppnidr, billinpaym_pphfrg, billinpaym_pphidr, _createby, _createdate, _modifyby, _modifydate
-				, (select jurnal_id from trn_jurextpvdetil where billinpaym_id = A.billinpaym_id) as jurnal_id
-				, case when (billinpaym_pphidr<>0 and billinpaym_itemidr=0 and billinpaym_ppnidr=0) then billinpaym_pphidr else billinpaym_itemidr + billinpaym_ppnidr end as  billinpaym_value
-				, (select billin_datedue from trn_billin where billin_id=A.billin_id) as billin_datedue
-				from trn_billinpaym A
+				A.paymentscd_id, A.periodemo_id, A.paymentscd_dtstart, A.paymentscd_dtend, A.paymentscd_descr, A.dept_id, A.paymentscd_notes, A.paymentscd_version, A.doc_id, A.paymentscd_iscommit, A.paymentscd_commitby, A.paymentscd_commitdate, A.paymentscd_isapprovalprogress, A.paymentscd_isapproved, A.paymentscd_approveby, A.paymentscd_approvedate, A.paymentscd_isdeclined, A.paymentscd_declineby, A.paymentscd_declinedate, A.paymentscd_isveryfied, A.paymentscd_verifyby, A.paymentscd_verifydate, A._createby, A._createdate, A._modifyby, A._modifydate 
+				from trn_paymentscd A
 			" . $where->sql . $limit);
 			$stmt->execute($where->params);
 			$rows  = $stmt->fetchall(\PDO::FETCH_ASSOC);
@@ -78,7 +75,13 @@ $API = new class extends paymentscdBase {
 					// // jikalau ingin menambah atau edit field di result record, dapat dilakukan sesuai contoh sbb: 
 					//'tanggal' => date("d/m/y", strtotime($record['tanggal'])),
 				 	//'tambahan' => 'dta'
-					'curr_name' => \FGTA4\utils\SqlUtility::Lookup($record['curr_id'], $this->db, 'mst_curr', 'curr_id', 'curr_name'),
+					'periodemo_name' => \FGTA4\utils\SqlUtility::Lookup($record['periodemo_id'], $this->db, 'mst_periodemo', 'periodemo_id', 'periodemo_name'),
+					'dept_name' => \FGTA4\utils\SqlUtility::Lookup($record['dept_id'], $this->db, 'mst_dept', 'dept_id', 'dept_name'),
+					'doc_name' => \FGTA4\utils\SqlUtility::Lookup($record['doc_id'], $this->db, 'mst_doc', 'doc_id', 'doc_name'),
+					'paymentscd_commitby' => \FGTA4\utils\SqlUtility::Lookup($record['paymentscd_commitby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+					'paymentscd_approveby' => \FGTA4\utils\SqlUtility::Lookup($record['paymentscd_approveby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+					'paymentscd_declineby' => \FGTA4\utils\SqlUtility::Lookup($record['paymentscd_declineby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+					'paymentscd_verifyby' => \FGTA4\utils\SqlUtility::Lookup($record['paymentscd_verifyby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
 					 
 				]));
 			}

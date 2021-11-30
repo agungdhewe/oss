@@ -1,8 +1,0 @@
-{
-	"title" : "Component",
-	"allowanonymous" : true,
-	"allowedgroups" : ["public"],
-	"apis" : {
-	}	
-}
-

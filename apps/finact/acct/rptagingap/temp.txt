@@ -1,0 +1,63 @@
+
+				<!-- 45 -->
+				<?php 
+				$i=0;
+				$total_value = 0;
+				$total_age_0 = 0;
+				$total_age_30 = 0;
+				$total_age_60 = 0;
+				$total_age_90 = 0;
+				$total_age_120 = 0;
+				$last_partner_name = "";
+
+				foreach ($this->rows as $row) { 
+
+				?>
+
+				<?php if ($row['partner_name']!=$last_partner_name) { ?>
+
+
+
+
+				<?php } ?>	
+
+
+
+				<tr>
+					<td class="" style="vertical-align:top; text-align: center" data-fill-color='CCCCCC'><?=$i?></td>
+					<td class="" style="vertical-align:top; " data-fill-color='CCCCCC'><?=$row['jurnal_id']?></td>
+					<td class="" style="vertical-align:top; " data-fill-color='CCCCCC'><?=$row['jurnal_descr']?></td>
+					<td class=" rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format($row['age_0'])?></td>
+					<td class=" rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format($row['age_30'])?></td>
+					<td class=" rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format($row['age_60'])?></td>
+					<td class=" rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format($row['age_90'])?></td>
+					<td class=" rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format($row['age_120'])?></td>
+					<td class=" rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format($row['outstanding_idr'])?></td>
+				</tr>
+
+				<?php
+
+					$i++;
+
+					$total_value += (float)$row['outstanding_idr'];
+					$total_age_0 += (float)$row['age_0'];
+					$total_age_30 += (float)$row['age_30'];
+					$total_age_60 += (float)$row['age_60'];
+					$total_age_90 += (float)$row['age_90'];
+					$total_age_120 += (float)$row['age_120'];
+
+					$last_partner_name = $row['partner_name'];
+
+				?>
+
+				<?php } ?>
+
+				<tr>
+					<td class="rowfoot" colspan="3" style="text-align: center" data-fill-color='CCCCCC'>TOTAL</td>
+					<td class="rowfoot rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format($total_age_0)?></td>
+					<td class="rowfoot rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format($total_age_30)?></td>
+					<td class="rowfoot rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format($total_age_60)?></td>
+					<td class="rowfoot rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format($total_age_90)?></td>
+					<td class="rowfoot rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format($total_age_120)?></td>
+					<td class="rowfoot rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format($total_value)?></td>
+				</tr>

@@ -180,36 +180,7 @@ async function obj_pastebox_paste(pastedData, fn_finish) {
 				var bruto = cells[2];
 				var pph = cells[3];
 
-				var id = `pay#${selected_month}#${nik}`;
-				var data = await getData(id);
-				if (data==null) {
-					data = {
-						_id: id,
-					}
-				}	
-				Object.assign(data, {
-					doctype: 'payroll',
-					month: selected_month,	
-					nik: nik, nama: nama, bruto: bruto, pph: pph
-				})
-
-				await global.DB.put(data);
-
-
-				// index nik
-				var idnik = `nik#${nik}`;
-				var datanik = await getData(id);
-				if (datanik==null) {
-					datanik = {
-						_id: idnik
-					}
-				}
-				Object.assign(datanik, {
-					doctype: 'nik',
-					nik: nik, nama: nama,
-					payroll: {}
-				});
-				await global.DB.put(datanik);
+			
 
 
 			}

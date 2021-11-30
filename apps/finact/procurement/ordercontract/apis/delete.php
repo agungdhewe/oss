@@ -25,7 +25,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 17/09/2021
+ * tanggal 07/11/2021
  */
 $API = new class extends ordercontractBase {
 	
@@ -52,7 +52,7 @@ $API = new class extends ordercontractBase {
 
 			try {
 				
-				$tabletodelete = ['trn_ordercontractitem'];
+				$tabletodelete = ['trn_ordercontractitem', 'trn_ordercontracterm', 'trn_ordercontracattch'];
 				foreach ($tabletodelete as $reftablename) {
 					$cmd = \FGTA4\utils\SqlUtility::CreateSQLDelete($reftablename, $key);
 					$stmt = $this->db->prepare($cmd->sql);

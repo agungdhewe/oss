@@ -13,7 +13,7 @@ module.exports = {
 			comment: 'Daftar Partner (rekanan)',
 			data: {
 				partner_id: {text:'ID', type: dbtype.varchar(14), null:false},
-				partner_name: {text:'Name', type: dbtype.varchar(60), null:false, uppercase: true, options:{required:true,invalidMessage:'Name harus diisi'}},
+				partner_name: {text:'Name', type: dbtype.varchar(60), null:false, options:{required:true,invalidMessage:'Name harus diisi'}},
 				partner_addressline1: {text:'Address', type: dbtype.varchar(100), null:false, suppresslist: true,  options:{required:true,invalidMessage:'Alamat harus diisi'}},
 				partner_addressline2: {text:'..', type: dbtype.varchar(100), null:false, suppresslist: true},
 				partner_postcode: {text:'..', type: dbtype.varchar(10), null:false, suppresslist: true},
@@ -100,6 +100,29 @@ module.exports = {
 			}
 		},
 
+
+		'mst_partnerastype' : {
+			primarykeys: ['partnerastype_id'],
+			comment: 'Daftar Type lain yang dimiliki partner',
+			data: {
+				partnerastype_id: {text:'ID', type: dbtype.varchar(14), null:false, uppercase: true},
+				partnertype_id: {
+					text:'Type', type: dbtype.varchar(10), null:false, 
+					options:{required:true,invalidMessage:'Type harus diisi'},
+					comp: comp.Combo({
+						table: 'mst_partnertype', 
+						field_value: 'partnertype_id', field_display: 'partnertype_name', 
+						api: 'ent/affiliation/partnertype/list'})					
+				
+				},
+				partner_id: {text:'Partner', type: dbtype.varchar(14), null:false, uppercase: true},
+			},
+			uniques: {
+				'partnerastype_pair' : ['partner_id', 'partnertype_id']
+			}			
+		},		
+
+
 		'mst_partnerbank' : {
 			primarykeys: ['partnerbank_id'],
 			comment: 'Daftar Bank yang dimiliki suatu Partner (rekanan)',
@@ -134,6 +157,10 @@ module.exports = {
 				partnercontact_mobilephone: {text:'HP', type: dbtype.varchar(30), null:false, uppercase: true, options:{required:true,invalidMessage:'HP harus diisi'}},
 				partnercontact_email: {text:'Email', type: dbtype.varchar(150), null:false, uppercase: true, options:{required:true,validType: ['email'],invalidMessage:'Email harus diisi'}},
 				partnecontact_isdisabled: {text:'Disabled', type: dbtype.boolean, null:false, default:'0'},
+				partnecontact_iscontract: {text:'PIC - Contract', type: dbtype.boolean, null:false, default:'0'},
+				partnecontact_isinvoice: {text:'PIC - Invoice', type: dbtype.boolean, null:false, default:'0'},
+				partnecontact_isdisabled: {text:'Disabled', type: dbtype.boolean, null:false, default:'0'},
+
 				partner_id: {text:'Partner', type: dbtype.varchar(14), null:false, uppercase: true},
 			},
 			uniques: {
@@ -235,6 +262,7 @@ module.exports = {
 		title: 'Partner',
 		header: 'mst_partner',
 		detils: {
+			'type' : {title: 'Type', table:'mst_partnerastype', form: true, headerview:'partner_name'},
 			'bank' : {title: 'Bank', table:'mst_partnerbank', form: true, headerview:'partner_name'},
 			'contact' : {title: 'Contact', table:'mst_partnercontact', form: true, headerview:'partner_name'},
 			'site' : {title: 'Site', table:'mst_partnersite', form: true, headerview:'partner_name'},

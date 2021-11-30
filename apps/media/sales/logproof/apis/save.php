@@ -6,34 +6,30 @@ if (!defined('FGTA4')) {
 
 require_once __ROOT_DIR.'/core/sqlutil.php';
 // require_once __ROOT_DIR . "/core/sequencer.php";
+require_once __DIR__ . '/xapi.base.php';
+
 
 use \FGTA4\exceptions\WebException;
 // use \FGTA4\utils\Sequencer;
 
 
 
-// /* Enable Debugging */
-// require_once __ROOT_DIR.'/core/debug.php';
-// use \FGTA4\debug;
-
-
-class DataSave extends WebAPI {
-	function __construct() {
-		$logfilepath = __LOCALDB_DIR . "/output/logproof-save.txt";
-		// debug::disable();
-		// debug::start($logfilepath, "w");
-
-		$this->debugoutput = true;
-		$DB_CONFIG = DB_CONFIG[$GLOBALS['MAINDB']];
-		$DB_CONFIG['param'] = DB_CONFIG_PARAM[$GLOBALS['MAINDBTYPE']];
-		$this->db = new \PDO(
-					$DB_CONFIG['DSN'], 
-					$DB_CONFIG['user'], 
-					$DB_CONFIG['pass'], 
-					$DB_CONFIG['param']
-		);	
-
-	}
+/**
+ * media/sales/logproof/apis/save.php
+ *
+ * ====
+ * Save
+ * ====
+ * Menampilkan satu baris data/record sesuai PrimaryKey,
+ * dari tabel header logproof (trn_medialogproof)
+ *
+ * Agung Nugroho <agung@fgta.net> http://www.fgta.net
+ * Tangerang, 26 Maret 2021
+ *
+ * digenerate dengan FGTA4 generator
+ * tanggal 29/11/2021
+ */
+$API = new class extends logproofBase {
 	
 	public function execute($data, $options) {
 		$tablename = 'trn_medialogproof';
@@ -69,7 +65,12 @@ class DataSave extends WebAPI {
 
 
 
+
+			unset($obj->medialogproof_version);
 			unset($obj->medialogproof_iscommit);
+			unset($obj->medialogproof_commitby);
+			unset($obj->medialogproof_commitdate);
+			unset($obj->medialogproof_isgenerate);
 
 
 
@@ -99,7 +100,37 @@ class DataSave extends WebAPI {
 
 				\FGTA4\utils\SqlUtility::WriteLog($this->db, $this->reqinfo->modulefullname, $tablename, $obj->{$primarykey}, $action, $userdata->username, (object)[]);
 
+
+
+
+				// result
+				$where = \FGTA4\utils\SqlUtility::BuildCriteria((object)[$primarykey=>$obj->{$primarykey}], [$primarykey=>"$primarykey=:$primarykey"]);
+				$sql = \FGTA4\utils\SqlUtility::Select($tablename , [
+					$primarykey
+					, 'medialogproof_id', 'medialogproof_date', 'medialogproof_version', 'medialogproof_iscommit', 'medialogproof_commitby', 'medialogproof_commitdate', 'medialogproof_isgenerate', '_createby', '_createdate', '_modifyby', '_modifydate', '_createby', '_createdate', '_modifyby', '_modifydate'
+				], $where->sql);
+				$stmt = $this->db->prepare($sql);
+				$stmt->execute($where->params);
+				$row  = $stmt->fetch(\PDO::FETCH_ASSOC);			
+
+				$record = [];
+				foreach ($row as $key => $value) {
+					$record[$key] = $value;
+				}
+				$result->dataresponse = (object) array_merge($record, [
+					//  untuk lookup atau modify response ditaruh disini
+				'medialogproof_date' => date("d/m/Y", strtotime($row['medialogproof_date'])),
+				'medialogproof_commitby' => \FGTA4\utils\SqlUtility::Lookup($record['medialogproof_commitby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+
+					'_createby' => \FGTA4\utils\SqlUtility::Lookup($record['_createby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+					'_modifyby' => \FGTA4\utils\SqlUtility::Lookup($record['_modifyby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+				]);
+
+
+
 				$this->db->commit();
+				return $result;
+
 			} catch (\Exception $ex) {
 				$this->db->rollBack();
 				throw $ex;
@@ -107,26 +138,6 @@ class DataSave extends WebAPI {
 				$this->db->setAttribute(\PDO::ATTR_AUTOCOMMIT,1);
 			}
 
-
-			$where = \FGTA4\utils\SqlUtility::BuildCriteria((object)[$primarykey=>$obj->{$primarykey}], [$primarykey=>"$primarykey=:$primarykey"]);
-			$sql = \FGTA4\utils\SqlUtility::Select($tablename , [
-				$primarykey, 'medialogproof_id', 'medialogproof_date', 'medialogproof_iscommit', '_createby', '_createdate', '_modifyby', '_modifydate', '_createby', '_createdate', '_modifyby', '_modifydate'
-			], $where->sql);
-			$stmt = $this->db->prepare($sql);
-			$stmt->execute($where->params);
-			$row  = $stmt->fetch(\PDO::FETCH_ASSOC);			
-
-			$dataresponse = [];
-			foreach ($row as $key => $value) {
-				$dataresponse[$key] = $value;
-			}
-			$result->dataresponse = (object) array_merge($dataresponse, [
-				//  untuk lookup atau modify response ditaruh disini
-				'medialogproof_date' => date("d/m/Y", strtotime($row['medialogproof_date'])),
-				
-			]);
-
-			return $result;
 		} catch (\Exception $ex) {
 			throw $ex;
 		}
@@ -136,6 +147,4 @@ class DataSave extends WebAPI {
 					return uniqid();
 	}
 
-}
-
-$API = new DataSave();
+};

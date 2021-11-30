@@ -1,3 +1,0 @@
-<?php
-
-// detil save api

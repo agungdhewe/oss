@@ -8,15 +8,30 @@ const btn_save = $('#pnl_edit-btn_save')
 const btn_delete = $('#pnl_edit-btn_delete')
 
 
+const btn_commit = $('#pnl_edit-btn_commit')
+const btn_uncommit = $('#pnl_edit-btn_uncommit')
+			
+
+
+
 const pnl_form = $('#pnl_edit-form')
 const obj = {
 	txt_medialogproof_id: $('#pnl_edit-txt_medialogproof_id'),
 	dt_medialogproof_date: $('#pnl_edit-dt_medialogproof_date'),
-	chk_medialogproof_iscommit: $('#pnl_edit-chk_medialogproof_iscommit')
+	txt_medialogproof_version: $('#pnl_edit-txt_medialogproof_version'),
+	chk_medialogproof_iscommit: $('#pnl_edit-chk_medialogproof_iscommit'),
+	txt_medialogproof_commitby: $('#pnl_edit-txt_medialogproof_commitby'),
+	txt_medialogproof_commitdate: $('#pnl_edit-txt_medialogproof_commitdate'),
+	chk_medialogproof_isgenerate: $('#pnl_edit-chk_medialogproof_isgenerate')
 }
 
 
-let form = {}
+const rec_commitby = $('#pnl_edit_record-commitby');
+const rec_commitdate = $('#pnl_edit_record-commitdate');		
+		
+
+
+let form;
 
 export async function init(opt) {
 	this_page_id = opt.id;
@@ -48,9 +63,20 @@ export async function init(opt) {
 		OnDataDeleting: async (data, options) => { await form_deleting(data, options) },
 		OnDataDeleted: async (result, options) => { await form_deleted(result, options) },
 		OnIdSetup : (options) => { form_idsetup(options) },
-		OnViewModeChanged : (viewonly) => { form_viewmodechanged(viewonly) }
+		OnViewModeChanged : (viewonly) => { form_viewmodechanged(viewonly) },
+		OnRecordStatusCreated: () => {
+			
+		$('#pnl_edit_record_custom').detach().appendTo("#pnl_edit_record");
+		$('#pnl_edit_record_custom').show();		
+					
+		}		
 	})
 
+
+
+	btn_commit.linkbutton({ onClick: () => { btn_action_click({ action: 'commit' }); } });
+	btn_uncommit.linkbutton({ onClick: () => { btn_action_click({ action: 'uncommit' }); } });			
+			
 
 
 
@@ -102,53 +128,66 @@ export async function init(opt) {
 		}
 	})
 
-
+	//button state
 
 }
-
 
 export function OnSizeRecalculated(width, height) {
 }
 
-
+export function getForm() {
+	return form
+}
 
 
 export function open(data, rowid, viewmode=true, fn_callback) {
 
-
+	var pOpt = form.getDefaultPrompt(false)
 	var fn_dataopening = async (options) => {
 		options.criteria[form.primary.mapping] = data[form.primary.mapping]
 	}
 
 	var fn_dataopened = async (result, options) => {
+		var record = result.record;
+		updatefilebox(record);
 
+		/*
 
+		*/
+		for (var objid in obj) {
+			let o = obj[objid]
+			if (o.isCombo() && !o.isRequired()) {
+				var value =  result.record[o.getFieldValueName()];
+				if (value==null ) {
+					record[o.getFieldValueName()] = pOpt.value;
+					record[o.getFieldDisplayName()] = pOpt.text;
+				}
+			}
+		}
+  		updaterecordstatus(record)
 
 		form.SuspendEvent(true);
 		form
-			.fill(result.record)
-			.commit()
+			.fill(record)
 			.setViewMode(viewmode)
 			.lock(false)
 			.rowid = rowid
 
+
+		/* tambahkan event atau behaviour saat form dibuka
+		   apabila ada rutin mengubah form dan tidak mau dijalankan pada saat opening,
+		   cek dengan form.isEventSuspended()
+		*/   
+
+
+
+		/* commit form */
+		form.commit()
+		form.SuspendEvent(false); 
+		updatebuttonstate(record)
+
 		// tampilkan form untuk data editor
 		fn_callback()
-		form.SuspendEvent(false);
-
-
-		// fill data, bisa dilakukan secara manual dengan cara berikut:	
-		// form
-			// .setValue(obj.txt_id, result.record.id)
-			// .setValue(obj.txt_nama, result.record.nama)
-			// .setValue(obj.cbo_prov, result.record.prov_id, result.record.prov_nama)
-			// .setValue(obj.chk_isdisabled, result.record.disabled)
-			// .setValue(obj.txt_alamat, result.record.alamat)
-			// ....... dst dst
-			// .commit()
-			// .setViewMode()
-			// ....... dst dst
-
 	}
 
 	var fn_dataopenerror = (err) => {
@@ -167,8 +206,25 @@ export function createnew() {
 		form.rowid = null
 
 		// set nilai-nilai default untuk form
-			data.medialogproof_date = global.now()
+		data.medialogproof_date = global.now()
+		data.medialogproof_version = 0
+		data.medialogproof_iscommit = '0'
+		data.medialogproof_isgenerate = '0'
 
+
+
+		rec_commitby.html('');
+		rec_commitdate.html('');
+		
+
+
+
+
+	var button_commit_on = true;
+	var button_uncommit_on = false;
+	btn_commit.linkbutton(button_commit_on ? 'enable' : 'disable');
+	btn_uncommit.linkbutton(button_uncommit_on ? 'enable' : 'disable');
+		
 
 
 
@@ -177,6 +233,7 @@ export function createnew() {
 		}
 
 		$ui.getPages().ITEMS['pnl_edititemgrid'].handler.createnew(data, options)
+		$ui.getPages().ITEMS['pnl_edituploadgrid'].handler.createnew(data, options)
 
 
 	})
@@ -195,6 +252,54 @@ export function detil_open(pnlname) {
 	})	
 }
 
+
+function updatefilebox(record) {
+	// apabila ada keperluan untuk menampilkan data dari object storage
+
+}
+
+function updaterecordstatus(record) {
+	// apabila ada keperluan untuk update status record di sini
+
+		rec_commitby.html(record.medialogproof_commitby);
+		rec_commitdate.html(record.medialogproof_commitdate);
+		
+}
+
+function updatebuttonstate(record) {
+	// apabila ada keperluan untuk update state action button di sini
+
+		/* action button */
+		var button_commit_on = false;
+		var button_uncommit_on = false;	
+		
+		if (record.medialogproof_iscommit=="1") {
+			button_commit_on = false;
+			button_uncommit_on = true;
+			form.lock(true);		
+		} else {
+			button_commit_on = true;
+			button_uncommit_on = false;
+			form.lock(false);
+		} 
+		btn_commit.linkbutton(button_commit_on ? 'enable' : 'disable');
+		btn_uncommit.linkbutton(button_uncommit_on ? 'enable' : 'disable');		
+			
+}
+
+function updategridstate(record) {
+	// apabila ada keperluan untuk update state grid list di sini
+
+
+
+	var updategriddata = {}
+
+	var col_commit = 'medialogproof_iscommit';
+	updategriddata[col_commit] = record.medialogproof_iscommit;	
+	
+	$ui.getPages().ITEMS['pnl_list'].handler.updategrid(updategriddata, form.rowid);
+			
+}
 
 function form_viewmodechanged(viewmode) {
 	var OnViewModeChangedEvent = new CustomEvent('OnViewModeChanged', {detail: {}})
@@ -233,7 +338,16 @@ async function form_datasaving(data, options) {
 	//    options.cancel = true
 
 	// Modifikasi object data, apabila ingin menambahkan variabel yang akan dikirim ke server
-
+	// options.skipmappingresponse = [];
+	options.skipmappingresponse = [];
+	for (var objid in obj) {
+		var o = obj[objid]
+		if (o.isCombo() && !o.isRequired()) {
+			var id = o.getFieldValueName()
+			options.skipmappingresponse.push(id)
+			console.log(id)
+		}
+	}
 
 }
 
@@ -261,8 +375,23 @@ async function form_datasaved(result, options) {
 
 	var data = {}
 	Object.assign(data, form.getData(), result.dataresponse)
+	/*
 
+	*/
 
+	var pOpt = form.getDefaultPrompt(false)
+	for (var objid in obj) {
+		var o = obj[objid]
+		if (o.isCombo() && !o.isRequired()) {
+			var value =  result.dataresponse[o.getFieldValueName()];
+			var text = result.dataresponse[o.getFieldDisplayName()];
+			if (value==null ) {
+				value = pOpt.value;
+				text = pOpt.text;
+			}
+			form.setValue(o, value, text);
+		}
+	}
 	form.rowid = $ui.getPages().ITEMS['pnl_list'].handler.updategrid(data, form.rowid)
 }
 
@@ -277,3 +406,82 @@ async function form_deleted(result, options) {
 
 }
 
+
+
+
+
+async function btn_action_click(args) {
+	if (form.isDataChanged() || !form.isInViewMode()) {
+		$ui.ShowMessage('[WARNING]Simpan dulu perubahan data, dan tidak sedang dalam mode edit.');
+		return;
+	}
+
+
+	var docname = 'Log Proof'
+	var txt_version = obj.txt_medialogproof_version;
+	var chk_iscommit = obj.chk_medialogproof_iscommit;
+	
+	
+	var id = form.getCurrentId();
+
+	Object.assign(args, {
+		id: id,
+		act_url: null,
+		act_msg_quest: null,
+		act_msg_result: null,
+		act_do: null,
+		use_otp: false,
+		otp_message: `Berikut adalah code yang harus anda masukkan untuk melakukan ${args.action} ${docname} dengan no id ${id}`,
+	});
+
+	switch (args.action) {
+		case 'commit' :
+			args.act_url = `${global.modulefullname}/xtion-${args.action}`;
+			args.act_msg_quest = `Apakah anda yakin akan <b>${args.action}</b> ${docname} no ${args.id} ?`;
+			args.act_msg_result = `${docname} no ${args.id} telah di ${args.action}.`;
+			args.act_do = (result) => {
+				chk_iscommit.checkbox('check');
+				
+				form.commit();
+			}
+			break;
+
+		case 'uncommit' :
+			args.act_url = `${global.modulefullname}/xtion-${args.action}`;
+			args.act_msg_quest = `Apakah anda yakin akan <b>${args.action}</b> ${docname} no ${args.id} ?`;
+			args.act_msg_result = `${docname} no ${args.id} telah di ${args.action}.`;
+			args.act_do = (result) => {
+				chk_iscommit.checkbox('uncheck');
+				
+				form.setValue(txt_version, result.version);
+				form.commit();
+			}
+			break;
+
+			
+	}
+
+
+	try {
+		$ui.mask('wait..');
+		var { doAction } = await import('../../../../../index.php/asset/fgta/framework/fgta4libs/fgta4xtion.mjs');
+		await doAction(args, (err, result) => {
+			if (err) {
+				$ui.ShowMessage('[WARNING]' + err.message);	
+			} else {
+				updaterecordstatus(result.dataresponse);
+				args.act_do(result);
+				updatebuttonstate(result.dataresponse);
+				updategridstate(result.dataresponse);
+				if (args.act_msg_result!=='') $ui.ShowMessage('[INFO]' + args.act_msg_result);	
+			}
+		});
+	} catch (err) {
+		console.error(err);
+		$ui.ShowMessage('[ERROR]' + err.message);
+	} finally {
+		$ui.unmask();
+	}
+}	
+	
+	

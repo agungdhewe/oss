@@ -1,8 +1,0 @@
-{
-	"title" : "hello PHP",
-	"allowanonymous" : true,
-	"allowedgroups" : ["public"],
-	"apis" : {
-	}	
-}
-

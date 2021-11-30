@@ -27,7 +27,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 18/04/2021
+ * tanggal 29/11/2021
  */
 $API = new class extends partnerBase {
 	
@@ -61,17 +61,9 @@ $API = new class extends partnerBase {
 			// apabila ada tanggal, ubah ke format sql sbb:
 			// $obj->tanggal = (\DateTime::createFromFormat('d/m/Y',$obj->tanggal))->format('Y-m-d');
 
-			// $obj->partner_name = strtoupper($obj->partner_name);
-			// $obj->partner_city = strtoupper($obj->partner_city);
-			// $obj->partner_country = strtoupper($obj->partner_country);
+			$obj->partner_city = strtoupper($obj->partner_city);
+			$obj->partner_country = strtoupper($obj->partner_country);
 			$obj->partner_email = strtolower($obj->partner_email);
-
-
-			// if ($obj->partner_parent=='--NULL--') { unset($obj->partner_parent); }
-			// if ($obj->empl_id=='--NULL--') { unset($obj->empl_id); }
-			// if ($obj->ae_empl_id=='--NULL--') { unset($obj->ae_empl_id); }
-			// if ($obj->col_empl_id=='--NULL--') { unset($obj->col_empl_id); }
-
 
 
 
@@ -103,8 +95,80 @@ $API = new class extends partnerBase {
 				\FGTA4\utils\SqlUtility::WriteLog($this->db, $this->reqinfo->modulefullname, $tablename, $obj->{$primarykey}, $action, $userdata->username, (object)[]);
 
 
+				// result
+				$where = \FGTA4\utils\SqlUtility::BuildCriteria((object)[$primarykey=>$obj->{$primarykey}], [$primarykey=>"$primarykey=:$primarykey"]);
+				$sql = \FGTA4\utils\SqlUtility::Select("$tablename A", [
+					$primarykey
+					, 'partner_id', 'partner_name', 'partner_addressline1', 'partner_addressline2', 'partner_postcode', 'partner_city', 'partner_country', 'partner_phone', 'partner_mobilephone', 'partner_email', 'partner_isdisabled', 'partner_isparent', 'partner_parent', 'partnertype_id', 'partnerorg_id', 'partner_npwp', 'partner_isnonnpwp', 'empl_id', 'ae_empl_id', 'col_empl_id', '_createby', '_createdate', '_modifyby', '_modifydate', '_createby', '_createdate', '_modifyby', '_modifydate'
+					, ['(select partnertype_isempl from mst_partnertype where partnertype_id=A.partnertype_id) as partnertype_isempl']
+				], $where->sql);
+				$stmt = $this->db->prepare($sql);
+				$stmt->execute($where->params);
+				$row  = $stmt->fetch(\PDO::FETCH_ASSOC);			
+
+				$record = [];
+				foreach ($row as $key => $value) {
+					$record[$key] = $value;
+				}
+				$result->dataresponse = (object) array_merge($record, [
+					//  untuk lookup atau modify response ditaruh disini
+					'country_name' => \FGTA4\utils\SqlUtility::Lookup($record['partner_country'], $this->db, 'mst_country', 'country_id', 'country_name'),
+					'partner_parent_name' => \FGTA4\utils\SqlUtility::Lookup($record['partner_parent'], $this->db, 'mst_partner', 'partner_id', 'partner_name'),
+					'partnertype_name' => \FGTA4\utils\SqlUtility::Lookup($record['partnertype_id'], $this->db, 'mst_partnertype', 'partnertype_id', 'partnertype_name'),
+					'partnerorg_name' => \FGTA4\utils\SqlUtility::Lookup($record['partnerorg_id'], $this->db, 'mst_partnerorg', 'partnerorg_id', 'partnerorg_name'),
+					'empl_name' => \FGTA4\utils\SqlUtility::Lookup($record['empl_id'], $this->db, 'mst_empl', 'empl_id', 'empl_name'),
+					'ae_empl_name' => \FGTA4\utils\SqlUtility::Lookup($record['ae_empl_id'], $this->db, 'mst_empl', 'empl_id', 'empl_name'),
+					'col_empl_name' => \FGTA4\utils\SqlUtility::Lookup($record['col_empl_id'], $this->db, 'mst_empl', 'empl_id', 'empl_name'),
+					'_createby' => \FGTA4\utils\SqlUtility::Lookup($record['_createby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+					'_modifyby' => \FGTA4\utils\SqlUtility::Lookup($record['_modifyby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+				]);
+
+
+				// Jika Karyawan, tambahkan 1 baris untuk contact
+				if ($result->dataresponse->partnertype_isempl=='1') {
+					$sql = "
+						select * from mst_partnercontact where partner_id = :partner_id
+					";
+					$stmt = $this->db->prepare($sql);
+					$stmt->execute(['partner_id'=>$result->dataresponse->partner_id]);
+					$rows  = $stmt->fetchall(\PDO::FETCH_ASSOC);
+
+					if (count($rows)==0) {
+						$sql = "
+							select 
+							A.empl_name,
+							(select hrjob_name from mst_hrjob where hrjob_id=A.hrjob_id) as hrjob_name
+							from mst_empl A 
+							where empl_id = :empl_id
+						";
+						$stmt = $this->db->prepare($sql);
+						$stmt->execute(['empl_id' => $result->dataresponse->empl_id]);
+						$row  = $stmt->fetch(\PDO::FETCH_ASSOC);	
+						$hrjob_name = $row['hrjob_name'];
+
+						$obj = new \stdClass;
+						$obj->partnercontact_id = \uniqid();
+						$obj->partnercontact_name = $result->dataresponse->partner_name;
+						$obj->partnercontact_position = $hrjob_name;
+						$obj->partnercontact_mobilephone = $result->dataresponse->partner_mobilephone;
+						$obj->partnercontact_email = $result->dataresponse->partner_email;
+						$obj->partner_id = $result->dataresponse->partner_id;
+						$obj->_createby = $userdata->username;
+						$obj->_createdate = date("Y-m-d H:i:s");
+						
+						$cmd = \FGTA4\utils\SqlUtility::CreateSQLInsert("mst_partnercontact", $obj);
+						$stmt = $this->db->prepare($cmd->sql);
+						$stmt->execute($cmd->params);
+
+					}
+
+				}
+
+
 
 				$this->db->commit();
+				return $result;
+
 			} catch (\Exception $ex) {
 				$this->db->rollBack();
 				throw $ex;
@@ -112,35 +176,6 @@ $API = new class extends partnerBase {
 				$this->db->setAttribute(\PDO::ATTR_AUTOCOMMIT,1);
 			}
 
-
-			$where = \FGTA4\utils\SqlUtility::BuildCriteria((object)[$primarykey=>$obj->{$primarykey}], [$primarykey=>"$primarykey=:$primarykey"]);
-			$sql = \FGTA4\utils\SqlUtility::Select($tablename , [
-				$primarykey
-				, 'partner_id', 'partner_name', 'partner_addressline1', 'partner_addressline2', 'partner_postcode', 'partner_city', 'partner_country', 'partner_phone', 'partner_mobilephone', 'partner_email', 'partner_isdisabled', 'partner_isparent', 'partner_parent', 'partnertype_id', 'partnerorg_id', 'partner_npwp', 'partner_isnonnpwp', 'empl_id', 'ae_empl_id', 'col_empl_id', '_createby', '_createdate', '_modifyby', '_modifydate', '_createby', '_createdate', '_modifyby', '_modifydate'
-			], $where->sql);
-			$stmt = $this->db->prepare($sql);
-			$stmt->execute($where->params);
-			$row  = $stmt->fetch(\PDO::FETCH_ASSOC);			
-
-			$record = [];
-			foreach ($row as $key => $value) {
-				$record[$key] = $value;
-			}
-			$result->dataresponse = (object) array_merge($record, [
-				//  untuk lookup atau modify response ditaruh disini
-				'country_name' => \FGTA4\utils\SqlUtility::Lookup($record['partner_country'], $this->db, 'mst_country', 'country_id', 'country_name'),
-				'partner_parent_name' => \FGTA4\utils\SqlUtility::Lookup($record['partner_parent'], $this->db, 'mst_partner', 'partner_id', 'partner_name'),
-				'partnertype_name' => \FGTA4\utils\SqlUtility::Lookup($record['partnertype_id'], $this->db, 'mst_partnertype', 'partnertype_id', 'partnertype_name'),
-				'partnerorg_name' => \FGTA4\utils\SqlUtility::Lookup($record['partnerorg_id'], $this->db, 'mst_partnerorg', 'partnerorg_id', 'partnerorg_name'),
-				'empl_name' => \FGTA4\utils\SqlUtility::Lookup($record['empl_id'], $this->db, 'mst_empl', 'empl_id', 'empl_name'),
-				'ae_empl_name' => \FGTA4\utils\SqlUtility::Lookup($record['ae_empl_id'], $this->db, 'mst_empl', 'empl_id', 'empl_name'),
-				'col_empl_name' => \FGTA4\utils\SqlUtility::Lookup($record['col_empl_id'], $this->db, 'mst_empl', 'empl_id', 'empl_name'),
-
-				'_createby' => \FGTA4\utils\SqlUtility::Lookup($record['_createby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
-				'_modifyby' => \FGTA4\utils\SqlUtility::Lookup($record['_modifyby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
-			]);
-
-			return $result;
 		} catch (\Exception $ex) {
 			throw $ex;
 		}

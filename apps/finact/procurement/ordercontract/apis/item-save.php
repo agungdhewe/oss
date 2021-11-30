@@ -26,7 +26,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 17/09/2021
+ * tanggal 07/11/2021
  */
 $API = new class extends ordercontractBase {
 	
@@ -59,7 +59,6 @@ $API = new class extends ordercontractBase {
 			$obj->item_id = strtoupper($obj->item_id);
 			$obj->itemstock_id = strtoupper($obj->itemstock_id);
 			$obj->itemclass_id = strtoupper($obj->itemclass_id);
-			$obj->ordercontractitem_descr = strtoupper($obj->ordercontractitem_descr);
 
 
 
@@ -111,7 +110,7 @@ $API = new class extends ordercontractBase {
 				$where = \FGTA4\utils\SqlUtility::BuildCriteria((object)[$primarykey=>$obj->{$primarykey}], [$primarykey=>"$primarykey=:$primarykey"]);
 				$sql = \FGTA4\utils\SqlUtility::Select($tablename , [
 					$primarykey
-					, 'ordercontractitem_id', 'item_id', 'itemstock_id', 'itemclass_id', 'ordercontractitem_descr', 'ordercontractitem_estrate', 'ordercontract_id', '_createby', '_createdate', '_modifyby', '_modifydate', '_createby', '_createdate', '_modifyby', '_modifydate'
+					, 'ordercontractitem_id', 'item_id', 'itemstock_id', 'itemclass_id', 'ordercontractitem_descr', 'ordercontractitem_qty', 'ordercontractitem_days', 'ordercontractitem_task', 'ordercontractitem_estrate', 'ordercontractitem_value', 'ordercontract_id', '_createby', '_createdate', '_modifyby', '_modifydate', '_createby', '_createdate', '_modifyby', '_modifydate'
 				], $where->sql);
 				$stmt = $this->db->prepare($sql);
 				$stmt->execute($where->params);

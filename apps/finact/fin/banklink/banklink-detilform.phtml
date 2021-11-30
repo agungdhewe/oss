@@ -8,7 +8,7 @@
 
 	<form id="pnl_editdetilform-form">
 
-		<div class="form_row">
+		<div class="form_row" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">ID</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-txt_bankbookdetil_id" class="easyui-textbox" mapping="bankbookdetil_id" uppercase="true" maxlength="14"  style="width: 400px" data-options="multiline:false  ">
@@ -16,79 +16,82 @@
 			</div>
 		</div>
 
-		<div class="form_row">
+		<div class="form_row" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Ref</div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editdetilform-txt_bankbookdetil_ref" class="easyui-textbox" mapping="bankbookdetil_ref"  maxlength="60"  style="width: 400px" data-options="multiline:false  ">
+				<input id="pnl_editdetilform-txt_bankbookdetil_ref" class="easyui-textbox" mapping="bankbookdetil_ref"  maxlength="60"  style="width: 400px" data-options="multiline:false, disabled: true  ">
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>
 
-		<div class="form_row">
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Valas Debet</div>
-			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editdetilform-txt_bankbookdetil_valfrgd" class="easyui-numberbox" mapping="bankbookdetil_valfrgd" style="width: 400px; text-align:right" data-options="precision: 2, decimalSeparator:'.', groupSeparator:','  , required: true">
-				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
-			</div>
-		</div>
-
-		<div class="form_row">
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Valas Kredit</div>
-			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editdetilform-txt_bankbookdetil_valfrgk" class="easyui-numberbox" mapping="bankbookdetil_valfrgk" style="width: 400px; text-align:right" data-options="precision: 2, decimalSeparator:'.', groupSeparator:','  , required: true">
-				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
-			</div>
-		</div>
-
-		<div class="form_row">
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Valas Saldo</div>
-			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editdetilform-txt_bankbookdetil_valfrgsaldo" class="easyui-numberbox" mapping="bankbookdetil_valfrgsaldo" style="width: 400px; text-align:right" data-options="precision: 2, decimalSeparator:'.', groupSeparator:','  , required: true">
-				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
-			</div>
-		</div>
-
-		<div class="form_row">
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">IDR Debet</div>
-			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editdetilform-txt_bankbookdetil_validrd" class="easyui-numberbox" mapping="bankbookdetil_validrd" style="width: 400px; text-align:right" data-options="precision: 2, decimalSeparator:'.', groupSeparator:','  , required: true">
-				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
-			</div>
-		</div>
-
-		<div class="form_row">
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">IDR Kredit</div>
-			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editdetilform-txt_bankbookdetil_validrk" class="easyui-numberbox" mapping="bankbookdetil_validrk" style="width: 400px; text-align:right" data-options="precision: 2, decimalSeparator:'.', groupSeparator:','  , required: true">
-				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
-			</div>
-		</div>
-
-		<div class="form_row">
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">IDR Saldo</div>
-			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editdetilform-txt_bankbookdetil_validrsaldo" class="easyui-numberbox" mapping="bankbookdetil_validrsaldo" style="width: 400px; text-align:right" data-options="precision: 2, decimalSeparator:'.', groupSeparator:','  , required: true">
-				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
-			</div>
-		</div>
-
-		<div class="form_row">
+		<div class="form_row" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Notes</div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editdetilform-txt_bankbookdetil_notes" class="easyui-textbox" mapping="bankbookdetil_notes"  maxlength="90"  style="width: 400px" data-options="multiline:false  ">
+				<input id="pnl_editdetilform-txt_bankbookdetil_notes" class="easyui-textbox" mapping="bankbookdetil_notes"  maxlength="90"  style="width: 400px" data-options="multiline:false, disabled: true  ">
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>
 
-		<div class="form_row">
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Jurnal</div>
+
+		<div class="form_row" style="display: none" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Valas Debet</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editdetilform-txt_bankbookdetil_valfrgd" class="easyui-numberbox" mapping="bankbookdetil_valfrgd" style="width: 400px; text-align:right" data-options="precision: 2, decimalSeparator:'.', groupSeparator:','  , required: true, disabled: true">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row"  style="display: none" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Valas Kredit</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editdetilform-txt_bankbookdetil_valfrgk" class="easyui-numberbox" mapping="bankbookdetil_valfrgk" style="width: 400px; text-align:right" data-options="precision: 2, decimalSeparator:'.', groupSeparator:','  , required: true, disabled: true">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row"  style="display: none" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Valas Saldo</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editdetilform-txt_bankbookdetil_valfrgsaldo" class="easyui-numberbox" mapping="bankbookdetil_valfrgsaldo" style="width: 400px; text-align:right" data-options="precision: 2, decimalSeparator:'.', groupSeparator:','  , required: true, disabled: true">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">IDR Debet</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editdetilform-txt_bankbookdetil_validrd" class="easyui-numberbox" mapping="bankbookdetil_validrd" style="width: 400px; text-align:right" data-options="precision: 2, decimalSeparator:'.', groupSeparator:','  , required: true, disabled: true">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">IDR Kredit</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editdetilform-txt_bankbookdetil_validrk" class="easyui-numberbox" mapping="bankbookdetil_validrk" style="width: 400px; text-align:right" data-options="precision: 2, decimalSeparator:'.', groupSeparator:','  , required: true, disabled: true">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">IDR Saldo</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editdetilform-txt_bankbookdetil_validrsaldo" class="easyui-numberbox" mapping="bankbookdetil_validrsaldo" style="width: 400px; text-align:right" data-options="precision: 2, decimalSeparator:'.', groupSeparator:','  , required: true, disabled: true">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+
+
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Link PV/OR</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-cbo_jurnal_id" class="easyui-combo" style="width: 400px" mapping="jurnal_id" display="jurnal_descr" data-options="editable:false, valueField:'id', textField:'text' , prompt: 'NONE'" >
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>
 
-		<div class="form_row">
+		<div class="form_row" style="display: none">
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Account Finance</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-cbo_acc_fin" class="easyui-combo" style="width: 400px" mapping="acc_fin" display="accfin_name" data-options="editable:false, valueField:'id', textField:'text' , prompt: 'NONE'" >
@@ -96,7 +99,7 @@
 			</div>
 		</div>
 
-		<div class="form_row">
+		<div class="form_row" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">BankBook</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-txt_bankbook_id" class="easyui-textbox" mapping="bankbook_id" uppercase="true" maxlength="14"  style="width: 400px" data-options="multiline:false  , disabled: true">

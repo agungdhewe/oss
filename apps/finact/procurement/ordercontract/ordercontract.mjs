@@ -7,6 +7,12 @@ import * as pList from './ordercontract-list.mjs'
 import * as pEdit from './ordercontract-edit.mjs'
 import * as pEditItemgrid from './ordercontract-itemgrid.mjs'
 import * as pEditItemform from './ordercontract-itemform.mjs'
+import * as pEditTermgrid from './ordercontract-termgrid.mjs'
+import * as pEditTermform from './ordercontract-termform.mjs'
+import * as pEditAttachgrid from './ordercontract-attachgrid.mjs'
+import * as pEditAttachform from './ordercontract-attachform.mjs'
+import * as pEditApprovalgrid from './ordercontract-approvalgrid.mjs'
+import * as pEditApprovalform from './ordercontract-approvalform.mjs'
 
 
 
@@ -14,6 +20,12 @@ const pnl_list = $('#pnl_list')
 const pnl_edit = $('#pnl_edit')
 const pnl_edititemgrid = $('#pnl_edititemgrid')
 const pnl_edititemform = $('#pnl_edititemform')
+const pnl_edittermgrid = $('#pnl_edittermgrid')
+const pnl_edittermform = $('#pnl_edittermform')
+const pnl_editattachgrid = $('#pnl_editattachgrid')
+const pnl_editattachform = $('#pnl_editattachform')
+const pnl_editapprovalgrid = $('#pnl_editapprovalgrid')
+const pnl_editapprovalform = $('#pnl_editapprovalform')
 
 
 
@@ -40,7 +52,13 @@ export async function init(opt) {
 			{panel: pnl_list, handler: pList},
 			{panel: pnl_edit, handler: pEdit},
 			{panel: pnl_edititemgrid, handler: pEditItemgrid},
-			{panel: pnl_edititemform, handler: pEditItemform}			
+			{panel: pnl_edititemform, handler: pEditItemform},
+			{panel: pnl_edittermgrid, handler: pEditTermgrid},
+			{panel: pnl_edittermform, handler: pEditTermform},
+			{panel: pnl_editattachgrid, handler: pEditAttachgrid},
+			{panel: pnl_editattachform, handler: pEditAttachform},
+			{panel: pnl_editapprovalgrid, handler: pEditApprovalgrid},
+			{panel: pnl_editapprovalform, handler: pEditApprovalform}			
 		], opt)
 
 	$ui.setPages(pages)

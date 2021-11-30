@@ -27,19 +27,19 @@ class PrintForm extends WebModule {
 		$id = $_GET['id'];
 
 
-		$tablename = 'trn_billinpaym';
-		$primarykey = 'billinpaym_id';
+		$tablename = 'trn_paymentscd';
+		$primarykey = 'paymentscd_id';
 
 		try {
 
 			// header
 			$sql = $this->getSqlHeader();
 			$stmt = $this->db->prepare($sql);
-			$stmt->execute([':billinpaym_id' => $id]);
+			$stmt->execute([':paymentscd_id' => $id]);
 			$rows  = $stmt->fetchall(\PDO::FETCH_ASSOC);
 			$row = $rows[0];
 
-			$this->billinpaym_id = $row['billinpaym_id'];
+			$this->paymentscd_id = $row['paymentscd_id'];
 			$this->empl_name = $row['empl_name'];
 
 		} catch (\Exception $ex) {
@@ -54,7 +54,7 @@ class PrintForm extends WebModule {
 			select 
 			A.*,
 			(select empl_name from mst_empl where empl_id =(select empl_id from mst_empluser where user_id = A._createby )) as empl_name
-			from trn_billinpaym A where billinpaym_id = :billinpaym_id
+			from trn_paymentscd A where paymentscd_id = :paymentscd_id
 		";
 	}	
 

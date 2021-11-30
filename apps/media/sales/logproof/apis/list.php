@@ -5,25 +5,27 @@ if (!defined('FGTA4')) {
 }
 
 require_once __ROOT_DIR.'/core/sqlutil.php';
-
+require_once __DIR__ . '/xapi.base.php';
 
 
 use \FGTA4\exceptions\WebException;
 
-
-class DataList extends WebAPI {
-	function __construct() {
-		$this->debugoutput = true;
-		$DB_CONFIG = DB_CONFIG[$GLOBALS['MAINDB']];
-		$DB_CONFIG['param'] = DB_CONFIG_PARAM[$GLOBALS['MAINDBTYPE']];
-		$this->db = new \PDO(
-					$DB_CONFIG['DSN'], 
-					$DB_CONFIG['user'], 
-					$DB_CONFIG['pass'], 
-					$DB_CONFIG['param']
-		);
-
-	}
+/**
+ * media/sales/logproof/apis/list.php
+ *
+ * ========
+ * DataList
+ * ========
+ * Menampilkan data-data pada tabel header logproof (trn_medialogproof)
+ * sesuai dengan parameter yang dikirimkan melalui variable $option->criteria
+ *
+ * Agung Nugroho <agung@fgta.net> http://www.fgta.net
+ * Tangerang, 26 Maret 2021
+ *
+ * digenerate dengan FGTA4 generator
+ * tanggal 29/11/2021
+ */
+$API = new class extends logproofBase {
 
 	public function execute($options) {
 
@@ -36,7 +38,7 @@ class DataList extends WebAPI {
 				throw new \Exception('your group authority is not allowed to do this action.');
 			}
 
-
+			// \FGTA4\utils\SqlUtility::setDefaultCriteria($options->criteria, '--fieldscriteria--', '--value--');
 			$where = \FGTA4\utils\SqlUtility::BuildCriteria(
 				$options->criteria,
 				[
@@ -56,12 +58,9 @@ class DataList extends WebAPI {
 			$limit = " LIMIT $maxrow OFFSET $offset ";
 			$stmt = $this->db->prepare("
 				select 
-				medialogproof_id, medialogproof_date, medialogproof_iscommit, _createby, _createdate, _modifyby, _modifydate 
+				A.medialogproof_id, A.medialogproof_date, A.medialogproof_version, A.medialogproof_iscommit, A.medialogproof_commitby, A.medialogproof_commitdate, A.medialogproof_isgenerate, A._createby, A._createdate, A._modifyby, A._modifydate 
 				from trn_medialogproof A
-			" 
-			. $where->sql 
-			. " order by medialogproof_date desc "
-			. $limit);
+			" . $where->sql . $limit);
 			$stmt->execute($where->params);
 			$rows  = $stmt->fetchall(\PDO::FETCH_ASSOC);
 
@@ -76,6 +75,7 @@ class DataList extends WebAPI {
 					// // jikalau ingin menambah atau edit field di result record, dapat dilakukan sesuai contoh sbb: 
 					//'tanggal' => date("d/m/y", strtotime($record['tanggal'])),
 				 	//'tambahan' => 'dta'
+					'medialogproof_commitby' => \FGTA4\utils\SqlUtility::Lookup($record['medialogproof_commitby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
 					 
 				]));
 			}
@@ -91,6 +91,4 @@ class DataList extends WebAPI {
 		}
 	}
 
-}
-
-$API = new DataList();
+};

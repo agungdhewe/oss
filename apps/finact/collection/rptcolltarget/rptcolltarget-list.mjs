@@ -172,6 +172,10 @@ function btn_load_click() {
 			reportmodule = window.global.modulefullname + '/rptcolltarget-03-realisasi.xprint'  + '?template=format-01-a4-landscape';
 			break;
 
+		case 'realisasibydate' :
+			reportmodule = window.global.modulefullname + '/rptcolltarget-04-realisasibydate.xprint'  + '?template=format-01-a4-landscape';
+			break;				
+
 	}
 
 	rpt.load(reportmodule, params);

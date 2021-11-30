@@ -34,3 +34,16 @@ ALTER TABLE `mst_inquirytype` ADD CONSTRAINT `fk_mst_inquirytype_mst_team_owner`
 
 alter table `mst_inquirytype` add column if not exists `inquirytype_isemplaspartner` tinyint(1) NOT NULL DEFAULT 0  after `inquirytype_isallowadvance`;
 
+
+alter table `mst_inquirytype` add column if not exists `inquirytype_isperempl` tinyint(1) NOT NULL DEFAULT 0  after `inquiryselect_id`;
+
+
+
+
+
+
+
+
+
+
+

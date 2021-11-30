@@ -1,6 +1,7 @@
 {
 	"title" : "Link Buku Bank",
-	"icon" : "icon-banklink-white.svg",
+	
+	
 	"variance" : {},
 	"allowanonymous" : true,
 	"allowedgroups" : ["public"],

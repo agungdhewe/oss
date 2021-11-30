@@ -24,7 +24,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 17/09/2021
+ * tanggal 07/11/2021
  */
 $API = new class extends ordercontractBase {
 
@@ -57,7 +57,7 @@ $API = new class extends ordercontractBase {
 			$limit = " LIMIT $maxrow OFFSET $offset ";
 			$stmt = $this->db->prepare("
 				select 
-				A.ordercontractitem_id, A.item_id, A.itemstock_id, A.itemclass_id, A.ordercontractitem_descr, A.ordercontractitem_estrate, A.ordercontract_id, A._createby, A._createdate, A._modifyby, A._modifydate 
+				A.ordercontractitem_id, A.item_id, A.itemstock_id, A.itemclass_id, A.ordercontractitem_descr, A.ordercontractitem_qty, A.ordercontractitem_days, A.ordercontractitem_task, A.ordercontractitem_estrate, A.ordercontractitem_value, A.ordercontract_id, A._createby, A._createdate, A._modifyby, A._modifydate 
 				from trn_ordercontractitem A
 			" . $where->sql . $limit);
 			$stmt->execute($where->params);

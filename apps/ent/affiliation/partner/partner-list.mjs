@@ -2,16 +2,13 @@ import { fgta4slideselect } from '../../../../../index.php/asset/fgta/framework/
 import { fgta4ParallelProcess } from '../../../../../index.php/asset/fgta/framework/fgta4libs/fgta4parallel.mjs'
 
 
-
 var this_page_id;
 var this_page_options;
 
 const tbl_list = $('#pnl_list-tbl_list')
 
 const txt_search = $('#pnl_list-txt_search')
-const cbo_search_partnertype = $('#pnl_list-cbo_search_partnertype');
-
-
+const cbo_search_type = $('#pnl_list-cbo_search_type');
 const btn_load = $('#pnl_list-btn_load')
 const btn_new = $('#pnl_list-btn_new')
 
@@ -41,18 +38,13 @@ export async function init(opt) {
 	})
 	
 
-	btn_load.linkbutton({
-		onClick: () => { btn_load_click() }
-	})
-
-	btn_new.linkbutton({
-		onClick: () => { btn_new_click() }
-	})
+	btn_load.linkbutton({ onClick: () => { btn_load_click() } })
+	btn_new.linkbutton({ onClick: () => { btn_new_click() } })
 
 
 	var parallelProcess = fgta4ParallelProcess({
 		waitfor: {
-			cbo_search_partnertype_created: 1
+			cbo_search_type_created: 1
 		},
 		onFinished: () => {
 			btn_load_click();
@@ -60,8 +52,8 @@ export async function init(opt) {
 	})
 
 
-	cbo_search_partnertype.name = 'pnl_list-cbo_search_partnertype'	
-	new fgta4slideselect(cbo_search_partnertype, {
+	cbo_search_type.name = 'pnl_list-cbo_search_type'	
+	new fgta4slideselect(cbo_search_type, {
 		title: 'Pilih Type',
 		returnpage: this_page_id,
 		api: $ui.apis.load_partnertype_id,
@@ -84,13 +76,11 @@ export async function init(opt) {
 			btn_load_click();
 		},
 		OnCreated: () => {
-			cbo_search_partnertype.combo('setValue', 'ALL');
-			cbo_search_partnertype.combo('setText', 'ALL');
-			parallelProcess.setFinished('cbo_search_partnertype_created');
+			cbo_search_type.combo('setValue', 'ALL');
+			cbo_search_type.combo('setText', 'ALL');
+			parallelProcess.setFinished('cbo_search_type_created');
 		}
 	});
-
-
 
 
 	document.addEventListener('OnSizeRecalculated', (ev) => {
@@ -107,7 +97,6 @@ export async function init(opt) {
 	})	
 	
 	//button state
-
 	// btn_load_click()
 }
 
@@ -148,11 +137,10 @@ function btn_load_click() {
 			options.criteria['search'] = search
 		}
 
-		var partnertype_id = cbo_search_partnertype.combo('getValue');
-		if (partnertype_id!='ALL') {
-			options.criteria.partnertype_id = partnertype_id;
+		var partnertye_id = cbo_search_type.combo('getValue')
+		if (partnertye_id!='ALL') {
+			options.criteria['partnertype_id'] = partnertye_id
 		}
-
 		// switch (this_page_options.variancename) {
 		// 	case 'commit' :
 		//		break;

@@ -19,16 +19,42 @@ class DataReport {
 		$periodemo_id = $objdt->format('Ym');
 
 		try {
-			$periodeinfo = $this->periode_getinfo($periodemo_id, 1);
 
-			$sql = $this->get_sqlreport();
+			$sql = "
+			
+				call ap_get_bydate(:date);
+
+				select 
+				A.jurnal_id,
+				(select jurnal_descr from trn_jurnal where jurnal_id=A.jurnal_id) as jurnal_descr,
+				A.ref_jurnal_duedate,
+				@days := datediff('2021-09-30', A.ref_jurnal_duedate) as days ,
+				case when @days<=0 then A.outstanding_idr else 0 end as age_0,
+				case when @days>0 and @days<=30 then A.outstanding_idr else 0 end as age_30,
+				case when @days>30 and @days<=60 then A.outstanding_idr else 0 end as age_60,
+				case when @days>60 and @days<=90 then A.outstanding_idr else 0 end as age_90,
+				case when @days>90 and @days<=120 then A.outstanding_idr else 0 end as age_120,
+				case when @days>120 then A.outstanding_idr else 0 end as age_120_more,
+				A.outstanding_idr
+				from 
+				RESULT_AP_PERIODE A;		
+			
+			
+			";
 			$stmt = $this->db->prepare($sql);
-			$stmt->execute([
-				':periodemo_id'=>$periodemo_id,
-				':coamodel_id'=>'AP'
-			]);	
+			$stmt->execute([':date'=>$pertanggal]);		
 			$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-			debug::log('jumlah baris ' . count($rows));
+
+
+			// $periodeinfo = $this->periode_getinfo($periodemo_id, 1);
+			// $sql = $this->get_sqlreport();
+			// $stmt = $this->db->prepare($sql);
+			// $stmt->execute([
+			// 	':periodemo_id'=>$periodemo_id,
+			// 	':coamodel_id'=>'AP'
+			// ]);	
+			// $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			// debug::log('jumlah baris ' . count($rows));
 
 			return $rows;
 		}  catch (\Exception $ex) {

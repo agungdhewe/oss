@@ -1,3 +1,14 @@
+-- SET FOREIGN_KEY_CHECKS=0;
+
+-- drop table if exists `mst_partner`;
+-- drop table if exists `mst_partnerastype`;
+-- drop table if exists `mst_partnerbank`;
+-- drop table if exists `mst_partnercontact`;
+-- drop table if exists `mst_partnersite`;
+-- drop table if exists `mst_partnertrxmodel`;
+-- drop table if exists `mst_partnerref`;
+
+
 CREATE TABLE `mst_partner` (
 	`partner_id` varchar(14) NOT NULL , 
 	`partner_name` varchar(60) NOT NULL , 
@@ -49,6 +60,30 @@ ALTER TABLE `mst_partner` ADD CONSTRAINT `fk_mst_partner_mst_empl_3` FOREIGN KEY
 
 
 
+CREATE TABLE `mst_partnerastype` (
+	`partnerastype_id` varchar(14) NOT NULL , 
+	`partnertype_id` varchar(10) NOT NULL , 
+	`partner_id` varchar(14) NOT NULL , 
+	`_createby` varchar(13) NOT NULL , 
+	`_createdate` datetime NOT NULL DEFAULT current_timestamp(), 
+	`_modifyby` varchar(13)  , 
+	`_modifydate` datetime  , 
+	UNIQUE KEY `partnerastype_pair` (`partner_id`, `partnertype_id`),
+	PRIMARY KEY (`partnerastype_id`)
+) 
+ENGINE=InnoDB
+COMMENT='Daftar Type lain yang dimiliki partner';
+
+ALTER TABLE `mst_partnerastype` ADD KEY `partnertype_id` (`partnertype_id`);
+ALTER TABLE `mst_partnerastype` ADD KEY `partner_id` (`partner_id`);
+
+ALTER TABLE `mst_partnerastype` ADD CONSTRAINT `fk_mst_partnerastype_mst_partnertype` FOREIGN KEY (`partnertype_id`) REFERENCES `mst_partnertype` (`partnertype_id`);
+ALTER TABLE `mst_partnerastype` ADD CONSTRAINT `fk_mst_partnerastype_mst_partner` FOREIGN KEY (`partner_id`) REFERENCES `mst_partner` (`partner_id`);
+
+
+
+
+
 CREATE TABLE `mst_partnerbank` (
 	`partnerbank_id` varchar(14) NOT NULL , 
 	`partnerbank_accnum` varchar(30) NOT NULL , 
@@ -83,6 +118,8 @@ CREATE TABLE `mst_partnercontact` (
 	`partnercontact_mobilephone` varchar(30) NOT NULL , 
 	`partnercontact_email` varchar(150) NOT NULL , 
 	`partnecontact_isdisabled` tinyint(1) NOT NULL DEFAULT 0, 
+	`partnecontact_iscontract` tinyint(1) NOT NULL DEFAULT 0, 
+	`partnecontact_isinvoice` tinyint(1) NOT NULL DEFAULT 0, 
 	`partner_id` varchar(14) NOT NULL , 
 	`_createby` varchar(13) NOT NULL , 
 	`_createdate` datetime NOT NULL DEFAULT current_timestamp(), 

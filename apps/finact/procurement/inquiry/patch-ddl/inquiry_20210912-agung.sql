@@ -88,3 +88,7 @@ ALTER TABLE `trn_inquiry` ADD KEY `partner_id` (`partner_id`);
 ALTER TABLE `trn_inquiry` ADD CONSTRAINT `fk_trn_inquiry_mst_partner` FOREIGN KEY (`partner_id`) REFERENCES `mst_partner` (`partner_id`);
 
 
+--- agung, 20211108
+alter table `trn_inquirydetil` add column if not exists `empl_id` varchar(30) not null default 0 AFTER `itemclass_id`;
+alter table `trn_inquirydetil` add column if not exists `hrgrd_id` varchar(10) not null default 0 AFTER `empl_id`;
+
