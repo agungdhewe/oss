@@ -25,3 +25,6 @@ $GLOBALS['MAINDB'] = 'FGTACLOUD';
 $GLOBALS['MAINDBTYPE'] = 'mariadb';
 
 $GLOBALS['MAIN_USERTABLE'] = 'ossdb.fgt_user';
+
+
+define('__COMPANY_NAME__', 'PT LATIVI MEDIAKARYA');
