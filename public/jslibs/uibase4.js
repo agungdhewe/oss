@@ -59,14 +59,21 @@ export async function ready() {
 		fn_cancel(events.OnButtonHome.detail.cancel)
 	}
 
-	if(window.fgtaTimingPatch) {
-		setTimeout($ui.iframe_resize, 100);
-	}
 
+	// var parse = async () => {
+	// 	return new Promise((resolve, reject) => {
+	// 		$.parser.onComplete = function() {
+	// 			console.log('parsed');
+	// 			resolve();
+	// 		}
+	// 		$.parser.parse();
+	// 	});
+	// }
 
+	// await parse();
+	// $.parser.parse();
 	console.log(`module ready`);
 }
-	
 
 
 /**
@@ -339,9 +346,6 @@ export async function download(url, args, fn_handler) {
 						filename: filename,
 						data: blob
 					})
-				} else if (xhr.status === 404) {
-					var errormessage = xhr.getResponseHeader('fgta4-errormessage');
-					reject(new Error(errormessage));
 				}
 			};		
 
@@ -397,10 +401,6 @@ export async function download(url, args, fn_handler) {
 			err = {errormessage: err}
 		}
 
-		if (typeof(fn_handler)==='function') {
-			fn_handler(null, err);
-		}
-
 		// fgta_output_content.html('')
 		fgta_output_error.html(err.errormessage)
 		throw err
@@ -412,43 +412,6 @@ export async function download(url, args, fn_handler) {
 }
 
 
-async function readfile(file) {
-	console.log(file);
-
-
-
-	return new Promise((resolve, reject) => {
-		var reader = new FileReader();
-		reader.onload = function(evt) {
-			if(evt.target.readyState != 2) return;
-			if(evt.target.error) {
-				reject('Error while reading file')
-			}
-
-			var filecontent = evt.target.result;
-			var f = {
-				name: file.name,
-				size: file.size,
-				type: file.type,
-				data: filecontent
-			};
-
-			if (file.type.startsWith('image')) {
-				var image = new Image();
-				image.src = evt.target.result;
-				image.onload = function() {
-					f.width = this.width;
-					f.height = this.height;
-					resolve(f);
-				}
-			} else {
-				resolve(f);
-			}
-	
-		};
-		reader.readAsDataURL(file);
-	})
-}
 
 
 
@@ -459,12 +422,10 @@ async function readfile(file) {
  * @param api url dari api
  * @param args argumen yang akan dikirimkan ke api
  */
-export async function apicall(api, args, files) {
+export async function apicall(api, args) {
 
-	if (fgta_output_content.find('.xdebug-error').length==0 && fgta_output_content.find('.fgta-warning').length==0) {
-		// fgta_output_content.html('')	
-		// fgta_output_error.html('')
-	}
+	fgta_output_content.html('')	
+	fgta_output_error.html('')
 
 	let postparams = {}
 	for (let paramname in args) {
@@ -474,19 +435,8 @@ export async function apicall(api, args, files) {
 		} else {
 			postparams[paramname] = args[paramname]
 		}
+		
 	}
-
-	// get file
-	var filedata = {}
-	for (var fli in files) {
-		if (files[fli]===undefined) continue;
-		var file = files[fli];
-		var filecontent = await readfile(file);
-		filedata[fli] = filecontent;
-	}
-	postparams['files'] = JSON.stringify(filedata);
-
-	
 
 	let apiurl = `index.php/api/${api}`
 	let ajax = async (apiurl, postparams, otp) => {
@@ -495,12 +445,7 @@ export async function apicall(api, args, files) {
 			urlEncodedDataPairs.push(encodeURIComponent(postparamname) + '=' + encodeURIComponent(postparams[postparamname]));
 		}
 		let urlEncodedData = urlEncodedDataPairs.join('&').replace(/%20/g, '+');
-
-		// let postdata = new FormData();
-		// for (let postparamname in postparams) {
-		// 	console.log(postparamname);
-		// 	postdata.append(postparamname, postparams[postparamname]);
-		// }
+		
 
 		return new Promise(function(resolve, reject) {
 			let xhr = new XMLHttpRequest();
@@ -516,7 +461,7 @@ export async function apicall(api, args, files) {
 					}
 
 					try {
-						var xhr_response = xhr.response;
+						var xhr_response = xhr.response;	
 						if (otp.encrypt) {
 							if ($ui.Crypto===undefined) {
 								$ui.Crypto = new Encryption();
@@ -587,7 +532,6 @@ export async function apicall(api, args, files) {
 
 			xhr.open("POST", apiurl, true);
 			xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-			// xhr.setRequestHeader('Content-Type', 'multipart/form-data');
 			xhr.setRequestHeader('cache-control', 'no-cache, must-revalidate, post-check=0, pre-check=0');
 			xhr.setRequestHeader('cache-control', 'max-age=0');
 			xhr.setRequestHeader('expires', '0');
@@ -604,7 +548,6 @@ export async function apicall(api, args, files) {
 				urlEncodedData = $ui.Crypto.encrypt(urlEncodedData, otp.password);
 			} else {
 				xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');	
-				// xhr.setRequestHeader('Content-Type', 'multipart/form-data');
 			}
 
 
@@ -612,11 +555,7 @@ export async function apicall(api, args, files) {
 				xhr.setRequestHeader("tokenid", Cookies.get('tokenid'));
 			}
 			
-			xhr.send(urlEncodedData);
-			// for(let [name, value] of postdata) {
-			// 	alert(`${name} = ${value}`); // key1 = value1, then key2 = value2
-			// }
-			// xhr.send(postdata);	
+			xhr.send(urlEncodedData);			
 		})
 	}
 
@@ -736,7 +675,7 @@ export function IsMessageShowing() {
 }
 
 
-export function ShowMessage(message, buttons, fn_callback) {
+export function ShowMessage(message, buttons) {
 	var top = $(window).scrollTop()
 
 	let progressmask = document.createElement('div')
@@ -901,13 +840,6 @@ export function ShowMessage(message, buttons, fn_callback) {
 		progresswaitmask.appendChild(progresswrap)
 		document.body.appendChild(progressmask)
 		document.body.appendChild(progresswaitmask)
-		$.parser.parse('#__dialogmessage-waiting__');
-
-		if (typeof fn_callback === 'function') {
-			fn_callback();
-		}
-
-		// console.log('test');
 		let fadein = setInterval(() => {
 			if (opacity < 7) {
 				opacity += 1;
@@ -921,8 +853,6 @@ export function ShowMessage(message, buttons, fn_callback) {
 			}
 		}, 20)
 	}
-
-	
 
 }
 

@@ -1,7 +1,5 @@
 <?php namespace FGTA4;
-define('FGTA4', 1);
 
-define('__LOCAL_CURR',  'IDR');
 
 ini_set("session.gc_maxlifetime", "65535");
 ini_set('display_errors', 1);
@@ -9,6 +7,8 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
 date_default_timezone_set('Asia/Jakarta');
 
+
+define('FGTA4', 1);
 define('__ROOT_DIR', realpath(dirname(__FILE__).'/..'));
 define('__BASEADDRESS', $_SERVER['REQUEST_SCHEME'] ."://".  $_SERVER['SERVER_NAME'] . rtrim($_SERVER['SCRIPT_NAME'], '/index.php') .'/');
 define('API_LOGIN_URL', 'fgta/framework/login/dologin');
@@ -43,7 +43,11 @@ define('DB_CONFIG_PARAM', [
 // untuk remote debugging:
 // ssh -R 9000:localhost:9000 agung@ubserver01
 
+
+
 ob_start();
+
+
 
 // Saat pertama site di load tampa parameter, 
 // yang akan ditampilkan pertama
@@ -53,6 +57,7 @@ if ($ENV_FGTA_STARTMODULE != '') {
 	$FGTA_STARTMODULE = $ENV_FGTA_STARTMODULE;	
 } 
 define('__STARTMODULE', $FGTA_STARTMODULE);	
+
 
 
 // Default menu yang muncul saat pembuatan group
@@ -161,8 +166,6 @@ $ROUTER = null;
 
 try {
 
-	$GLOBALS['ERR_HANDLER'] = null;
-
 	$configuration = new \stdClass;
 
 
@@ -229,11 +232,6 @@ try {
 				require_once __ROOT_DIR.'/core/routes/route-images.php';
 				break;	
 
-			case 'cfs' :
-				$isapps = false;
-				require_once __ROOT_DIR.'/core/routes/route-cfs.php';
-				break;						
-
 
 			case 'favicon.ico' :
 				$isapps = false;
@@ -245,8 +243,6 @@ try {
 				$isapps = false;
 				require_once __ROOT_DIR.'/core/routes/route-manifest.php';
 				break;	
-
-
 
 
 			case 'info' :
@@ -262,7 +258,7 @@ try {
 				require_once $redirectsourcepath;
 
 				$startmodule = __STARTMODULE; 
-				echo "<script>location.href='index.php/module/$startmodule#'</script>";
+				echo "<script>location.href='index.php/module/$startmodule'</script>";
 				die();
 				
 		}
@@ -311,7 +307,7 @@ try {
 
 	} catch (\Exception $ex) {
 		throw $ex;
-	}
+	}	
 } catch (\Exception $ex) {
 	if (method_exists($ROUTER, 'ShowError')) {
 		$ROUTER->ShowError($ex);

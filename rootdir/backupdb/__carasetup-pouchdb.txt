@@ -1,0 +1,26 @@
+# buat direktory pouchdb
+mkdir pouchdb
+
+npm init pouchdb
+
+
+npm install pouchdb-server
+
+
+
+# edit package.json
+# pada scripts, tambahkan: 
+"start": "node ./node_modules/pouchdb-server/bin/pouchdb-server --dir C:/Users/agung/Documents/pouchdb/data --port 5984" 
+
+
+
+# jalankan server dengan perintah
+npm start
+
+# untuk menjalankan fauxton admin
+http://localhost:5984/_utils/
+
+
+# buat database 
+ossdbfs
+
