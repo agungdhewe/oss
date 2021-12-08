@@ -6,24 +6,28 @@ if (!defined('FGTA4')) {
 
 
 require_once __ROOT_DIR.'/core/sqlutil.php';
+require_once __DIR__ . '/xapi.base.php';
 
 
 use \FGTA4\exceptions\WebException;
 
 
-
-class DataSave extends WebAPI {
-	function __construct() {
-		$this->debugoutput = true;
-		$DB_CONFIG = DB_CONFIG[$GLOBALS['MAINDB']];
-		$DB_CONFIG['param'] = DB_CONFIG_PARAM[$GLOBALS['MAINDBTYPE']];
-		$this->db = new \PDO(
-					$DB_CONFIG['DSN'], 
-					$DB_CONFIG['user'], 
-					$DB_CONFIG['pass'], 
-					$DB_CONFIG['param']
-		);	
-	}
+/**
+ * /ent/organisation/deptgroup/apis/delete.php
+ *
+ * ======
+ * Delete
+ * ======
+ * Menghapus satu baris data/record berdasarkan PrimaryKey
+ * pada tabel header deptgroup (mst_deptgroup)
+ *
+ * Agung Nugroho <agung@fgta.net> http://www.fgta.net
+ * Tangerang, 26 Maret 2021
+ *
+ * digenerate dengan FGTA4 generator
+ * tanggal 03/12/2021
+ */
+$API = new class extends deptgroupBase {
 	
 	public function execute($data, $options) {
 		$tablename = 'mst_deptgroup';
@@ -47,6 +51,14 @@ class DataSave extends WebAPI {
 			$this->db->beginTransaction();
 
 			try {
+				
+				$tabletodelete = [];
+				foreach ($tabletodelete as $reftablename) {
+					$cmd = \FGTA4\utils\SqlUtility::CreateSQLDelete($reftablename, $key);
+					$stmt = $this->db->prepare($cmd->sql);
+					$stmt->execute($cmd->params);
+				}
+		
 				$cmd = \FGTA4\utils\SqlUtility::CreateSQLDelete($tablename, $key);
 				$stmt = $this->db->prepare($cmd->sql);
 				$stmt->execute($cmd->params);
@@ -70,6 +82,4 @@ class DataSave extends WebAPI {
 		}
 	}
 
-}
-
-$API = new DataSave();
+};

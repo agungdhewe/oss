@@ -5,15 +5,11 @@ import * as fgta4pageslider from '../../../../../index.php/asset/fgta/framework/
 import * as apis from './accbudget.apis.mjs'
 import * as pList from './accbudget-list.mjs'
 import * as pEdit from './accbudget-edit.mjs'
-import * as pEditCoagrid from './accbudget-coagrid.mjs'
-import * as pEditCoaform from './accbudget-coaform.mjs'
 
 
 
 const pnl_list = $('#pnl_list')
 const pnl_edit = $('#pnl_edit')
-const pnl_editcoagrid = $('#pnl_editcoagrid')
-const pnl_editcoaform = $('#pnl_editcoaform')
 
 
 
@@ -39,8 +35,7 @@ export async function init(opt) {
 		.initPages([
 			{panel: pnl_list, handler: pList},
 			{panel: pnl_edit, handler: pEdit},
-			{panel: pnl_editcoagrid, handler: pEditCoagrid},
-			{panel: pnl_editcoaform, handler: pEditCoaform}			
+			
 		], opt)
 
 	$ui.setPages(pages)

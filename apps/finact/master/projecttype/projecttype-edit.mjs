@@ -15,7 +15,6 @@ const pnl_form = $('#pnl_edit-form')
 const obj = {
 	txt_projecttype_id: $('#pnl_edit-txt_projecttype_id'),
 	txt_projecttype_name: $('#pnl_edit-txt_projecttype_name'),
-	chk_projecttype_isdisabled: $('#pnl_edit-chk_projecttype_isdisabled'),
 	txt_projecttype_descr: $('#pnl_edit-txt_projecttype_descr')
 }
 
@@ -191,7 +190,6 @@ export function createnew() {
 		form.rowid = null
 
 		// set nilai-nilai default untuk form
-		data.projecttype_isdisabled = '0'
 
 
 

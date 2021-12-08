@@ -28,10 +28,21 @@ module.exports = {
 						api: 'ent/organisation/unit/list'
 					})
 				},
-				orderin_ref: { text: 'Ref', type: dbtype.varchar(90), null: false,  options: { required: true, invalidMessage: 'Descr harus diisi' } },
-				orderin_descr: { text: 'Descr', type: dbtype.varchar(90), null: false,  options: { required: true, invalidMessage: 'Descr harus diisi' } },
+
+				orderintype_id: {
+					text:'Order Type', type: dbtype.varchar(10), null:true, suppresslist: true,
+					options: { required: true, invalidMessage: 'Order Type Harus diisi', disabled:false } ,
+					comp: comp.Combo({
+						table: 'mst_orderintype', 
+						field_value: 'orderintype_id', field_display: 'orderintype_name',  field_display_name: 'orderintype_name',
+						api: 'finact/sales/orderintype'
+					})
+				},
+
+				
+				orderin_ref: { text: 'Ref', type: dbtype.varchar(90), null: true,  options: { required: true, invalidMessage: 'Descr harus diisi' } },
+				orderin_descr: { text: 'Descr', type: dbtype.varchar(90), null: true,  options: { required: true, invalidMessage: 'Descr harus diisi' } },
 				orderin_dtstart: {text:'Date Start', type: dbtype.date, null:false},
-				orderin_eta: {text:'Date ETA', type: dbtype.date, null:false},
 				orderin_dtend: {text:'Date End', type: dbtype.date, null:false, suppresslist: true},
 
 				partner_id: {
@@ -44,31 +55,6 @@ module.exports = {
 					})
 				},
 
-				partnercontact_id: {
-					text:'Partner Contact', type: dbtype.varchar(14), null:true, suppresslist: true,
-					options: { required: true, invalidMessage: 'Nama kontak partner harus diisi', disabled:false } ,
-					comp: comp.Combo({
-						table: 'mst_partnercontact', 
-						field_value: 'partnercontact_id', field_display: 'partnercontact_name',  field_display_name: 'partnercontact_name',
-						api: 'ent/affiliation/partner/contact-list'
-					})
-				},
-
-				partnercontact_position: {text:'Position', type: dbtype.varchar(30), null:false, uppercase: true, suppresslist: true, options:{disabled:true}},
-				partnercontact_mobilephone: {text:'HP', type: dbtype.varchar(30), null:false, uppercase: true, suppresslist: true, options:{disabled:true}},
-				partnercontact_email: {text:'Email', type: dbtype.varchar(150), null:false, uppercase: true, suppresslist: true, options:{validType: ['email'],disabled:true}},
-
-				orderin_isunquot: {text:'Without Quotation', type: dbtype.boolean, null:false, default:'0', suppresslist: true, options:{labelWidth:'200px'}},
-				quot_id: {
-					text: 'Quotation', type: dbtype.varchar(30), null: true, suppresslist: true,
-					options: { prompt: 'NONE'},
-					comp: comp.Combo({
-						table: 'trn_quot',
-						field_value: 'quot_id', field_display: 'quot_descr', field_display_name: 'quot_descr',
-						api: 'finact/sales/quot/list'
-					})
-				},
-
 				ae_empl_id: {
 					text:'AE', type: dbtype.varchar(14), null:true, suppresslist: true,
 					options:{prompt:'NONE'},
@@ -77,7 +63,6 @@ module.exports = {
 						field_value: 'empl_id', field_display: 'empl_name',  field_display_name: 'ae_empl_name',
 						api: 'hrms/master/empl/list'})
 				},	
-
 
 				trxmodel_id: { 
 					text: 'Model Trx', type: dbtype.varchar(10), null: false, suppresslist: true,
@@ -89,41 +74,6 @@ module.exports = {
 					})				
 				},
 
-				site_id: {
-					text:'Item From', type: dbtype.varchar(30), null:true, suppresslist: true,
-					options:{required:true,invalidMessage:'Site harus diisi', prompt:'-- PILIH --'},
-					comp: comp.Combo({
-						table: 'mst_site', 
-						field_value: 'site_id', field_display: 'site_name', 
-						api: 'ent/location/site/list'})				
-				},
-
-				sender_dept_id: {
-					text: 'Sender Dept', type: dbtype.varchar(30), null: false, suppresslist: true,
-					
-					options: { required: true, invalidMessage: 'Departemen harus diisi'},
-					comp: comp.Combo({
-						table: 'mst_dept',
-						field_value: 'dept_id', field_display: 'dept_name', field_display_name: 'recv_dept_name',
-						api: 'ent/organisation/dept/list'
-					})
-				},
-				deliver_siteaddress: {text:'To Address', type: dbtype.varchar(250), null:true, suppresslist: true, uppercase: false},
-				deliver_city: {text:'To City', type: dbtype.varchar(60), null:true, uppercase: true, suppresslist: true},
-				deliver_upname: {text:'To UP Name', type: dbtype.varchar(60), null:true, uppercase: true, suppresslist: true},
-				deliver_uptelp: {text:'To UP Telp', type: dbtype.varchar(60), null:true, uppercase: true, suppresslist: true},
-
-				curr_id: {
-					text:'Currency', type: dbtype.varchar(10), null:false, suppresslist: true,
-					options:{required:true,invalidMessage:'Currency harus diisi', prompt:'-- PILIH --'},
-					comp: comp.Combo({
-						table: 'mst_curr', 
-						field_value: 'curr_id', field_display: 'curr_name', 
-						api: 'ent/general/curr/list'})
-				},
-				curr_rate: { text: 'Rate', type: dbtype.decimal(12,0), null:false, suppresslist: true, default:0},
-
-
 				project_id: {
 					text: 'Project', type: dbtype.varchar(30), null: true, suppresslist: true, hidden: true,
 					options: { prompt: 'NONE' },
@@ -134,17 +84,9 @@ module.exports = {
 					})
 				},
 
-				projecttask_id: {
-					text: 'Project Task', type: dbtype.varchar(14), null: true, suppresslist: true, hidden: true,
-					options: { prompt: 'NONE' },
-					comp: comp.Combo({
-						table: 'mst_projecttask',
-						field_value: 'projecttask_id', field_display: 'projecttask_name',
-						api: 'finact/master/projecttask/list-byproject'
-					})
-				},
-
-				ppn_taxtype_id: { text: 'PPN', type: dbtype.varchar(10), null: true, suppresslist: true,
+				ppn_taxtype_id: { 
+					section: section.Begin('Tax'),  //section.Begin('Related Dept', 'defbottomborder'),
+					text: 'PPN', type: dbtype.varchar(10), null: true, suppresslist: true,
 					options: { prompt: 'NONE' }, 
 					comp: comp.Combo({
 						table: 'mst_taxtype', 
@@ -152,6 +94,9 @@ module.exports = {
 						api: 'finact/master/taxtype/list'})				
 				
 				},
+				ppn_taxvalue: { text: 'PPN Value (%)', type: dbtype.decimal(4,2), null: false, default:0, suppresslist: true, options: { disabled: true} },
+				ppn_include: {text:'PPN Include', type: dbtype.boolean, null:false, default:'0', suppresslist: true, options: { disabled: true}},
+
 
 				pph_taxtype_id: { text: 'PPh', type: dbtype.varchar(10), null: true, suppresslist: true,
 					options: { prompt: 'NONE' }, 
@@ -162,45 +107,126 @@ module.exports = {
 			
 				},
 
+				pph_taxvalue: { 
+					section: section.End(),  //section.Begin('Related Dept', 'defbottomborder'),
+					text: 'PPH Value (%)', type: dbtype.decimal(4,2), null: false, default:0, suppresslist: true, options: { disabled: true} 
+				},
+
+
+				// *Sub Total
+				// *Discount
+				// *Total
+				// *PPH Value
+				// *Sales Nett
+				// *PPN Value
+				// Outstanding Payment
+				// Biaya Administrasi
+				// Additional Charge (non PPN)
+
+
+
+
+
+				sales_coa_id: { 
+					section: section.Begin('Account'),  //section.Begin('Related Dept', 'defbottomborder'),
+					text: 'COA Sales', type: dbtype.varchar(10), null: false, suppresslist: true,
+					options: { required: true, invalidMessage: 'OrderIn Sales COA harus diisi' }, 
+					tips: '',
+					tipstype: 'visible',
+					comp: comp.Combo({
+						table: 'mst_coa', 
+						field_value: 'coa_id', field_display: 'coa_name', field_display_name: 'sales_coa_name', 
+						api: 'finact/master/coa/list'})				
+				
+				},	
+				
+				salesdisc_coa_id: { 
+					text: 'COA Disc Sales', type: dbtype.varchar(10), null: true, suppresslist: true,
+					options: { prompt: 'NONE' }, 
+					tips: '',
+					tipstype: 'visible',
+					comp: comp.Combo({
+						table: 'mst_coa', 
+						field_value: 'coa_id', field_display: 'coa_name', field_display_name: 'salesdisc_coa_name', 
+						api: 'finact/master/coa/list'})				
+				},
+
+				ppn_coa_id: { 
+					text: 'COA PPN Payable', type: dbtype.varchar(10), null: true, suppresslist: true,
+					options: { prompt: 'NONE' }, 
+					tips: '',
+					tipstype: 'visible',
+					comp: comp.Combo({
+						table: 'mst_coa', 
+						field_value: 'coa_id', field_display: 'coa_name', field_display_name: 'ppn_coa_name', 
+						api: 'finact/master/coa/list'})				
+				},
+
+				ppnsubsidi_coa_id: { 
+					text: 'COA Subsidi PPN', type: dbtype.varchar(10), null: true, suppresslist: true,
+					options: { prompt: 'NONE' }, 
+					tips: 'Apabila PPN include COA ini perlu diisi',
+					tipstype: 'visible',
+					comp: comp.Combo({
+						table: 'mst_coa', 
+						field_value: 'coa_id', field_display: 'coa_name', field_display_name: 'ppnsubsidi_coa_name', 
+						api: 'finact/master/coa/list'})				
+				},
+
+				pph_coa_id: { 
+					text: 'COA PPH Prepaid', type: dbtype.varchar(10), null: true, suppresslist: true,
+					options: { prompt: 'NONE' }, 
+					tips: '',
+					tipstype: 'visible',
+					comp: comp.Combo({
+						table: 'mst_coa', 
+						field_value: 'coa_id', field_display: 'coa_name', field_display_name: 'pph_coa_name', 
+						api: 'finact/master/coa/list'})				
+				},						
+
+
+
 				sales_dept_id: {
+					section: section.End(), 
 					text: 'Item Owner Dept', type: dbtype.varchar(30), null: false, suppresslist: true,
 					options: { required: true, invalidMessage: 'Departemen harus diisi'},
 					comp: comp.Combo({
 						table: 'mst_dept',
-						field_value: 'dept_id', field_display: 'dept_name', field_display_name: 'owner_dept_name',
+						field_value: 'dept_id', field_display: 'dept_name', field_display_name: 'sales_dept_name',
 						api: 'ent/organisation/dept/list'
 					})
 				},
 
-				doc_id: {
-					text:'Order Doc', type: dbtype.varchar(30), null:false, uppercase: true, suppresslist: true,
-					options: {required:true, invalidMessage:'ID harus diisi', disabled: true },
-					comp: comp.Combo({
-						table: 'mst_doc',
-						field_value: 'doc_id', field_display: 'doc_name', field_display_name: 'doc_name',
-						api: 'ent/organisation/docs/list'
-					})				
-				},
+
+
+				orderin_totalitem: { text: 'Total Item', type: dbtype.int(5), null: false, default:0, suppresslist: true, options: { disabled: true} },
+				orderin_totalqty: { text: 'Total Qty', type: dbtype.int(5), null: false, default:0, suppresslist: true, options: { disabled: true} },
+
+				orderin_salesgross: { text: 'Gross Sales', type: dbtype.decimal(16,0), null: false, default:0, suppresslist: true, options: { disabled: true} },
+				orderin_discount: { text: 'Dicount', type: dbtype.decimal(16,0), null: false, default:0, suppresslist: true, options: { disabled: true} },
+				orderin_subtotal: { text: 'Sub Total', type: dbtype.decimal(16,0), null: false, default:0, suppresslist: true, options: { disabled: true} },
+				orderin_pph: { text: 'PPh', type: dbtype.decimal(16,0), null: false, default:0, suppresslist: true, options: { disabled: true} },
+				orderin_nett: { text: 'Sales Nett', type: dbtype.decimal(16,0), null: false, default:0, suppresslist: true, options: { disabled: true} },
+				orderin_ppn: { text: 'PPN', type: dbtype.decimal(16,0), null: false, default:0, suppresslist: true, options: { disabled: true} },
+				orderin_total: { text: 'Total', type: dbtype.decimal(16,0), null: false, default:0, suppresslist: true, options: { disabled: true} },
+				orderin_totaladdcost: { text: 'Additional Cost', type: dbtype.decimal(16,0), null: false, default:0, suppresslist: true, options: { disabled: true} },
+				orderin_payment: { text: 'Total Payment', type: dbtype.decimal(16,0), null: false, default:0, suppresslist: true, options: { disabled: true} },
+
+
+
+
 				orderin_version: {text:'Doc Version', type: dbtype.int(4), null:false, default:'0', suppresslist: true, options:{disabled:true}},
 				orderin_isdateinterval: { text: 'Date Interval', type: dbtype.boolean, null: false, default: '0', suppresslist: true, options: {disabled: true} },
 				orderin_iscommit: {text:'Commit', type: dbtype.boolean, null:false, default:'0', unset:true, suppresslist: true, options:{disabled:true}},
 				orderin_commitby: {text:'CommitBy', type: dbtype.varchar(14), suppresslist: true, unset:true, options:{disabled:true}, hidden: true, lookup:'user'},
 				orderin_commitdate: {text:'CommitDate', type: dbtype.datetime, suppresslist: true, unset:true, comp:comp.Textbox(), options:{disabled:true}, hidden: true},	
-				// orderin_isapprovalprogress: {text:'Progress', type: dbtype.boolean, null:false, default:'0', unset:true, suppresslist: true, options:{disabled:true}, hidden: true},
-				// orderin_isapproved: { text: 'Approved', type: dbtype.boolean, null: false, default: '0', unset:true, options: { disabled: true } },
-				// orderin_approveby: { text: 'Approve By', type: dbtype.varchar(14), suppresslist: true, unset:true, options: { disabled: true }, hidden: true, lookup:'user' },
-				// orderin_approvedate: { text: 'Approve Date', type: dbtype.datetime, suppresslist: true, unset:true, comp: comp.Textbox(), options: { disabled: true }, hidden: true },
-				// orderin_isdeclined: { text: 'Declined', type: dbtype.boolean, null: false, default: '0', unset:true, suppresslist: true, options: { disabled: true } },
-				// orderin_declineby: { text: 'Decline By', type: dbtype.varchar(14), suppresslist: true, unset:true, options: { disabled: true }, hidden: true, lookup:'user' },
-				// orderin_declinedate: { text: 'Decline Date', type: dbtype.datetime, suppresslist: true, unset:true, comp: comp.Textbox(), options: { disabled: true }, hidden: true },
 				orderin_isclose: { text: 'Close', type: dbtype.boolean, null: false, default: '0', unset:true, options: { disabled: true } },
 				orderin_closeby: { text: 'Close By', type: dbtype.varchar(14), suppresslist: true, unset:true, options: { disabled: true }, hidden: true, lookup:'user'},
 				orderin_closedate: { text: 'Close Date', type: dbtype.datetime, suppresslist: true, unset:true, comp: comp.Textbox(), options: { disabled: true } , hidden: true},
-				// orderin_isadvance: { text: 'Use Advance Request', type: dbtype.boolean, null: false, default: '0', suppresslist: true, options: {labelWidth: '300px'} , hidden: true},
 				orderin_isautogenerated: { text: 'Auto Generated', type: dbtype.boolean, null: false, default: '0', unset:true, suppresslist: true, options: { labelWidth: '300px', disabled: true } },
 			},
 			
-			defaultsearch: ['orderout_id', 'orderout_descr']
+			defaultsearch: ['orderin_id', 'orderin_descr']
 		},
 
 		/*

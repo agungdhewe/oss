@@ -8,7 +8,7 @@
 
 	<form id="pnl_editdelegateform-form">
 
-		<div class="form_row">
+		<div class="form_row" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">ID</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdelegateform-txt_authdelegate_id" class="easyui-textbox" mapping="authdelegate_id"  maxlength="14"  style="width: 400px" data-options="multiline:false  ">
@@ -16,26 +16,26 @@
 			</div>
 		</div>
 
-		<div class="form_row">
+		<div class="form_row" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Porsi</div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editdelegateform-txt_authdelegate_portion" class="easyui-numberbox" mapping="authdelegate_portion" style="width: 400px; text-align:right" data-options="precision: 0, required: true, invalidMessage: 'Porsi harus diisi angka 1 sd 100', min:1, max:100">
+				<input id="pnl_editdelegateform-txt_authdelegate_portion" class="easyui-numberbox" mapping="authdelegate_portion" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  , required: true, invalidMessage: 'Porsi harus diisi angka 1 sd 100', validType: 'range[1,100]'">
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>
 
-		<div class="form_row">
+		<div class="form_row" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Empl</div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editdelegateform-cbo_empl_id" class="easyui-combo" style="width: 400px" mapping="empl_id" display="empl_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Employee harus diisi', prompt: '-- PILIH --'">
+				<input id="pnl_editdelegateform-cbo_empl_id" class="easyui-combo" style="width: 400px" mapping="empl_id" display="empl_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Employee harus diisi', prompt: '-- PILIH --'"  validType="requiredcombo['pnl_editdelegateform-cbo_empl_id']" >
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>
 
-		<div class="form_row">
+		<div class="form_row" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">ID</div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editdelegateform-txt_auth_id" class="easyui-textbox" mapping="auth_id" uppercase="true" maxlength="30"  style="width: 400px" data-options="multiline:false  , disabled: true">
+				<input id="pnl_editdelegateform-txt_auth_id" class="easyui-textbox" mapping="auth_id"  maxlength="30"  style="width: 400px" data-options="multiline:false  , disabled: true">
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>

@@ -23,7 +23,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 13/06/2021
+ * tanggal 06/12/2021
  */
 $API = new class extends projbudgetrevBase {
 
@@ -38,7 +38,7 @@ $API = new class extends projbudgetrevBase {
 				throw new \Exception('your group authority is not allowed to do this action.');
 			}
 
-
+			// \FGTA4\utils\SqlUtility::setDefaultCriteria($options->criteria, '--fieldscriteria--', '--value--');
 			$where = \FGTA4\utils\SqlUtility::BuildCriteria(
 				$options->criteria,
 				[
@@ -58,7 +58,7 @@ $API = new class extends projbudgetrevBase {
 			$limit = " LIMIT $maxrow OFFSET $offset ";
 			$stmt = $this->db->prepare("
 				select 
-				projbudgetrev_id, dept_id, projbudget_id, projbudgetrev_descr, project_id, projbudget_year, projbudget_month, doc_id, projbudgetrev_notes, projbudgetrev_version, projbudgetrev_iscommit, projbudgetrev_commitby, projbudgetrev_commitdate, projbudgetrev_isapprovalprogress, projbudgetrev_isapproved, projbudgetrev_approveby, projbudgetrev_approvedate, projbudgetrev_isdeclined, projbudgetrev_declineby, projbudgetrev_declinedate, projbudgetrev_isclose, projbudgetrev_closeby, projbudgetrev_closedate, _createby, _createdate, _modifyby, _modifydate 
+				A.projbudgetrev_id, A.dept_id, A.projbudget_id, A.projbudgetrev_descr, A.project_id, A.projbudget_year, A.projbudget_month, A.projbudget_isdeptalloc, A.doc_id, A.projbudgetrev_notes, A.projbudgetrev_version, A.projbudgetrev_iscommit, A.projbudgetrev_commitby, A.projbudgetrev_commitdate, A.projbudgetrev_isapprovalprogress, A.projbudgetrev_isapproved, A.projbudgetrev_approveby, A.projbudgetrev_approvedate, A.projbudgetrev_isdeclined, A.projbudgetrev_declineby, A.projbudgetrev_declinedate, A.projbudgetrev_isclose, A.projbudgetrev_closeby, A.projbudgetrev_closedate, A._createby, A._createdate, A._modifyby, A._modifydate 
 				from mst_projbudgetrev A
 			" . $where->sql . $limit);
 			$stmt->execute($where->params);
@@ -79,10 +79,10 @@ $API = new class extends projbudgetrevBase {
 					'projbudget_name' => \FGTA4\utils\SqlUtility::Lookup($record['projbudget_id'], $this->db, 'mst_projbudget', 'projbudget_id', 'projbudget_name'),
 					'project_name' => \FGTA4\utils\SqlUtility::Lookup($record['project_id'], $this->db, 'mst_project', 'project_id', 'project_name'),
 					'doc_name' => \FGTA4\utils\SqlUtility::Lookup($record['doc_id'], $this->db, 'mst_doc', 'doc_id', 'doc_name'),
-				'projbudgetrev_commitby' => \FGTA4\utils\SqlUtility::Lookup($record['projbudgetrev_commitby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
-				'projbudgetrev_approveby' => \FGTA4\utils\SqlUtility::Lookup($record['projbudgetrev_approveby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
-				'projbudgetrev_declineby' => \FGTA4\utils\SqlUtility::Lookup($record['projbudgetrev_declineby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
-				'projbudgetrev_closeby' => \FGTA4\utils\SqlUtility::Lookup($record['projbudgetrev_closeby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+					'projbudgetrev_commitby' => \FGTA4\utils\SqlUtility::Lookup($record['projbudgetrev_commitby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+					'projbudgetrev_approveby' => \FGTA4\utils\SqlUtility::Lookup($record['projbudgetrev_approveby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+					'projbudgetrev_declineby' => \FGTA4\utils\SqlUtility::Lookup($record['projbudgetrev_declineby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+					'projbudgetrev_closeby' => \FGTA4\utils\SqlUtility::Lookup($record['projbudgetrev_closeby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
 					 
 				]));
 			}

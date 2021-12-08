@@ -30,13 +30,14 @@ const obj = {
 	txt_deptbudgetdet_12: $('#pnl_editdetilform-txt_deptbudgetdet_12'),
 	txt_deptbudgetdet_total: $('#pnl_editdetilform-txt_deptbudgetdet_total'),
 	cbo_accbudget_id: $('#pnl_editdetilform-cbo_accbudget_id'),
+	txt_coa_id: $('#pnl_editdetilform-txt_coa_id'),
 	txt_coareport_id: $('#pnl_editdetilform-txt_coareport_id'),
 	txt_deptbudgetdet_notes: $('#pnl_editdetilform-txt_deptbudgetdet_notes'),
 	txt_deptbudget_id: $('#pnl_editdetilform-txt_deptbudget_id')
 }
 
 
-let form = {}
+let form;
 let header_data = {}
 
 
@@ -94,7 +95,8 @@ export async function init(opt) {
 		},
 		OnSelected: (value, display, record, args) => {
 			if (value!=args.PreviousValue ) {				
-				form.setValue(obj.txt_deptbudgetdet_descr, record.accbudget_descr)
+				form.setValue(obj.txt_deptbudgetdet_descr, record.accbudget_descr.trim() == '' ? record.accbudget_name : record.accbudget_descr)
+				form.setValue(obj.txt_coa_id, record.coa_id)
 				form.setValue(obj.txt_coareport_id, record.coareport_id)
 				txt_deptbudgetdet_valuechanged()
 			}
@@ -440,15 +442,9 @@ function txt_deptbudgetdet_valuechanged(newvalue, oldvalue) {
 	var deptbudgetdet_11 = parseFloat(obj.txt_deptbudgetdet_11.numberbox('getValue'));
 	var deptbudgetdet_12 = parseFloat(obj.txt_deptbudgetdet_12.numberbox('getValue'));
 
-	var total = 0
-	if (coareport_id!='NR') {
-		total = deptbudgetdet_01 + deptbudgetdet_02 + deptbudgetdet_03 + deptbudgetdet_04 
+	var total = deptbudgetdet_01 + deptbudgetdet_02 + deptbudgetdet_03 + deptbudgetdet_04 
 			+ deptbudgetdet_05 + deptbudgetdet_06 + deptbudgetdet_07 + deptbudgetdet_08
 			+ deptbudgetdet_09 + deptbudgetdet_10 + deptbudgetdet_11 + deptbudgetdet_12
-
-	} else {
-		total = deptbudgetdet_12
-	}
 
 	// obj.txt_deptbudgetdet_total.numberbox('setValue', total);
 	form.setValue(obj.txt_deptbudgetdet_total, total);

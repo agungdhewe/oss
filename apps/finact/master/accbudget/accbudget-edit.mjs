@@ -14,21 +14,19 @@ const btn_delete = $('#pnl_edit-btn_delete')
 const pnl_form = $('#pnl_edit-form')
 const obj = {
 	txt_accbudget_id: $('#pnl_edit-txt_accbudget_id'),
+	cbo_accbudgetgroup_id: $('#pnl_edit-cbo_accbudgetgroup_id'),
 	txt_accbudget_name: $('#pnl_edit-txt_accbudget_name'),
 	txt_accbudget_nameshort: $('#pnl_edit-txt_accbudget_nameshort'),
 	chk_accbudget_isdisabled: $('#pnl_edit-chk_accbudget_isdisabled'),
 	txt_accbudget_descr: $('#pnl_edit-txt_accbudget_descr'),
-	cbo_accbudgetgroup_id: $('#pnl_edit-cbo_accbudgetgroup_id'),
 	cbo_accbudgetmodel_id: $('#pnl_edit-cbo_accbudgetmodel_id'),
-	cbo_accbudgettype_id: $('#pnl_edit-cbo_accbudgettype_id'),
-	cbo_coa_id: $('#pnl_edit-cbo_coa_id'),
-	txt_coa_nameshort: $('#pnl_edit-txt_coa_nameshort'),
+	cbo_coa_id: $('#pnl_edit-cbo_coa_id')
 }
 
 
 
 
-let form = {}
+let form;
 
 export async function init(opt) {
 	this_page_id = opt.id;
@@ -84,11 +82,16 @@ export async function init(opt) {
 			{mapping: 'accbudgetgroup_id', text: 'accbudgetgroup_id'},
 			{mapping: 'accbudgetgroup_name', text: 'accbudgetgroup_name'},
 		],
-		OnDataLoading: (criteria) => {},
-		OnDataLoaded : (result, options) => {
-			result.records.unshift({accbudgetgroup_id:'--NULL--', accbudgetgroup_name:'NONE'});	
+		OnDataLoading: (criteria) => {
+						
 		},
-		OnSelected: (value, display, record) => {}
+		OnDataLoaded : (result, options) => {
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {		
+				form.setValue(obj.cbo_accbudgetmodel_id, record.accbudgetmodel_id, record.accbudgetmodel_name)		
+			}
+		}
 	})				
 				
 	new fgta4slideselect(obj.cbo_accbudgetmodel_id, {
@@ -102,29 +105,16 @@ export async function init(opt) {
 			{mapping: 'accbudgetmodel_id', text: 'accbudgetmodel_id'},
 			{mapping: 'accbudgetmodel_name', text: 'accbudgetmodel_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+						
+		},
 		OnDataLoaded : (result, options) => {
 				
 		},
-		OnSelected: (value, display, record) => {}
-	})				
-				
-	new fgta4slideselect(obj.cbo_accbudgettype_id, {
-		title: 'Pilih accbudgettype_id',
-		returnpage: this_page_id,
-		api: $ui.apis.load_accbudgettype_id,
-		fieldValue: 'accbudgettype_id',
-		fieldValueMap: 'accbudgettype_id',
-		fieldDisplay: 'accbudgettype_name',
-		fields: [
-			{mapping: 'accbudgettype_id', text: 'accbudgettype_id'},
-			{mapping: 'accbudgettype_name', text: 'accbudgettype_name'},
-		],
-		OnDataLoading: (criteria) => {},
-		OnDataLoaded : (result, options) => {
-			result.records.unshift({accbudgettype_id:'--NULL--', accbudgettype_name:'NONE'});	
-		},
-		OnSelected: (value, display, record) => {}
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {				
+			}
+		}
 	})				
 				
 	new fgta4slideselect(obj.cbo_coa_id, {
@@ -138,12 +128,15 @@ export async function init(opt) {
 			{mapping: 'coa_id', text: 'coa_id'},
 			{mapping: 'coa_name', text: 'coa_name'},
 		],
-		OnDataLoading: (criteria) => {},
-		OnDataLoaded : (result, options) => {
-			// result.records.unshift({coa_id:'--NULL--', coa_name:'NONE'});	
+		OnDataLoading: (criteria) => {
+						
 		},
-		OnSelected: (value, display, record) => {
-			form.setValue(obj.txt_coa_nameshort, record.coa_nameshort);
+		OnDataLoaded : (result, options) => {
+			result.records.unshift({coa_id:'--NULL--', coa_name:'NONE'});	
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {				
+			}
 		}
 	})				
 				
@@ -193,66 +186,71 @@ export async function init(opt) {
 		}
 	})
 
-
+	//button state
 
 }
-
 
 export function OnSizeRecalculated(width, height) {
 }
 
-
+export function getForm() {
+	return form
+}
 
 
 export function open(data, rowid, viewmode=true, fn_callback) {
 
-
+	var pOpt = form.getDefaultPrompt(false)
 	var fn_dataopening = async (options) => {
 		options.criteria[form.primary.mapping] = data[form.primary.mapping]
 	}
 
 	var fn_dataopened = async (result, options) => {
+		var record = result.record;
+		updatefilebox(record);
 
-		updatefilebox(result.record);
-
+		/*
 		if (result.record.accbudgetgroup_id==null) { result.record.accbudgetgroup_id='--NULL--'; result.record.accbudgetgroup_name='NONE'; }
-		if (result.record.accbudgettype_id==null) { result.record.accbudgettype_id='--NULL--'; result.record.accbudgettype_name='NONE'; }
-		// if (result.record.coa_id==null) { result.record.coa_id='--NULL--'; result.record.coa_name='NONE'; }
+		if (result.record.coa_id==null) { result.record.coa_id='--NULL--'; result.record.coa_name='NONE'; }
 
-  		updaterecordstatus(result.record)
+		*/
+		for (var objid in obj) {
+			let o = obj[objid]
+			if (o.isCombo() && !o.isRequired()) {
+				var value =  result.record[o.getFieldValueName()];
+				if (value==null ) {
+					record[o.getFieldValueName()] = pOpt.value;
+					record[o.getFieldDisplayName()] = pOpt.text;
+				}
+			}
+		}
+  		updaterecordstatus(record)
 
 		form.SuspendEvent(true);
 		form
-			.fill(result.record)
-			.setValue(obj.cbo_accbudgetgroup_id, result.record.accbudgetgroup_id, result.record.accbudgetgroup_name)
-			.setValue(obj.cbo_accbudgetmodel_id, result.record.accbudgetmodel_id, result.record.accbudgetmodel_name)
-			.setValue(obj.cbo_accbudgettype_id, result.record.accbudgettype_id, result.record.accbudgettype_name)
-			.setValue(obj.cbo_coa_id, result.record.coa_id, result.record.coa_name)
-			.commit()
+			.fill(record)
+			.setValue(obj.cbo_accbudgetgroup_id, record.accbudgetgroup_id, record.accbudgetgroup_name)
+			.setValue(obj.cbo_accbudgetmodel_id, record.accbudgetmodel_id, record.accbudgetmodel_name)
+			.setValue(obj.cbo_coa_id, record.coa_id, record.coa_name)
 			.setViewMode(viewmode)
 			.lock(false)
 			.rowid = rowid
 
+
+		/* tambahkan event atau behaviour saat form dibuka
+		   apabila ada rutin mengubah form dan tidak mau dijalankan pada saat opening,
+		   cek dengan form.isEventSuspended()
+		*/   
+
+
+
+		/* commit form */
+		form.commit()
+		form.SuspendEvent(false); 
+		updatebuttonstate(record)
+
 		// tampilkan form untuk data editor
 		fn_callback()
-		form.SuspendEvent(false);
-
-		updatebuttonstate(result.record)
-		
-
-
-		// fill data, bisa dilakukan secara manual dengan cara berikut:	
-		// form
-			// .setValue(obj.txt_id, result.record.id)
-			// .setValue(obj.txt_nama, result.record.nama)
-			// .setValue(obj.cbo_prov, result.record.prov_id, result.record.prov_nama)
-			// .setValue(obj.chk_isdisabled, result.record.disabled)
-			// .setValue(obj.txt_alamat, result.record.alamat)
-			// ....... dst dst
-			// .commit()
-			// .setViewMode()
-			// ....... dst dst
-
 	}
 
 	var fn_dataopenerror = (err) => {
@@ -271,22 +269,19 @@ export function createnew() {
 		form.rowid = null
 
 		// set nilai-nilai default untuk form
+		data.accbudget_isdisabled = '0'
 
-		data.accbudgetgroup_id = '--NULL--'
-		data.accbudgetgroup_name = 'NONE'
+		data.accbudgetgroup_id = '0'
+		data.accbudgetgroup_name = '-- PILIH --'
 		data.accbudgetmodel_id = '0'
 		data.accbudgetmodel_name = '-- PILIH --'
-		data.accbudgettype_id = '--NULL--'
-		data.accbudgettype_name = 'NONE'
 		data.coa_id = '0'
 		data.coa_name = '-- PILIH --'
-
 
 		options.OnCanceled = () => {
 			$ui.getPages().show('pnl_list')
 		}
 
-		$ui.getPages().ITEMS['pnl_editcoagrid'].handler.createnew(data, options)
 
 
 	})
@@ -363,8 +358,16 @@ async function form_datasaving(data, options) {
 	//    options.cancel = true
 
 	// Modifikasi object data, apabila ingin menambahkan variabel yang akan dikirim ke server
-
-	options.skipmappingresponse = ["accbudgetgroup_id", "accbudgettype_id"];
+	// options.skipmappingresponse = ['accbudgetgroup_id', 'coa_id', ];
+	options.skipmappingresponse = [];
+	for (var objid in obj) {
+		var o = obj[objid]
+		if (o.isCombo() && !o.isRequired()) {
+			var id = o.getFieldValueName()
+			options.skipmappingresponse.push(id)
+			console.log(id)
+		}
+	}
 
 }
 
@@ -392,11 +395,25 @@ async function form_datasaved(result, options) {
 
 	var data = {}
 	Object.assign(data, form.getData(), result.dataresponse)
-
+	/*
 	form.setValue(obj.cbo_accbudgetgroup_id, result.dataresponse.accbudgetgroup_name!=='--NULL--' ? result.dataresponse.accbudgetgroup_id : '--NULL--', result.dataresponse.accbudgetgroup_name!=='--NULL--'?result.dataresponse.accbudgetgroup_name:'NONE')
-	form.setValue(obj.cbo_accbudgettype_id, result.dataresponse.accbudgettype_name!=='--NULL--' ? result.dataresponse.accbudgettype_id : '--NULL--', result.dataresponse.accbudgettype_name!=='--NULL--'?result.dataresponse.accbudgettype_name:'NONE')
-	// form.setValue(obj.cbo_coa_id, result.dataresponse.coa_name!=='--NULL--' ? result.dataresponse.coa_id : '--NULL--', result.dataresponse.coa_name!=='--NULL--'?result.dataresponse.coa_name:'NONE')
+	form.setValue(obj.cbo_coa_id, result.dataresponse.coa_name!=='--NULL--' ? result.dataresponse.coa_id : '--NULL--', result.dataresponse.coa_name!=='--NULL--'?result.dataresponse.coa_name:'NONE')
 
+	*/
+
+	var pOpt = form.getDefaultPrompt(false)
+	for (var objid in obj) {
+		var o = obj[objid]
+		if (o.isCombo() && !o.isRequired()) {
+			var value =  result.dataresponse[o.getFieldValueName()];
+			var text = result.dataresponse[o.getFieldDisplayName()];
+			if (value==null ) {
+				value = pOpt.value;
+				text = pOpt.text;
+			}
+			form.setValue(o, value, text);
+		}
+	}
 	form.rowid = $ui.getPages().ITEMS['pnl_list'].handler.updategrid(data, form.rowid)
 }
 

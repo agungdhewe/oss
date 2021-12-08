@@ -16,7 +16,7 @@ const btn_approve = $('#pnl_edit-btn_approve')
 const btn_decline = $('#pnl_edit-btn_decline')			
 				
 
-const pnl_approval = $('#pnl_edit-approval');
+const pnl_approval = $('.pnl_edit-approval');
 const pnl_form = $('#pnl_edit-form')
 const obj = {
 	txt_deptbudget_id: $('#pnl_edit-txt_deptbudget_id'),
@@ -191,16 +191,21 @@ export async function init(opt) {
 	})
 
 	//button state
-	switch (this_page_options.variancename) {
-		case 'approval' : 
-			btn_edit.hide();
-			btn_save.hide();
-			btn_delete.hide();
-			btn_commit.hide();
-			btn_uncommit.hide();
-			pnl_approval.show();
-			break;
+	if (!this_page_options.privileges.can_edit) {
+		btn_edit.hide();
+		btn_save.hide();
+		btn_delete.hide();	
 	}
+
+	if (!this_page_options.privileges.can_commit) {
+		btn_commit.hide();
+		btn_uncommit.hide();
+	}
+
+	if (!this_page_options.privileges.can_approve) {
+		pnl_approval.hide();
+	}
+
 }
 
 

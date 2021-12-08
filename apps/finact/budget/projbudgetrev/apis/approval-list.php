@@ -24,7 +24,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 13/06/2021
+ * tanggal 06/12/2021
  */
 $API = new class extends projbudgetrevBase {
 
@@ -33,6 +33,7 @@ $API = new class extends projbudgetrevBase {
 		
 		try {
 
+			// \FGTA4\utils\SqlUtility::setDefaultCriteria($options->criteria, '--fieldscriteria--', '--value--');
 			$where = \FGTA4\utils\SqlUtility::BuildCriteria(
 				$options->criteria,
 				[
@@ -56,7 +57,7 @@ $API = new class extends projbudgetrevBase {
 			$limit = " LIMIT $maxrow OFFSET $offset ";
 			$stmt = $this->db->prepare("
 				select 
-				projbudgetrevappr_id, projbudgetrevappr_isapproved, projbudgetrevappr_by, projbudgetrevappr_date, projbudgetrev_version, projbudgetrevappr_isdeclined, projbudgetrevappr_declinedby, projbudgetrevappr_declineddate, projbudgetrevappr_notes, projbudgetrev_id, docauth_descr, docauth_order, docauth_value, docauth_min, authlevel_id, authlevel_name, auth_id, auth_name, _createby, _createdate, _modifyby, _modifydate 
+				A.projbudgetrevappr_id, A.projbudgetrevappr_isapproved, A.projbudgetrevappr_by, A.projbudgetrevappr_date, A.projbudgetrev_version, A.projbudgetrevappr_isdeclined, A.projbudgetrevappr_declinedby, A.projbudgetrevappr_declineddate, A.projbudgetrevappr_notes, A.projbudgetrev_id, A.docauth_descr, A.docauth_order, A.docauth_value, A.docauth_min, A.authlevel_id, A.authlevel_name, A.auth_id, A.auth_name, A._createby, A._createdate, A._modifyby, A._modifydate 
 				from mst_projbudgetrevappr A
 			" . $where->sql . $limit);
 			$stmt->execute($where->params);

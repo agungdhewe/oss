@@ -24,7 +24,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 03/04/2021
+ * tanggal 05/12/2021
  */
 $API = new class extends accbudgetBase {
 	
@@ -50,8 +50,7 @@ $API = new class extends accbudgetBase {
 			);
 
 			$sql = \FGTA4\utils\SqlUtility::Select('mst_accbudget A', [
-				'accbudget_id', 'accbudget_name', 'accbudget_nameshort', 'accbudget_isdisabled', 'accbudget_descr', 'accbudgetgroup_id', 'accbudgetmodel_id', 'accbudgettype_id', 'coa_id', 'coa_nameshort'
-				, '_createby', '_createdate', '_modifyby', '_modifydate' 
+				'accbudget_id', 'accbudgetgroup_id', 'accbudget_name', 'accbudget_nameshort', 'accbudget_isdisabled', 'accbudget_descr', 'accbudgetmodel_id', 'coa_id', '_createby', '_createdate', '_modifyby', '_modifydate'
 			], $where->sql);
 
 			$stmt = $this->db->prepare($sql);
@@ -74,7 +73,6 @@ $API = new class extends accbudgetBase {
 				
 				'accbudgetgroup_name' => \FGTA4\utils\SqlUtility::Lookup($record['accbudgetgroup_id'], $this->db, 'mst_accbudgetgroup', 'accbudgetgroup_id', 'accbudgetgroup_name'),
 				'accbudgetmodel_name' => \FGTA4\utils\SqlUtility::Lookup($record['accbudgetmodel_id'], $this->db, 'mst_accbudgetmodel', 'accbudgetmodel_id', 'accbudgetmodel_name'),
-				'accbudgettype_name' => \FGTA4\utils\SqlUtility::Lookup($record['accbudgettype_id'], $this->db, 'mst_accbudgettype', 'accbudgettype_id', 'accbudgettype_name'),
 				'coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
 
 

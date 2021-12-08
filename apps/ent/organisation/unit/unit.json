@@ -1,6 +1,8 @@
 {
 	"title" : "Unit",
-	"icon" : "icon-unit-white.png",
+	
+	
+	"variance" : {},
 	"allowanonymous" : true,
 	"allowedgroups" : ["public"],
 	"apis" : {

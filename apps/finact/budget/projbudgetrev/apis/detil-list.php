@@ -24,7 +24,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 13/06/2021
+ * tanggal 06/12/2021
  */
 $API = new class extends projbudgetrevBase {
 
@@ -33,6 +33,7 @@ $API = new class extends projbudgetrevBase {
 		
 		try {
 
+			// \FGTA4\utils\SqlUtility::setDefaultCriteria($options->criteria, '--fieldscriteria--', '--value--');
 			$where = \FGTA4\utils\SqlUtility::BuildCriteria(
 				$options->criteria,
 				[
@@ -56,7 +57,7 @@ $API = new class extends projbudgetrevBase {
 			$limit = " LIMIT $maxrow OFFSET $offset ";
 			$stmt = $this->db->prepare("
 				select 
-				projbudgetrevdet_id, accbudget_id, projbudgetrevdet_descr, projbudgetrevdet_qty, projbudgetrevdet_days, projbudgetrevdet_task, projbudgetrevdet_rate, projbudgetrevdet_value, projbudgetrevdet_qty_prev, projbudgetrevdet_days_prev, projbudgetrevdet_task_prev, projbudgetrevdet_rate_prev, projbudgetrevdet_value_prev, projbudgetrevdet_rate_variance, projbudgetrevdet_value_variance, projbudgetrev_id, _createby, _createdate, _modifyby, _modifydate 
+				A.projbudgetrevdet_id, A.budgetrevmode_id, A.projbudgetdet_id, A.accbudget_id, A.alloc_dept_id, A.projbudgetrevdet_descr, A.projbudgetrevdet_qty, A.projbudgetrevdet_days, A.projbudgetrevdet_task, A.projbudgetrevdet_rate, A.projbudgetrevdet_value, A.projbudgetrevdet_qty_prev, A.projbudgetrevdet_days_prev, A.projbudgetrevdet_task_prev, A.projbudgetrevdet_rate_prev, A.projbudgetrevdet_value_prev, A.projbudgetrevdet_rate_variance, A.projbudgetrevdet_value_variance, A.projbudgetrev_id, A._createby, A._createdate, A._modifyby, A._modifydate 
 				from mst_projbudgetrevdet A
 			" . $where->sql . $limit);
 			$stmt->execute($where->params);
@@ -74,7 +75,10 @@ $API = new class extends projbudgetrevBase {
 					//'tanggal' => date("d/m/y", strtotime($record['tanggal'])),
 				 	//'tambahan' => 'dta'
 
+					'budgetrevmode_name' => \FGTA4\utils\SqlUtility::Lookup($record['budgetrevmode_id'], $this->db, 'mst_budgetrevmode', 'budgetrevmode_id', 'budgetrevmode_name'),
+					'projbudgetdet_descr' => \FGTA4\utils\SqlUtility::Lookup($record['projbudgetdet_id'], $this->db, 'mst_projbudgetdet', 'projbudgetdet_id', 'projbudgetdet_descr'),
 					'accbudget_name' => \FGTA4\utils\SqlUtility::Lookup($record['accbudget_id'], $this->db, 'mst_accbudget', 'accbudget_id', 'accbudget_name'),
+					'dept_name' => \FGTA4\utils\SqlUtility::Lookup($record['alloc_dept_id'], $this->db, 'mst_dept', 'dept_id', 'dept_name'),
 					 
 				]));
 			}

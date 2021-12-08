@@ -68,7 +68,7 @@ export async function init(opt) {
 			{mapping: 'dept_id', text: 'dept_id'},
 			{mapping: 'dept_name', text: 'dept_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria, options) => {},
 		OnDataLoaded : (result, options) => {
 				
 		},

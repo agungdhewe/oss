@@ -52,7 +52,7 @@ $API = new class extends inquirymodelBase {
 
 			try {
 				
-				$tabletodelete = [''];
+				$tabletodelete = [];
 				foreach ($tabletodelete as $reftablename) {
 					$cmd = \FGTA4\utils\SqlUtility::CreateSQLDelete($reftablename, $key);
 					$stmt = $this->db->prepare($cmd->sql);

@@ -108,12 +108,11 @@ $API = new class extends logproofBase {
 
 
 
-
 				// result
 				$where = \FGTA4\utils\SqlUtility::BuildCriteria((object)[$primarykey=>$obj->{$primarykey}], [$primarykey=>"$primarykey=:$primarykey"]);
 				$sql = \FGTA4\utils\SqlUtility::Select($tablename , [
 					$primarykey
-					, 'medialogproofupload_id', 'mediaadslot_timestart', 'mediaadslot_timeend', 'mediaadslot_duration', 'mediaadslot_descr', 'mediaadslot_code', 'actual_timestart', 'actual_timeend', 'actual_duration', 'spot_id', 'mediaorder_ref', 'mediaorder_reftype', 'mediaorder_descr', 'mediaorder_id', 'mediaordertype_id', 'agency_code', 'agency_name', 'agency_partner_id', 'advertiser_code', 'advertiser_name', 'advertiser_partner_id', 'brand_code', 'brand_name', 'brand_id', 'programme_code', 'programme_name', 'project_id', 'episode_code', 'episode_name', 'projecttask_id', 'medialogproof_validr', 'medialogproof_ppnidr', 'pph_taxtype_id', 'medialogproof_id', '_createby', '_createdate', '_modifyby', '_modifydate', '_createby', '_createdate', '_modifyby', '_modifydate'
+					, 'medialogproofupload_id', 'nobaris', 'mediaadslot_timestart', 'mediaadslot_timeend', 'mediaadslot_duration', 'mediaadslot_descr', 'mediaadslot_code', 'actual_timestart', 'actual_timeend', 'actual_duration', 'spot_id', 'mediaorder_ref', 'mediaorder_reftype', 'mediaorder_descr', 'mediaorder_id', 'mediaordertype_id', 'agency_code', 'agency_name', 'agency_partner_id', 'advertiser_code', 'advertiser_name', 'advertiser_partner_id', 'brand_code', 'brand_name', 'brand_id', 'programme_code', 'programme_name', 'project_id', 'episode_code', 'episode_name', 'projecttask_id', 'medialogproof_validr', 'medialogproof_ppnidr', 'pph_taxtype_id', 'medialogproof_id', '_createby', '_createdate', '_modifyby', '_modifydate', '_createby', '_createdate', '_modifyby', '_modifydate'
 				], $where->sql);
 				$stmt = $this->db->prepare($sql);
 				$stmt->execute($where->params);

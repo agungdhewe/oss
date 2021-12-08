@@ -16,30 +16,16 @@ module.exports = {
 			primarykeys: ['project_id'],
 			data: {
 				project_id: {text: 'ID', type: dbtype.varchar(30), null: false, options: { required: true, invalidMessage: 'ID harus diisi', disabled: true }},
-				projecttype_id: {
-					text: 'Type', type: dbtype.varchar(10), null: false, suppresslist: true,
-					options: { required: true, invalidMessage: 'Type Project harus diisi' },
-					comp: comp.Combo({
-						table: 'mst_projecttype', field_value: 'projecttype_id', field_display: 'projecttype_name',
-						api: 'finact/master/projecttype/list'
-					})
-				},
 
 				projectmodel_id: {
 					text: 'Type', type: dbtype.varchar(10), null: false, suppresslist: true,
 					options: { required: true, invalidMessage: 'Type Project harus diisi' },
 					comp: comp.Combo({
 						table: 'mst_projectmodel', field_value: 'projectmodel_id', field_display: 'projectmodel_name',
-						api: 'finact/master/projectmodel/list'
-					})
-				},
-
-				orderin_id: {
-					text: 'Order In', type: dbtype.varchar(30), null: true, suppresslist: true,
-					options: { prompt:'NONE' },
-					comp: comp.Combo({
-						table: 'trn_orderin', field_value: 'orderin_id', field_display: 'orderin_descr',
-						api: 'finact/sales/orderin/list'
+						api: 'finact/master/projectmodel/list',
+						OnSelectedScript: `
+				form.setValue(obj.cbo_projecttype_id, record.projecttype_id, record.projecttype_name)		
+						`
 					})
 				},
 
@@ -57,7 +43,25 @@ module.exports = {
 					})
 				},
 				project_isdisabled: { text: 'Disabled', type: dbtype.boolean, null: false, default: '0' },
-				project_isallowalldept: { text: 'Visible to All Dept', type: dbtype.boolean, null: false, default: '0' },
+				project_isallowalldept: { text: 'Visible to All Dept', type: dbtype.boolean, null: false, default: '0', suppresslist: true, options: {labelWidth: '300px'} },
+
+				orderin_id: {
+					text: 'Based on Order In', type: dbtype.varchar(30), null: true, suppresslist: true,
+					options: { prompt:'NONE' },
+					comp: comp.Combo({
+						table: 'trn_orderin', field_value: 'orderin_id', field_display: 'orderin_descr',
+						api: 'finact/sales/orderin/list'
+					})
+				},
+
+				projecttype_id: {
+					text: 'Type', type: dbtype.varchar(10), null: false, suppresslist: true,
+					options: { required: true, invalidMessage: 'Type Project harus diisi', disabled: true },
+					comp: comp.Combo({
+						table: 'mst_projecttype', field_value: 'projecttype_id', field_display: 'projecttype_name',
+						api: 'finact/master/projecttype/list'
+					})
+				},
 
 			},
 			defaultsearch: ['project_id', 'project_name'],

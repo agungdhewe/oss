@@ -1,6 +1,7 @@
 {
 	"title" : "Budget Account Group",
-	"icon" : "icon-accbudgetgroup-white.svg",
+	
+	
 	"variance" : {},
 	"allowanonymous" : true,
 	"allowedgroups" : ["public"],

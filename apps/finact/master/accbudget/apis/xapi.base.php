@@ -26,7 +26,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 03/04/2021
+ * tanggal 05/12/2021
  */
 class accbudgetBase extends WebAPI {
 

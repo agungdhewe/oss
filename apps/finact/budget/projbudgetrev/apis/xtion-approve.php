@@ -29,7 +29,7 @@ use FGTA4\utils\Currency;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 13/06/2021
+ * tanggal 06/12/2021
  */
 $API = new class extends projbudgetrevBase {
 
@@ -154,6 +154,10 @@ $API = new class extends projbudgetrevBase {
 			if ($param->approve) {
 				// echo "approving...\r\n";
 				$ret = StandartApproval::Approve($this->db, $param);
+				if ($ret->isfinalapproval) {
+					$this->ApplyRevToProjbudget($currentdata, $param);
+				}
+
 			} else {
 				// echo "declining...\r\n";
 				StandartApproval::Decline($this->db, $param);
@@ -165,6 +169,107 @@ $API = new class extends projbudgetrevBase {
 		}		
 	}
 
+	public function ApplyRevToProjbudget($currentdata, $param) {
+		$userdata = $currentdata->user;
+		$projbudgetrev_id = $currentdata->header->projbudgetrev_id;
+		$projbudget_id = $currentdata->header->projbudget_id;
+		
+		try {
+
+			$objupd = new \stdClass;
+			$objupd->projbudgetdet_id = null;
+			$objupd->projbudgetdet_qty = null;
+			$objupd->projbudgetdet_days = null;
+			$objupd->projbudgetdet_task = null;
+			$objupd->projbudgetdet_rate = null;
+			$objupd->projbudgetdet_value = null;
+			$objupd->_modifyby = null;
+			$objupd->_modifydate = null;
+
+			$keyupd = new \stdClass;
+			$keyupd->projbudgetdet_id = null;
+
+
+
+
+			$objnew = new \stdClass;
+			$objnew->projbudget_id = null;
+			$objnew->projbudgetdet_id = null;
+			$objnew->accbudget_id = null;
+			$objnew->alloc_dept_id = null;
+			$objnew->projbudgetdet_descr = null;
+			$objnew->projbudgetdet_qty = null;
+			$objnew->projbudgetdet_days = null;
+			$objnew->projbudgetdet_task = null;
+			$objnew->projbudgetdet_rate = null;
+			$objnew->projbudgetdet_valueprop = null;
+			$objnew->projbudgetdet_value = null;
+			$objnew->_createby = null;
+			$objnew->_createdate = null;
+
+
+			$cmdupd = \FGTA4\utils\SqlUtility::CreateSQLUpdate('mst_projbudgetdet', $objupd, $keyupd);
+			$stmtupdate = $this->db->prepare($cmdupd->sql);
+			
+			$cmdins = \FGTA4\utils\SqlUtility::CreateSQLInsert('mst_projbudgetdet', $objnew);
+			$stmtinsert = $this->db->prepare($cmdins->sql);
+		
+
+			$count_insert = 0;
+			$stmt = $this->db->prepare("select * from mst_projbudgetrevdet where projbudgetrev_id = :projbudgetrev_id");
+			$stmt->execute([':projbudgetrev_id' => $projbudgetrev_id]);
+			$rows  = $stmt->fetchall(\PDO::FETCH_ASSOC);
+
+			foreach ($rows as $row) {
+			
+				// update projbudgetdet
+				$budgetrevmode_id = $row['budgetrevmode_id'];
+
+				if ($budgetrevmode_id=='A') {
+					// tambah baru
+					$param = [
+						':projbudget_id' => $projbudget_id,
+						':projbudgetdet_id' => \uniqid(),
+						':accbudget_id' => $row['accbudget_id'],
+						':alloc_dept_id' => $row['alloc_dept_id'],
+						':projbudgetdet_descr' => $row['projbudgetrevdet_descr'],
+						':projbudgetdet_qty' => $row['projbudgetrevdet_days'],
+						':projbudgetdet_days' => $row['projbudgetrevdet_days'],
+						':projbudgetdet_task' => $row['projbudgetrevdet_days'],
+						':projbudgetdet_rate' => $row['projbudgetrevdet_rate'],
+						':projbudgetdet_valueprop' => $row['projbudgetrevdet_value'],
+						':projbudgetdet_value' => $row['projbudgetrevdet_value'],
+						':_createby' => $userdata->username,
+						':_createdate' => date("Y-m-d H:i:s")
+
+
+					];
+					$stmtinsert->execute($param);
+
+				} else {
+					// update
+					$param = [
+						':projbudgetdet_id' => $row['projbudgetdet_id'],
+						':projbudgetdet_qty' => $row['projbudgetrevdet_days'],
+						':projbudgetdet_days' => $row['projbudgetrevdet_days'],
+						':projbudgetdet_task' => $row['projbudgetrevdet_days'],
+						':projbudgetdet_rate' => $row['projbudgetrevdet_rate'],
+						':projbudgetdet_value' => $row['projbudgetrevdet_value'],
+						':_modifyby' => $userdata->username,
+						':_modifydate' => date("Y-m-d H:i:s")
+					];
+					$stmtupdate->execute($param);
+
+
+				}
+			}
+
+
+
+		} catch (\Exception $ex) {
+			throw $ex;
+		}
+	}
 
 
 

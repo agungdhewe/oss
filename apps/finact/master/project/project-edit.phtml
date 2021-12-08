@@ -18,23 +18,7 @@
 		<div class="form_row" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Type</div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_edit-cbo_projecttype_id" class="easyui-combo" style="width: 400px" mapping="projecttype_id" display="projecttype_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Type Project harus diisi'"   validType="requiredcombo['pnl_edit-cbo_projecttype_id']" >
-				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
-			</div>
-		</div>
-
-		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Type</div>
-			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_edit-cbo_projectmodel_id" class="easyui-combo" style="width: 400px" mapping="projectmodel_id" display="projectmodel_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Type Project harus diisi'"   validType="requiredcombo['pnl_edit-cbo_projectmodel_id']" >
-				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
-			</div>
-		</div>
-
-		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Order In</div>
-			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_edit-cbo_orderin_id" class="easyui-combo" style="width: 400px" mapping="orderin_id" display="orderin_descr" data-options="editable:false, valueField:'id', textField:'text' , prompt: 'NONE'"  >
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>
@@ -73,7 +57,23 @@
 		<div class="form_row" >
 			<div class="form_label_col"></div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_edit-chk_project_isallowalldept" class="easyui-checkbox c1" mapping="project_isallowalldept" data-options="label: 'Visible to All Dept', labelPosition: 'after', checked: false ">
+				<input id="pnl_edit-chk_project_isallowalldept" class="easyui-checkbox c1" mapping="project_isallowalldept" data-options="label: 'Visible to All Dept', labelPosition: 'after', checked: false , labelWidth: '300px'">
+			</div>
+		</div>
+
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Based on Order In</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-cbo_orderin_id" class="easyui-combo" style="width: 400px" mapping="orderin_id" display="orderin_descr" data-options="editable:false, valueField:'id', textField:'text' , prompt: 'NONE'"  >
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Type</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-cbo_projecttype_id" class="easyui-combo" style="width: 400px" mapping="projecttype_id" display="projecttype_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Type Project harus diisi', disabled: true"   validType="requiredcombo['pnl_edit-cbo_projecttype_id']" >
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>
 

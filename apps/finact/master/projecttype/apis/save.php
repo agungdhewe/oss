@@ -27,7 +27,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 15/09/2021
+ * tanggal 05/12/2021
  */
 $API = new class extends projecttypeBase {
 	
@@ -103,7 +103,7 @@ $API = new class extends projecttypeBase {
 				$where = \FGTA4\utils\SqlUtility::BuildCriteria((object)[$primarykey=>$obj->{$primarykey}], [$primarykey=>"$primarykey=:$primarykey"]);
 				$sql = \FGTA4\utils\SqlUtility::Select($tablename , [
 					$primarykey
-					, 'projecttype_id', 'projecttype_name', 'projecttype_isdisabled', 'projecttype_descr', '_createby', '_createdate', '_modifyby', '_modifydate', '_createby', '_createdate', '_modifyby', '_modifydate'
+					, 'projecttype_id', 'projecttype_name', 'projecttype_descr', '_createby', '_createdate', '_modifyby', '_modifydate', '_createby', '_createdate', '_modifyby', '_modifydate'
 				], $where->sql);
 				$stmt = $this->db->prepare($sql);
 				$stmt->execute($where->params);

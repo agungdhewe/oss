@@ -23,7 +23,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 15/09/2021
+ * tanggal 05/12/2021
  */
 $API = new class extends projecttypeBase {
 
@@ -58,7 +58,7 @@ $API = new class extends projecttypeBase {
 			$limit = " LIMIT $maxrow OFFSET $offset ";
 			$stmt = $this->db->prepare("
 				select 
-				A.projecttype_id, A.projecttype_name, A.projecttype_isdisabled, A.projecttype_descr, A._createby, A._createdate, A._modifyby, A._modifydate 
+				A.projecttype_id, A.projecttype_name, A.projecttype_descr, A._createby, A._createdate, A._modifyby, A._modifydate 
 				from mst_projecttype A
 			" . $where->sql . $limit);
 			$stmt->execute($where->params);

@@ -21,6 +21,8 @@ $MODULE = new class extends WebModule {
 	public function LoadPage() {
 		$userdata = $this->auth->session_get_user();
 
+		
+
 		// parameter=parameter yang bisa diakses langsung dari javascript module
 		// dengan memanggil variable global.setup.<namavariable>
 		$this->setup = (object)array(

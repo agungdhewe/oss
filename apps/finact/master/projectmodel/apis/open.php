@@ -24,7 +24,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 15/09/2021
+ * tanggal 05/12/2021
  */
 $API = new class extends projectmodelBase {
 	
@@ -50,7 +50,7 @@ $API = new class extends projectmodelBase {
 			);
 
 			$sql = \FGTA4\utils\SqlUtility::Select('mst_projectmodel A', [
-				'projectmodel_id', 'projectmodel_name', 'projectmodel_isdisabled', 'projectmodel_descr', 'fg_accbudget_id', 'fg_coa_id', '_createby', '_createdate', '_modifyby', '_modifydate'
+				'projectmodel_id', 'projectmodel_name', 'projectmodel_isdisabled', 'projectmodel_descr', 'projecttype_id', 'fg_accbudget_id', 'fg_coa_id', 'sl_accbudget_id', 'sl_coa_id', '_createby', '_createdate', '_modifyby', '_modifydate'
 			], $where->sql);
 
 			$stmt = $this->db->prepare($sql);
@@ -71,8 +71,11 @@ $API = new class extends projectmodelBase {
 				//'tanggal' => date("d/m/Y", strtotime($record['tanggal'])),
 				//'gendername' => $record['gender']
 				
+				'projecttype_name' => \FGTA4\utils\SqlUtility::Lookup($record['projecttype_id'], $this->db, 'mst_projecttype', 'projecttype_id', 'projecttype_name'),
 				'fg_accbudget_name' => \FGTA4\utils\SqlUtility::Lookup($record['fg_accbudget_id'], $this->db, 'mst_accbudget', 'accbudget_id', 'accbudget_name'),
 				'fg_coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['fg_coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
+				'sl_accbudget_name' => \FGTA4\utils\SqlUtility::Lookup($record['sl_accbudget_id'], $this->db, 'mst_accbudget', 'accbudget_id', 'accbudget_name'),
+				'sl_coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['sl_coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
 
 
 				'_createby' => \FGTA4\utils\SqlUtility::Lookup($record['_createby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),

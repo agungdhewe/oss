@@ -26,7 +26,7 @@ module.exports = {
 				deptgroup_pathid: {text:'PathId', type: dbtype.varchar(13), null:false, uppercase: false, suppresslist: true, options:{disabled:true}},
 				deptgroup_path: {text:'Path', type: dbtype.varchar(390), null:false, uppercase: false, suppresslist: true, options:{disabled:true}},
 				deptgroup_level: {text:'Level', type: dbtype.int(2), null:false, default:'0', uppercase: false, suppresslist: true, options:{disabled:true}},
-				deptgroup_isexselect : {text:'Exclude From Selection', type: dbtype.boolean, null:false, default:'0'},
+				deptgroup_isexselect : {text:'Exclude From Selection', type: dbtype.boolean, null:false, default:'0',options: { labelWidth: '300px' } },
 				depttype_id: {
 					text:'Type', type: dbtype.varchar(10), null:false, uppercase: true, suppresslist: true,
 					options:{required:true,invalidMessage:'Type Group harus diisi', prompt:'-- PILIH --'},

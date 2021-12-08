@@ -23,7 +23,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 03/04/2021
+ * tanggal 05/12/2021
  */
 $API = new class extends accbudgetBase {
 
@@ -38,25 +38,19 @@ $API = new class extends accbudgetBase {
 				throw new \Exception('your group authority is not allowed to do this action.');
 			}
 
-
+			// \FGTA4\utils\SqlUtility::setDefaultCriteria($options->criteria, '--fieldscriteria--', '--value--');
 			$where = \FGTA4\utils\SqlUtility::BuildCriteria(
 				$options->criteria,
 				[
-					"search" => " A.accbudget_id LIKE CONCAT('%', :search, '%') OR A.accbudget_name LIKE CONCAT('%', :search, '%') ",
-					"coareport_id" => " C.coareport_id = :coareport_id "
+					"search" => " A.accbudget_id LIKE CONCAT('%', :search, '%') OR A.accbudget_name LIKE CONCAT('%', :search, '%') "
 				]
 			);
-
-			WebAPI::log($options->criteria);
 
 			$result = new \stdClass; 
 			$maxrow = 30;
 			$offset = (property_exists($options, 'offset')) ? $options->offset : 0;
 
-			$stmt = $this->db->prepare("
-				select count(*) as n from mst_accbudget A inner join mst_coa B on B.coa_id = A.coa_id
-				                                          inner join mst_coatype C on C.coatype_id = B.coatype_id
-			" . $where->sql);
+			$stmt = $this->db->prepare("select count(*) as n from mst_accbudget A" . $where->sql);
 			$stmt->execute($where->params);
 			$row  = $stmt->fetch(\PDO::FETCH_ASSOC);
 			$total = (float) $row['n'];
@@ -64,10 +58,8 @@ $API = new class extends accbudgetBase {
 			$limit = " LIMIT $maxrow OFFSET $offset ";
 			$stmt = $this->db->prepare("
 				select 
-				  A.accbudget_id, A.accbudget_name, A.accbudget_nameshort, A.accbudget_isdisabled, A.accbudget_descr, A.accbudgetgroup_id, A.accbudgetmodel_id, A.accbudgettype_id, A.coa_id
-				, A._createby, A._createdate, A._modifyby, A._modifydate 
-				from mst_accbudget A inner join mst_coa B on B.coa_id = A.coa_id
-				                     inner join mst_coatype C on C.coatype_id = B.coatype_id
+				A.accbudget_id, A.accbudgetgroup_id, A.accbudget_name, A.accbudget_nameshort, A.accbudget_isdisabled, A.accbudget_descr, A.accbudgetmodel_id, A.coa_id, A._createby, A._createdate, A._modifyby, A._modifydate 
+				from mst_accbudget A
 			" . $where->sql . $limit);
 			$stmt->execute($where->params);
 			$rows  = $stmt->fetchall(\PDO::FETCH_ASSOC);
@@ -85,7 +77,6 @@ $API = new class extends accbudgetBase {
 				 	//'tambahan' => 'dta'
 					'accbudgetgroup_name' => \FGTA4\utils\SqlUtility::Lookup($record['accbudgetgroup_id'], $this->db, 'mst_accbudgetgroup', 'accbudgetgroup_id', 'accbudgetgroup_name'),
 					'accbudgetmodel_name' => \FGTA4\utils\SqlUtility::Lookup($record['accbudgetmodel_id'], $this->db, 'mst_accbudgetmodel', 'accbudgetmodel_id', 'accbudgetmodel_name'),
-					'accbudgettype_name' => \FGTA4\utils\SqlUtility::Lookup($record['accbudgettype_id'], $this->db, 'mst_accbudgettype', 'accbudgettype_id', 'accbudgettype_name'),
 					'coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
 					 
 				]));

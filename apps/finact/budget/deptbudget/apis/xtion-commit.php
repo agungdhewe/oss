@@ -54,6 +54,7 @@ $API = new class extends deptbudgetBase {
 
 			try {
 
+				$this->set_commit($id, $currentdata);
 				$this->set_approval($currentdata);
 				$this->save_and_set_commit_flag($id, $currentdata);
 
@@ -111,6 +112,39 @@ $API = new class extends deptbudgetBase {
 			throw $ex;
 		}
 	}
+
+	public function set_commit($id, $currentdata) {
+		try {
+
+			$sql = "
+				update mst_deptbudgetdet
+				set
+				deptbudgetdet_01_prop = deptbudgetdet_01,
+				deptbudgetdet_02_prop = deptbudgetdet_02,
+				deptbudgetdet_03_prop = deptbudgetdet_03,
+				deptbudgetdet_04_prop = deptbudgetdet_04,
+				deptbudgetdet_05_prop = deptbudgetdet_05,
+				deptbudgetdet_06_prop = deptbudgetdet_06,
+				deptbudgetdet_07_prop = deptbudgetdet_07,
+				deptbudgetdet_08_prop = deptbudgetdet_08,
+				deptbudgetdet_09_prop = deptbudgetdet_09,
+				deptbudgetdet_10_prop = deptbudgetdet_10,
+				deptbudgetdet_11_prop = deptbudgetdet_11,
+				deptbudgetdet_12_prop = deptbudgetdet_12,
+				deptbudgetdet_total_prop = deptbudgetdet_total
+				where
+				deptbudget_id = :id
+			";
+			$stmt = $this->db->prepare($sql);
+			$stmt->execute([
+				":id" => $id
+			]);
+
+		} catch (\Exception $ex) {
+			throw $ex;
+		}	
+	}
+
 
 
 	public function set_approval($currentdata) {

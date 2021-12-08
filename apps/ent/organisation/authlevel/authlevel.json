@@ -1,6 +1,8 @@
 {
 	"title" : "Auth Level",
-	"icon" : "icon-authlevel-white.png",
+	
+	
+	"variance" : {},
 	"allowanonymous" : true,
 	"allowedgroups" : ["public"],
 	"apis" : {

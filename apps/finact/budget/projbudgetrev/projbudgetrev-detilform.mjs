@@ -12,12 +12,14 @@ const btn_next = $('#pnl_editdetilform-btn_next')
 const btn_addnew = $('#pnl_editdetilform-btn_addnew')
 const chk_autoadd = $('#pnl_editdetilform-autoadd')
 
-const pnl_entry = $('#pnl_editdetilform-entry');
+
 const pnl_form = $('#pnl_editdetilform-form')
 const obj = {
 	txt_projbudgetrevdet_id: $('#pnl_editdetilform-txt_projbudgetrevdet_id'),
-	cbo_projbudgetrevdet_mode: $('#pnl_editdetilform-cbo_projbudgetrevdet_mode'),
+	cbo_budgetrevmode_id: $('#pnl_editdetilform-cbo_budgetrevmode_id'),
+	cbo_projbudgetdet_id: $('#pnl_editdetilform-cbo_projbudgetdet_id'),
 	cbo_accbudget_id: $('#pnl_editdetilform-cbo_accbudget_id'),
+	cbo_alloc_dept_id: $('#pnl_editdetilform-cbo_alloc_dept_id'),
 	txt_projbudgetrevdet_descr: $('#pnl_editdetilform-txt_projbudgetrevdet_descr'),
 	txt_projbudgetrevdet_qty: $('#pnl_editdetilform-txt_projbudgetrevdet_qty'),
 	txt_projbudgetrevdet_days: $('#pnl_editdetilform-txt_projbudgetrevdet_days'),
@@ -35,8 +37,8 @@ const obj = {
 }
 
 
-let form = {}
-let header_data = {}
+let form;
+let header_data;
 
 
 
@@ -68,39 +70,84 @@ export async function init(opt) {
 	form.CreateLogPage(this_page_id)
 
 
-	obj.cbo_projbudgetrevdet_mode.name = 'pnl_editdetilform-cbo_projbudgetrevdet_mode'		
-	new fgta4slideselect(obj.cbo_projbudgetrevdet_mode, {
-		title: 'Pilih Mode Revisi',
+
+
+	obj.cbo_budgetrevmode_id.name = 'pnl_editdetilform-cbo_budgetrevmode_id'		
+	new fgta4slideselect(obj.cbo_budgetrevmode_id, {
+		title: 'Pilih budgetrevmode_id',
 		returnpage: this_page_id,
-		fieldValue: 'id',
-		fieldValueMap: 'id',
-		fieldDisplay: 'text',
+		api: $ui.apis.load_budgetrevmode_id,
+		fieldValue: 'budgetrevmode_id',
+		fieldValueMap: 'budgetrevmode_id',
+		fieldDisplay: 'budgetrevmode_name',
 		fields: [
-			{mapping: 'text', text: 'Mode'}
+			{mapping: 'budgetrevmode_id', text: 'budgetrevmode_id'},
+			{mapping: 'budgetrevmode_name', text: 'budgetrevmode_name'},
 		],
-		data: global.setup.mode,
-		OnDataLoading: (criteria) => {},
-		OnDataLoaded : (result, options) => {},
-		OnSelected: (value, display, record) => {
-			pnl_entry.show();
+		OnDataLoading: (criteria, options) => {},
+		OnDataLoaded : (result, options) => {
+				
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+				cbo_budgetrevmode_id_changed(value, display, record);
+			}			
 		}
-	})
+	})				
+			
+	obj.cbo_projbudgetdet_id.name = 'pnl_editdetilform-cbo_projbudgetdet_id'		
+	new fgta4slideselect(obj.cbo_projbudgetdet_id, {
+		title: 'Pilih projbudgetdet_id',
+		returnpage: this_page_id,
+		api: `${global.modulefullname}/get-projbudgetdet-torevise`,
+		fieldValue: 'projbudgetdet_id',
+		fieldValueMap: 'projbudgetdet_id',
+		fieldDisplay: 'projbudgetdet_descr',
+		fields: [
+			{mapping: 'projbudgetdet_id', text: 'projbudgetdet_id'},
+			{mapping: 'projbudgetdet_descr', text: 'projbudgetdet_descr'},
+		],
+		OnDataLoading: (criteria, options) => {
+			criteria.projbudget_id = header_data.projbudget_id;
+		},
+		OnDataLoaded : (result, options) => {
+				
+		},
+		OnSelected: (value, display, record, args) => {
+			console.log(record);
+			if (value!=args.PreviousValue ) {
+				form.setValue(obj.cbo_accbudget_id, record.accbudget_id, record.accbudget_name)	
+				form.setValue(obj.cbo_alloc_dept_id, record.alloc_dept_id, record.alloc_dept_name)	
+				
+				form.setValue(obj.txt_projbudgetrevdet_qty, record.projbudgetdet_qty);
+				form.setValue(obj.txt_projbudgetrevdet_days, record.projbudgetdet_days);
+				form.setValue(obj.txt_projbudgetrevdet_task, record.projbudgetdet_task);
+				form.setValue(obj.txt_projbudgetrevdet_rate, record.projbudgetdet_rate);
+				form.setValue(obj.txt_projbudgetrevdet_value, record.projbudgetdet_value);
 
+				// Previous Budget
+				form.setValue(obj.txt_projbudgetrevdet_qty_prev, record.projbudgetdet_qty);
+				form.setValue(obj.txt_projbudgetrevdet_days_prev, record.projbudgetdet_days);
+				form.setValue(obj.txt_projbudgetrevdet_task_prev, record.projbudgetdet_task);
+				form.setValue(obj.txt_projbudgetrevdet_rate_prev, record.projbudgetdet_rate);
+				form.setValue(obj.txt_projbudgetrevdet_value_prev, record.projbudgetdet_value);
 
+				
+			}			
+		}
+	})				
+			
 	obj.cbo_accbudget_id.name = 'pnl_editdetilform-cbo_accbudget_id'		
 	new fgta4slideselect(obj.cbo_accbudget_id, {
 		title: 'Pilih accbudget_id',
 		returnpage: this_page_id,
-		api: $ui.apis.load_accbudget_id,
+		api: `${global.modulefullname}/get-accbudget-proj-torevise-add`, //$ui.apis.load_accbudget_id,
 		fieldValue: 'accbudget_id',
 		fieldValueMap: 'accbudget_id',
 		fieldDisplay: 'accbudget_name',
 		fields: [
-			{mapping: 'accbudget_id', text: 'ID', style: "width: 100px;"},
-			{mapping: 'accbudget_name', text: 'Budget'},
-			{mapping: 'projbudgetdet_value', text: 'Current Budgeted', formatter: "row_format_number", style: "width: 100px; text-align: right"},
-			{mapping: 'deptbudgetdet_available', text: 'Available', formatter: "row_format_number", style: "width: 100px; text-align: right" }
-
+			{mapping: 'accbudget_id', text: 'accbudget_id'},
+			{mapping: 'accbudget_name', text: 'accbudget_name'},
 		],
 		OnDataLoading: (criteria, options) => {
 			var dept_id = header_data.dept_id
@@ -109,63 +156,50 @@ export async function init(opt) {
 			var projbudget_month = header_data.projbudget_month
 			var projbudgetrev_id = header_data.projbudgetrev_id
 			var current_accbudget_id = form.getOldValue(obj.cbo_accbudget_id)
-			var mode = form.getValue(obj.cbo_projbudgetrevdet_mode);
 
-			if (mode=='I') {
-				// tambah baru
-				options.api = `${global.modulefullname}/get-accbudget-proj-torevise-add`;
-				criteria.dept_id = dept_id
-				criteria.projbudget_id = projbudget_id
-				criteria.projbudget_year = projbudget_year
-				criteria.projbudget_month = projbudget_month
-				criteria.projbudgetrev_id = projbudgetrev_id
-				criteria.include_accbudget_id = current_accbudget_id
-			} else {
-				// update
-				options.api = `${global.modulefullname}/get-accbudget-proj-torevise-update`;
-				criteria.dept_id = dept_id
-				criteria.projbudget_id = projbudget_id
-				criteria.projbudget_year = projbudget_year
-				criteria.projbudget_month = projbudget_month
-				criteria.projbudgetrev_id = projbudgetrev_id
-				criteria.include_accbudget_id = current_accbudget_id
-			}
+			options.api = `${global.modulefullname}/get-accbudget-proj-torevise-add`;
+			criteria.dept_id = dept_id
+			criteria.projbudget_id = projbudget_id
+			criteria.projbudget_year = projbudget_year
+			criteria.projbudget_month = projbudget_month
+			criteria.projbudgetrev_id = projbudgetrev_id
+			criteria.include_accbudget_id = current_accbudget_id
+
 		},
 		OnDataLoaded : (result, options) => {
 				
 		},
-		OnSelected: (value, display, record) => {
-			form.setDisable(obj.cbo_projbudgetrevdet_mode, true);
-
-			console.log(record);
-
-			var projbudgetdet_value = parseFloat(record.projbudgetdet_value)
-			var deptbudgetdet_available = parseFloat(record.deptbudgetdet_available);
-			var newvalue = projbudgetdet_value + deptbudgetdet_available
-
-			var days = parseInt(record.projbudgetdet_days)
-			var task = parseInt(record.projbudgetdet_task)
-			var qty = parseInt(record.projbudgetdet_qty)
-
-			form.setValue(obj.txt_projbudgetrevdet_days, days);
-			form.setValue(obj.txt_projbudgetrevdet_qty, qty);
-			form.setValue(obj.txt_projbudgetrevdet_task, task);
-			form.setValue(obj.txt_projbudgetrevdet_value, newvalue)
-			                  
-			form.setValue(obj.txt_projbudgetrevdet_days_prev, days)
-			form.setValue(obj.txt_projbudgetrevdet_qty_prev, qty)
-			form.setValue(obj.txt_projbudgetrevdet_task_prev, task)
-			form.setValue(obj.txt_projbudgetrevdet_value_prev, record.projbudgetdet_value)
-
-			variance_recalculate();
-
-
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+			}			
+		}
+	})				
+			
+	obj.cbo_alloc_dept_id.name = 'pnl_editdetilform-cbo_alloc_dept_id'		
+	new fgta4slideselect(obj.cbo_alloc_dept_id, {
+		title: 'Pilih alloc_dept_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_alloc_dept_id,
+		fieldValue: 'alloc_dept_id',
+		fieldValueMap: 'dept_id',
+		fieldDisplay: 'dept_name',
+		fields: [
+			{mapping: 'dept_id', text: 'dept_id'},
+			{mapping: 'dept_name', text: 'dept_name'},
+		],
+		OnDataLoading: (criteria, options) => {},
+		OnDataLoaded : (result, options) => {
+				
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+			}			
 		}
 	})				
 			
 
 
-	btn_addnew.linkbutton({ onClick: () => { btn_addnew_click() } })
+	btn_addnew.linkbutton({ onClick: () => { btn_addnew_click() }  })
 	btn_prev.linkbutton({ onClick: () => { btn_prev_click() } })
 	btn_next.linkbutton({ onClick: () => { btn_next_click() } })
 
@@ -174,8 +208,6 @@ export async function init(opt) {
 	obj.txt_projbudgetrevdet_days.numberbox({ onChange: (newvalue, oldvalue) => { txt_projbudgetrevdet_valuechanged(newvalue, oldvalue); } })
 	obj.txt_projbudgetrevdet_task.numberbox({ onChange: (newvalue, oldvalue) => { txt_projbudgetrevdet_valuechanged(newvalue, oldvalue); } })
 	obj.txt_projbudgetrevdet_value.numberbox({ onChange: (newvalue, oldvalue) => { txt_projbudgetrevdet_valuechanged(newvalue, oldvalue); } })
-
-
 
 
 	document.addEventListener('keydown', (ev)=>{
@@ -252,26 +284,49 @@ export function open(data, rowid, hdata) {
 	txt_title.html(hdata.projbudgetrev_descr)
 	header_data = hdata
 
+	var pOpt = form.getDefaultPrompt(false)
 	var fn_dataopening = async (options) => {
 		options.api = `${global.modulefullname}/detil-open`
 		options.criteria[form.primary.mapping] = data[form.primary.mapping]
 	}
 
 	var fn_dataopened = async (result, options) => {
-
+		var record = result.record;
 		updatefilebox(result.record);
+/*
 
-
-
+*/
+		for (var objid in obj) {
+			let o = obj[objid]
+			if (o.isCombo() && !o.isRequired()) {
+				var value =  result.record[o.getFieldValueName()];
+				if (value==null ) {
+					record[o.getFieldValueName()] = pOpt.value;
+					record[o.getFieldDisplayName()] = pOpt.text;
+				}
+			}
+		}
 		form.SuspendEvent(true);
 		form
-			.fill(result.record)
-			.setValue(obj.cbo_projbudgetrevdet_mode, result.record.projbudgetrevdet_mode, result.record.projbudgetrevdet_modename)
-			.setValue(obj.cbo_accbudget_id, result.record.accbudget_id, result.record.accbudget_name)
-			.commit()
+			.fill(record)
+			.setValue(obj.cbo_budgetrevmode_id, record.budgetrevmode_id, record.budgetrevmode_name)
+			.setValue(obj.cbo_projbudgetdet_id, record.projbudgetdet_id, record.projbudgetdet_descr)
+			.setValue(obj.cbo_accbudget_id, record.accbudget_id, record.accbudget_name)
+			.setValue(obj.cbo_alloc_dept_id, record.alloc_dept_id, record.dept_name)
 			.setViewMode()
 			.rowid = rowid
 
+
+
+		/* tambahkan event atau behaviour saat form dibuka
+		   apabila ada rutin mengubah form dan tidak mau dijalankan pada saat opening,
+		   cek dengan form.isEventSuspended()
+		*/ 
+		cbo_budgetrevmode_id_changed(record.budgetrevmode_id)
+
+
+
+		form.commit()
 		form.SuspendEvent(false);
 
 
@@ -327,9 +382,9 @@ export function createnew(hdata) {
 		data.projbudgetrev_id= hdata.projbudgetrev_id
 		data.detil_value = 0
 
-		data.projbudgetrevdet_qty = 0
-		data.projbudgetrevdet_days = 0
-		data.projbudgetrevdet_task = 0
+		data.projbudgetrevdet_qty = 1
+		data.projbudgetrevdet_days = 1
+		data.projbudgetrevdet_task = 1
 		data.projbudgetrevdet_rate = 0
 		data.projbudgetrevdet_value = 0
 		data.projbudgetrevdet_qty_prev = 0
@@ -340,11 +395,17 @@ export function createnew(hdata) {
 		data.projbudgetrevdet_rate_variance = 0
 		data.projbudgetrevdet_value_variance = 0
 
+		data.budgetrevmode_id = 'U'
+		data.budgetrevmode_name = 'Update Existing'
+		data.projbudgetdet_id = '0'
+		data.projbudgetdet_descr = '-- PILIH --'
 		data.accbudget_id = '0'
 		data.accbudget_name = '-- PILIH --'
+		data.alloc_dept_id = '0'
+		data.dept_name = '-- PILIH --'
 
-		data.projbudgetrevdet_mode = global.setup.mode[1].id;
-		data.projbudgetrevdet_modename = global.setup.mode[1].text;
+		cbo_budgetrevmode_id_changed(data.budgetrevmode_id)
+
 
 		form.rowid = null
 		options.OnCanceled = () => {
@@ -357,14 +418,39 @@ export function createnew(hdata) {
 async function form_datasaving(data, options) {
 	options.api = `${global.modulefullname}/detil-save`
 
+	// options.skipmappingresponse = [];
 	options.skipmappingresponse = [];
+	for (var objid in obj) {
+		var o = obj[objid]
+		if (o.isCombo() && !o.isRequired()) {
+			var id = o.getFieldValueName()
+			options.skipmappingresponse.push(id)
+			console.log(id)
+		}
+	}	
 }
 
 async function form_datasaved(result, options) {
 	var data = {}
 	Object.assign(data, form.getData(), result.dataresponse)
 
+	/*
 
+	*/
+
+	var pOpt = form.getDefaultPrompt(false)
+	for (var objid in obj) {
+		var o = obj[objid]
+		if (o.isCombo() && !o.isRequired()) {
+			var value =  result.dataresponse[o.getFieldValueName()];
+			var text = result.dataresponse[o.getFieldDisplayName()];
+			if (value==null ) {
+				value = pOpt.value;
+				text = pOpt.text;
+			}
+			form.setValue(o, value, text);
+		}
+	}
 	form.rowid = $ui.getPages().ITEMS['pnl_editdetilgrid'].handler.updategrid(data, form.rowid)
 
 	var autoadd = chk_autoadd.prop("checked")
@@ -464,49 +550,87 @@ function btn_next_click() {
 }
 
 
-function txt_projbudgetrevdet_valuechanged(newvalue, oldvalue) {
-	variance_recalculate(); 
+function cbo_budgetrevmode_id_changed(value) {
+
+	console.log(value);
+	if (value=='A') {
+		// penambahan baru, 
+		// Budget Line disable, kosong
+		obj.cbo_projbudgetdet_id.revalidate({
+			required: false, invalidMessage: null, prompt: form.getDefaultPrompt(false).text,
+			validType: null,
+		});	
+	} else if (value=='U') {
+		// update
+		// Budget Line harus diisi
+		obj.cbo_projbudgetdet_id.revalidate({
+			required: true, invalidMessage:  'Detil budget yang akan direvisi harus dipilih', prompt: form.getDefaultPrompt(true).text,
+			validType: "requiredcombo['pnl_editdetilform-cbo_projbudgetdet_id']",
+		});
+	}
+
+	if (form.isEventSuspended()) {
+		return;
+	}
+
+	var promptMandatory = form.getDefaultPrompt(true)
+	var promptOptional = form.getDefaultPrompt(false)
+
+	if (value=='A') {
+		// penambahan baru, 
+		form.setDisable(obj.cbo_projbudgetdet_id, true);
+		form.setDisable(obj.cbo_accbudget_id, false);
+		form.setDisable(obj.cbo_alloc_dept_id, false);
+		
+		form.setValue(obj.cbo_projbudgetdet_id, promptOptional.value, promptOptional.text);
+		form.setValue(obj.cbo_alloc_dept_id, header_data.dept_id, header_data.dept_name);
+	} else {
+		form.setDisable(obj.cbo_projbudgetdet_id, false);
+		form.setDisable(obj.cbo_accbudget_id, true);
+		form.setDisable(obj.cbo_alloc_dept_id, true);
+
+		form.setValue(obj.cbo_projbudgetdet_id, promptMandatory.value, promptMandatory.text);
+		form.setValue(obj.cbo_alloc_dept_id, promptMandatory.value, promptMandatory.text);
+	}
+
+	form.setValue(obj.cbo_accbudget_id, promptMandatory.value, promptMandatory.text);
+	
+
 }
 
 
-function variance_recalculate() {
+function txt_projbudgetrevdet_valuechanged(newvalue, oldvalue) {
+	recalculate();
+}
+
+
+function recalculate() {
 
 	var curr_days = parseInt(form.getValue(obj.txt_projbudgetrevdet_days))
 	var curr_qty = parseInt(form.getValue(obj.txt_projbudgetrevdet_qty))
 	var curr_task = parseInt(form.getValue(obj.txt_projbudgetrevdet_task))
 	var curr_value = parseFloat(form.getValue(obj.txt_projbudgetrevdet_value))
 
-	var prev_days = parseInt(form.getValue(obj.txt_projbudgetrevdet_days_prev))
-	var prev_qty = parseInt(form.getValue(obj.txt_projbudgetrevdet_qty_prev))
-	var prev_task = parseInt(form.getValue(obj.txt_projbudgetrevdet_task_prev))
+	// var prev_days = parseInt(form.getValue(obj.txt_projbudgetrevdet_days_prev))
+	// var prev_qty = parseInt(form.getValue(obj.txt_projbudgetrevdet_qty_prev))
+	// var prev_task = parseInt(form.getValue(obj.txt_projbudgetrevdet_task_prev))
+	var prev_rate = parseFloat(form.getValue(obj.txt_projbudgetrevdet_rate_prev))
 	var prev_value = parseFloat(form.getValue(obj.txt_projbudgetrevdet_value_prev))
 
-	curr_days = curr_days==0 ? 1 : curr_days;
-	curr_qty = curr_qty==0 ? 1 : curr_qty;
-	curr_task = curr_task==0 ? 1 : curr_task;
+	// curr_days = curr_days==0 ? 1 : curr_days;
+	// curr_qty = curr_qty==0 ? 1 : curr_qty;
+	// curr_task = curr_task==0 ? 1 : curr_task;
 	
-	prev_days = prev_days==0 ? 1 : prev_days;
-	prev_qty = prev_qty==0 ? 1 : prev_qty;
-	prev_task = curr_days==0 ? 1 : prev_task;
-	
+	// prev_days = prev_days==0 ? 1 : prev_days;
+	// prev_qty = prev_qty==0 ? 1 : prev_qty;
+	// prev_task = curr_days==0 ? 1 : prev_task;
 
 	// console.log('test');
 	var curr_rate = curr_value / (curr_days * curr_qty * curr_task);
-	var prev_rate = prev_value / (prev_days * prev_qty * prev_task);
-
-
 	var var_rate =  (100*((curr_rate-prev_rate)/prev_rate)).toFixed(2);
 	var var_value =  (100*((curr_value-prev_value)/prev_value)).toFixed(2);
 		
 	form.setValue(obj.txt_projbudgetrevdet_rate, curr_rate);
-	form.setValue(obj.txt_projbudgetrevdet_rate_prev, prev_rate);
 	form.setValue(obj.txt_projbudgetrevdet_rate_variance, var_rate);
 	form.setValue(obj.txt_projbudgetrevdet_value_variance, var_value);
-
-
 }
-
-
-
-
-

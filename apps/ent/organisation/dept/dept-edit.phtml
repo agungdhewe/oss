@@ -7,109 +7,119 @@
 
 	<form id="pnl_edit-form">
 
-		<div class="form_row">
-			<div class="form_label_col">ID</div>
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">ID</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_edit-txt_dept_id" class="easyui-textbox" mapping="dept_id" uppercase="true" maxlength="30" style="width: 400px" data-options="multiline: false , required: true, invalidMessage: 'ID Group harus diisi' ">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>
 
-		<div class="form_row">
-			<div class="form_label_col">Dept Name</div>
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Dept Name</div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_edit-txt_dept_name" class="easyui-textbox" mapping="dept_name" maxlength="60" style="width: 400px" data-options="multiline: false , required: true, invalidMessage: 'Nama Group harus diisi' ">
+				<input id="pnl_edit-txt_dept_name" class="easyui-textbox" mapping="dept_name" uppercase="true" maxlength="60" style="width: 400px" data-options="multiline: false , required: true, invalidMessage: 'Nama Group harus diisi' ">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>
 
-		<div class="form_row">
-			<div class="form_label_col">Descr</div>
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Descr</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_edit-txt_dept_descr" class="easyui-textbox" mapping="dept_descr"  maxlength="90" style="width: 400px" data-options="multiline: false  ">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>
 
-		<div class="form_row">
+		<div class="form_row" >
 			<div class="form_label_col"></div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_edit-chk_dept_isparent" class="easyui-checkbox c1" mapping="dept_isparent" data-options="label: 'Parent Dept', labelPosition: 'after', disabled:false, checked: false ">
+				<input id="pnl_edit-chk_dept_isparent" class="easyui-checkbox c1" mapping="dept_isparent" data-options="label: 'Parent Dept', labelPosition: 'after', labelWidth:'300px', checked: false ">
 			</div>
 		</div>
 
-		<div class="form_row">
+		<div class="form_row" >
 			<div class="form_label_col"></div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_edit-chk_dept_isdisabled" class="easyui-checkbox c1" mapping="dept_isdisabled" data-options="label: 'Disabled', labelPosition: 'after', disabled:false, checked: false ">
+				<input id="pnl_edit-chk_dept_isdisabled" class="easyui-checkbox c1" mapping="dept_isdisabled" data-options="label: 'Disabled', labelPosition: 'after', labelWidth:'300px', checked: false ">
 			</div>
 		</div>
 
-		<div class="form_row">
+		<div class="form_row" >
 			<div class="form_label_col"></div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_edit-chk_dept_isbudgetmandatory" class="easyui-checkbox c1" mapping="dept_isbudgetmandatory" data-options="label: 'Budget is Mandatory', labelWidth:'200px', labelPosition: 'after', disabled:false, checked: false ">
+				<input id="pnl_edit-chk_dept_isbudgetmandatory" class="easyui-checkbox c1" mapping="dept_isbudgetmandatory" data-options="label: 'Budget Mandatory', labelPosition: 'after', labelWidth:'300px', checked: false ">
 			</div>
 		</div>
 
-		<div class="form_row">
+		<div class="form_row" >
 			<div class="form_label_col"></div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_edit-chk_dept_issingleprojectbudget" class="easyui-checkbox c1" mapping="dept_issingleprojectbudget" data-options="label: 'Single Project Budget', labelWidth:'200px', labelPosition: 'after', disabled:false, checked: false ">
+				<input id="pnl_edit-chk_dept_issingleprojectbudget" class="easyui-checkbox c1" mapping="dept_issingleprojectbudget" data-options="label: 'Single Project Budget', labelPosition: 'after', labelWidth:'300px', checked: false ">
 			</div>
 		</div>
 
-
-		<div class="form_row">
-			<div class="form_label_col">Path</div>
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Path</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_edit-txt_dept_path" class="easyui-textbox" mapping="dept_path"  maxlength="390" style="width: 400px" data-options="multiline: false , disabled: true ">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>
 
-		<div class="form_row">
-			<div class="form_label_col">Level</div>
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Level</div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_edit-txt_dept_level" class="easyui-numberbox" mapping="dept_level" style="width: 400px" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  , disabled: true">
+				<input id="pnl_edit-txt_dept_level" class="easyui-numberbox" mapping="dept_level" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  , disabled: true">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>
 
-		<div class="form_row">
-			<div class="form_label_col">Group</div>
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Group</div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_edit-cbo_deptgroup_id" class="easyui-combo" style="width: 400px" mapping="deptgroup_id" display="deptgroup_name" data-options="editable:false, valueField:'id', textField:'text' , prompt: 'NONE'">
+				<input id="pnl_edit-cbo_deptgroup_id" class="easyui-combo" style="width: 400px" mapping="deptgroup_id" display="deptgroup_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Group harus diisi', prompt: '-- PILIH --'"   validType="requiredcombo['pnl_edit-cbo_deptgroup_id']" >
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>
 
-		<div class="form_row">
-			<div class="form_label_col">Parent</div>
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Parent</div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_edit-cbo_dept_parent" class="easyui-combo" style="width: 400px" mapping="dept_parent" display="dept_name" data-options="editable:false, valueField:'id', textField:'text' , prompt: 'NONE'">
+				<input id="pnl_edit-cbo_dept_parent" class="easyui-combo" style="width: 400px" mapping="dept_parent" display="dept_parent_name" data-options="editable:false, valueField:'id', textField:'text' , prompt: 'NONE'"  >
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>
 
-		<div class="form_row">
-			<div class="form_label_col">Type</div>
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Type</div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_edit-cbo_depttype_id" class="easyui-combo" style="width: 400px" mapping="depttype_id" display="depttype_name" data-options="editable:false, valueField:'id', textField:'text' , prompt: 'NONE'">
+				<input id="pnl_edit-cbo_depttype_id" class="easyui-combo" style="width: 400px" mapping="depttype_id" display="depttype_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Type Department harus diisi', prompt: '-- PILIH --'"   validType="requiredcombo['pnl_edit-cbo_depttype_id']" >
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>
 
-		<div class="form_row">
-			<div class="form_label_col">Model</div>
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Model</div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_edit-cbo_deptmodel_id" class="easyui-combo" style="width: 400px" mapping="deptmodel_id" display="deptmodel_name" data-options="editable:false, valueField:'id', textField:'text' , prompt: 'NONE'">
+				<input id="pnl_edit-cbo_deptmodel_id" class="easyui-combo" style="width: 400px" mapping="deptmodel_id" display="deptmodel_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Model Department harus diisi', prompt: '-- PILIH --'"   validType="requiredcombo['pnl_edit-cbo_deptmodel_id']" >
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>
 
-		<div class="form_row">
-			<div class="form_label_col">Auth</div>
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Authorisasi</div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_edit-cbo_auth_id" class="easyui-combo" style="width: 400px" mapping="auth_id" display="auth_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Authorisasi harus diisi', prompt: '-- PILIH --'">
+				<input id="pnl_edit-cbo_auth_id" class="easyui-combo" style="width: 400px" mapping="auth_id" display="auth_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Authorisasi harus diisi', prompt: '-- PILIH --'"   validType="requiredcombo['pnl_edit-cbo_auth_id']" >
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>
 
-		<div class="form_row">
-			<div class="form_label_col">Default Project</div>
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Project</div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_edit-cbo_project_id" class="easyui-combo" style="width: 400px" mapping="project_id" display="project_name" data-options="editable:false, valueField:'id', textField:'text' , prompt: 'NONE'">
+				<input id="pnl_edit-cbo_project_id" class="easyui-combo" style="width: 400px" mapping="project_id" display="project_name" data-options="editable:false, valueField:'id', textField:'text' , prompt: 'NONE'"  >
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>
 
@@ -127,12 +137,15 @@
 
 
 
-	<div style="margin-top: 30px; margin-left:-5px; margin-right: -5px; background-color: #cccccc; height: 40px; display: flex; justify-content: space-between; padding: 5px 2px 2px 2px ">
+	<div style="margin-top: 30px; margin-left:-5px; margin-right: -5px; background-color: #cccccc; display: flex; justify-content: space-between; padding: 10px 2px 2px 2px ">
 		<div>
 			<!-- letakkan tombol yang lin disini -->
+		
+		
+		
 		</div>
 		<div>
-			<a id="pnl_edit-btn_delete" class="easyui-linkbutton c5" style="width">Hapus</a>
+			<a id="pnl_edit-btn_delete" class="easyui-linkbutton c5" style="margin-bottom: 10px; margin-right: 10px">Hapus</a>
 		</div>
 	</div>
 

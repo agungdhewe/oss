@@ -68,7 +68,9 @@ export async function init(opt) {
 			// console.log('loading...');
 		},
 		OnDataLoaded: (result, options) => {
-			result.records.unshift({ dept_id: 'ALL', dept_name: 'ALL' });
+			if (global.setup.empluser_allowviewalldept=='1') {
+				result.records.unshift({ dept_id: 'ALL', dept_name: 'ALL' });
+			}
 		},
 		OnSelected: (value, display, record, options) => {
 			// console.log(record);
@@ -98,6 +100,9 @@ export async function init(opt) {
 	})	
 	
 	//button state
+	if (!this_page_options.privileges.can_edit) {
+		btn_new.hide();
+	}
 
 }
 
@@ -133,6 +138,12 @@ function btn_load_click() {
 	grd_list.clear()
 
 	var fn_listloading = async (options) => {
+
+		//override api
+		if (this_page_options.privileges.override_api_list!=null) {
+			options.api = this_page_options.privileges.override_api_list;
+		}
+
 		var search = txt_search.textbox('getText')
 		if (search!='') {
 			options.criteria.search = search

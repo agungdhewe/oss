@@ -10,6 +10,7 @@ kemdian, di program bisa diakses dengan
 
 */
 
-export const load_accbudgetgroup_parent = 'finact/master/accbudgetgroup/list'
+export const load_accbudgetgroup_parent = 'finact/master/accbudgetgroup/list-parent'
+export const load_accbudgetmodel_id = 'finact/master/accbudgetmodel/list'
 
 

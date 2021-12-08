@@ -2,6 +2,8 @@ var this_page_id;
 var this_page_options;
 
 import {fgta4slideselect} from  '../../../../../index.php/asset/fgta/framework/fgta4libs/fgta4slideselect.mjs'
+import {toTitleCase} from  '../../../../../index.php/asset/fgta/framework/fgta4libs/fgta4text.mjs'
+
 
 const btn_edit = $('#pnl_edit-btn_edit')
 const btn_save = $('#pnl_edit-btn_save')
@@ -16,7 +18,7 @@ const btn_approve = $('#pnl_edit-btn_approve')
 const btn_decline = $('#pnl_edit-btn_decline')			
 				
 
-
+const pnl_approval = $('.pnl_edit-approval')
 const pnl_form = $('#pnl_edit-form')
 const obj = {
 	txt_projbudget_id: $('#pnl_edit-txt_projbudget_id'),
@@ -179,8 +181,8 @@ export async function init(opt) {
 		fieldValueMap: 'project_id',
 		fieldDisplay: 'project_name',
 		fields: [
-			{mapping: 'project_name', text: 'project_name'},
 			{mapping: 'project_id', text: 'project_id'},
+			{mapping: 'project_name', text: 'project_name'},
 		],
 		OnDataLoading: (criteria) => {
 			var dept_id = obj.cbo_dept_id.combo('getValue');
@@ -189,8 +191,10 @@ export async function init(opt) {
 		OnDataLoaded : (result, options) => {
 				
 		},
-		OnSelected: (value, display, record) => {
-
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {	
+				txt_projbudget_composename(); 			
+			}
 		}
 	})				
 				
@@ -212,6 +216,11 @@ export async function init(opt) {
 		OnSelected: (value, display, record) => {}
 	})				
 				
+
+	obj.txt_projbudget_year.numberbox({ onChange: (newvalue, oldvalue) => {  txt_projbudget_composename(); } })
+	obj.txt_projbudget_month.numberbox({ onChange: (newvalue, oldvalue) => {  txt_projbudget_composename(); } })
+
+
 
 	document.addEventListener('keydown', (ev)=>{
 		if ($ui.getPages().getCurrentPage()==this_page_id) {
@@ -259,6 +268,20 @@ export async function init(opt) {
 	})
 
 	//button state
+	if (!this_page_options.privileges.can_edit) {
+		btn_edit.hide();
+		btn_save.hide();
+		btn_delete.hide();	
+	}
+
+	if (!this_page_options.privileges.can_commit) {
+		btn_commit.hide();
+		btn_uncommit.hide();
+	}
+
+	if (!this_page_options.privileges.can_approve) {
+		pnl_approval.hide();
+	}
 
 }
 
@@ -398,7 +421,11 @@ export function detil_open(pnlname) {
 		form.setDisable(obj.cbo_project_id, true);
 		form.setDisable(obj.txt_projbudget_year, true);
 		form.setDisable(obj.txt_projbudget_month, true);
-		$ui.getPages().ITEMS[pnlname].handler.OpenDetil(form.getData())
+
+		var header_data = form.getData();
+		header_data.dept_name = obj.cbo_dept_id.combo('getText');
+
+		$ui.getPages().ITEMS[pnlname].handler.OpenDetil(header_data)
 	})	
 }
 
@@ -760,4 +787,21 @@ async function btn_action_click(args) {
 	}
 }	
 	
+
+function txt_projbudget_composename() {
+	var project_id = form.getValue(obj.cbo_project_id);
+	if (project_id=="0") {
+		return;
+	}
+
+	var project_name = obj.cbo_project_id.combo('getText');
+	var year = form.getValue(obj.txt_projbudget_year);
+	var month = form.getValue(obj.txt_projbudget_month);
+	var str_month = month.padStart(2, '0');
+	var projbudget_descr = `${project_name} - ${year} ${str_month}`;
+	form.setValue(obj.txt_projbudget_name, projbudget_descr);
+	form.setValue(obj.txt_projbudget_descr, toTitleCase(projbudget_descr));
+
+}
 	
+

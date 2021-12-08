@@ -6,7 +6,6 @@ if (!defined('FGTA4')) {
 
 require_once __ROOT_DIR.'/core/sqlutil.php';
 require_once __DIR__ . '/xapi.base.php';
-require_once __DIR__ . '/xdata-static.php';
 
 use \FGTA4\exceptions\WebException;
 
@@ -25,7 +24,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 13/06/2021
+ * tanggal 06/12/2021
  */
 $API = new class extends projbudgetrevBase {
 
@@ -45,8 +44,7 @@ $API = new class extends projbudgetrevBase {
 			);
 
 			$sql = \FGTA4\utils\SqlUtility::Select('mst_projbudgetrevdet A', [
-				'projbudgetrevdet_id', 'projbudgetrevdet_mode', 'accbudget_id', 'projbudgetrevdet_descr', 'projbudgetrevdet_qty', 'projbudgetrevdet_days', 'projbudgetrevdet_task', 'projbudgetrevdet_rate', 'projbudgetrevdet_value', 'projbudgetrevdet_qty_prev', 'projbudgetrevdet_days_prev', 'projbudgetrevdet_task_prev', 'projbudgetrevdet_rate_prev', 'projbudgetrevdet_value_prev', 'projbudgetrevdet_rate_variance', 'projbudgetrevdet_value_variance', 'projbudgetrev_id'
-				, '_createby', '_createdate', '_modifyby', '_modifydate' 
+				'projbudgetrevdet_id', 'budgetrevmode_id', 'projbudgetdet_id', 'accbudget_id', 'alloc_dept_id', 'projbudgetrevdet_descr', 'projbudgetrevdet_qty', 'projbudgetrevdet_days', 'projbudgetrevdet_task', 'projbudgetrevdet_rate', 'projbudgetrevdet_value', 'projbudgetrevdet_qty_prev', 'projbudgetrevdet_days_prev', 'projbudgetrevdet_task_prev', 'projbudgetrevdet_rate_prev', 'projbudgetrevdet_value_prev', 'projbudgetrevdet_rate_variance', 'projbudgetrevdet_value_variance', 'projbudgetrev_id', '_createby', '_createdate', '_modifyby', '_modifydate' 
 			], $where->sql);
 
 			$stmt = $this->db->prepare($sql);
@@ -64,8 +62,12 @@ $API = new class extends projbudgetrevBase {
 				// 'tambahan' => 'dta',
 				//'tanggal' => date("d/m/Y", strtotime($record['tanggal'])),
 				//'gendername' => $record['gender']
-				'projbudgetrevdet_modename' =>  \FGTA4\utils\StaticData::get($record['projbudgetrevdet_mode'], 'mode', 'text'),
+
+				'budgetrevmode_name' => \FGTA4\utils\SqlUtility::Lookup($record['budgetrevmode_id'], $this->db, 'mst_budgetrevmode', 'budgetrevmode_id', 'budgetrevmode_name'),
+				'projbudgetdet_descr' => \FGTA4\utils\SqlUtility::Lookup($record['projbudgetdet_id'], $this->db, 'mst_projbudgetdet', 'projbudgetdet_id', 'projbudgetdet_descr'),
 				'accbudget_name' => \FGTA4\utils\SqlUtility::Lookup($record['accbudget_id'], $this->db, 'mst_accbudget', 'accbudget_id', 'accbudget_name'),
+				'dept_name' => \FGTA4\utils\SqlUtility::Lookup($record['alloc_dept_id'], $this->db, 'mst_dept', 'dept_id', 'dept_name'),
+				
 				'_createby' => \FGTA4\utils\SqlUtility::Lookup($record['_createby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
 				'_modifyby' => \FGTA4\utils\SqlUtility::Lookup($record['_modifyby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
 			]);

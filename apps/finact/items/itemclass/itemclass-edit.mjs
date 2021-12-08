@@ -102,7 +102,9 @@ export async function init(opt) {
 				
 		},
 		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
+			if (value!=args.PreviousValue ) {		
+				console.log(record);
+				form.setValue(obj.cbo_itemmanage_id, record.itemmanage_id, record.itemmanage_name);		
 			}
 		}
 	})				
@@ -450,8 +452,8 @@ export function createnew() {
 
 		data.itemmodel_id = '0'
 		data.itemmodel_name = '-- PILIH --'
-		data.itemclassgroup_id = '0'
-		data.itemclassgroup_name = '-- PILIH --'
+		data.itemclassgroup_id = '--NULL--'
+		data.itemclassgroup_name = 'NONE'
 		data.owner_dept_id = '0'
 		data.owner_dept_name = '-- PILIH --'
 		data.maintainer_dept_id = '0'

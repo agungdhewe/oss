@@ -29,7 +29,7 @@ module.exports = {
 					comp: comp.Combo({
 						table: 'mst_deptgroup', 
 						field_value: 'deptgroup_id', field_display: 'deptgroup_name', 
-						api: 'ent/organisation/deptgroup/list'})				
+						api: 'ent/organisation/deptgroup/list-selector'})				
 				},
 
 				dept_parent: {
@@ -54,7 +54,7 @@ module.exports = {
 					text:'Model', type: dbtype.varchar(10), null:false, uppercase: true, suppresslist: true,
 					options:{required:true,invalidMessage:'Model Department harus diisi', prompt:'-- PILIH --'},
 					comp: comp.Combo({
-						table: 'mst_deptmodle', 
+						table: 'mst_deptmodel', 
 						field_value: 'deptmodel_id', field_display: 'deptmodel_name', 
 						api: 'ent/organisation/deptmodel/list'})				
 				},
@@ -63,7 +63,7 @@ module.exports = {
 					text:'Authorisasi', type: dbtype.varchar(10), null:false, uppercase: true, suppresslist: true,
 					options:{required:true,invalidMessage:'Authorisasi harus diisi', prompt:'-- PILIH --'},
 					comp: comp.Combo({
-						table: 'mst_deptauth', 
+						table: 'mst_auth', 
 						field_value: 'auth_id', field_display: 'auth_name', 
 						api: 'ent/organisation/auth/list'})				
 				},

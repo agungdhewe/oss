@@ -1,3 +1,8 @@
+-- SET FOREIGN_KEY_CHECKS=0;
+
+-- drop table if exists `mst_accbudgetmodel`;
+
+
 CREATE TABLE `mst_accbudgetmodel` (
 	`accbudgetmodel_id` varchar(10) NOT NULL , 
 	`accbudgetmodel_name` varchar(30) NOT NULL , 

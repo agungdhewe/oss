@@ -1,3 +1,8 @@
+-- SET FOREIGN_KEY_CHECKS=0;
+
+-- drop table if exists `mst_unit`;
+
+
 CREATE TABLE `mst_unit` (
 	`unit_id` varchar(10) NOT NULL , 
 	`unit_name` varchar(60) NOT NULL , 

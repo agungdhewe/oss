@@ -24,7 +24,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 19/09/2021
+ * tanggal 05/12/2021
  */
 $API = new class extends projectBase {
 	
@@ -50,7 +50,7 @@ $API = new class extends projectBase {
 			);
 
 			$sql = \FGTA4\utils\SqlUtility::Select('mst_project A', [
-				'project_id', 'projecttype_id', 'projectmodel_id', 'orderin_id', 'project_name', 'project_descr', 'dept_id', 'project_isdisabled', 'project_isallowalldept', '_createby', '_createdate', '_modifyby', '_modifydate'
+				'project_id', 'projectmodel_id', 'project_name', 'project_descr', 'dept_id', 'project_isdisabled', 'project_isallowalldept', 'orderin_id', 'projecttype_id', '_createby', '_createdate', '_modifyby', '_modifydate'
 			], $where->sql);
 
 			$stmt = $this->db->prepare($sql);
@@ -71,10 +71,10 @@ $API = new class extends projectBase {
 				//'tanggal' => date("d/m/Y", strtotime($record['tanggal'])),
 				//'gendername' => $record['gender']
 				
-				'projecttype_name' => \FGTA4\utils\SqlUtility::Lookup($record['projecttype_id'], $this->db, 'mst_projecttype', 'projecttype_id', 'projecttype_name'),
 				'projectmodel_name' => \FGTA4\utils\SqlUtility::Lookup($record['projectmodel_id'], $this->db, 'mst_projectmodel', 'projectmodel_id', 'projectmodel_name'),
-				'orderin_descr' => \FGTA4\utils\SqlUtility::Lookup($record['orderin_id'], $this->db, 'trn_orderin', 'orderin_id', 'orderin_descr'),
 				'dept_name' => \FGTA4\utils\SqlUtility::Lookup($record['dept_id'], $this->db, 'mst_dept', 'dept_id', 'dept_name'),
+				'orderin_descr' => \FGTA4\utils\SqlUtility::Lookup($record['orderin_id'], $this->db, 'trn_orderin', 'orderin_id', 'orderin_descr'),
+				'projecttype_name' => \FGTA4\utils\SqlUtility::Lookup($record['projecttype_id'], $this->db, 'mst_projecttype', 'projecttype_id', 'projecttype_name'),
 
 
 				'_createby' => \FGTA4\utils\SqlUtility::Lookup($record['_createby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),

@@ -1,17 +1,9 @@
-import { fgta4slideselect } from '../../../../../index.php/asset/fgta/framework/fgta4libs/fgta4slideselect.mjs'
-import { fgta4ParallelProcess } from '../../../../../index.php/asset/fgta/framework/fgta4libs/fgta4parallel.mjs'
-
-
 var this_page_id;
 var this_page_options;
 
 const tbl_list = $('#pnl_list-tbl_list')
 
 const txt_search = $('#pnl_list-txt_search')
-const cbo_search_model = $('#pnl_list-cbo_search_model');
-const cbo_search_type = $('#pnl_list-cbo_search_type');
-const cbo_search_report = $('#pnl_list-cbo_search_report');
-
 const btn_load = $('#pnl_list-btn_load')
 const btn_new = $('#pnl_list-btn_new')
 
@@ -41,121 +33,13 @@ export async function init(opt) {
 	})
 	
 
-	btn_load.linkbutton({ onClick: () => { btn_load_click() } })
-	btn_new.linkbutton({ onClick: () => { btn_new_click() } })
-
-
-	var parallelProcess = fgta4ParallelProcess({
-		waitfor: {
-			cbo_search_report_created: 1,
-			cbo_search_type_created: 1,
-			cbo_search_model_created: 1
-		},
-		onFinished: () => {
-			btn_load_click();
-		}
+	btn_load.linkbutton({
+		onClick: () => { btn_load_click() }
 	})
 
-	cbo_search_report.name = 'pnl_list-cbo_search_report'	
-	new fgta4slideselect(cbo_search_report, {
-		title: 'Pilih Type',
-		returnpage: this_page_id,
-		api: $ui.apis.load_coareport_id,
-
-		fieldValue: 'coareport_id',
-		fieldValueMap: 'coareport_id',
-		fieldDisplay: 'coareport_name',
-		fields: [
-			{ mapping: 'coareport_name', text: 'Report' },
-		],
-		OnDataLoading: (criteria) => {
-			// console.log('loading...');
-		},
-		OnDataLoaded: (result, options) => {
-			result.records.unshift({ coareport_id: 'ALL', coareport_name: 'ALL' });
-		},
-		OnSelected: (value, display, record, options) => {
-			// console.log(record);
-			cbo_search_type.combo('setValue', 'ALL');
-			cbo_search_type.combo('setText', 'ALL');
-
-			options.flashhighlight = false
-			btn_load_click();
-		},
-		OnCreated: () => {
-			cbo_search_report.combo('setValue', 'ALL');
-			cbo_search_report.combo('setText', 'ALL');
-			parallelProcess.setFinished('cbo_search_report_created');
-		}
-	});
-
-
-
-	cbo_search_model.name = 'pnl_list-cbo_search_type'	
-	new fgta4slideselect(cbo_search_type, {
-		title: 'Pilih Type',
-		returnpage: this_page_id,
-		api: $ui.apis.load_coatype_id,
-
-		fieldValue: 'coatype_id',
-		fieldValueMap: 'coatype_id',
-		fieldDisplay: 'coatype_name',
-		fields: [
-			{ mapping: 'coatype_name', text: 'Type', style:"width: 200px" },
-			{ mapping: 'coareport_name', text: 'Report' },
-		],
-		OnDataLoading: (criteria) => {
-			var coareport_id = cbo_search_report.combo('getValue');
-			if (coareport_id!='ALL') {
-				criteria.coareport_id = coareport_id
-			}
-			// console.log('loading...');
-		},
-		OnDataLoaded: (result, options) => {
-			result.records.unshift({ coatype_id: 'ALL', coatype_name: 'ALL' });
-		},
-		OnSelected: (value, display, record, options) => {
-			// console.log(record);
-			options.flashhighlight = false
-			btn_load_click();
-		},
-		OnCreated: () => {
-			cbo_search_type.combo('setValue', 'ALL');
-			cbo_search_type.combo('setText', 'ALL');
-			parallelProcess.setFinished('cbo_search_type_created');
-		}
-	});
-
-
-	cbo_search_model.name = 'pnl_list-cbo_search_model'	
-	new fgta4slideselect(cbo_search_model, {
-		title: 'Pilih Model',
-		returnpage: this_page_id,
-		api: $ui.apis.load_coamodel_id,
-
-		fieldValue: 'coamodel_id',
-		fieldValueMap: 'coamodel_id',
-		fieldDisplay: 'coamodel_name',
-		fields: [
-			{ mapping: 'coamodel_name', text: 'Model' },
-		],
-		OnDataLoading: (criteria) => {
-			// console.log('loading...');
-		},
-		OnDataLoaded: (result, options) => {
-			result.records.unshift({ coamodel_id: 'ALL', coamodel_name: 'ALL' });
-		},
-		OnSelected: (value, display, record, options) => {
-			// console.log(record);
-			options.flashhighlight = false
-			btn_load_click();
-		},
-		OnCreated: () => {
-			cbo_search_model.combo('setValue', 'ALL');
-			cbo_search_model.combo('setText', 'ALL');
-			parallelProcess.setFinished('cbo_search_model_created');
-		}
-	});
+	btn_new.linkbutton({
+		onClick: () => { btn_new_click() }
+	})
 
 	document.addEventListener('OnSizeRecalculated', (ev) => {
 		OnSizeRecalculated(ev.detail.width, ev.detail.height)
@@ -170,8 +54,9 @@ export async function init(opt) {
 		}
 	})	
 	
+	//button state
 
-	// btn_load_click()
+	btn_load_click()
 }
 
 
@@ -211,24 +96,6 @@ function btn_load_click() {
 			options.criteria['search'] = search
 		}
 
-
-		var coareport_id = cbo_search_report.combo('getValue');
-		var coatype_id = cbo_search_type.combo('getValue');
-		var coamodel_id = cbo_search_model.combo('getValue');
-		
-		if (coareport_id!='ALL') {
-			options.criteria.coareport_id = coareport_id;
-		}
-
-		if (coatype_id!='ALL') {
-			options.criteria.coatype_id = coatype_id;
-		}
-
-		if (coamodel_id!='ALL') {
-			options.criteria.coamodel_id = coamodel_id;
-		} 
-
-		// console.log(options.criteria);
 		// switch (this_page_options.variancename) {
 		// 	case 'commit' :
 		//		break;

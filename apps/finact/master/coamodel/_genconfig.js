@@ -13,19 +13,41 @@ module.exports = {
 		primarykeys: ['coamodel_id'],
 			data: {
 				coamodel_id: { text: 'ID', type: dbtype.varchar(10), uppercase: true, null: false, options: { required: true, invalidMessage: 'ID harus diisi' } },
-				coamodel_name: { text: 'Model COA', type: dbtype.varchar(30), null: false, uppercase: true, options: { required: true, invalidMessage: 'Model coa harus diisi' } },
+				coamodel_name: { text: 'Model COA', type: dbtype.varchar(90), null: false, uppercase: true, options: { required: true, invalidMessage: 'Model coa harus diisi' } },
 				coamodel_isdisabled: { text: 'Disabled', type: dbtype.boolean, null: false, default: '0' },
 				coamodel_isaging: { text: 'Manage Aging', type: dbtype.boolean, null: false, default: '0' },
-				coamodel_descr: { text: 'Descr', type: dbtype.varchar(90), suppresslist: true }
+				coamodel_descr: { text: 'Descr', type: dbtype.varchar(90), suppresslist: true },
+				coareport_id: {
+					text: 'Report', type: dbtype.varchar(2), null: false, uppercase: true, suppresslist: true,
+					options: { required: true, invalidMessage: 'Report harus diisi' },
+					comp: comp.Combo({
+						table: 'mst_coareport',
+						field_value: 'coareport_id',
+						field_display: 'coareport_name',
+						api: 'finact/master/coareport/list'
+					})
+				},	
+
+
 			},
 			uniques: {
 				'coamodel_name': ['coamodel_name']
 			},
 			defaultsearch: ['coamodel_id', 'coamodel_name'],
 			values: [
-				{coamodel_id:'AR', coamodel_name:'RECEIVABLE', coamodel_isaging:'1', coamodel_descr:''},
-				{coamodel_id:'AP', coamodel_name:'PAYABLE', coamodel_isaging:'1', coamodel_descr:''},
-				{coamodel_id:'GN', coamodel_name:'GENERAL', coamodel_isaging:'0', coamodel_descr:''},
+				{coamodel_id:'KB', coamodel_name:'KAS & BANK', coareport_id: 'NR'},
+				{coamodel_id:'SB', coamodel_name:'SURAT BERHARGA', coareport_id: 'NR'},
+				{coamodel_id:'AR', coamodel_name:'PIUTANG', coareport_id: 'NR', coamodel_isaging:'1'},
+				{coamodel_id:'PS', coamodel_name:'PERSEDIAAN', coareport_id: 'NR'},
+				{coamodel_id:'PL', coamodel_name:'PERLENGKAPAN', coareport_id: 'NR'},
+				{coamodel_id:'UM', coamodel_name:'UAMG MUKA', coareport_id: 'NR', coamodel_isaging:'1'},
+				{coamodel_id:'HT', coamodel_name:'HARTA TETAP', coareport_id: 'NR'},
+				{coamodel_id:'HB', coamodel_name:'HARTA TAK BERWUJUD', coareport_id: 'NR'},
+				{coamodel_id:'AP', coamodel_name:'KEWAJIBAN', coareport_id: 'NR', coamodel_isaging:'1'},
+				{coamodel_id:'MD', coamodel_name:'MODAL', coareport_id: 'NR'},
+				{coamodel_id:'PD', coamodel_name:'PENDAPATAN', coareport_id: 'LR'},
+				{coamodel_id:'BN', coamodel_name:'BEBAN', coareport_id: 'LR'},
+				{coamodel_id:'CL', coamodel_name:'CLEARING', coareport_id: 'CR'},
 			]
 		}
 	},

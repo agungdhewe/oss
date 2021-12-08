@@ -39,14 +39,17 @@ $API = new class extends projbudgetBase {
 			}
 
 
+			\FGTA4\utils\SqlUtility::setDefaultCriteria($options->criteria, 'projbudget_isapproved', '1');
 			$where = \FGTA4\utils\SqlUtility::BuildCriteria(
 				$options->criteria,
 				[
 					"search" => " A.projbudget_id LIKE CONCAT('%', :search, '%') OR A.projbudget_name LIKE CONCAT('%', :search, '%') ",
-					"dept_id" => " A.dept_id = :dept_id "
+					"dept_id" => " A.dept_id = :dept_id ",
+					"projbudget_isapproved" => " A.projbudget_isapproved = :projbudget_isapproved " 
 				]
 			);
 
+			
 			$result = new \stdClass; 
 			$maxrow = 30;
 			$offset = (property_exists($options, 'offset')) ? $options->offset : 0;
@@ -59,7 +62,7 @@ $API = new class extends projbudgetBase {
 			$limit = " LIMIT $maxrow OFFSET $offset ";
 			$stmt = $this->db->prepare("
 				select 
-				projbudget_id, dept_id, project_id, projbudget_name, projbudget_descr, projbudget_year, projbudget_month, doc_id, projbudget_notes, projbudget_version, projbudget_iscommit, projbudget_commitby, projbudget_commitdate, projbudget_isapprovalprogress, projbudget_isapproved, projbudget_approveby, projbudget_approvedate, projbudget_isdeclined, projbudget_declineby, projbudget_declinedate, projbudget_isclose, projbudget_closeby, projbudget_closedate, _createby, _createdate, _modifyby, _modifydate 
+				projbudget_id, dept_id, project_id, projbudget_name, projbudget_descr, projbudget_year, projbudget_month, projbudget_isdeptalloc, doc_id, projbudget_notes, projbudget_version, projbudget_iscommit, projbudget_commitby, projbudget_commitdate, projbudget_isapprovalprogress, projbudget_isapproved, projbudget_approveby, projbudget_approvedate, projbudget_isdeclined, projbudget_declineby, projbudget_declinedate, projbudget_isclose, projbudget_closeby, projbudget_closedate, _createby, _createdate, _modifyby, _modifydate 
 				from mst_projbudget A
 			" . $where->sql . $limit);
 			$stmt->execute($where->params);
@@ -79,10 +82,10 @@ $API = new class extends projbudgetBase {
 					'dept_name' => \FGTA4\utils\SqlUtility::Lookup($record['dept_id'], $this->db, 'mst_dept', 'dept_id', 'dept_name'),
 					'project_name' => \FGTA4\utils\SqlUtility::Lookup($record['project_id'], $this->db, 'mst_project', 'project_id', 'project_name'),
 					'doc_name' => \FGTA4\utils\SqlUtility::Lookup($record['doc_id'], $this->db, 'mst_doc', 'doc_id', 'doc_name'),
-				'projbudget_commitby' => \FGTA4\utils\SqlUtility::Lookup($record['projbudget_commitby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
-				'projbudget_approveby' => \FGTA4\utils\SqlUtility::Lookup($record['projbudget_approveby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
-				'projbudget_declineby' => \FGTA4\utils\SqlUtility::Lookup($record['projbudget_declineby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
-				'projbudget_closeby' => \FGTA4\utils\SqlUtility::Lookup($record['projbudget_closeby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+					'projbudget_commitby' => \FGTA4\utils\SqlUtility::Lookup($record['projbudget_commitby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+					'projbudget_approveby' => \FGTA4\utils\SqlUtility::Lookup($record['projbudget_approveby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+					'projbudget_declineby' => \FGTA4\utils\SqlUtility::Lookup($record['projbudget_declineby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+					'projbudget_closeby' => \FGTA4\utils\SqlUtility::Lookup($record['projbudget_closeby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
 					 
 				]));
 			}

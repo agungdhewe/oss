@@ -23,7 +23,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 19/09/2021
+ * tanggal 05/12/2021
  */
 $API = new class extends projectBase {
 
@@ -58,7 +58,7 @@ $API = new class extends projectBase {
 			$limit = " LIMIT $maxrow OFFSET $offset ";
 			$stmt = $this->db->prepare("
 				select 
-				A.project_id, A.projecttype_id, A.projectmodel_id, A.orderin_id, A.project_name, A.project_descr, A.dept_id, A.project_isdisabled, A.project_isallowalldept, A._createby, A._createdate, A._modifyby, A._modifydate 
+				A.project_id, A.projectmodel_id, A.project_name, A.project_descr, A.dept_id, A.project_isdisabled, A.project_isallowalldept, A.orderin_id, A.projecttype_id, A._createby, A._createdate, A._modifyby, A._modifydate 
 				from mst_project A
 			" . $where->sql . $limit);
 			$stmt->execute($where->params);
@@ -75,10 +75,10 @@ $API = new class extends projectBase {
 					// // jikalau ingin menambah atau edit field di result record, dapat dilakukan sesuai contoh sbb: 
 					//'tanggal' => date("d/m/y", strtotime($record['tanggal'])),
 				 	//'tambahan' => 'dta'
-					'projecttype_name' => \FGTA4\utils\SqlUtility::Lookup($record['projecttype_id'], $this->db, 'mst_projecttype', 'projecttype_id', 'projecttype_name'),
 					'projectmodel_name' => \FGTA4\utils\SqlUtility::Lookup($record['projectmodel_id'], $this->db, 'mst_projectmodel', 'projectmodel_id', 'projectmodel_name'),
-					'orderin_descr' => \FGTA4\utils\SqlUtility::Lookup($record['orderin_id'], $this->db, 'trn_orderin', 'orderin_id', 'orderin_descr'),
 					'dept_name' => \FGTA4\utils\SqlUtility::Lookup($record['dept_id'], $this->db, 'mst_dept', 'dept_id', 'dept_name'),
+					'orderin_descr' => \FGTA4\utils\SqlUtility::Lookup($record['orderin_id'], $this->db, 'trn_orderin', 'orderin_id', 'orderin_descr'),
+					'projecttype_name' => \FGTA4\utils\SqlUtility::Lookup($record['projecttype_id'], $this->db, 'mst_projecttype', 'projecttype_id', 'projecttype_name'),
 					 
 				]));
 			}

@@ -1,6 +1,7 @@
 {
 	"title" : "Budget Account Model",
-	"icon" : "icon-accbudgetmodel-white.svg",
+	
+	
 	"variance" : {},
 	"allowanonymous" : true,
 	"allowedgroups" : ["public"],

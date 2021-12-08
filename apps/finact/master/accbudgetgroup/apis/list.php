@@ -5,25 +5,27 @@ if (!defined('FGTA4')) {
 }
 
 require_once __ROOT_DIR.'/core/sqlutil.php';
-
+require_once __DIR__ . '/xapi.base.php';
 
 
 use \FGTA4\exceptions\WebException;
 
-
-class DataList extends WebAPI {
-	function __construct() {
-		$this->debugoutput = true;
-		$DB_CONFIG = DB_CONFIG[$GLOBALS['MAINDB']];
-		$DB_CONFIG['param'] = DB_CONFIG_PARAM[$GLOBALS['MAINDBTYPE']];
-		$this->db = new \PDO(
-					$DB_CONFIG['DSN'], 
-					$DB_CONFIG['user'], 
-					$DB_CONFIG['pass'], 
-					$DB_CONFIG['param']
-		);
-
-	}
+/**
+ * finact/master/accbudgetgroup/apis/list.php
+ *
+ * ========
+ * DataList
+ * ========
+ * Menampilkan data-data pada tabel header accbudgetgroup (mst_accbudgetgroup)
+ * sesuai dengan parameter yang dikirimkan melalui variable $option->criteria
+ *
+ * Agung Nugroho <agung@fgta.net> http://www.fgta.net
+ * Tangerang, 26 Maret 2021
+ *
+ * digenerate dengan FGTA4 generator
+ * tanggal 04/12/2021
+ */
+$API = new class extends accbudgetgroupBase {
 
 	public function execute($options) {
 
@@ -36,7 +38,7 @@ class DataList extends WebAPI {
 				throw new \Exception('your group authority is not allowed to do this action.');
 			}
 
-
+			// \FGTA4\utils\SqlUtility::setDefaultCriteria($options->criteria, '--fieldscriteria--', '--value--');
 			$where = \FGTA4\utils\SqlUtility::BuildCriteria(
 				$options->criteria,
 				[
@@ -56,11 +58,14 @@ class DataList extends WebAPI {
 			$limit = " LIMIT $maxrow OFFSET $offset ";
 			$stmt = $this->db->prepare("
 					select 
-					accbudgetgroup_id, accbudgetgroup_name, accbudgetgroup_descr, accbudgetgroup_isparent, accbudgetgroup_isdisabled, accbudgetgroup_parent, accbudgetgroup_path, accbudgetgroup_pathid, accbudgetgroup_level, accbudgetgroup_isexselect, _createby, _createdate, _modifyby, _modifydate 
+					  A.accbudgetgroup_id, A.accbudgetgroup_name, A.accbudgetgroup_descr, A.accbudgetgroup_isparent
+					, A.accbudgetmodel_id, A.accbudgetgroup_isdisabled, A.accbudgetgroup_parent, A.accbudgetgroup_path
+					, A.accbudgetgroup_pathid, A.accbudgetgroup_level, A.accbudgetgroup_isexselect
+					, A._createby, A._createdate, A._modifyby, A._modifydate 
 					from mst_accbudgetgroup A
 				" 
-				. $where->sql
-				. " order by accbudgetgroup_path, accbudgetgroup_id " 
+				. $where->sql 
+				." ORDER BY accbudgetgroup_path, accbudgetgroup_pathid "
 				. $limit
 			);
 			$stmt->execute($where->params);
@@ -78,7 +83,7 @@ class DataList extends WebAPI {
 					//'tanggal' => date("d/m/y", strtotime($record['tanggal'])),
 				 	//'tambahan' => 'dta'
 					'accbudgetgroup_parent_name' => \FGTA4\utils\SqlUtility::Lookup($record['accbudgetgroup_parent'], $this->db, 'mst_accbudgetgroup', 'accbudgetgroup_id', 'accbudgetgroup_name'),
-					 
+					'accbudgetmodel_name' => \FGTA4\utils\SqlUtility::Lookup($record['accbudgetmodel_id'], $this->db, 'mst_accbudgetmodel', 'accbudgetmodel_id', 'accbudgetmodel_name'),
 				]));
 			}
 
@@ -93,6 +98,4 @@ class DataList extends WebAPI {
 		}
 	}
 
-}
-
-$API = new DataList();
+};

@@ -16,7 +16,7 @@ const btn_approve = $('#pnl_edit-btn_approve')
 const btn_decline = $('#pnl_edit-btn_decline')			
 				
 
-
+const pnl_approval = $('.pnl_edit-approval')
 const pnl_form = $('#pnl_edit-form')
 const obj = {
 	txt_projbudgetrev_id: $('#pnl_edit-txt_projbudgetrev_id'),
@@ -26,6 +26,7 @@ const obj = {
 	cbo_project_id: $('#pnl_edit-cbo_project_id'),
 	txt_projbudget_year: $('#pnl_edit-txt_projbudget_year'),
 	txt_projbudget_month: $('#pnl_edit-txt_projbudget_month'),
+	chk_projbudget_isdeptalloc: $('#pnl_edit-chk_projbudget_isdeptalloc'),
 	cbo_doc_id: $('#pnl_edit-cbo_doc_id'),
 	txt_projbudgetrev_notes: $('#pnl_edit-txt_projbudgetrev_notes'),
 	txt_projbudgetrev_version: $('#pnl_edit-txt_projbudgetrev_version'),
@@ -55,7 +56,7 @@ const rec_declinedate = $('#pnl_edit_record-declinedate');
 			
 
 
-let form = {}
+let form;
 
 export async function init(opt) {
 	this_page_id = opt.id;
@@ -157,11 +158,17 @@ export async function init(opt) {
 			{mapping: 'dept_id', text: 'dept_id'},
 			{mapping: 'dept_name', text: 'dept_name'},
 		],
-		OnDataLoading: (criteria) => {},
-		OnDataLoaded : (result, options) => {},
-		OnSelected: (value, display, record) => {
-			form.setValue(obj.cbo_projbudget_id, '0', '-- PILIH --');
-			form.setValue(obj.cbo_project_id, '0', '-- PILIH --');
+		OnDataLoading: (criteria) => {
+						
+		},
+		OnDataLoaded : (result, options) => {
+				
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+				form.setValue(obj.cbo_project_id, '0', '-- PILIH --');
+				form.setValue(obj.cbo_projbudget_id, '0', '-- PILIH --');
+			}
 		}
 	})				
 				
@@ -177,16 +184,20 @@ export async function init(opt) {
 			{mapping: 'projbudget_name', text: 'projbudget_name'},
 		],
 		OnDataLoading: (criteria) => {
-			var dept_id = form.getValue(obj.cbo_dept_id);
-			criteria.dept_id = dept_id;
+			var dept_id = form.getValue(obj.cbo_dept_id);	
+				criteria.dept_id = dept_id;			
 		},
 		OnDataLoaded : (result, options) => {
 				
 		},
-		OnSelected: (value, display, record) => {
-			form.setValue(obj.cbo_project_id, record.project_id, record.project_name);
-			form.setValue(obj.txt_projbudget_year, record.projbudget_year);
-			form.setValue(obj.txt_projbudget_month, record.projbudget_month);
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+				form.setValue(obj.cbo_project_id, record.project_id, record.project_name);
+				form.setValue(obj.txt_projbudget_year, record.projbudget_year);
+				form.setValue(obj.txt_projbudget_month, record.projbudget_month);
+				form.setValue(obj.chk_projbudget_isdeptalloc, record.projbudget_isdeptalloc=='1'?true:false);				
+										
+			}
 		}
 	})				
 				
@@ -201,11 +212,16 @@ export async function init(opt) {
 			{mapping: 'project_id', text: 'project_id'},
 			{mapping: 'project_name', text: 'project_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+						
+		},
 		OnDataLoaded : (result, options) => {
 				
 		},
-		OnSelected: (value, display, record) => {}
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {				
+			}
+		}
 	})				
 				
 	new fgta4slideselect(obj.cbo_doc_id, {
@@ -219,11 +235,16 @@ export async function init(opt) {
 			{mapping: 'doc_id', text: 'doc_id'},
 			{mapping: 'doc_name', text: 'doc_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+						
+		},
 		OnDataLoaded : (result, options) => {
 				
 		},
-		OnSelected: (value, display, record) => {}
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {				
+			}
+		}
 	})				
 				
 
@@ -273,66 +294,84 @@ export async function init(opt) {
 	})
 
 	//button state
-
-
-	// buat testing
-
+		//button state
+		if (!this_page_options.privileges.can_edit) {
+			btn_edit.hide();
+			btn_save.hide();
+			btn_delete.hide();	
+		}
+	
+		if (!this_page_options.privileges.can_commit) {
+			btn_commit.hide();
+			btn_uncommit.hide();
+		}
+	
+		if (!this_page_options.privileges.can_approve) {
+			pnl_approval.hide();
+		}
 
 }
-
 
 export function OnSizeRecalculated(width, height) {
 }
 
-
+export function getForm() {
+	return form
+}
 
 
 export function open(data, rowid, viewmode=true, fn_callback) {
 
-
+	var pOpt = form.getDefaultPrompt(false)
 	var fn_dataopening = async (options) => {
 		options.criteria[form.primary.mapping] = data[form.primary.mapping]
 	}
 
 	var fn_dataopened = async (result, options) => {
+		var record = result.record;
+		updatefilebox(record);
 
-		updatefilebox(result.record);
+		/*
 
-
-  		updaterecordstatus(result.record)
+		*/
+		for (var objid in obj) {
+			let o = obj[objid]
+			if (o.isCombo() && !o.isRequired()) {
+				var value =  result.record[o.getFieldValueName()];
+				if (value==null ) {
+					record[o.getFieldValueName()] = pOpt.value;
+					record[o.getFieldDisplayName()] = pOpt.text;
+				}
+			}
+		}
+  		updaterecordstatus(record)
 
 		form.SuspendEvent(true);
 		form
-			.fill(result.record)
-			.setValue(obj.cbo_dept_id, result.record.dept_id, result.record.dept_name)
-			.setValue(obj.cbo_projbudget_id, result.record.projbudget_id, result.record.projbudget_name)
-			.setValue(obj.cbo_project_id, result.record.project_id, result.record.project_name)
-			.setValue(obj.cbo_doc_id, result.record.doc_id, result.record.doc_name)
-			.commit()
+			.fill(record)
+			.setValue(obj.cbo_dept_id, record.dept_id, record.dept_name)
+			.setValue(obj.cbo_projbudget_id, record.projbudget_id, record.projbudget_name)
+			.setValue(obj.cbo_project_id, record.project_id, record.project_name)
+			.setValue(obj.cbo_doc_id, record.doc_id, record.doc_name)
 			.setViewMode(viewmode)
 			.lock(false)
 			.rowid = rowid
 
+
+		/* tambahkan event atau behaviour saat form dibuka
+		   apabila ada rutin mengubah form dan tidak mau dijalankan pada saat opening,
+		   cek dengan form.isEventSuspended()
+		*/   
+
+
+
+		/* commit form */
+		form.commit()
+		form.SuspendEvent(false); 
+		updatebuttonstate(record)
+
 		// tampilkan form untuk data editor
 		fn_callback()
-		form.SuspendEvent(false);
-
-		updatebuttonstate(result.record)
-		
-
-
-		// fill data, bisa dilakukan secara manual dengan cara berikut:	
-		// form
-			// .setValue(obj.txt_id, result.record.id)
-			// .setValue(obj.txt_nama, result.record.nama)
-			// .setValue(obj.cbo_prov, result.record.prov_id, result.record.prov_nama)
-			// .setValue(obj.chk_isdisabled, result.record.disabled)
-			// .setValue(obj.txt_alamat, result.record.alamat)
-			// ....... dst dst
-			// .commit()
-			// .setViewMode()
-			// ....... dst dst
-
 	}
 
 	var fn_dataopenerror = (err) => {
@@ -353,6 +392,7 @@ export function createnew() {
 		// set nilai-nilai default untuk form
 		data.projbudget_year = 0
 		data.projbudget_month = 0
+		data.projbudget_isdeptalloc = '0'
 		data.projbudgetrev_version = 0
 		data.projbudgetrev_iscommit = '0'
 		data.projbudgetrev_isapprovalprogress = '0'
@@ -360,8 +400,8 @@ export function createnew() {
 		data.projbudgetrev_isdeclined = '0'
 		data.projbudgetrev_isclose = '0'
 
-		data.dept_id = global.setup.dept_id
-		data.dept_name = global.setup.dept_name
+		data.dept_id = '0'
+		data.dept_name = '-- PILIH --'
 		data.projbudget_id = '0'
 		data.projbudget_name = '-- PILIH --'
 		data.project_id = '0'
@@ -392,6 +432,8 @@ export function createnew() {
 		btn_decline.linkbutton(button_decline_on ? 'enable' : 'disable');
 			
 
+
+
 		options.OnCanceled = () => {
 			$ui.getPages().show('pnl_list')
 		}
@@ -412,7 +454,9 @@ export function detil_open(pnlname) {
 
 	//$ui.getPages().show(pnlname)
 	$ui.getPages().show(pnlname, () => {
-		$ui.getPages().ITEMS[pnlname].handler.OpenDetil(form.getData())
+		var header_data = form.getData();
+		header_data.dept_name = obj.cbo_dept_id.combo('getText');
+		$ui.getPages().ITEMS[pnlname].handler.OpenDetil(header_data)
 	})	
 }
 
@@ -548,7 +592,17 @@ async function form_datasaving(data, options) {
 	//    options.cancel = true
 
 	// Modifikasi object data, apabila ingin menambahkan variabel yang akan dikirim ke server
+	// options.skipmappingresponse = [];
 	options.skipmappingresponse = [];
+	for (var objid in obj) {
+		var o = obj[objid]
+		if (o.isCombo() && !o.isRequired()) {
+			var id = o.getFieldValueName()
+			options.skipmappingresponse.push(id)
+			console.log(id)
+		}
+	}
+
 }
 
 async function form_datasaveerror(err, options) {
@@ -575,8 +629,23 @@ async function form_datasaved(result, options) {
 
 	var data = {}
 	Object.assign(data, form.getData(), result.dataresponse)
+	/*
 
+	*/
 
+	var pOpt = form.getDefaultPrompt(false)
+	for (var objid in obj) {
+		var o = obj[objid]
+		if (o.isCombo() && !o.isRequired()) {
+			var value =  result.dataresponse[o.getFieldValueName()];
+			var text = result.dataresponse[o.getFieldDisplayName()];
+			if (value==null ) {
+				value = pOpt.value;
+				text = pOpt.text;
+			}
+			form.setValue(o, value, text);
+		}
+	}
 	form.rowid = $ui.getPages().ITEMS['pnl_list'].handler.updategrid(data, form.rowid)
 }
 

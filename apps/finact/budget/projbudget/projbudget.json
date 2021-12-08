@@ -1,8 +1,21 @@
 {
 	"title" : "Project Budget",
 	"icon": "icon-projbudget-white.svg",
-	
-	"variance" : {},
+
+	"variance" : {
+		"view" : {
+			"title" : "Project Budget View"
+		},
+
+		"propose" : {
+			"title" : "Project Budget Propose"
+		},
+
+		"approval" : {
+			"title" : "Project Budget Approval"
+		}
+	},
+
 	"allowanonymous" : true,
 	"allowedgroups" : ["public"],
 	"apis" : {

@@ -53,6 +53,7 @@ $API = new class extends projbudgetBase {
 
 			try {
 
+				$this->set_commit($id, $currentdata);
 				$this->set_approval($currentdata);
 				$this->save_and_set_commit_flag($id, $currentdata);
 
@@ -95,6 +96,32 @@ $API = new class extends projbudgetBase {
 			throw $ex;
 		}
 	}
+
+
+	public function set_Commit($id, $currentdata) {
+		try {
+
+			$sql = "
+				update mst_projbudgetdet
+				set
+				projbudgetdet_qty_prop = projbudgetdet_qty,
+				projbudgetdet_days_prop = projbudgetdet_days,
+				projbudgetdet_task_prop = projbudgetdet_task,
+				projbudgetdet_rate_prop = projbudgetdet_rate,
+				projbudgetdet_value_prop = projbudgetdet_value
+				where
+				projbudget_id = :id
+			";
+			$stmt = $this->db->prepare($sql);
+			$stmt->execute([
+				":id" => $id
+			]);
+
+		} catch (Exception $ex) {
+			throw $ex;
+		}
+	}
+
 
 
 	public function set_approval($currentdata) {

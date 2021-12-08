@@ -24,7 +24,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 13/06/2021
+ * tanggal 06/12/2021
  */
 $API = new class extends projbudgetrevBase {
 
@@ -45,7 +45,6 @@ $API = new class extends projbudgetrevBase {
 
 			$sql = \FGTA4\utils\SqlUtility::Select('mst_projbudgetrevappr A', [
 				'projbudgetrevappr_id', 'projbudgetrevappr_isapproved', 'projbudgetrevappr_by', 'projbudgetrevappr_date', 'projbudgetrev_version', 'projbudgetrevappr_isdeclined', 'projbudgetrevappr_declinedby', 'projbudgetrevappr_declineddate', 'projbudgetrevappr_notes', 'projbudgetrev_id', 'docauth_descr', 'docauth_order', 'docauth_value', 'docauth_min', 'authlevel_id', 'authlevel_name', 'auth_id', 'auth_name', '_createby', '_createdate', '_modifyby', '_modifydate' 
-				, '_createby', '_createdate', '_modifyby', '_modifydate' 
 			], $where->sql);
 
 			$stmt = $this->db->prepare($sql);

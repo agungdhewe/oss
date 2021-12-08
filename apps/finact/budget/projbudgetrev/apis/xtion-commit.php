@@ -30,7 +30,7 @@ use \FGTA4\StandartApproval;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 13/06/2021
+ * tanggal 06/12/2021
  */
 $API = new class extends projbudgetrevBase {
 
@@ -105,7 +105,8 @@ $API = new class extends projbudgetrevBase {
 				$currentdata,
 				$this->approval_tablename, 
 				["$this->main_primarykey"=> $currentdata->header->{$this->main_primarykey}, "$this->approval_primarykey"=>null],
-				$currentdata->header->doc_id
+				$currentdata->header->doc_id,
+				'dept_id'
 			);
 
 		} catch (Exception $ex) {

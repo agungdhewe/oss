@@ -5,25 +5,31 @@ if (!defined('FGTA4')) {
 }
 
 require_once __ROOT_DIR.'/core/sqlutil.php';
+// require_once __ROOT_DIR . "/core/sequencer.php";
+require_once __DIR__ . '/xapi.base.php';
 
 
 use \FGTA4\exceptions\WebException;
+// use \FGTA4\utils\Sequencer;
 
 
 
-class DataSave extends WebAPI {
-	function __construct() {
-		$this->debugoutput = true;
-		$DB_CONFIG = DB_CONFIG[$GLOBALS['MAINDB']];
-		$DB_CONFIG['param'] = DB_CONFIG_PARAM[$GLOBALS['MAINDBTYPE']];
-		$this->db = new \PDO(
-					$DB_CONFIG['DSN'], 
-					$DB_CONFIG['user'], 
-					$DB_CONFIG['pass'], 
-					$DB_CONFIG['param']
-		);	
-
-	}
+/**
+ * finact/master/accbudgetgroup/apis/save.php
+ *
+ * ====
+ * Save
+ * ====
+ * Menampilkan satu baris data/record sesuai PrimaryKey,
+ * dari tabel header accbudgetgroup (mst_accbudgetgroup)
+ *
+ * Agung Nugroho <agung@fgta.net> http://www.fgta.net
+ * Tangerang, 26 Maret 2021
+ *
+ * digenerate dengan FGTA4 generator
+ * tanggal 04/12/2021
+ */
+$API = new class extends accbudgetgroupBase {
 	
 	public function execute($data, $options) {
 		$tablename = 'mst_accbudgetgroup';
@@ -55,9 +61,11 @@ class DataSave extends WebAPI {
 			// apabila ada tanggal, ubah ke format sql sbb:
 			// $obj->tanggal = (\DateTime::createFromFormat('d/m/Y',$obj->tanggal))->format('Y-m-d');
 
+			$obj->accbudgetgroup_id = strtoupper($obj->accbudgetgroup_id);
 
 
-			// if ($obj->accbudgetgroup_parent=='--NULL--') { unset($obj->accbudgetgroup_parent); }
+
+
 
 
 
@@ -87,7 +95,39 @@ class DataSave extends WebAPI {
 
 				\FGTA4\utils\SqlUtility::WriteLog($this->db, $this->reqinfo->modulefullname, $tablename, $obj->{$primarykey}, $action, $userdata->username, (object)[]);
 
+
+
+
+				// result
+				$where = \FGTA4\utils\SqlUtility::BuildCriteria((object)[$primarykey=>$obj->{$primarykey}], [$primarykey=>"$primarykey=:$primarykey"]);
+				$sql = \FGTA4\utils\SqlUtility::Select($tablename , [
+					$primarykey
+					, 'accbudgetgroup_id', 'accbudgetgroup_name', 'accbudgetgroup_descr', 'accbudgetgroup_isparent'
+					, 'accbudgetgroup_isdisabled', 'accbudgetgroup_parent', 'accbudgetmodel_id', 'accbudgetgroup_path'
+					, 'accbudgetgroup_pathid', 'accbudgetgroup_level', 'accbudgetgroup_isexselect'
+					, '_createby', '_createdate', '_modifyby', '_modifydate'
+				], $where->sql);
+				$stmt = $this->db->prepare($sql);
+				$stmt->execute($where->params);
+				$row  = $stmt->fetch(\PDO::FETCH_ASSOC);			
+
+				$record = [];
+				foreach ($row as $key => $value) {
+					$record[$key] = $value;
+				}
+				$result->dataresponse = (object) array_merge($record, [
+					//  untuk lookup atau modify response ditaruh disini
+					'accbudgetgroup_parent_name' => \FGTA4\utils\SqlUtility::Lookup($record['accbudgetgroup_parent'], $this->db, 'mst_accbudgetgroup', 'accbudgetgroup_id', 'accbudgetgroup_name'),
+					'accbudgetmodel_name' => \FGTA4\utils\SqlUtility::Lookup($record['accbudgetmodel_id'], $this->db, 'mst_accbudgetmodel', 'accbudgetmodel_id', 'accbudgetmodel_name'),
+					'_createby' => \FGTA4\utils\SqlUtility::Lookup($record['_createby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+					'_modifyby' => \FGTA4\utils\SqlUtility::Lookup($record['_modifyby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+				]);
+
+
+
 				$this->db->commit();
+				return $result;
+
 			} catch (\Exception $ex) {
 				$this->db->rollBack();
 				throw $ex;
@@ -95,35 +135,13 @@ class DataSave extends WebAPI {
 				$this->db->setAttribute(\PDO::ATTR_AUTOCOMMIT,1);
 			}
 
-
-			$where = \FGTA4\utils\SqlUtility::BuildCriteria((object)[$primarykey=>$obj->{$primarykey}], [$primarykey=>"$primarykey=:$primarykey"]);
-			$sql = \FGTA4\utils\SqlUtility::Select($tablename , [
-				$primarykey, 'accbudgetgroup_id', 'accbudgetgroup_name', 'accbudgetgroup_descr', 'accbudgetgroup_isparent', 'accbudgetgroup_isdisabled', 'accbudgetgroup_parent', 'accbudgetgroup_path', 'accbudgetgroup_pathid', 'accbudgetgroup_level', 'accbudgetgroup_isexselect', '_createby', '_createdate', '_modifyby', '_modifydate', '_createby', '_createdate', '_modifyby', '_modifydate'
-			], $where->sql);
-			$stmt = $this->db->prepare($sql);
-			$stmt->execute($where->params);
-			$row  = $stmt->fetch(\PDO::FETCH_ASSOC);			
-
-			$dataresponse = [];
-			foreach ($row as $key => $value) {
-				$dataresponse[$key] = $value;
-			}
-			$result->dataresponse = (object) array_merge($dataresponse, [
-				//  untuk lookup atau modify response ditaruh disini
-				'accbudgetgroup_parent_name' => \FGTA4\utils\SqlUtility::Lookup($data->accbudgetgroup_parent, $this->db, 'mst_accbudgetgroup', 'accbudgetgroup_id', 'accbudgetgroup_name'),
-				
-			]);
-
-			return $result;
 		} catch (\Exception $ex) {
 			throw $ex;
 		}
 	}
 
 	public function NewId($param) {
-		return uniqid();
+					return uniqid();
 	}
 
-}
-
-$API = new DataSave();
+};

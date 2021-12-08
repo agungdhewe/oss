@@ -17,8 +17,11 @@ const obj = {
 	txt_projectmodel_name: $('#pnl_edit-txt_projectmodel_name'),
 	chk_projectmodel_isdisabled: $('#pnl_edit-chk_projectmodel_isdisabled'),
 	txt_projectmodel_descr: $('#pnl_edit-txt_projectmodel_descr'),
+	cbo_projecttype_id: $('#pnl_edit-cbo_projecttype_id'),
 	cbo_fg_accbudget_id: $('#pnl_edit-cbo_fg_accbudget_id'),
-	cbo_fg_coa_id: $('#pnl_edit-cbo_fg_coa_id')
+	cbo_fg_coa_id: $('#pnl_edit-cbo_fg_coa_id'),
+	cbo_sl_accbudget_id: $('#pnl_edit-cbo_sl_accbudget_id'),
+	cbo_sl_coa_id: $('#pnl_edit-cbo_sl_coa_id')
 }
 
 
@@ -69,6 +72,29 @@ export async function init(opt) {
 
 
 
+	new fgta4slideselect(obj.cbo_projecttype_id, {
+		title: 'Pilih projecttype_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_projecttype_id,
+		fieldValue: 'projecttype_id',
+		fieldValueMap: 'projecttype_id',
+		fieldDisplay: 'projecttype_name',
+		fields: [
+			{mapping: 'projecttype_id', text: 'projecttype_id'},
+			{mapping: 'projecttype_name', text: 'projecttype_name'},
+		],
+		OnDataLoading: (criteria) => {
+						
+		},
+		OnDataLoaded : (result, options) => {
+				
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {				
+			}
+		}
+	})				
+				
 	new fgta4slideselect(obj.cbo_fg_accbudget_id, {
 		title: 'Pilih fg_accbudget_id',
 		returnpage: this_page_id,
@@ -80,12 +106,16 @@ export async function init(opt) {
 			{mapping: 'accbudget_id', text: 'accbudget_id'},
 			{mapping: 'accbudget_name', text: 'accbudget_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+						
+		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({accbudget_id:'--NULL--', accbudget_name:'NONE'});	
 		},
 		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
+			if (value!=args.PreviousValue ) {
+				form.setValue(obj.cbo_fg_coa_id, record.coa_id, record.coa_name)		
+										
 			}
 		}
 	})				
@@ -101,7 +131,57 @@ export async function init(opt) {
 			{mapping: 'coa_id', text: 'coa_id'},
 			{mapping: 'coa_name', text: 'coa_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+						
+		},
+		OnDataLoaded : (result, options) => {
+			result.records.unshift({coa_id:'--NULL--', coa_name:'NONE'});	
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {				
+			}
+		}
+	})				
+				
+	new fgta4slideselect(obj.cbo_sl_accbudget_id, {
+		title: 'Pilih sl_accbudget_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_sl_accbudget_id,
+		fieldValue: 'sl_accbudget_id',
+		fieldValueMap: 'accbudget_id',
+		fieldDisplay: 'accbudget_name',
+		fields: [
+			{mapping: 'accbudget_id', text: 'accbudget_id'},
+			{mapping: 'accbudget_name', text: 'accbudget_name'},
+		],
+		OnDataLoading: (criteria) => {
+						
+		},
+		OnDataLoaded : (result, options) => {
+			result.records.unshift({accbudget_id:'--NULL--', accbudget_name:'NONE'});	
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+				form.setValue(obj.cbo_sl_coa_id, record.coa_id, record.coa_name)		
+										
+			}
+		}
+	})				
+				
+	new fgta4slideselect(obj.cbo_sl_coa_id, {
+		title: 'Pilih sl_coa_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_sl_coa_id,
+		fieldValue: 'sl_coa_id',
+		fieldValueMap: 'coa_id',
+		fieldDisplay: 'coa_name',
+		fields: [
+			{mapping: 'coa_id', text: 'coa_id'},
+			{mapping: 'coa_name', text: 'coa_name'},
+		],
+		OnDataLoading: (criteria) => {
+						
+		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({coa_id:'--NULL--', coa_name:'NONE'});	
 		},
@@ -183,6 +263,8 @@ export function open(data, rowid, viewmode=true, fn_callback) {
 		/*
 		if (result.record.fg_accbudget_id==null) { result.record.fg_accbudget_id='--NULL--'; result.record.fg_accbudget_name='NONE'; }
 		if (result.record.fg_coa_id==null) { result.record.fg_coa_id='--NULL--'; result.record.fg_coa_name='NONE'; }
+		if (result.record.sl_accbudget_id==null) { result.record.sl_accbudget_id='--NULL--'; result.record.sl_accbudget_name='NONE'; }
+		if (result.record.sl_coa_id==null) { result.record.sl_coa_id='--NULL--'; result.record.sl_coa_name='NONE'; }
 
 		*/
 		for (var objid in obj) {
@@ -200,8 +282,11 @@ export function open(data, rowid, viewmode=true, fn_callback) {
 		form.SuspendEvent(true);
 		form
 			.fill(record)
+			.setValue(obj.cbo_projecttype_id, record.projecttype_id, record.projecttype_name)
 			.setValue(obj.cbo_fg_accbudget_id, record.fg_accbudget_id, record.fg_accbudget_name)
 			.setValue(obj.cbo_fg_coa_id, record.fg_coa_id, record.fg_coa_name)
+			.setValue(obj.cbo_sl_accbudget_id, record.sl_accbudget_id, record.sl_accbudget_name)
+			.setValue(obj.cbo_sl_coa_id, record.sl_coa_id, record.sl_coa_name)
 			.setViewMode(viewmode)
 			.lock(false)
 			.rowid = rowid
@@ -241,10 +326,16 @@ export function createnew() {
 		// set nilai-nilai default untuk form
 		data.projectmodel_isdisabled = '0'
 
+		data.projecttype_id = '0'
+		data.projecttype_name = '-- PILIH --'
 		data.fg_accbudget_id = '--NULL--'
 		data.fg_accbudget_name = 'NONE'
 		data.fg_coa_id = '--NULL--'
 		data.fg_coa_name = 'NONE'
+		data.sl_accbudget_id = '--NULL--'
+		data.sl_accbudget_name = 'NONE'
+		data.sl_coa_id = '--NULL--'
+		data.sl_coa_name = 'NONE'
 
 
 
@@ -334,7 +425,7 @@ async function form_datasaving(data, options) {
 	//    options.cancel = true
 
 	// Modifikasi object data, apabila ingin menambahkan variabel yang akan dikirim ke server
-	// options.skipmappingresponse = ['fg_accbudget_id', 'fg_coa_id', ];
+	// options.skipmappingresponse = ['fg_accbudget_id', 'fg_coa_id', 'sl_accbudget_id', 'sl_coa_id', ];
 	options.skipmappingresponse = [];
 	for (var objid in obj) {
 		var o = obj[objid]
@@ -374,7 +465,11 @@ async function form_datasaved(result, options) {
 	/*
 	form.setValue(obj.cbo_fg_accbudget_id, result.dataresponse.fg_accbudget_name!=='--NULL--' ? result.dataresponse.fg_accbudget_id : '--NULL--', result.dataresponse.fg_accbudget_name!=='--NULL--'?result.dataresponse.fg_accbudget_name:'NONE')
 	form.setValue(obj.cbo_fg_coa_id, result.dataresponse.fg_coa_name!=='--NULL--' ? result.dataresponse.fg_coa_id : '--NULL--', result.dataresponse.fg_coa_name!=='--NULL--'?result.dataresponse.fg_coa_name:'NONE')
+	form.setValue(obj.cbo_sl_accbudget_id, result.dataresponse.sl_accbudget_name!=='--NULL--' ? result.dataresponse.sl_accbudget_id : '--NULL--', result.dataresponse.sl_accbudget_name!=='--NULL--'?result.dataresponse.sl_accbudget_name:'NONE')
+	form.setValue(obj.cbo_sl_coa_id, result.dataresponse.sl_coa_name!=='--NULL--' ? result.dataresponse.sl_coa_id : '--NULL--', result.dataresponse.sl_coa_name!=='--NULL--'?result.dataresponse.sl_coa_name:'NONE')
+
 	*/
+
 	var pOpt = form.getDefaultPrompt(false)
 	for (var objid in obj) {
 		var o = obj[objid]

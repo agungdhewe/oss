@@ -25,6 +25,16 @@ module.exports = {
             },
 
 			values: [
+				{deptmodel_id:'GD', deptmodel_name:'GENERAL DEPT'},
+				{deptmodel_id:'TS', deptmodel_name:'TECHNICAL SUPPORT'},
+				{deptmodel_id:'RH', deptmodel_name:'REPRESENTASI HIRARKI'},
+				{deptmodel_id:'RL', deptmodel_name:'REPRESENTASI LOKASI'},
+			]
+
+
+
+			/*
+			values: [
 				{deptmodel_id:'COM', deptmodel_name:'COMMERCIAL'},
 				{deptmodel_id:'DC', deptmodel_name:'DISTRIBUTION CENTER'},
 				{deptmodel_id:'FIA', deptmodel_name:'FINANCE, ACCOUNTING & ADMINISTRATION'},
@@ -35,7 +45,7 @@ module.exports = {
 				{deptmodel_id:'PRJ', deptmodel_name:'PROJECT'},
 				{deptmodel_id:'STO', deptmodel_name:'STORE'},
 			]
-			
+			*/
 		},
 	},
 

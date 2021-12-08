@@ -1,10 +1,15 @@
 var this_page_id;
+var this_page_options;
 
 import {fgta4slideselect} from  '../../../../../index.php/asset/fgta/framework/fgta4libs/fgta4slideselect.mjs'
 
 const btn_edit = $('#pnl_edit-btn_edit')
 const btn_save = $('#pnl_edit-btn_save')
 const btn_delete = $('#pnl_edit-btn_delete')
+
+
+
+
 
 const pnl_form = $('#pnl_edit-form')
 const obj = {
@@ -20,25 +25,39 @@ const obj = {
 	cbo_deptgroup_id: $('#pnl_edit-cbo_deptgroup_id'),
 	cbo_dept_parent: $('#pnl_edit-cbo_dept_parent'),
 	cbo_depttype_id: $('#pnl_edit-cbo_depttype_id'),
-	cbo_deptmodel_id : $('#pnl_edit-cbo_deptmodel_id'),
+	cbo_deptmodel_id: $('#pnl_edit-cbo_deptmodel_id'),
 	cbo_auth_id: $('#pnl_edit-cbo_auth_id'),
 	cbo_project_id: $('#pnl_edit-cbo_project_id')
 }
 
 
-let form = {}
+
+
+let form;
 
 export async function init(opt) {
-	this_page_id = opt.id
+	this_page_id = opt.id;
+	this_page_options = opt;
+
+
+	var disableedit = false;
+	// switch (this_page_options.variancename) {
+	// 	case 'commit' :
+	//		disableedit = true;
+	//		btn_edit.linkbutton('disable');
+	//		btn_save.linkbutton('disable');
+	//		btn_delete.linkbutton('disable');
+	//		break;
+	// }
 
 
 	form = new global.fgta4form(pnl_form, {
 		primary: obj.txt_dept_id,
 		autoid: false,
 		logview: 'mst_dept',
-		btn_edit: btn_edit,
-		btn_save: btn_save,
-		btn_delete: btn_delete,		
+		btn_edit: disableedit==true? $('<a>edit</a>') : btn_edit,
+		btn_save: disableedit==true? $('<a>save</a>') : btn_save,
+		btn_delete: disableedit==true? $('<a>delete</a>') : btn_delete,		
 		objects : obj,
 		OnDataSaving: async (data, options) => { await form_datasaving(data, options) },
 		OnDataSaveError: async (data, options) => { await form_datasaveerror(data, options) },
@@ -46,13 +65,21 @@ export async function init(opt) {
 		OnDataDeleting: async (data, options) => { await form_deleting(data, options) },
 		OnDataDeleted: async (result, options) => { await form_deleted(result, options) },
 		OnIdSetup : (options) => { form_idsetup(options) },
-		OnViewModeChanged : (viewonly) => { form_viewmodechanged(viewonly) }
+		OnViewModeChanged : (viewonly) => { form_viewmodechanged(viewonly) },
+		OnRecordStatusCreated: () => {
+			undefined			
+		}		
 	})
 
 
 
+
+
+
+
+
 	new fgta4slideselect(obj.cbo_deptgroup_id, {
-		title: 'Pilih Group Department',
+		title: 'Pilih deptgroup_id',
 		returnpage: this_page_id,
 		api: $ui.apis.load_deptgroup_id,
 		fieldValue: 'deptgroup_id',
@@ -62,51 +89,49 @@ export async function init(opt) {
 			{mapping: 'deptgroup_id', text: 'deptgroup_id'},
 			{mapping: 'deptgroup_name', text: 'deptgroup_name'},
 		],
-
 		OnDataLoading: (criteria) => {
-			criteria['isexselect'] = 0
+			criteria['isexselect'] = 0			
 		},
-
-
 		OnDataLoaded : (result, options) => {
-			result.records.unshift({deptgroup_id:'--NULL--', deptgroup_name:'NONE'});	
 		},
-		OnSelected: (value, display, record) => {
-			var selected_depttype_id = obj.cbo_depttype_id.combobox('getValue');
-			if (selected_depttype_id=="0") {
-				// langsung isi
-				form.setValue(obj.cbo_depttype_id, record.depttype_id, record.depttype_name)
-			} else {
-				if (record.depttype_id!=selected_depttype_id) {
-					$ui.ShowMessage('[QUESTION]Apakah anda akan mengubah tipe?', {
-						"Ya" : () => {
-							if (record.deptgroup_id!='--NULL--') {
-								form.setValue(obj.cbo_depttype_id, record.depttype_id, record.depttype_name)
-							} else {
-								form.setValue(obj.cbo_depttype_id, '0', '-- PILIH --')
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {		
+				var selected_depttype_id = obj.cbo_depttype_id.combobox('getValue');
+				if (selected_depttype_id=="0") {
+					// langsung isi
+					form.setValue(obj.cbo_depttype_id, record.depttype_id, record.depttype_name)
+				} else {
+					if (record.depttype_id!=selected_depttype_id) {
+						$ui.ShowMessage('[QUESTION]Apakah anda akan mengubah tipe?', {
+							"Ya" : () => {
+								if (record.deptgroup_id!='--NULL--') {
+									form.setValue(obj.cbo_depttype_id, record.depttype_id, record.depttype_name)
+								} else {
+									form.setValue(obj.cbo_depttype_id, '0', '-- PILIH --')
+								}
+							},
+							"Tidak" : () => {
 							}
-						},
-						"Tidak" : () => {
-						}
-					});
-				}
-			}			
+						});
+					}
+				}						
+			}
 		}
 	})				
 				
 	new fgta4slideselect(obj.cbo_dept_parent, {
-		title: 'Pilih Parent Department',
+		title: 'Pilih dept_parent',
 		returnpage: this_page_id,
 		api: $ui.apis.load_dept_parent,
 		fieldValue: 'dept_parent',
-		fieldValueMap: 'dept_id',
-		fieldDisplay: 'dept_name',
+		fieldValueMap: 'dept_parent',
+		fieldDisplay: 'dept_parent_name',
 		fields: [
-			{mapping: 'dept_id', text: 'dept_id'},
-			{mapping: 'dept_name', text: 'dept_name'},
+			{mapping: 'dept_parent', text: 'ID'},
+			{mapping: 'dept_parent_name', text: 'Dept'},
 		],
 		OnDataLoading: (criteria) => {
-			criteria['isparent'] = 1
+						
 		},
 		OnDataLoaded : (result, options) => {
 			
@@ -119,13 +144,17 @@ export async function init(opt) {
 			}
 			if (idx>=0) { result.records.splice(idx, 1); }					
 			
-			result.records.unshift({dept_id:'--NULL--', dept_name:'NONE'});	
+			result.records.unshift({dept_parent:'--NULL--', dept_parent_name:'NONE'});	
 		},
-		OnSelected: (value, display, record) => {}
+		OnSelected: (value, display, record, args) => {
+			console.log(record);
+			if (value!=args.PreviousValue ) {				
+			}
+		}
 	})				
 				
 	new fgta4slideselect(obj.cbo_depttype_id, {
-		title: 'Pilih Type Department',
+		title: 'Pilih depttype_id',
 		returnpage: this_page_id,
 		api: $ui.apis.load_depttype_id,
 		fieldValue: 'depttype_id',
@@ -135,16 +164,20 @@ export async function init(opt) {
 			{mapping: 'depttype_id', text: 'depttype_id'},
 			{mapping: 'depttype_name', text: 'depttype_name'},
 		],
-		OnDataLoading: (criteria) => {},
-		OnDataLoaded : (result, options) => {
-			result.records.unshift({depttype_id:'--NULL--', depttype_name:'NONE'});	
+		OnDataLoading: (criteria) => {
+						
 		},
-		OnSelected: (value, display, record) => {}
+		OnDataLoaded : (result, options) => {
+				
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {				
+			}
+		}
 	})				
-
-	
+				
 	new fgta4slideselect(obj.cbo_deptmodel_id, {
-		title: 'Pilih Model Department',
+		title: 'Pilih deptmodel_id',
 		returnpage: this_page_id,
 		api: $ui.apis.load_deptmodel_id,
 		fieldValue: 'deptmodel_id',
@@ -154,15 +187,20 @@ export async function init(opt) {
 			{mapping: 'deptmodel_id', text: 'deptmodel_id'},
 			{mapping: 'deptmodel_name', text: 'deptmodel_name'},
 		],
-		OnDataLoading: (criteria) => {},
-		OnDataLoaded : (result, options) => {
-			result.records.unshift({deptmodel_id:'--NULL--', deptmodel_name:'NONE'});	
+		OnDataLoading: (criteria) => {
+						
 		},
-		OnSelected: (value, display, record) => {}
-	})	
-
+		OnDataLoaded : (result, options) => {
+				
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {				
+			}
+		}
+	})				
+				
 	new fgta4slideselect(obj.cbo_auth_id, {
-		title: 'Pilih Authorisasi',
+		title: 'Pilih auth_id',
 		returnpage: this_page_id,
 		api: $ui.apis.load_auth_id,
 		fieldValue: 'auth_id',
@@ -173,18 +211,19 @@ export async function init(opt) {
 			{mapping: 'auth_name', text: 'auth_name'},
 		],
 		OnDataLoading: (criteria) => {
-			criteria['disabled'] = 0
+						
 		},
-
 		OnDataLoaded : (result, options) => {
 				
 		},
-		OnSelected: (value, display, record) => {}
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {				
+			}
+		}
 	})				
 				
-
 	new fgta4slideselect(obj.cbo_project_id, {
-		title: 'Pilih Project',
+		title: 'Pilih project_id',
 		returnpage: this_page_id,
 		api: $ui.apis.load_project_id,
 		fieldValue: 'project_id',
@@ -202,19 +241,19 @@ export async function init(opt) {
 				$ui.ShowMessage('[WARNING] untuk memilih project, silakan isi ID terlebih dahulu')
 			}
 		},
-
+		
 		OnDataLoading: (criteria) => {
-			criteria.dept_id = form.getValue(obj.txt_dept_id)
-			criteria.enabledonly = 1
+						
 		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({project_id:'--NULL--', project_name:'NONE'});	
 		},
-		OnSelected: (value, display, record) => {
-			form.setDisable(obj.txt_dept_id);
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {				
+			}
 		}
-	})	
-
+	})				
+				
 
 	document.addEventListener('keydown', (ev)=>{
 		if ($ui.getPages().getCurrentPage()==this_page_id) {
@@ -261,54 +300,78 @@ export async function init(opt) {
 		}
 	})
 
-
+	//button state
 
 }
-
 
 export function OnSizeRecalculated(width, height) {
 }
 
-
+export function getForm() {
+	return form
+}
 
 
 export function open(data, rowid, viewmode=true, fn_callback) {
 
-
+	var pOpt = form.getDefaultPrompt(false)
 	var fn_dataopening = async (options) => {
 		options.criteria[form.primary.mapping] = data[form.primary.mapping]
 	}
 
 	var fn_dataopened = async (result, options) => {
+		var record = result.record;
+		updatefilebox(record);
 
+		/*
 		if (result.record.dept_parent==null) { result.record.dept_parent='--NULL--'; result.record.dept_parent_name='NONE'; }
 		if (result.record.project_id==null) { result.record.project_id='--NULL--'; result.record.project_name='NONE'; }
-		if (result.record.deptgroup_id==null) { result.record.deptgroup_id='--NULL--'; result.record.deptgroup_name='NONE'; }
-		if (result.record.depttype_id==null) { result.record.depttype_id='--NULL--'; result.record.depttype_name='NONE'; }
-		if (result.record.deptmodel_id==null) { result.record.deptmodel_id='--NULL--'; result.record.deptmodel_name='NONE'; }
 
+		*/
+		for (var objid in obj) {
+			let o = obj[objid]
+			if (o.isCombo() && !o.isRequired()) {
+				var value =  result.record[o.getFieldValueName()];
+				if (value==null ) {
+					record[o.getFieldValueName()] = pOpt.value;
+					record[o.getFieldDisplayName()] = pOpt.text;
+				}
+			}
+		}
+  		updaterecordstatus(record)
 
+		form.SuspendEvent(true);
 		form
-			.fill(result.record)
-			.setValue(obj.cbo_deptmodel_id, result.record.deptmodel_id, result.record.deptmodel_name)
-			.setValue(obj.cbo_deptgroup_id, result.record.deptgroup_id, result.record.deptgroup_name)
-			.setValue(obj.cbo_dept_parent, result.record.dept_parent, result.record.dept_parent_name)
-			.setValue(obj.cbo_depttype_id, result.record.depttype_id, result.record.depttype_name)
-			.setValue(obj.cbo_auth_id, result.record.auth_id, result.record.auth_name)
-			.setValue(obj.cbo_project_id, result.record.project_id, result.record.project_name)
-			.commit()
+			.fill(record)
+			.setValue(obj.cbo_deptgroup_id, record.deptgroup_id, record.deptgroup_name)
+			.setValue(obj.cbo_dept_parent, record.dept_parent, record.dept_parent_name)
+			.setValue(obj.cbo_depttype_id, record.depttype_id, record.depttype_name)
+			.setValue(obj.cbo_deptmodel_id, record.deptmodel_id, record.deptmodel_name)
+			.setValue(obj.cbo_auth_id, record.auth_id, record.auth_name)
+			.setValue(obj.cbo_project_id, record.project_id, record.project_name)
 			.setViewMode(viewmode)
 			.lock(false)
 			.rowid = rowid
 
+
+		/* tambahkan event atau behaviour saat form dibuka
+		   apabila ada rutin mengubah form dan tidak mau dijalankan pada saat opening,
+		   cek dengan form.isEventSuspended()
+		*/   
+
+
+
+		/* commit form */
+		form.commit()
+		form.SuspendEvent(false); 
+		updatebuttonstate(record)
+
 		// tampilkan form untuk data editor
 		fn_callback()
-
-
 	}
 
 	var fn_dataopenerror = (err) => {
-		$ui.ShowMessage(err.errormessage);
+		$ui.ShowMessage('[ERROR]'+err.errormessage);
 	}
 
 	form.dataload(fn_dataopening, fn_dataopened, fn_dataopenerror)
@@ -323,20 +386,30 @@ export function createnew() {
 		form.rowid = null
 
 		// set nilai-nilai default untuk form
-			data.dept_level = 0
+		data.dept_isparent = '0'
+		data.dept_isdisabled = '0'
+		data.dept_isbudgetmandatory = '0'
+		data.dept_issingleprojectbudget = '0'
+		data.dept_level = 0
 
-			data.deptgroup_id = '--NULL--'
-			data.deptgroup_name = 'NONE'
-			data.dept_parent = '--NULL--'
-			data.dept_parent_name = 'NONE'
-			data.depttype_id = '--NULL--'
-			data.depttype_name = 'NONE'
-			data.deptmodel_id = '--NULL--'
-			data.deptmodel_name = 'NONE'
-			data.auth_id = '0'
-			data.auth_name = '-- PILIH --'
-			data.project_id = '--NULL--'
-			data.project_name = 'NONE'
+		data.deptgroup_id = '0'
+		data.deptgroup_name = '-- PILIH --'
+		data.dept_parent = '--NULL--'
+		data.dept_parent_name = 'NONE'
+		data.depttype_id = '0'
+		data.depttype_name = '-- PILIH --'
+		data.deptmodel_id = '0'
+		data.deptmodel_name = '-- PILIH --'
+		data.auth_id = '0'
+		data.auth_name = '-- PILIH --'
+		data.project_id = '--NULL--'
+		data.project_name = 'NONE'
+
+
+
+
+
+
 
 
 
@@ -362,6 +435,26 @@ export function detil_open(pnlname) {
 	})	
 }
 
+
+function updatefilebox(record) {
+	// apabila ada keperluan untuk menampilkan data dari object storage
+
+}
+
+function updaterecordstatus(record) {
+	// apabila ada keperluan untuk update status record di sini
+
+}
+
+function updatebuttonstate(record) {
+	// apabila ada keperluan untuk update state action button di sini
+	
+}
+
+function updategridstate(record) {
+	// apabila ada keperluan untuk update state grid list di sini
+	
+}
 
 function form_viewmodechanged(viewmode) {
 	var OnViewModeChangedEvent = new CustomEvent('OnViewModeChanged', {detail: {}})
@@ -398,13 +491,18 @@ async function form_datasaving(data, options) {
 	// cek dulu data yang akan disimpan,
 	// apabila belum sesuai dengan yang diharuskan, batalkan penyimpanan
 	//    options.cancel = true
-	if (data.dept_issingleprojectbudget && data.project_id=='--NULL--') {
-		options.cancel = true
-		$ui.ShowMessage("[WARNING]Default Project harus diisi");
-	}
 
 	// Modifikasi object data, apabila ingin menambahkan variabel yang akan dikirim ke server
-	options.skipmappingresponse = ["dept_parent", "project_id", "deptgroup_id", "depttype_id", "deptmodel_id"];
+	// options.skipmappingresponse = [dept_parent, 'project_id', ];
+	options.skipmappingresponse = [];
+	for (var objid in obj) {
+		var o = obj[objid]
+		if (o.isCombo() && !o.isRequired()) {
+			var id = o.getFieldValueName()
+			options.skipmappingresponse.push(id)
+			console.log(id)
+		}
+	}
 
 }
 
@@ -432,14 +530,25 @@ async function form_datasaved(result, options) {
 
 	var data = {}
 	Object.assign(data, form.getData(), result.dataresponse)
+	/*
+	form.setValue(obj.cbo_dept_parent, result.dataresponse.dept_parent_name!=='--NULL--' ? result.dataresponse.dept_parent : '--NULL--', result.dataresponse.dept_parent_name!=='--NULL--'?result.dataresponse.dept_parent_name:'NONE')
+	form.setValue(obj.cbo_project_id, result.dataresponse.project_name!=='--NULL--' ? result.dataresponse.project_id : '--NULL--', result.dataresponse.project_name!=='--NULL--'?result.dataresponse.project_name:'NONE')
 
-	form.setValue(obj.cbo_dept_parent, result.dataresponse.dept_parent_name!=='--NULL--'?result.dataresponse.dept_parent:'--NULL--', result.dataresponse.dept_parent_name!=='--NULL--'?result.dataresponse.dept_parent_name:'NONE')
-	form.setValue(obj.cbo_project_id, result.dataresponse.project_name!=='--NULL--'?result.dataresponse.project_id:'--NULL--', result.dataresponse.project_name!=='--NULL--'?result.dataresponse.project_name:'NONE')
-	form.setValue(obj.cbo_deptgroup_id, result.dataresponse.deptgroup_name!=='--NULL--'?result.dataresponse.deptgroup_id:'--NULL--', result.dataresponse.deptgroup_name!=='--NULL--'?result.dataresponse.deptgroup_name:'NONE')
-	form.setValue(obj.cbo_depttype_id, result.dataresponse.depttype_name!=='--NULL--'?result.dataresponse.depttype_id:'--NULL--', result.dataresponse.depttype_name!=='--NULL--'?result.dataresponse.depttype_name:'NONE')
-	form.setValue(obj.cbo_deptmodel_id, result.dataresponse.deptmodel_name!=='--NULL--'?result.dataresponse.deptmodel_id:'--NULL--', result.dataresponse.deptmodel_name!=='--NULL--'?result.dataresponse.deptmodel_name:'NONE')
+	*/
 
-	
+	var pOpt = form.getDefaultPrompt(false)
+	for (var objid in obj) {
+		var o = obj[objid]
+		if (o.isCombo() && !o.isRequired()) {
+			var value =  result.dataresponse[o.getFieldValueName()];
+			var text = result.dataresponse[o.getFieldDisplayName()];
+			if (value==null ) {
+				value = pOpt.value;
+				text = pOpt.text;
+			}
+			form.setValue(o, value, text);
+		}
+	}
 	form.rowid = $ui.getPages().ITEMS['pnl_list'].handler.updategrid(data, form.rowid)
 }
 
@@ -453,4 +562,7 @@ async function form_deleted(result, options) {
 	$ui.getPages().ITEMS['pnl_list'].handler.removerow(form.rowid)
 
 }
+
+
+
 

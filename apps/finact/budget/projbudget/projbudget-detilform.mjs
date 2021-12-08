@@ -118,6 +118,9 @@ export async function init(opt) {
 			} 
 
 			txt_available.numberbox('setValue', available);
+
+			txt_projbudgetdet_composename();
+
 		}
 	})				
 			
@@ -142,6 +145,7 @@ export async function init(opt) {
 			// if (value!=old_dept_id) {
 			// 	form.setValue(obj.cbo_project_id, '0', '-- PILIH --')
 			// }
+			txt_projbudgetdet_composename();
 		}
 	})	
 
@@ -310,6 +314,8 @@ export function createnew(hdata) {
 	txt_title.html('Create New Row')
 	form.createnew(async (data, options)=>{
 
+		console.log(data);
+
 		data.projbudget_id= hdata.projbudget_id
 		data.detil_value = 0
 
@@ -338,8 +344,7 @@ async function form_datasaving(data, options) {
 	var available = parseFloat(txt_available.numberbox('getValue'));
 	var proposed = parseFloat(data.projbudgetdet_valueprop);
 
-
-	/*
+	
 	if (false === await (async (data)=>{
 		return new Promise((resolve, reject) => {
 			try {
@@ -356,7 +361,7 @@ async function form_datasaving(data, options) {
 		options.cancel = true;
 		return;
 	} 
-	*/
+	
 
 	options.api = `${global.modulefullname}/detil-save`
 	options.skipmappingresponse = [];
@@ -475,5 +480,21 @@ function txt_projbudgetdet_valuechanged(newvalue, oldvalue) {
 
 	form.setValue(obj.txt_projbudgetdet_valueprop, value);
 	form.setValue(obj.txt_projbudgetdet_value, value);
+	
+}
+
+
+function txt_projbudgetdet_composename() {
+	var dept_name = obj.cbo_alloc_dept_id.combo('getText');
+	var accbudget_name = obj.cbo_accbudget_id.combo('getText');
+	var projbudgetdet_descr = `${accbudget_name} - ${dept_name}`;
+
+	console.log('ddd');
+	if (dept_name!=header_data.dept_name) {
+		form.setValue(obj.txt_projbudgetdet_descr, projbudgetdet_descr);
+	} else {
+		form.setValue(obj.txt_projbudgetdet_descr, accbudget_name);
+	}
+
 	
 }

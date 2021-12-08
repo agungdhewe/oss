@@ -5,25 +5,27 @@ if (!defined('FGTA4')) {
 }
 
 require_once __ROOT_DIR.'/core/sqlutil.php';
-
+require_once __DIR__ . '/xapi.base.php';
 
 
 use \FGTA4\exceptions\WebException;
 
-
-class DataList extends WebAPI {
-	function __construct() {
-		$this->debugoutput = true;
-		$DB_CONFIG = DB_CONFIG[$GLOBALS['MAINDB']];
-		$DB_CONFIG['param'] = DB_CONFIG_PARAM[$GLOBALS['MAINDBTYPE']];
-		$this->db = new \PDO(
-					$DB_CONFIG['DSN'], 
-					$DB_CONFIG['user'], 
-					$DB_CONFIG['pass'], 
-					$DB_CONFIG['param']
-		);
-
-	}
+/**
+ * finact/master/coamodel/apis/list.php
+ *
+ * ========
+ * DataList
+ * ========
+ * Menampilkan data-data pada tabel header coamodel (mst_coamodel)
+ * sesuai dengan parameter yang dikirimkan melalui variable $option->criteria
+ *
+ * Agung Nugroho <agung@fgta.net> http://www.fgta.net
+ * Tangerang, 26 Maret 2021
+ *
+ * digenerate dengan FGTA4 generator
+ * tanggal 04/12/2021
+ */
+$API = new class extends coamodelBase {
 
 	public function execute($options) {
 
@@ -36,11 +38,12 @@ class DataList extends WebAPI {
 				throw new \Exception('your group authority is not allowed to do this action.');
 			}
 
-
+			// \FGTA4\utils\SqlUtility::setDefaultCriteria($options->criteria, '--fieldscriteria--', '--value--');
 			$where = \FGTA4\utils\SqlUtility::BuildCriteria(
 				$options->criteria,
 				[
-					"search" => " A.coamodel_id LIKE CONCAT('%', :search, '%') OR A.coamodel_name LIKE CONCAT('%', :search, '%') "
+					"search" => " A.coamodel_id LIKE CONCAT('%', :search, '%') OR A.coamodel_name LIKE CONCAT('%', :search, '%') ",
+					"coareport_id" => " A.coareport_id = :coareport_id "
 				]
 			);
 
@@ -56,9 +59,12 @@ class DataList extends WebAPI {
 			$limit = " LIMIT $maxrow OFFSET $offset ";
 			$stmt = $this->db->prepare("
 				select 
-				coamodel_id, coamodel_name, coamodel_isdisabled, coamodel_isaging, coamodel_descr, _createby, _createdate, _modifyby, _modifydate 
+				A.coamodel_id, A.coamodel_name, A.coamodel_isdisabled, A.coamodel_isaging, A.coamodel_descr, A.coareport_id, A._createby, A._createdate, A._modifyby, A._modifydate 
 				from mst_coamodel A
-			" . $where->sql . $limit);
+			" 
+			. $where->sql 
+			. " ORDER BY A.coareport_id, A.coamodel_name "
+			. $limit);
 			$stmt->execute($where->params);
 			$rows  = $stmt->fetchall(\PDO::FETCH_ASSOC);
 
@@ -73,6 +79,7 @@ class DataList extends WebAPI {
 					// // jikalau ingin menambah atau edit field di result record, dapat dilakukan sesuai contoh sbb: 
 					//'tanggal' => date("d/m/y", strtotime($record['tanggal'])),
 				 	//'tambahan' => 'dta'
+					'coareport_name' => \FGTA4\utils\SqlUtility::Lookup($record['coareport_id'], $this->db, 'mst_coareport', 'coareport_id', 'coareport_name'),
 					 
 				]));
 			}
@@ -88,6 +95,4 @@ class DataList extends WebAPI {
 		}
 	}
 
-}
-
-$API = new DataList();
+};

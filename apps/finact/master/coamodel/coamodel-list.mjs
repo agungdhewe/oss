@@ -54,6 +54,7 @@ export async function init(opt) {
 		}
 	})	
 	
+	//button state
 
 	btn_load_click()
 }

@@ -27,7 +27,7 @@ use \FGTA4\utils\Sequencer;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 13/06/2021
+ * tanggal 06/12/2021
  */
 $API = new class extends projbudgetrevBase {
 	
@@ -65,7 +65,7 @@ $API = new class extends projbudgetrevBase {
 			$obj->doc_id = strtoupper($obj->doc_id);
 
 
-			// if ($obj->projbudgetrev_notes=='--NULL--') { unset($obj->projbudgetrev_notes); }
+			if ($obj->projbudgetrev_notes=='') { $obj->projbudgetrev_notes = '--NULL--'; }
 
 
 			unset($obj->projbudgetrev_notes);
@@ -119,7 +119,7 @@ $API = new class extends projbudgetrevBase {
 				$where = \FGTA4\utils\SqlUtility::BuildCriteria((object)[$primarykey=>$obj->{$primarykey}], [$primarykey=>"$primarykey=:$primarykey"]);
 				$sql = \FGTA4\utils\SqlUtility::Select($tablename , [
 					$primarykey
-					, 'projbudgetrev_id', 'dept_id', 'projbudget_id', 'projbudgetrev_descr', 'project_id', 'projbudget_year', 'projbudget_month', 'doc_id', 'projbudgetrev_notes', 'projbudgetrev_version', 'projbudgetrev_iscommit', 'projbudgetrev_commitby', 'projbudgetrev_commitdate', 'projbudgetrev_isapprovalprogress', 'projbudgetrev_isapproved', 'projbudgetrev_approveby', 'projbudgetrev_approvedate', 'projbudgetrev_isdeclined', 'projbudgetrev_declineby', 'projbudgetrev_declinedate', 'projbudgetrev_isclose', 'projbudgetrev_closeby', 'projbudgetrev_closedate', '_createby', '_createdate', '_modifyby', '_modifydate', '_createby', '_createdate', '_modifyby', '_modifydate'
+					, 'projbudgetrev_id', 'dept_id', 'projbudget_id', 'projbudgetrev_descr', 'project_id', 'projbudget_year', 'projbudget_month', 'projbudget_isdeptalloc', 'doc_id', 'projbudgetrev_notes', 'projbudgetrev_version', 'projbudgetrev_iscommit', 'projbudgetrev_commitby', 'projbudgetrev_commitdate', 'projbudgetrev_isapprovalprogress', 'projbudgetrev_isapproved', 'projbudgetrev_approveby', 'projbudgetrev_approvedate', 'projbudgetrev_isdeclined', 'projbudgetrev_declineby', 'projbudgetrev_declinedate', 'projbudgetrev_isclose', 'projbudgetrev_closeby', 'projbudgetrev_closedate', '_createby', '_createdate', '_modifyby', '_modifydate', '_createby', '_createdate', '_modifyby', '_modifydate'
 				], $where->sql);
 				$stmt = $this->db->prepare($sql);
 				$stmt->execute($where->params);

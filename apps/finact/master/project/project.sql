@@ -7,14 +7,14 @@
 
 CREATE TABLE `mst_project` (
 	`project_id` varchar(30) NOT NULL , 
-	`projecttype_id` varchar(10) NOT NULL , 
 	`projectmodel_id` varchar(10) NOT NULL , 
-	`orderin_id` varchar(30)  , 
 	`project_name` varchar(90) NOT NULL , 
 	`project_descr` varchar(255)  , 
 	`dept_id` varchar(30) NOT NULL , 
 	`project_isdisabled` tinyint(1) NOT NULL DEFAULT 0, 
 	`project_isallowalldept` tinyint(1) NOT NULL DEFAULT 0, 
+	`orderin_id` varchar(30)  , 
+	`projecttype_id` varchar(10) NOT NULL , 
 	`_createby` varchar(13) NOT NULL , 
 	`_createdate` datetime NOT NULL DEFAULT current_timestamp(), 
 	`_modifyby` varchar(13)  , 
@@ -25,15 +25,15 @@ CREATE TABLE `mst_project` (
 ENGINE=InnoDB
 COMMENT='Daftar Project';
 
-ALTER TABLE `mst_project` ADD KEY `projecttype_id` (`projecttype_id`);
 ALTER TABLE `mst_project` ADD KEY `projectmodel_id` (`projectmodel_id`);
-ALTER TABLE `mst_project` ADD KEY `orderin_id` (`orderin_id`);
 ALTER TABLE `mst_project` ADD KEY `dept_id` (`dept_id`);
+ALTER TABLE `mst_project` ADD KEY `orderin_id` (`orderin_id`);
+ALTER TABLE `mst_project` ADD KEY `projecttype_id` (`projecttype_id`);
 
-ALTER TABLE `mst_project` ADD CONSTRAINT `fk_mst_project_mst_projecttype` FOREIGN KEY (`projecttype_id`) REFERENCES `mst_projecttype` (`projecttype_id`);
 ALTER TABLE `mst_project` ADD CONSTRAINT `fk_mst_project_mst_projectmodel` FOREIGN KEY (`projectmodel_id`) REFERENCES `mst_projectmodel` (`projectmodel_id`);
-ALTER TABLE `mst_project` ADD CONSTRAINT `fk_mst_project_trn_orderin` FOREIGN KEY (`orderin_id`) REFERENCES `trn_orderin` (`orderin_id`);
 ALTER TABLE `mst_project` ADD CONSTRAINT `fk_mst_project_mst_dept` FOREIGN KEY (`dept_id`) REFERENCES `mst_dept` (`dept_id`);
+ALTER TABLE `mst_project` ADD CONSTRAINT `fk_mst_project_trn_orderin` FOREIGN KEY (`orderin_id`) REFERENCES `trn_orderin` (`orderin_id`);
+ALTER TABLE `mst_project` ADD CONSTRAINT `fk_mst_project_mst_projecttype` FOREIGN KEY (`projecttype_id`) REFERENCES `mst_projecttype` (`projecttype_id`);
 
 
 

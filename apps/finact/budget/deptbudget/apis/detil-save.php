@@ -101,7 +101,14 @@ $API = new class extends deptbudgetBase {
 				$where = \FGTA4\utils\SqlUtility::BuildCriteria((object)[$primarykey=>$obj->{$primarykey}], [$primarykey=>"$primarykey=:$primarykey"]);
 				$sql = \FGTA4\utils\SqlUtility::Select($tablename , [
 					$primarykey
-					, 'deptbudgetdet_id', 'deptbudgetdet_descr', 'deptbudgetdet_01', 'deptbudgetdet_02', 'deptbudgetdet_03', 'deptbudgetdet_04', 'deptbudgetdet_05', 'deptbudgetdet_06', 'deptbudgetdet_07', 'deptbudgetdet_08', 'deptbudgetdet_09', 'deptbudgetdet_10', 'deptbudgetdet_11', 'deptbudgetdet_12', 'deptbudgetdet_total', 'accbudget_id', 'deptbudgetdet_notes', 'deptbudget_id', '_createby', '_createdate', '_modifyby', '_modifydate', '_createby', '_createdate', '_modifyby', '_modifydate'
+					, 'deptbudgetdet_id', 'deptbudgetdet_descr'
+					, 'deptbudgetdet_01', 'deptbudgetdet_02', 'deptbudgetdet_03', 'deptbudgetdet_04'
+					, 'deptbudgetdet_05', 'deptbudgetdet_06', 'deptbudgetdet_07', 'deptbudgetdet_08'
+					, 'deptbudgetdet_09', 'deptbudgetdet_10', 'deptbudgetdet_11', 'deptbudgetdet_12'
+					, 'deptbudgetdet_total'
+					, 'coa_id', 'coareport_id'
+					, 'accbudget_id', 'deptbudgetdet_notes', 'deptbudget_id'
+					, '_createby', '_createdate', '_modifyby', '_modifydate'
 				], $where->sql);
 				$stmt = $this->db->prepare($sql);
 				$stmt->execute($where->params);

@@ -1,6 +1,8 @@
 {
 	"title" : "Unit Group",
-	"icon" : "icon-unitgroup-white.png",
+	
+	
+	"variance" : {},
 	"allowanonymous" : true,
 	"allowedgroups" : ["public"],
 	"apis" : {

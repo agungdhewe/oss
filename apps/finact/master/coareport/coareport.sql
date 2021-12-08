@@ -1,3 +1,8 @@
+-- SET FOREIGN_KEY_CHECKS=0;
+
+-- drop table if exists `mst_coareport`;
+
+
 CREATE TABLE `mst_coareport` (
 	`coareport_id` varchar(2) NOT NULL , 
 	`coareport_name` varchar(30)  , 

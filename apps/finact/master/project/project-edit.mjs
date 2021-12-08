@@ -14,14 +14,14 @@ const btn_print = $('#pnl_edit-btn_print');
 const pnl_form = $('#pnl_edit-form')
 const obj = {
 	txt_project_id: $('#pnl_edit-txt_project_id'),
-	cbo_projecttype_id: $('#pnl_edit-cbo_projecttype_id'),
 	cbo_projectmodel_id: $('#pnl_edit-cbo_projectmodel_id'),
-	cbo_orderin_id: $('#pnl_edit-cbo_orderin_id'),
 	txt_project_name: $('#pnl_edit-txt_project_name'),
 	txt_project_descr: $('#pnl_edit-txt_project_descr'),
 	cbo_dept_id: $('#pnl_edit-cbo_dept_id'),
 	chk_project_isdisabled: $('#pnl_edit-chk_project_isdisabled'),
-	chk_project_isallowalldept: $('#pnl_edit-chk_project_isallowalldept')
+	chk_project_isallowalldept: $('#pnl_edit-chk_project_isallowalldept'),
+	cbo_orderin_id: $('#pnl_edit-cbo_orderin_id'),
+	cbo_projecttype_id: $('#pnl_edit-cbo_projecttype_id')
 }
 
 
@@ -80,27 +80,6 @@ export async function init(opt) {
 
 
 
-	new fgta4slideselect(obj.cbo_projecttype_id, {
-		title: 'Pilih projecttype_id',
-		returnpage: this_page_id,
-		api: $ui.apis.load_projecttype_id,
-		fieldValue: 'projecttype_id',
-		fieldValueMap: 'projecttype_id',
-		fieldDisplay: 'projecttype_name',
-		fields: [
-			{mapping: 'projecttype_id', text: 'projecttype_id'},
-			{mapping: 'projecttype_name', text: 'projecttype_name'},
-		],
-		OnDataLoading: (criteria) => {},
-		OnDataLoaded : (result, options) => {
-				
-		},
-		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
-			}
-		}
-	})				
-				
 	new fgta4slideselect(obj.cbo_projectmodel_id, {
 		title: 'Pilih projectmodel_id',
 		returnpage: this_page_id,
@@ -112,7 +91,34 @@ export async function init(opt) {
 			{mapping: 'projectmodel_id', text: 'projectmodel_id'},
 			{mapping: 'projectmodel_name', text: 'projectmodel_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+						
+		},
+		OnDataLoaded : (result, options) => {
+				
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+				form.setValue(obj.cbo_projecttype_id, record.projecttype_id, record.projecttype_name)		
+										
+			}
+		}
+	})				
+				
+	new fgta4slideselect(obj.cbo_dept_id, {
+		title: 'Pilih dept_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_dept_id,
+		fieldValue: 'dept_id',
+		fieldValueMap: 'dept_id',
+		fieldDisplay: 'dept_name',
+		fields: [
+			{mapping: 'dept_id', text: 'dept_id'},
+			{mapping: 'dept_name', text: 'dept_name'},
+		],
+		OnDataLoading: (criteria) => {
+						
+		},
 		OnDataLoaded : (result, options) => {
 				
 		},
@@ -133,7 +139,9 @@ export async function init(opt) {
 			{mapping: 'orderin_id', text: 'orderin_id'},
 			{mapping: 'orderin_descr', text: 'orderin_descr'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+						
+		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({orderin_id:'--NULL--', orderin_descr:'NONE'});	
 		},
@@ -143,18 +151,20 @@ export async function init(opt) {
 		}
 	})				
 				
-	new fgta4slideselect(obj.cbo_dept_id, {
-		title: 'Pilih dept_id',
+	new fgta4slideselect(obj.cbo_projecttype_id, {
+		title: 'Pilih projecttype_id',
 		returnpage: this_page_id,
-		api: $ui.apis.load_dept_id,
-		fieldValue: 'dept_id',
-		fieldValueMap: 'dept_id',
-		fieldDisplay: 'dept_name',
+		api: $ui.apis.load_projecttype_id,
+		fieldValue: 'projecttype_id',
+		fieldValueMap: 'projecttype_id',
+		fieldDisplay: 'projecttype_name',
 		fields: [
-			{mapping: 'dept_id', text: 'dept_id'},
-			{mapping: 'dept_name', text: 'dept_name'},
+			{mapping: 'projecttype_id', text: 'projecttype_id'},
+			{mapping: 'projecttype_name', text: 'projecttype_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+						
+		},
 		OnDataLoaded : (result, options) => {
 				
 		},
@@ -252,10 +262,10 @@ export function open(data, rowid, viewmode=true, fn_callback) {
 		form.SuspendEvent(true);
 		form
 			.fill(record)
-			.setValue(obj.cbo_projecttype_id, record.projecttype_id, record.projecttype_name)
 			.setValue(obj.cbo_projectmodel_id, record.projectmodel_id, record.projectmodel_name)
-			.setValue(obj.cbo_orderin_id, record.orderin_id, record.orderin_descr)
 			.setValue(obj.cbo_dept_id, record.dept_id, record.dept_name)
+			.setValue(obj.cbo_orderin_id, record.orderin_id, record.orderin_descr)
+			.setValue(obj.cbo_projecttype_id, record.projecttype_id, record.projecttype_name)
 			.setViewMode(viewmode)
 			.lock(false)
 			.rowid = rowid
@@ -296,14 +306,14 @@ export function createnew() {
 		data.project_isdisabled = '0'
 		data.project_isallowalldept = '0'
 
-		data.projecttype_id = '0'
-		data.projecttype_name = '-- PILIH --'
 		data.projectmodel_id = '0'
 		data.projectmodel_name = '-- PILIH --'
-		data.orderin_id = '--NULL--'
-		data.orderin_descr = 'NONE'
 		data.dept_id = '0'
 		data.dept_name = '-- PILIH --'
+		data.orderin_id = '--NULL--'
+		data.orderin_descr = 'NONE'
+		data.projecttype_id = '0'
+		data.projecttype_name = '-- PILIH --'
 
 
 

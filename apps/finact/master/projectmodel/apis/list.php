@@ -23,7 +23,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 15/09/2021
+ * tanggal 05/12/2021
  */
 $API = new class extends projectmodelBase {
 
@@ -58,7 +58,7 @@ $API = new class extends projectmodelBase {
 			$limit = " LIMIT $maxrow OFFSET $offset ";
 			$stmt = $this->db->prepare("
 				select 
-				A.projectmodel_id, A.projectmodel_name, A.projectmodel_isdisabled, A.projectmodel_descr, A.fg_accbudget_id, A.fg_coa_id, A._createby, A._createdate, A._modifyby, A._modifydate 
+				A.projectmodel_id, A.projectmodel_name, A.projectmodel_isdisabled, A.projectmodel_descr, A.projecttype_id, A.fg_accbudget_id, A.fg_coa_id, A.sl_accbudget_id, A.sl_coa_id, A._createby, A._createdate, A._modifyby, A._modifydate 
 				from mst_projectmodel A
 			" . $where->sql . $limit);
 			$stmt->execute($where->params);
@@ -75,8 +75,11 @@ $API = new class extends projectmodelBase {
 					// // jikalau ingin menambah atau edit field di result record, dapat dilakukan sesuai contoh sbb: 
 					//'tanggal' => date("d/m/y", strtotime($record['tanggal'])),
 				 	//'tambahan' => 'dta'
+					'projecttype_name' => \FGTA4\utils\SqlUtility::Lookup($record['projecttype_id'], $this->db, 'mst_projecttype', 'projecttype_id', 'projecttype_name'),
 					'fg_accbudget_name' => \FGTA4\utils\SqlUtility::Lookup($record['fg_accbudget_id'], $this->db, 'mst_accbudget', 'accbudget_id', 'accbudget_name'),
 					'fg_coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['fg_coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
+					'sl_accbudget_name' => \FGTA4\utils\SqlUtility::Lookup($record['sl_accbudget_id'], $this->db, 'mst_accbudget', 'accbudget_id', 'accbudget_name'),
+					'sl_coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['sl_coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
 					 
 				]));
 			}

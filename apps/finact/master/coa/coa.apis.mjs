@@ -11,9 +11,8 @@ kemdian, di program bisa diakses dengan
 */
 
 export const load_coagroup_id = 'finact/master/coagroup/list'
-export const load_coamodel_id = 'finact/master/coamodel/list'
-export const load_coatype_id = 'finact/master/coatype/list'
-export const load_coareport_id = 'finact/master/coareport/list'
 export const load_curr_id = 'ent/general/curr/list'
+export const load_coamodel_id = 'finact/master/coamodel/list'
+export const load_coareport_id = 'finact/master/coareport/list'
 
 

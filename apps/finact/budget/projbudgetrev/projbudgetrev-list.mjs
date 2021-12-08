@@ -55,6 +55,11 @@ export async function init(opt) {
 	})	
 	
 	//button state
+	//button state
+	if (!this_page_options.privileges.can_edit) {
+		btn_new.hide();
+	}
+
 
 	btn_load_click()
 }
@@ -91,6 +96,12 @@ function btn_load_click() {
 	grd_list.clear()
 
 	var fn_listloading = async (options) => {
+
+		//override api
+		if (this_page_options.privileges.override_api_list!=null) {
+			options.api = this_page_options.privileges.override_api_list;
+		}
+
 		var search = txt_search.textbox('getText')
 		if (search!='') {
 			options.criteria['search'] = search

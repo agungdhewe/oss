@@ -17,21 +17,23 @@
 	//-->
 
 	<div style="margin-top: 10px; margin-bottom: 15px">
-		<table id="pnl_editdelegategrid-tbl_list" paging="true" cellspacing="0" width="100%">
+		<table id="pnl_editdelegategrid-tbl_list" paging="true" cellspacing="0" width="100%" class="deftable">
 			<thead>
 				<tr>
-					<th type="check">chk</th>
+<th type="check">chk</th>					
 					<th mapping="authdelegate_id">authdelegate_id</th>
-					<th mapping="authdelegate_portion">authdelegate_portion</th>
+					<th mapping="authdelegate_portion" style="text-align: right" formatter="row_format_number">authdelegate_portion</th>
 					<th mapping="empl_name">empl_name</th>
 
+					<th mapping=""></th>
 				</tr>
 				<tr style="background-color: #cccccc; height: 30px">
-					<td class="fgtable-head" style="width: 5px; border-bottom: 1px solid #000000; text-align: center">*</td>
+<td class="fgtable-head" style="width: 30px; border-bottom: 1px solid #000000; text-align: center">*</td>
 					<td class="fgtable-head" style="width: 100px; border-bottom: 1px solid #000000">ID</td>
-					<td class="fgtable-head" style="width: 100px; border-bottom: 1px solid #000000">Porsi</td>
+					<td class="fgtable-head" style="width: 100px; text-align: right; border-bottom: 1px solid #000000">Porsi</td>
 					<td class="fgtable-head" style="width: 100px; border-bottom: 1px solid #000000">Empl</td>
 
+					<td class="fgtable-head" style="border-bottom: 1px solid #000000; text-align: center">&nbsp;</td>
 				</tr>
 			</thead>
 		</table>

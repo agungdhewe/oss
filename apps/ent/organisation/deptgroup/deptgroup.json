@@ -1,6 +1,8 @@
 {
 	"title" : "Departement Group",
-	"icon" : "icon-deptgroup-white.png",
+	
+	
+	"variance" : {},
 	"allowanonymous" : true,
 	"allowedgroups" : ["public"],
 	"apis" : {

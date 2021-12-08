@@ -21,12 +21,12 @@ module.exports = {
 				text: 'Report', type: dbtype.varchar(2), null: false, uppercase: true, suppresslist: true,
 				options: { required: true, invalidMessage: 'Report harus diisi' },
 				comp: comp.Combo({
-				  table: 'mst_coareport',
-				  field_value: 'coareport_id',
-				  field_display: 'coareport_name',
-				  api: 'finact/master/coareport/list'
+					table: 'mst_coareport',
+					field_value: 'coareport_id',
+					field_display: 'coareport_name',
+					api: 'finact/master/coareport/list'
 				})
-			  },			
+			},			
 		},
 		uniques: {
        		'coatype_name': ['coatype_name']

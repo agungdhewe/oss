@@ -1,3 +1,9 @@
+-- SET FOREIGN_KEY_CHECKS=0;
+
+-- drop table if exists `mst_auth`;
+-- drop table if exists `mst_authdelegate`;
+
+
 CREATE TABLE `mst_auth` (
 	`auth_id` varchar(30) NOT NULL , 
 	`auth_name` varchar(60) NOT NULL , 

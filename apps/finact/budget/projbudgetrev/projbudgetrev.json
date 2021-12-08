@@ -2,7 +2,21 @@
 	"title" : "Project Budget Revisi",
 	"icon": "icon-projbudget-white.svg",
 	
-	"variance" : {},
+	"variance" : {
+		"view" : {
+			"title" : "Project Budget Revisi View"
+		},
+
+		"propose" : {
+			"title" : "Project Budget Revisi Propose"
+		},
+
+		"approval" : {
+			"title" : "Project Budget Revisi Approval"
+		}
+	},
+
+
 	"allowanonymous" : true,
 	"allowedgroups" : ["public"],
 	"apis" : {

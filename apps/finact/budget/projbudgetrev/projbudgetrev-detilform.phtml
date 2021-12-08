@@ -16,16 +16,21 @@
 			</div>
 		</div>
 
-
 		<div class="form_row" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Mode</div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editdetilform-cbo_projbudgetrevdet_mode" class="easyui-combo" style="width: 400px" mapping="projbudgetrevdet_mode" display="projbudgetrevdet_modename" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Mode Revisi harus diisi', prompt: '-- PILIH --'"  validType="requiredcombo['pnl_editdetilform-cbo_projbudgetrevdet_mode']" >
+				<input id="pnl_editdetilform-cbo_budgetrevmode_id" class="easyui-combo" style="width: 400px" mapping="budgetrevmode_id" display="budgetrevmode_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Mode harus diisi', prompt: '-- PILIH --'"  validType="requiredcombo['pnl_editdetilform-cbo_budgetrevmode_id']" >
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>
 
-		<div id="pnl_editdetilform-entry">
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Budget Line</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editdetilform-cbo_projbudgetdet_id" class="easyui-combo" style="width: 400px" mapping="projbudgetdet_id" display="projbudgetdet_descr" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Line Budget harus diisi', prompt: '-- PILIH --'"  validType="requiredcombo['pnl_editdetilform-cbo_projbudgetdet_id']" >
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
 
 		<div class="form_row" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Account</div>
@@ -36,15 +41,23 @@
 		</div>
 
 		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Descr/Reason</div>
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Dept</div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editdetilform-txt_projbudgetrevdet_descr" class="easyui-textbox" mapping="projbudgetrevdet_descr"  maxlength="255"  style="width: 400px" data-options="multiline:false  ">
+				<input id="pnl_editdetilform-cbo_alloc_dept_id" class="easyui-combo" style="width: 400px" mapping="alloc_dept_id" display="dept_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Departemen harus diisi', prompt: '-- PILIH --'"  validType="requiredcombo['pnl_editdetilform-cbo_alloc_dept_id']" >
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>
 
 		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Qty#</div>
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Descr/Reason</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editdetilform-txt_projbudgetrevdet_descr" class="easyui-textbox" mapping="projbudgetrevdet_descr"  maxlength="255"  style="width: 400px" data-options="multiline:false , required: true, invalidMessage: 'Descr/Reason harus diisi' ">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Qty</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-txt_projbudgetrevdet_qty" class="easyui-numberbox" mapping="projbudgetrevdet_qty" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  ">
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
@@ -52,7 +65,7 @@
 		</div>
 
 		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Days#</div>
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Days</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-txt_projbudgetrevdet_days" class="easyui-numberbox" mapping="projbudgetrevdet_days" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  ">
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
@@ -60,7 +73,7 @@
 		</div>
 
 		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Task#</div>
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Task</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-txt_projbudgetrevdet_task" class="easyui-numberbox" mapping="projbudgetrevdet_task" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  ">
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
@@ -83,11 +96,11 @@
 			</div>
 		</div>
 
-
-		<div style="display:none">
-
+		<?=$this->Section('Previous Budget', true, true)?>
+		<div class="fgta_section_collapsible " style="display: none">
+					
 		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Prev Qty#</div>
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Qty</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-txt_projbudgetrevdet_qty_prev" class="easyui-numberbox" mapping="projbudgetrevdet_qty_prev" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  , disabled: true">
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
@@ -95,7 +108,7 @@
 		</div>
 
 		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Prev Days#</div>
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Days</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-txt_projbudgetrevdet_days_prev" class="easyui-numberbox" mapping="projbudgetrevdet_days_prev" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  , disabled: true">
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
@@ -103,7 +116,7 @@
 		</div>
 
 		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Prev Task#</div>
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Task</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-txt_projbudgetrevdet_task_prev" class="easyui-numberbox" mapping="projbudgetrevdet_task_prev" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  , disabled: true">
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
@@ -111,7 +124,7 @@
 		</div>
 
 		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Prev Rate</div>
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Rate</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-txt_projbudgetrevdet_rate_prev" class="easyui-numberbox" mapping="projbudgetrevdet_rate_prev" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  , disabled: true">
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
@@ -119,7 +132,7 @@
 		</div>
 
 		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Prev Value</div>
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Value</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-txt_projbudgetrevdet_value_prev" class="easyui-numberbox" mapping="projbudgetrevdet_value_prev" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  , disabled: true">
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
@@ -127,10 +140,9 @@
 		</div>
 
 		</div>
-
-
+					
 		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Rate Variance (%)</div>
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Rate Variance</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-txt_projbudgetrevdet_rate_variance" class="easyui-numberbox" mapping="projbudgetrevdet_rate_variance" style="width: 400px; text-align:right" data-options="precision: 2, decimalSeparator:'.', groupSeparator:',', disabled: true  ">
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
@@ -138,13 +150,11 @@
 		</div>
 
 		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Value Variance (%)</div>
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Value Variance</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-txt_projbudgetrevdet_value_variance" class="easyui-numberbox" mapping="projbudgetrevdet_value_variance" style="width: 400px; text-align:right" data-options="precision: 2, decimalSeparator:'.', groupSeparator:',', disabled: true  ">
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
-		</div>
-
 		</div>
 
 		<div class="form_row" >

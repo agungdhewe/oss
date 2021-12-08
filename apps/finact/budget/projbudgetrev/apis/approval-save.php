@@ -26,7 +26,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 13/06/2021
+ * tanggal 06/12/2021
  */
 $API = new class extends projbudgetrevBase {
 	
@@ -57,8 +57,8 @@ $API = new class extends projbudgetrevBase {
 
 
 
-			// if ($obj->docauth_descr=='--NULL--') { unset($obj->docauth_descr); }
-			// if ($obj->auth_id=='--NULL--') { unset($obj->auth_id); }
+			if ($obj->docauth_descr=='') { $obj->docauth_descr = '--NULL--'; }
+			if ($obj->auth_id=='') { $obj->auth_id = '--NULL--'; }
 
 
 

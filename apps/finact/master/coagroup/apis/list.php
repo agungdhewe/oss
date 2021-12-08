@@ -5,25 +5,27 @@ if (!defined('FGTA4')) {
 }
 
 require_once __ROOT_DIR.'/core/sqlutil.php';
-
+require_once __DIR__ . '/xapi.base.php';
 
 
 use \FGTA4\exceptions\WebException;
 
-
-class DataList extends WebAPI {
-	function __construct() {
-		$this->debugoutput = true;
-		$DB_CONFIG = DB_CONFIG[$GLOBALS['MAINDB']];
-		$DB_CONFIG['param'] = DB_CONFIG_PARAM[$GLOBALS['MAINDBTYPE']];
-		$this->db = new \PDO(
-					$DB_CONFIG['DSN'], 
-					$DB_CONFIG['user'], 
-					$DB_CONFIG['pass'], 
-					$DB_CONFIG['param']
-		);
-
-	}
+/**
+ * finact/master/coagroup/apis/list.php
+ *
+ * ========
+ * DataList
+ * ========
+ * Menampilkan data-data pada tabel header coagroup (mst_coagroup)
+ * sesuai dengan parameter yang dikirimkan melalui variable $option->criteria
+ *
+ * Agung Nugroho <agung@fgta.net> http://www.fgta.net
+ * Tangerang, 26 Maret 2021
+ *
+ * digenerate dengan FGTA4 generator
+ * tanggal 04/12/2021
+ */
+$API = new class extends coagroupBase {
 
 	public function execute($options) {
 
@@ -36,7 +38,7 @@ class DataList extends WebAPI {
 				throw new \Exception('your group authority is not allowed to do this action.');
 			}
 
-
+			// \FGTA4\utils\SqlUtility::setDefaultCriteria($options->criteria, '--fieldscriteria--', '--value--');
 			$where = \FGTA4\utils\SqlUtility::BuildCriteria(
 				$options->criteria,
 				[
@@ -56,9 +58,12 @@ class DataList extends WebAPI {
 			$limit = " LIMIT $maxrow OFFSET $offset ";
 			$stmt = $this->db->prepare("
 				select 
-				coagroup_id, coagroup_name, coagroup_descr, coagroup_isparent, coagroup_isdisabled, coagroup_parent, coagroup_path, coagroup_pathid, coagroup_level, coagroup_isexselect, _createby, _createdate, _modifyby, _modifydate 
+				A.coagroup_id, A.coagroup_name, A.coagroup_descr, A.coagroup_isparent, A.coagroup_isdisabled, A.coagroup_parent, A.coamodel_id, A.coareport_id, A.coagroup_path, A.coagroup_pathid, A.coagroup_level, A.coagroup_isexselect, A._createby, A._createdate, A._modifyby, A._modifydate 
 				from mst_coagroup A
-			" . $where->sql . $limit);
+			" 
+			. $where->sql 
+			. " ORDER BY coagroup_path, coagroup_pathid "
+			. $limit);
 			$stmt->execute($where->params);
 			$rows  = $stmt->fetchall(\PDO::FETCH_ASSOC);
 
@@ -74,7 +79,8 @@ class DataList extends WebAPI {
 					//'tanggal' => date("d/m/y", strtotime($record['tanggal'])),
 				 	//'tambahan' => 'dta'
 					'coagroup_parent_name' => \FGTA4\utils\SqlUtility::Lookup($record['coagroup_parent'], $this->db, 'mst_coagroup', 'coagroup_id', 'coagroup_name'),
-					 
+					'coamodel_name' => \FGTA4\utils\SqlUtility::Lookup($record['coamodel_id'], $this->db, 'mst_coamodel', 'coamodel_id', 'coamodel_name'),
+					'coareport_name' => \FGTA4\utils\SqlUtility::Lookup($record['coareport_id'], $this->db, 'mst_coareport', 'coareport_id', 'coareport_name'),
 				]));
 			}
 
@@ -89,6 +95,4 @@ class DataList extends WebAPI {
 		}
 	}
 
-}
-
-$API = new DataList();
+};

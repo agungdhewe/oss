@@ -1,3 +1,10 @@
+-- SET FOREIGN_KEY_CHECKS=0;
+
+-- drop table if exists `mst_projbudgetrev`;
+-- drop table if exists `mst_projbudgetrevdet`;
+-- drop table if exists `mst_projbudgetrevappr`;
+
+
 CREATE TABLE `mst_projbudgetrev` (
 	`projbudgetrev_id` varchar(30) NOT NULL , 
 	`dept_id` varchar(30) NOT NULL , 
@@ -6,6 +13,7 @@ CREATE TABLE `mst_projbudgetrev` (
 	`project_id` varchar(30) NOT NULL , 
 	`projbudget_year` int(4) NOT NULL , 
 	`projbudget_month` int(2) NOT NULL , 
+	`projbudget_isdeptalloc` tinyint(1) NOT NULL DEFAULT 0, 
 	`doc_id` varchar(30) NOT NULL , 
 	`projbudgetrev_notes` varchar(255)  , 
 	`projbudgetrev_version` int(4) NOT NULL DEFAULT 0, 
@@ -47,7 +55,10 @@ ALTER TABLE `mst_projbudgetrev` ADD CONSTRAINT `fk_mst_projbudgetrev_mst_doc` FO
 
 CREATE TABLE `mst_projbudgetrevdet` (
 	`projbudgetrevdet_id` varchar(14) NOT NULL , 
+	`budgetrevmode_id` varchar(10) NOT NULL , 
+	`projbudgetdet_id` varchar(20) NOT NULL , 
 	`accbudget_id` varchar(20) NOT NULL , 
+	`alloc_dept_id` varchar(30) NOT NULL , 
 	`projbudgetrevdet_descr` varchar(255)  , 
 	`projbudgetrevdet_qty` int(6) NOT NULL DEFAULT 0, 
 	`projbudgetrevdet_days` int(4) NOT NULL DEFAULT 0, 
@@ -66,16 +77,22 @@ CREATE TABLE `mst_projbudgetrevdet` (
 	`_createdate` datetime NOT NULL DEFAULT current_timestamp(), 
 	`_modifyby` varchar(13)  , 
 	`_modifydate` datetime  , 
-	UNIQUE KEY `projbudgetrevdet_pair` (`projbudgetrev_id`, `accbudget_id`),
+	UNIQUE KEY `projbudgetrevdet_pair` (`projbudgetrev_id`, `accbudget_id`, `alloc_dept_id`),
 	PRIMARY KEY (`projbudgetrevdet_id`)
 ) 
 ENGINE=InnoDB
 COMMENT='Detil budget tahunan (per account bulanan)';
 
+ALTER TABLE `mst_projbudgetrevdet` ADD KEY `budgetrevmode_id` (`budgetrevmode_id`);
+ALTER TABLE `mst_projbudgetrevdet` ADD KEY `projbudgetdet_id` (`projbudgetdet_id`);
 ALTER TABLE `mst_projbudgetrevdet` ADD KEY `accbudget_id` (`accbudget_id`);
+ALTER TABLE `mst_projbudgetrevdet` ADD KEY `alloc_dept_id` (`alloc_dept_id`);
 ALTER TABLE `mst_projbudgetrevdet` ADD KEY `projbudgetrev_id` (`projbudgetrev_id`);
 
+ALTER TABLE `mst_projbudgetrevdet` ADD CONSTRAINT `fk_mst_projbudgetrevdet_mst_budgetrevmode` FOREIGN KEY (`budgetrevmode_id`) REFERENCES `mst_budgetrevmode` (`budgetrevmode_id`);
+ALTER TABLE `mst_projbudgetrevdet` ADD CONSTRAINT `fk_mst_projbudgetrevdet_mst_projbudgetdet` FOREIGN KEY (`projbudgetdet_id`) REFERENCES `mst_projbudgetdet` (`projbudgetdet_id`);
 ALTER TABLE `mst_projbudgetrevdet` ADD CONSTRAINT `fk_mst_projbudgetrevdet_mst_accbudget` FOREIGN KEY (`accbudget_id`) REFERENCES `mst_accbudget` (`accbudget_id`);
+ALTER TABLE `mst_projbudgetrevdet` ADD CONSTRAINT `fk_mst_projbudgetrevdet_mst_dept` FOREIGN KEY (`alloc_dept_id`) REFERENCES `mst_dept` (`dept_id`);
 ALTER TABLE `mst_projbudgetrevdet` ADD CONSTRAINT `fk_mst_projbudgetrevdet_mst_projbudgetrev` FOREIGN KEY (`projbudgetrev_id`) REFERENCES `mst_projbudgetrev` (`projbudgetrev_id`);
 
 

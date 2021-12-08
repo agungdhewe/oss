@@ -18,13 +18,14 @@ module.exports = {
 				unit_isdisabled: {text:'Disabled', type: dbtype.boolean, null:false, default:'0'},
 				unitgroup_id: {
 					text:'Unit Group', type: dbtype.varchar(10), null:false, 
+					options:{required:true,invalidMessage:'Unit Group harus diisi', prompt:'-- PILIH --'},
 					comp: comp.Combo({
 						table: 'mst_unitgroup', 
 						field_value: 'unitgroup_id', field_display: 'unitgroup_name', 
 						api: 'ent/organisation/unitgroup/list'})
 				},
 				dept_id: {
-					text:'Dept', type: dbtype.varchar(30), null:false, uppercase: true, suppresslist: true,
+					text:'Dept', type: dbtype.varchar(30), null:false, suppresslist: true,
 					options:{required:true,invalidMessage:'Department harus diisi', prompt:'-- PILIH --'},
 					comp: comp.Combo({
 						table: 'mst_dept', 

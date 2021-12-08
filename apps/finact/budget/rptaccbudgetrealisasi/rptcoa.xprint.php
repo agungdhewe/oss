@@ -44,7 +44,8 @@ $MODULE = new class extends WebModule {
 					projbudgetdet_value as budget,
 					0 as inquiry,
 					0 as realisasi
-					from mst_projbudgetdet where projbudget_id = 'BP21100001'
+					from mst_projbudgetdet 
+					-- where projbudget_id = 'BP21100001'
 					
 					
 					union all
@@ -57,8 +58,8 @@ $MODULE = new class extends WebModule {
 					0 as realisasi
 					from
 					trn_inquirydetil A inner join mst_projbudgetdet B on B.projbudgetdet_id = A.projbudgetdet_id
-					where
-					B.projbudget_id = 'BP21100001'
+					-- where
+					-- B.projbudget_id = 'BP21100001'
 					
 					
 					union all
@@ -72,8 +73,8 @@ $MODULE = new class extends WebModule {
 					from
 					trn_recvitem A inner join trn_inquirydetil B on B.inquirydetil_id=A.inquiryitem_id
 								inner join mst_projbudgetdet C on C.projbudgetdet_id = B.projbudgetdet_id
-					where
-					C.projbudget_id = 'BP21100001'
+					-- where
+					-- C.projbudget_id = 'BP21100001'
 				
 				) AX
 				group by

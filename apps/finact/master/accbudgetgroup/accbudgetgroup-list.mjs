@@ -46,6 +46,16 @@ export async function init(opt) {
 	})	
 
 
+	document.addEventListener('scroll', (ev) => {
+		if ($ui.getPages().getCurrentPage()==this_page_id) {
+			if($(window).scrollTop() + $(window).height() == $(document).height()) {
+				grd_list.nextpageload();
+			}			
+		}
+	})	
+	
+	//button state
+
 	btn_load_click()
 }
 
@@ -146,18 +156,14 @@ function grd_list_rowrender(tr) {
 	var record = grd_list.DATA[dataid]
 
 	$(tr).find('td').each((i, td) => {
-
 		var mapping = td.getAttribute('mapping')
-		
-		if (mapping == 'accbudgetgroup_name') {
+		if (mapping=='accbudgetgroup_name') {
+			// console.log(record.deptgroup_level);
 			var indent = record.accbudgetgroup_level * 15;
 			$(td).css("padding-left", `${indent}px`);
-		}
-
-		if (record.disabled == "1" || record.disabled == true) {
-			td.classList.add('fgtable-row-disabled')
-		} else {
-			td.classList.remove('fgtable-row-disabled')
+			if (record.accbudgetgroup_isparent=='1') {
+				$(td).css('font-weight', 'bold');
+			}
 		}
 	})
 }

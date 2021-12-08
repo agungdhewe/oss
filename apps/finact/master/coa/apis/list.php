@@ -5,25 +5,27 @@ if (!defined('FGTA4')) {
 }
 
 require_once __ROOT_DIR.'/core/sqlutil.php';
-
+require_once __DIR__ . '/xapi.base.php';
 
 
 use \FGTA4\exceptions\WebException;
 
-
-class DataList extends WebAPI {
-	function __construct() {
-		$this->debugoutput = true;
-		$DB_CONFIG = DB_CONFIG[$GLOBALS['MAINDB']];
-		$DB_CONFIG['param'] = DB_CONFIG_PARAM[$GLOBALS['MAINDBTYPE']];
-		$this->db = new \PDO(
-					$DB_CONFIG['DSN'], 
-					$DB_CONFIG['user'], 
-					$DB_CONFIG['pass'], 
-					$DB_CONFIG['param']
-		);
-
-	}
+/**
+ * finact/master/coa/apis/list.php
+ *
+ * ========
+ * DataList
+ * ========
+ * Menampilkan data-data pada tabel header coa (mst_coa)
+ * sesuai dengan parameter yang dikirimkan melalui variable $option->criteria
+ *
+ * Agung Nugroho <agung@fgta.net> http://www.fgta.net
+ * Tangerang, 26 Maret 2021
+ *
+ * digenerate dengan FGTA4 generator
+ * tanggal 04/12/2021
+ */
+$API = new class extends coaBase {
 
 	public function execute($options) {
 
@@ -36,15 +38,13 @@ class DataList extends WebAPI {
 				throw new \Exception('your group authority is not allowed to do this action.');
 			}
 
-
+			// \FGTA4\utils\SqlUtility::setDefaultCriteria($options->criteria, '--fieldscriteria--', '--value--');
 			$where = \FGTA4\utils\SqlUtility::BuildCriteria(
 				$options->criteria,
 				[
 					"search" => " A.coa_id LIKE CONCAT('%', :search, '%') OR A.coa_name LIKE CONCAT('%', :search, '%') ",
-					"curr_id" => " A.curr_id = :curr_id ",
-					"coareport_id" => " B.coareport_id = :coareport_id",
-					"coatype_id" => " A.coatype_id = :coatype_id ",
-					"coamodel_id" => " A.coamodel_id = :coamodel_id "
+					"coamodel_id" => " A.coamodel_id = :coamodel_id ",
+					"coareport_id" => " A.coareport_id = :coareport_id "
 				]
 			);
 
@@ -52,11 +52,7 @@ class DataList extends WebAPI {
 			$maxrow = 30;
 			$offset = (property_exists($options, 'offset')) ? $options->offset : 0;
 
-			$stmt = $this->db->prepare("
-				select 
-				count(*) as n 
-				from mst_coa A inner join mst_coatype B on B.coatype_id = A.coatype_id
-			" . $where->sql);
+			$stmt = $this->db->prepare("select count(*) as n from mst_coa A" . $where->sql);
 			$stmt->execute($where->params);
 			$row  = $stmt->fetch(\PDO::FETCH_ASSOC);
 			$total = (float) $row['n'];
@@ -64,9 +60,8 @@ class DataList extends WebAPI {
 			$limit = " LIMIT $maxrow OFFSET $offset ";
 			$stmt = $this->db->prepare("
 				select 
-				  A.coa_id, A.coa_name, A.coa_nameshort, A.coa_isdisabled, A.coa_descr, A.coa_dk, A.coagroup_id, A.coamodel_id, A.coatype_id
-				, A._createby, A._createdate, A._modifyby, A._modifydate 
-				from mst_coa A inner join mst_coatype B on B.coatype_id = A.coatype_id
+				A.coa_id, A.coagroup_id, A.coa_name, A.coa_nameshort, A.curr_id, A.coa_dk, A.coa_descr, A.coa_isdisabled, A.coamodel_id, A.coareport_id, A._createby, A._createdate, A._modifyby, A._modifydate 
+				from mst_coa A
 			" . $where->sql . $limit);
 			$stmt->execute($where->params);
 			$rows  = $stmt->fetchall(\PDO::FETCH_ASSOC);
@@ -83,8 +78,9 @@ class DataList extends WebAPI {
 					//'tanggal' => date("d/m/y", strtotime($record['tanggal'])),
 				 	//'tambahan' => 'dta'
 					'coagroup_name' => \FGTA4\utils\SqlUtility::Lookup($record['coagroup_id'], $this->db, 'mst_coagroup', 'coagroup_id', 'coagroup_name'),
+					'curr_name' => \FGTA4\utils\SqlUtility::Lookup($record['curr_id'], $this->db, 'mst_curr', 'curr_id', 'curr_name'),
 					'coamodel_name' => \FGTA4\utils\SqlUtility::Lookup($record['coamodel_id'], $this->db, 'mst_coamodel', 'coamodel_id', 'coamodel_name'),
-					'coatype_name' => \FGTA4\utils\SqlUtility::Lookup($record['coatype_id'], $this->db, 'mst_coatype', 'coatype_id', 'coatype_name'),
+					'coareport_name' => \FGTA4\utils\SqlUtility::Lookup($record['coareport_id'], $this->db, 'mst_coareport', 'coareport_id', 'coareport_name'),
 					 
 				]));
 			}
@@ -100,6 +96,4 @@ class DataList extends WebAPI {
 		}
 	}
 
-}
-
-$API = new DataList();
+};

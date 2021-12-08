@@ -1,6 +1,8 @@
 {
 	"title" : "Departement",
-	"icon" : "icon-dept-white.png",
+	
+	
+	"variance" : {},
 	"allowanonymous" : true,
 	"allowedgroups" : ["public"],
 	"apis" : {

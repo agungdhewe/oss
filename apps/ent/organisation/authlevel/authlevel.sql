@@ -1,3 +1,8 @@
+-- SET FOREIGN_KEY_CHECKS=0;
+
+-- drop table if exists `mst_authlevel`;
+
+
 CREATE TABLE `mst_authlevel` (
 	`authlevel_id` varchar(10) NOT NULL , 
 	`authlevel_name` varchar(60) NOT NULL , 

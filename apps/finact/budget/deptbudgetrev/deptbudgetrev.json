@@ -1,8 +1,20 @@
 {
 	"title" : "Budget Department Revisi",
 	"icon": "icon-budgetdept-white.svg",
-	
-	"variance" : {},
+
+	"variance" : {
+		"view" : {
+			"title" : "View Rev Budget Dept"
+		},
+
+		"propose" : {
+			"title" : "Propose Rev Budget Dept"
+		},
+
+		"approval" : {
+			"title" : "Approval Rev Budget Dept"
+		}
+	},
 	"allowanonymous" : true,
 	"allowedgroups" : ["public"],
 	"apis" : {

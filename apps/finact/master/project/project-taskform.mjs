@@ -236,8 +236,8 @@ export function createnew(hdata) {
 		data.projecttask_dtstart = global.now()
 		data.projecttask_dtend = global.now()
 
-		data.dept_id = header_data.dept_id;
-		data.dept_name = header_data.dept_name;
+
+
 
 
 		form.rowid = null

@@ -1,5 +1,7 @@
 {
 	"title" : "COA Report",
+	
+	
 	"variance" : {},
 	"allowanonymous" : true,
 	"allowedgroups" : ["public"],

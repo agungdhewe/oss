@@ -57,7 +57,7 @@ $API = new class extends logproofBase {
 			$limit = " LIMIT $maxrow OFFSET $offset ";
 			$stmt = $this->db->prepare("
 				select 
-				A.medialogproofupload_id, A.mediaadslot_timestart, A.mediaadslot_timeend, A.mediaadslot_duration, A.mediaadslot_descr, A.mediaadslot_code, A.actual_timestart, A.actual_timeend, A.actual_duration, A.spot_id, A.mediaorder_ref, A.mediaorder_reftype, A.mediaorder_descr, A.mediaorder_id, A.mediaordertype_id, A.agency_code, A.agency_name, A.agency_partner_id, A.advertiser_code, A.advertiser_name, A.advertiser_partner_id, A.brand_code, A.brand_name, A.brand_id, A.programme_code, A.programme_name, A.project_id, A.episode_code, A.episode_name, A.projecttask_id, A.medialogproof_validr, A.medialogproof_ppnidr, A.pph_taxtype_id, A.medialogproof_id, A._createby, A._createdate, A._modifyby, A._modifydate 
+				A.medialogproofupload_id, A.nobaris, A.mediaadslot_timestart, A.mediaadslot_timeend, A.mediaadslot_duration, A.mediaadslot_descr, A.mediaadslot_code, A.actual_timestart, A.actual_timeend, A.actual_duration, A.spot_id, A.mediaorder_ref, A.mediaorder_reftype, A.mediaorder_descr, A.mediaorder_id, A.mediaordertype_id, A.agency_code, A.agency_name, A.agency_partner_id, A.advertiser_code, A.advertiser_name, A.advertiser_partner_id, A.brand_code, A.brand_name, A.brand_id, A.programme_code, A.programme_name, A.project_id, A.episode_code, A.episode_name, A.projecttask_id, A.medialogproof_validr, A.medialogproof_ppnidr, A.pph_taxtype_id, A.medialogproof_id, A._createby, A._createdate, A._modifyby, A._modifydate 
 				from trn_medialogproofupload A
 			" . $where->sql . $limit);
 			$stmt->execute($where->params);

@@ -1,3 +1,5 @@
+import {fgta4grid} from  '../../../../../index.php/asset/fgta/framework/fgta4libs/fgta4grid.mjs'
+
 import * as fgta4pages from '../../../../../index.php/asset/fgta/framework/fgta4libs/fgta4pages.mjs'
 import * as fgta4pageslider from '../../../../../index.php/asset/fgta/framework/fgta4libs/fgta4pageslider.mjs'
 import * as apis from './rptcoa.apis.mjs'
@@ -16,6 +18,9 @@ export const SIZE = {width:0, height:0}
 
 
 export async function init(opt) {
+
+	global.fgta4grid = fgta4grid
+
 	$ui.apis = apis
 	document.getElementsByTagName("body")[0].style.margin = '5px 5px 5px 5px'
 

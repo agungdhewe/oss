@@ -3,6 +3,15 @@
 	"icon": "icon-budgetdept-white.svg",
 	
 	"variance" : {
+		"view" : {
+			"icon" : "icon-budgetdept-view-white.svg",
+			"title" : "Budget Department View"
+		},
+
+		"propose" : {
+			"title" : "Budget Department Propose"
+		},
+
 		"approval" : {
 			"title" : "Budget Department Approval"
 		}

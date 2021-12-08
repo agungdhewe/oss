@@ -2,18 +2,42 @@
 	<!-- <div class="fgta-page-title">Trial Balance</div> -->
 
 	<div id="pnl_list-pnl_head" style="display: flex; justify-content: space-between; margin-top: 10px ">
-		<div>
-			<span>Per Tanggal</span>
-			<input id="pnl_list-dt_report_date" class="easyui-datebox" style="width: 130px" mapping="jurnal_date" data-options="editable:false ">
-			<a href="javascript:void(0)" id="pnl_list-btn_load" class="easyui-linkbutton c8" style="width: 45px">Load</a>
-		</div>
 
+
+		<!-- START: Query Box -->
+		<div class="list-search-wrap" style="width: calc(100% - 150px); display: flex;">
+			<div class="list-search-param" style="width: 280px">
+				<div class="list-search-item" style="width: 50px; align-self:center; text-align: right">Dept</div>
+				<div class="list-search-item" style="width: 200px">
+					<input id="pnl_list-cbo_search_dept" class="easyui-combo" style="width: 100%">
+				</div>
+			</div>
+
+			<div class="list-search-param" style="width: 180px">
+				<div class="list-search-item" style="width: 50px;align-self:center; text-align: right">Tanggal</div>
+				<div class="list-search-item" style="width: 100px">
+					<!-- <input id="pnl_list-txt_search" class="easyui-textbox" style="width: 100%"> -->
+					<input id="pnl_list-dt_report_date" class="easyui-datebox" style="width: 100px" mapping="jurnal_date" data-options="editable:false ">
+				</div>
+			</div>
+			
+			<div class="list-search-item" style="width: 45px">
+				<a href="javascript:void(0)" id="pnl_list-btn_load" class="easyui-linkbutton c8" style="width: 45px">Load</a>
+			</div>
+
+		</div>
+		<!-- END: Query Box -->
+	
 		
 		<div style="text-align: right">
-		<a href="javascript:void(0)" id="pnl_list-btn_export" class="easyui-linkbutton c8" style="width: 100px">Export</a>
-		<a href="javascript:void(0)" id="pnl_list-btn_print" class="easyui-linkbutton c8" style="width: 45px">Print</a>
+			<a href="javascript:void(0)" id="pnl_list-btn_export" class="easyui-linkbutton c8" style="width: 100px">Export</a>
+			<a href="javascript:void(0)" id="pnl_list-btn_print" class="easyui-linkbutton c8" style="width: 45px">Print</a>
 		</div>
 	</div>
+
+
+
+
 	<div id="rpt_container"  style="margin-top: 10px; border: 1px solid #000">
 		<iframe id="obj_report" style="border: 0px; width:100%; height:100%;">
 		</iframe>

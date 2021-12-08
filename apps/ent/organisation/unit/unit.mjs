@@ -20,7 +20,7 @@ var slider = fgta4pageslider;
 export const SIZE = {width:0, height:0}
 
 
-export async function init() {
+export async function init(opt) {
 	// $ui.grd_list = new fgta4grid()
 	// $ui.grd_edit = new fgta4grid()
 
@@ -36,7 +36,7 @@ export async function init() {
 			{panel: pnl_list, handler: pList},
 			{panel: pnl_edit, handler: pEdit},
 			
-		])
+		], opt)
 
 	$ui.setPages(pages)
 

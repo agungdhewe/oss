@@ -2,9 +2,12 @@
 	<div class="fgta-page-title">Daftar COA</div>
 
 	<div id="pnl_list-pnl_head" style="display: flex; align-items: flex-end">
+
 		<div class="list-buttonbaru" style="text-align: right; width: calc(100% - 10px); float: right;  position: absolute">
 			<a href="javascript:void(0)" id="pnl_list-btn_new" class="easyui-linkbutton c8" style="width: 60px">Baru</a>
 		</div>
+
+
 
 		<!-- START: Query Box -->
 		<div class="list-search-wrap" style="width: calc(100% - 65px); display: flex;">
@@ -15,13 +18,6 @@
 					<div class="list-search-item" style="width: 50px; align-self:flex-start; padding-top: 4px; text-align: right">Report</div>
 					<div class="list-search-item" style="width: 200px">
 						<input id="pnl_list-cbo_search_report" class="easyui-combo" style="width: 100%">
-					</div>
-				</div>
-
-				<div class="list-search-param" style="width: 280px">
-					<div class="list-search-item" style="width: 50px; align-self:flex-start; padding-top: 4px; text-align: right">Type</div>
-					<div class="list-search-item" style="width: 200px">
-						<input id="pnl_list-cbo_search_type" class="easyui-combo" style="width: 100%">
 					</div>
 				</div>
 
@@ -51,18 +47,20 @@
 
 
 	<div style="margin-top: 10px">
-		<table id="pnl_list-tbl_list" paging="true" cellspacing="0" width="100%">
+		<table id="pnl_list-tbl_list" paging="true" cellspacing="0" width="100%" class="deftable">
 			<thead>
 				<tr>
 					<th mapping="coa_id">coa_id</th>
 					<th mapping="coa_name">coa_name</th>
-					<th mapping="coa_isdisabled">coa_isdisabled</th>
+					<th mapping="coa_nameshort">coa_nameshort</th>
+					<th mapping="coa_isdisabled" type="checkbox">coa_isdisabled</th>
 
 				</tr>
 				<tr style="background-color: #cccccc; height: 30px">
 					<td class="fgtable-head" style="width: 100px; border-bottom: 1px solid #000000">ID</td>
-					<td class="fgtable-head" style="width: 100px; border-bottom: 1px solid #000000">COA</td>
-					<td class="fgtable-head" style="width: 100px; border-bottom: 1px solid #000000">Disabled</td>
+					<td class="fgtable-head" style="width: 100px; border-bottom: 1px solid #000000">Nama COA</td>
+					<td class="fgtable-head" style="width: 100px; border-bottom: 1px solid #000000">Nama Pendek</td>
+					<td class="fgtable-head" style="width: 100px; border-bottom: 1px solid #000000; text-align: center">Disabled</td>
 
 				</tr>
 			</thead>

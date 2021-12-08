@@ -6,34 +6,30 @@ if (!defined('FGTA4')) {
 
 require_once __ROOT_DIR.'/core/sqlutil.php';
 // require_once __ROOT_DIR . "/core/sequencer.php";
+require_once __DIR__ . '/xapi.base.php';
+
 
 use \FGTA4\exceptions\WebException;
 // use \FGTA4\utils\Sequencer;
 
 
 
-// /* Enable Debugging */
-// require_once __ROOT_DIR.'/core/debug.php';
-// use \FGTA4\debug;
-
-
-class DataSave extends WebAPI {
-	function __construct() {
-		$logfilepath = __LOCALDB_DIR . "/output/coamodel-save.txt";
-		// debug::disable();
-		// debug::start($logfilepath, "w");
-
-		$this->debugoutput = true;
-		$DB_CONFIG = DB_CONFIG[$GLOBALS['MAINDB']];
-		$DB_CONFIG['param'] = DB_CONFIG_PARAM[$GLOBALS['MAINDBTYPE']];
-		$this->db = new \PDO(
-					$DB_CONFIG['DSN'], 
-					$DB_CONFIG['user'], 
-					$DB_CONFIG['pass'], 
-					$DB_CONFIG['param']
-		);	
-
-	}
+/**
+ * finact/master/coamodel/apis/save.php
+ *
+ * ====
+ * Save
+ * ====
+ * Menampilkan satu baris data/record sesuai PrimaryKey,
+ * dari tabel header coamodel (mst_coamodel)
+ *
+ * Agung Nugroho <agung@fgta.net> http://www.fgta.net
+ * Tangerang, 26 Maret 2021
+ *
+ * digenerate dengan FGTA4 generator
+ * tanggal 04/12/2021
+ */
+$API = new class extends coamodelBase {
 	
 	public function execute($data, $options) {
 		$tablename = 'mst_coamodel';
@@ -67,6 +63,7 @@ class DataSave extends WebAPI {
 
 			$obj->coamodel_id = strtoupper($obj->coamodel_id);
 			$obj->coamodel_name = strtoupper($obj->coamodel_name);
+			$obj->coareport_id = strtoupper($obj->coareport_id);
 
 
 
@@ -100,7 +97,36 @@ class DataSave extends WebAPI {
 
 				\FGTA4\utils\SqlUtility::WriteLog($this->db, $this->reqinfo->modulefullname, $tablename, $obj->{$primarykey}, $action, $userdata->username, (object)[]);
 
+
+
+
+				// result
+				$where = \FGTA4\utils\SqlUtility::BuildCriteria((object)[$primarykey=>$obj->{$primarykey}], [$primarykey=>"$primarykey=:$primarykey"]);
+				$sql = \FGTA4\utils\SqlUtility::Select($tablename , [
+					$primarykey
+					, 'coamodel_id', 'coamodel_name', 'coamodel_isdisabled', 'coamodel_isaging', 'coamodel_descr', 'coareport_id', '_createby', '_createdate', '_modifyby', '_modifydate', '_createby', '_createdate', '_modifyby', '_modifydate'
+				], $where->sql);
+				$stmt = $this->db->prepare($sql);
+				$stmt->execute($where->params);
+				$row  = $stmt->fetch(\PDO::FETCH_ASSOC);			
+
+				$record = [];
+				foreach ($row as $key => $value) {
+					$record[$key] = $value;
+				}
+				$result->dataresponse = (object) array_merge($record, [
+					//  untuk lookup atau modify response ditaruh disini
+				'coareport_name' => \FGTA4\utils\SqlUtility::Lookup($record['coareport_id'], $this->db, 'mst_coareport', 'coareport_id', 'coareport_name'),
+
+					'_createby' => \FGTA4\utils\SqlUtility::Lookup($record['_createby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+					'_modifyby' => \FGTA4\utils\SqlUtility::Lookup($record['_modifyby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+				]);
+
+
+
 				$this->db->commit();
+				return $result;
+
 			} catch (\Exception $ex) {
 				$this->db->rollBack();
 				throw $ex;
@@ -108,25 +134,6 @@ class DataSave extends WebAPI {
 				$this->db->setAttribute(\PDO::ATTR_AUTOCOMMIT,1);
 			}
 
-
-			$where = \FGTA4\utils\SqlUtility::BuildCriteria((object)[$primarykey=>$obj->{$primarykey}], [$primarykey=>"$primarykey=:$primarykey"]);
-			$sql = \FGTA4\utils\SqlUtility::Select($tablename , [
-				$primarykey, 'coamodel_id', 'coamodel_name', 'coamodel_isdisabled', 'coamodel_isaging', 'coamodel_descr', '_createby', '_createdate', '_modifyby', '_modifydate', '_createby', '_createdate', '_modifyby', '_modifydate'
-			], $where->sql);
-			$stmt = $this->db->prepare($sql);
-			$stmt->execute($where->params);
-			$row  = $stmt->fetch(\PDO::FETCH_ASSOC);			
-
-			$dataresponse = [];
-			foreach ($row as $key => $value) {
-				$dataresponse[$key] = $value;
-			}
-			$result->dataresponse = (object) array_merge($dataresponse, [
-				//  untuk lookup atau modify response ditaruh disini
-				
-			]);
-
-			return $result;
 		} catch (\Exception $ex) {
 			throw $ex;
 		}
@@ -136,6 +143,4 @@ class DataSave extends WebAPI {
 					return uniqid();
 	}
 
-}
-
-$API = new DataSave();
+};

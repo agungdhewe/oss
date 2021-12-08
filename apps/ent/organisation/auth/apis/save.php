@@ -5,25 +5,31 @@ if (!defined('FGTA4')) {
 }
 
 require_once __ROOT_DIR.'/core/sqlutil.php';
+// require_once __ROOT_DIR . "/core/sequencer.php";
+require_once __DIR__ . '/xapi.base.php';
 
 
 use \FGTA4\exceptions\WebException;
+// use \FGTA4\utils\Sequencer;
 
 
 
-class DataSave extends WebAPI {
-	function __construct() {
-		$this->debugoutput = true;
-		$DB_CONFIG = DB_CONFIG[$GLOBALS['MAINDB']];
-		$DB_CONFIG['param'] = DB_CONFIG_PARAM[$GLOBALS['MAINDBTYPE']];
-		$this->db = new \PDO(
-					$DB_CONFIG['DSN'], 
-					$DB_CONFIG['user'], 
-					$DB_CONFIG['pass'], 
-					$DB_CONFIG['param']
-		);	
-
-	}
+/**
+ * ent/organisation/auth/apis/save.php
+ *
+ * ====
+ * Save
+ * ====
+ * Menampilkan satu baris data/record sesuai PrimaryKey,
+ * dari tabel header auth (mst_auth)
+ *
+ * Agung Nugroho <agung@fgta.net> http://www.fgta.net
+ * Tangerang, 26 Maret 2021
+ *
+ * digenerate dengan FGTA4 generator
+ * tanggal 04/12/2021
+ */
+$API = new class extends authBase {
 	
 	public function execute($data, $options) {
 		$tablename = 'mst_auth';
@@ -56,14 +62,11 @@ class DataSave extends WebAPI {
 			// $obj->tanggal = (\DateTime::createFromFormat('d/m/Y',$obj->tanggal))->format('Y-m-d');
 
 			$obj->auth_id = strtoupper($obj->auth_id);
-			$obj->auth_name = strtoupper($obj->auth_name);
-			$obj->authlevel_id = strtoupper($obj->authlevel_id);
-			$obj->deptmodel_id = strtoupper($obj->deptmodel_id);
-			$obj->empl_id = strtoupper($obj->empl_id);
 
 
-			// if ($obj->auth_descr=='--NULL--') { unset($obj->auth_descr); }
-			// if ($obj->empl_id=='--NULL--') { unset($obj->empl_id); }
+			if ($obj->auth_descr=='') { $obj->auth_descr = '--NULL--'; }
+
+
 
 
 
@@ -93,7 +96,38 @@ class DataSave extends WebAPI {
 
 				\FGTA4\utils\SqlUtility::WriteLog($this->db, $this->reqinfo->modulefullname, $tablename, $obj->{$primarykey}, $action, $userdata->username, (object)[]);
 
+
+
+
+				// result
+				$where = \FGTA4\utils\SqlUtility::BuildCriteria((object)[$primarykey=>$obj->{$primarykey}], [$primarykey=>"$primarykey=:$primarykey"]);
+				$sql = \FGTA4\utils\SqlUtility::Select($tablename , [
+					$primarykey
+					, 'auth_id', 'auth_name', 'auth_isdisabled', 'auth_descr', 'authlevel_id', 'deptmodel_id', 'empl_id', '_createby', '_createdate', '_modifyby', '_modifydate', '_createby', '_createdate', '_modifyby', '_modifydate'
+				], $where->sql);
+				$stmt = $this->db->prepare($sql);
+				$stmt->execute($where->params);
+				$row  = $stmt->fetch(\PDO::FETCH_ASSOC);			
+
+				$record = [];
+				foreach ($row as $key => $value) {
+					$record[$key] = $value;
+				}
+				$result->dataresponse = (object) array_merge($record, [
+					//  untuk lookup atau modify response ditaruh disini
+				'authlevel_name' => \FGTA4\utils\SqlUtility::Lookup($record['authlevel_id'], $this->db, 'mst_authlevel', 'authlevel_id', 'authlevel_name'),
+				'deptmodel_name' => \FGTA4\utils\SqlUtility::Lookup($record['deptmodel_id'], $this->db, 'mst_deptmodel', 'deptmodel_id', 'deptmodel_name'),
+				'empl_name' => \FGTA4\utils\SqlUtility::Lookup($record['empl_id'], $this->db, 'mst_empl', 'empl_id', 'empl_name'),
+
+					'_createby' => \FGTA4\utils\SqlUtility::Lookup($record['_createby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+					'_modifyby' => \FGTA4\utils\SqlUtility::Lookup($record['_modifyby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+				]);
+
+
+
 				$this->db->commit();
+				return $result;
+
 			} catch (\Exception $ex) {
 				$this->db->rollBack();
 				throw $ex;
@@ -101,37 +135,13 @@ class DataSave extends WebAPI {
 				$this->db->setAttribute(\PDO::ATTR_AUTOCOMMIT,1);
 			}
 
-
-			$where = \FGTA4\utils\SqlUtility::BuildCriteria((object)[$primarykey=>$obj->{$primarykey}], [$primarykey=>"$primarykey=:$primarykey"]);
-			$sql = \FGTA4\utils\SqlUtility::Select($tablename , [
-				$primarykey, 'auth_id', 'auth_name', 'auth_isdisabled', 'auth_descr', 'authlevel_id', 'deptmodel_id', 'empl_id', '_createby', '_createdate', '_modifyby', '_modifydate', '_createby', '_createdate', '_modifyby', '_modifydate'
-			], $where->sql);
-			$stmt = $this->db->prepare($sql);
-			$stmt->execute($where->params);
-			$row  = $stmt->fetch(\PDO::FETCH_ASSOC);			
-
-			$dataresponse = [];
-			foreach ($row as $key => $value) {
-				$dataresponse[$key] = $value;
-			}
-			$result->dataresponse = (object) array_merge($dataresponse, [
-				//  untuk lookup atau modify response ditaruh disini
-				'authlevel_name' => \FGTA4\utils\SqlUtility::Lookup($data->authlevel_id, $this->db, 'mst_authlevel', 'authlevel_id', 'authlevel_name'),
-				'deptmodel_name' => \FGTA4\utils\SqlUtility::Lookup($data->deptmodel_id, $this->db, 'mst_deptmodel', 'deptmodel_id', 'deptmodel_name'),
-				'empl_name' => \FGTA4\utils\SqlUtility::Lookup($data->empl_id, $this->db, 'mst_empl', 'empl_id', 'empl_name'),
-				
-			]);
-
-			return $result;
 		} catch (\Exception $ex) {
 			throw $ex;
 		}
 	}
 
 	public function NewId($param) {
-		return uniqid();
+					return uniqid();
 	}
 
-}
-
-$API = new DataSave();
+};

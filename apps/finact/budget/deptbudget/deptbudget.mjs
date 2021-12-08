@@ -40,6 +40,31 @@ export async function init(opt) {
 	$ui.apis = apis
 	document.getElementsByTagName("body")[0].style.margin = '5px 5px 5px 5px'
 
+
+	//button state
+	opt.privileges = {
+		can_edit: true,
+		can_commit: true,
+		can_approve: true,
+		ovveride_api_list: null
+	};
+	switch (opt.variancename) {
+		case 'view' :
+			opt.privileges.can_edit = false;
+			opt.privileges.can_commit = false;
+			opt.privileges.can_approve = false;
+			break;
+		case 'propose' : 
+			opt.privileges.can_approve = false;
+			break;
+		case 'approval' : 
+			opt.privileges.can_edit = false;
+			opt.privileges.can_commit = false;
+			opt.privileges.override_api_list = `${global.modulefullname}/list-forapproval`;
+			break;
+	}
+
+
 	pages
 		.setSlider(slider)
 		.initPages([
@@ -67,6 +92,8 @@ export async function init(opt) {
 	document.addEventListener('OnSizeRecalculated', (ev) => {
 		OnSizeRecalculated(ev.detail.width, ev.detail.height)
 	})	
+
+
 
 
 

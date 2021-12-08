@@ -1,6 +1,7 @@
 {
 	"title" : "COA Group",
-	"icon" : "icon-coagroup-white.svg",
+	
+	
 	"variance" : {},
 	"allowanonymous" : true,
 	"allowedgroups" : ["public"],

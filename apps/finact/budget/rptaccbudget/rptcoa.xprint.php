@@ -27,19 +27,16 @@ $MODULE = new class extends WebModule {
 
 			$stmt = $this->db->prepare('call accbudget_listing()');
 			$stmt->execute();
-			$row =  $stmt->fetch(\PDO::FETCH_ASSOC);
-			$cacheid = $row['cacheid'];
+
 
 			$stmt = $this->db->prepare("
 				select
 				accbudget_id, accbudget_name, accbudget_parent, accbudget_isparent, accbudget_path, accbudget_level, coa_id
 				from 
-				xhc_accbudget
-				where
-				cacheid = :cacheid
-				order by cacherownum
+				TEMP_ACCBUDGET_RESULT
 			");
-			$stmt->execute([':cacheid'=>$cacheid]);
+			
+			$stmt->execute();
 			$this->rows =  $stmt->fetchall(\PDO::FETCH_ASSOC);
 
 		} catch (\Exception $ex) {

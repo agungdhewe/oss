@@ -6,34 +6,37 @@
 CREATE TABLE `trn_orderin` (
 	`orderin_id` varchar(30) NOT NULL , 
 	`unit_id` varchar(10)  , 
-	`orderin_ref` varchar(90) NOT NULL , 
-	`orderin_descr` varchar(90) NOT NULL , 
+	`orderintype_id` varchar(10)  , 
+	`orderin_ref` varchar(90)  , 
+	`orderin_descr` varchar(90)  , 
 	`orderin_dtstart` date NOT NULL , 
-	`orderin_eta` date NOT NULL , 
 	`orderin_dtend` date NOT NULL , 
 	`partner_id` varchar(30)  , 
-	`partnercontact_id` varchar(14)  , 
-	`partnercontact_position` varchar(30) NOT NULL , 
-	`partnercontact_mobilephone` varchar(30) NOT NULL , 
-	`partnercontact_email` varchar(150) NOT NULL , 
-	`orderin_isunquot` tinyint(1) NOT NULL DEFAULT 0, 
-	`quot_id` varchar(30)  , 
 	`ae_empl_id` varchar(14)  , 
 	`trxmodel_id` varchar(10) NOT NULL , 
-	`site_id` varchar(30)  , 
-	`sender_dept_id` varchar(30) NOT NULL , 
-	`deliver_siteaddress` varchar(250)  , 
-	`deliver_city` varchar(60)  , 
-	`deliver_upname` varchar(60)  , 
-	`deliver_uptelp` varchar(60)  , 
-	`curr_id` varchar(10) NOT NULL , 
-	`curr_rate` decimal(12, 0) NOT NULL DEFAULT 0, 
 	`project_id` varchar(30)  , 
-	`projecttask_id` varchar(14)  , 
 	`ppn_taxtype_id` varchar(10)  , 
+	`ppn_taxvalue` decimal(4, 2) NOT NULL DEFAULT 0, 
+	`ppn_include` tinyint(1) NOT NULL DEFAULT 0, 
 	`pph_taxtype_id` varchar(10)  , 
+	`pph_taxvalue` decimal(4, 2) NOT NULL DEFAULT 0, 
+	`sales_coa_id` varchar(10) NOT NULL , 
+	`salesdisc_coa_id` varchar(10)  , 
+	`ppn_coa_id` varchar(10)  , 
+	`ppnsubsidi_coa_id` varchar(10)  , 
+	`pph_coa_id` varchar(10)  , 
 	`sales_dept_id` varchar(30) NOT NULL , 
-	`doc_id` varchar(30) NOT NULL , 
+	`orderin_totalitem` int(5) NOT NULL DEFAULT 0, 
+	`orderin_totalqty` int(5) NOT NULL DEFAULT 0, 
+	`orderin_salesgross` decimal(16, 0) NOT NULL DEFAULT 0, 
+	`orderin_discount` decimal(16, 0) NOT NULL DEFAULT 0, 
+	`orderin_subtotal` decimal(16, 0) NOT NULL DEFAULT 0, 
+	`orderin_pph` decimal(16, 0) NOT NULL DEFAULT 0, 
+	`orderin_nett` decimal(16, 0) NOT NULL DEFAULT 0, 
+	`orderin_ppn` decimal(16, 0) NOT NULL DEFAULT 0, 
+	`orderin_total` decimal(16, 0) NOT NULL DEFAULT 0, 
+	`orderin_totaladdcost` decimal(16, 0) NOT NULL DEFAULT 0, 
+	`orderin_payment` decimal(16, 0) NOT NULL DEFAULT 0, 
 	`orderin_version` int(4) NOT NULL DEFAULT 0, 
 	`orderin_isdateinterval` tinyint(1) NOT NULL DEFAULT 0, 
 	`orderin_iscommit` tinyint(1) NOT NULL DEFAULT 0, 
@@ -53,36 +56,34 @@ ENGINE=InnoDB
 COMMENT='Daftar Order Pembelian, Sewa, Service, Talent, dll';
 
 ALTER TABLE `trn_orderin` ADD KEY `unit_id` (`unit_id`);
+ALTER TABLE `trn_orderin` ADD KEY `orderintype_id` (`orderintype_id`);
 ALTER TABLE `trn_orderin` ADD KEY `partner_id` (`partner_id`);
-ALTER TABLE `trn_orderin` ADD KEY `partnercontact_id` (`partnercontact_id`);
-ALTER TABLE `trn_orderin` ADD KEY `quot_id` (`quot_id`);
 ALTER TABLE `trn_orderin` ADD KEY `ae_empl_id` (`ae_empl_id`);
 ALTER TABLE `trn_orderin` ADD KEY `trxmodel_id` (`trxmodel_id`);
-ALTER TABLE `trn_orderin` ADD KEY `site_id` (`site_id`);
-ALTER TABLE `trn_orderin` ADD KEY `sender_dept_id` (`sender_dept_id`);
-ALTER TABLE `trn_orderin` ADD KEY `curr_id` (`curr_id`);
 ALTER TABLE `trn_orderin` ADD KEY `project_id` (`project_id`);
-ALTER TABLE `trn_orderin` ADD KEY `projecttask_id` (`projecttask_id`);
 ALTER TABLE `trn_orderin` ADD KEY `ppn_taxtype_id` (`ppn_taxtype_id`);
 ALTER TABLE `trn_orderin` ADD KEY `pph_taxtype_id` (`pph_taxtype_id`);
+ALTER TABLE `trn_orderin` ADD KEY `sales_coa_id` (`sales_coa_id`);
+ALTER TABLE `trn_orderin` ADD KEY `salesdisc_coa_id` (`salesdisc_coa_id`);
+ALTER TABLE `trn_orderin` ADD KEY `ppn_coa_id` (`ppn_coa_id`);
+ALTER TABLE `trn_orderin` ADD KEY `ppnsubsidi_coa_id` (`ppnsubsidi_coa_id`);
+ALTER TABLE `trn_orderin` ADD KEY `pph_coa_id` (`pph_coa_id`);
 ALTER TABLE `trn_orderin` ADD KEY `sales_dept_id` (`sales_dept_id`);
-ALTER TABLE `trn_orderin` ADD KEY `doc_id` (`doc_id`);
 
 ALTER TABLE `trn_orderin` ADD CONSTRAINT `fk_trn_orderin_mst_unit` FOREIGN KEY (`unit_id`) REFERENCES `mst_unit` (`unit_id`);
+ALTER TABLE `trn_orderin` ADD CONSTRAINT `fk_trn_orderin_mst_orderintype` FOREIGN KEY (`orderintype_id`) REFERENCES `mst_orderintype` (`orderintype_id`);
 ALTER TABLE `trn_orderin` ADD CONSTRAINT `fk_trn_orderin_mst_partner` FOREIGN KEY (`partner_id`) REFERENCES `mst_partner` (`partner_id`);
-ALTER TABLE `trn_orderin` ADD CONSTRAINT `fk_trn_orderin_mst_partnercontact` FOREIGN KEY (`partnercontact_id`) REFERENCES `mst_partnercontact` (`partnercontact_id`);
-ALTER TABLE `trn_orderin` ADD CONSTRAINT `fk_trn_orderin_trn_quot` FOREIGN KEY (`quot_id`) REFERENCES `trn_quot` (`quot_id`);
 ALTER TABLE `trn_orderin` ADD CONSTRAINT `fk_trn_orderin_mst_empl` FOREIGN KEY (`ae_empl_id`) REFERENCES `mst_empl` (`empl_id`);
 ALTER TABLE `trn_orderin` ADD CONSTRAINT `fk_trn_orderin_mst_trxmodel` FOREIGN KEY (`trxmodel_id`) REFERENCES `mst_trxmodel` (`trxmodel_id`);
-ALTER TABLE `trn_orderin` ADD CONSTRAINT `fk_trn_orderin_mst_site` FOREIGN KEY (`site_id`) REFERENCES `mst_site` (`site_id`);
-ALTER TABLE `trn_orderin` ADD CONSTRAINT `fk_trn_orderin_mst_dept` FOREIGN KEY (`sender_dept_id`) REFERENCES `mst_dept` (`dept_id`);
-ALTER TABLE `trn_orderin` ADD CONSTRAINT `fk_trn_orderin_mst_curr` FOREIGN KEY (`curr_id`) REFERENCES `mst_curr` (`curr_id`);
 ALTER TABLE `trn_orderin` ADD CONSTRAINT `fk_trn_orderin_mst_project` FOREIGN KEY (`project_id`) REFERENCES `mst_project` (`project_id`);
-ALTER TABLE `trn_orderin` ADD CONSTRAINT `fk_trn_orderin_mst_projecttask` FOREIGN KEY (`projecttask_id`) REFERENCES `mst_projecttask` (`projecttask_id`);
 ALTER TABLE `trn_orderin` ADD CONSTRAINT `fk_trn_orderin_mst_taxtype` FOREIGN KEY (`ppn_taxtype_id`) REFERENCES `mst_taxtype` (`taxtype_id`);
 ALTER TABLE `trn_orderin` ADD CONSTRAINT `fk_trn_orderin_mst_taxtype_2` FOREIGN KEY (`pph_taxtype_id`) REFERENCES `mst_taxtype` (`taxtype_id`);
-ALTER TABLE `trn_orderin` ADD CONSTRAINT `fk_trn_orderin_mst_dept_2` FOREIGN KEY (`sales_dept_id`) REFERENCES `mst_dept` (`dept_id`);
-ALTER TABLE `trn_orderin` ADD CONSTRAINT `fk_trn_orderin_mst_doc` FOREIGN KEY (`doc_id`) REFERENCES `mst_doc` (`doc_id`);
+ALTER TABLE `trn_orderin` ADD CONSTRAINT `fk_trn_orderin_mst_coa` FOREIGN KEY (`sales_coa_id`) REFERENCES `mst_coa` (`coa_id`);
+ALTER TABLE `trn_orderin` ADD CONSTRAINT `fk_trn_orderin_mst_coa_2` FOREIGN KEY (`salesdisc_coa_id`) REFERENCES `mst_coa` (`coa_id`);
+ALTER TABLE `trn_orderin` ADD CONSTRAINT `fk_trn_orderin_mst_coa_3` FOREIGN KEY (`ppn_coa_id`) REFERENCES `mst_coa` (`coa_id`);
+ALTER TABLE `trn_orderin` ADD CONSTRAINT `fk_trn_orderin_mst_coa_4` FOREIGN KEY (`ppnsubsidi_coa_id`) REFERENCES `mst_coa` (`coa_id`);
+ALTER TABLE `trn_orderin` ADD CONSTRAINT `fk_trn_orderin_mst_coa_5` FOREIGN KEY (`pph_coa_id`) REFERENCES `mst_coa` (`coa_id`);
+ALTER TABLE `trn_orderin` ADD CONSTRAINT `fk_trn_orderin_mst_dept` FOREIGN KEY (`sales_dept_id`) REFERENCES `mst_dept` (`dept_id`);
 
 
 

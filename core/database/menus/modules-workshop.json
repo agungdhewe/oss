@@ -1,6 +1,154 @@
 {
 	"title": "home",
 	"modules": [
+
+		"finact/budget/rptaccbudgetrealisasi",
+
+		{
+			"title" : "Budgeting",
+			"modules" : [
+
+				{"program": "finact/budget/deptbudget", "variancename":"view"},
+				{"program": "finact/budget/deptbudget", "variancename":"propose"},
+				{"program": "finact/budget/deptbudget", "variancename":"approval"},
+				"finact/budget/deptbudget",
+
+				{"program": "finact/budget/deptbudgetrev", "variancename":"view"},
+				{"program": "finact/budget/deptbudgetrev", "variancename":"propose"},
+				{"program": "finact/budget/deptbudgetrev", "variancename":"approval"},
+				"finact/budget/deptbudgetrev",
+		
+				{"program": "finact/budget/projbudget", "variancename":"view"},
+				{"program": "finact/budget/projbudget", "variancename":"propose"},
+				{"program": "finact/budget/projbudget", "variancename":"approval"},
+				"finact/budget/projbudget",
+
+
+				{"program": "finact/budget/projbudgetrev", "variancename":"view"},
+				{"program": "finact/budget/projbudgetrev", "variancename":"propose"},
+				{"program": "finact/budget/projbudgetrev", "variancename":"approval"},
+				"finact/budget/projbudgetrev",
+
+
+				
+
+				{
+					"title" : "Budget Setup",
+					"modules" : [
+						"finact/master/accbudgetmodel",
+						"finact/master/accbudgetgroup",
+						"finact/master/accbudget",
+						"finact/budget/deptbudgetacc",
+						"finact/budget/accbudgetformat",
+						"finact/budget/accbudgetformatset"
+					]
+				}
+
+
+
+			]
+		},
+
+
+		{
+			"title": "Setup",
+			"modules": [
+
+
+
+
+				{
+					"title" : "General Setup",
+					"modules" : [
+						"ent/general/bank",
+						"ent/general/country",
+						"ent/general/curr",
+						"ent/general/doctype",
+						"ent/general/gender",
+						"ent/general/religion",
+						"ent/affiliation/contacttype",
+						"ent/affiliation/partnertype",
+						"ent/affiliation/partnerorg",
+						"ent/affiliation/partnercategory",
+						"ent/affiliation/partner",
+						"ent/affiliation/brandtype",
+						"ent/affiliation/brand"
+					]
+				},
+		
+				{
+					"title" : "Location Setup",
+					"modules" : [
+						"ent/location/area",
+						"ent/location/prov",
+						"ent/location/city",
+						"ent/location/zone",
+						"ent/location/land",
+						"ent/location/site",
+						"ent/location/landtype",
+						"ent/location/sitemodel",
+						"ent/location/sitegroup"
+					]
+				},
+		
+				{
+					"title" : "Organisation Setup",
+					"modules" : [
+						"ent/organisation/depttype",
+						"ent/organisation/deptmodel",
+						"ent/organisation/deptgroup",
+						"ent/organisation/authlevel",
+						"ent/organisation/auth",
+						"ent/organisation/dept",
+						"ent/organisation/unitgroup",
+						"ent/organisation/unit",
+						"ent/organisation/docs"
+					]
+				}
+
+				
+
+			]
+		},
+
+
+	
+
+		{
+			"title" : "HR",
+			"modules" : [
+				"hrms/master/empl",
+				"fgta/framework/fguser",
+				"hrms/master/empluser"
+			]
+		}
+
+
+	],
+
+
+	
+	"archieve": [
+		
+		"finact/master/periode",
+
+		"media/sales/mediaorder",
+		"media/sales/logproof",
+
+		"finact/fin/settl",
+
+		"finact/fin/billin",
+		"finact/fin/paymentscd",
+		"finact/acct/jurnal",
+		"finact/fin/payment",
+		"finact/master/bankrekening",
+		"finact/fin/bankbook",
+		"finact/fin/banklink",
+
+		"finact/acct/rptagingap",
+		"finact/acct/rpttrialbal",
+		"finact/acct/rptneraca",
+
 		"finact/collection/collagingar",
 		"finact/collection/rptcolltarget",
 		"hrms/master/empl",
@@ -41,8 +189,8 @@
 		"finact/budget/rptbudgetbs",
 		"finact/budget/rptbudgetis",
 
-		"finact/fin/billin",
-		"finact/fin/payment",
+		"finact/fin/ofrecv",
+
 		
 		"finact/procurement/inquiryselect",
 		"finact/procurement/inquirymodel",
@@ -57,8 +205,10 @@
 		
 		"finact/budget/accbudgetformat",
 		"finact/budget/accbudgetformatset",
+		"finact/acct/coaformat",
+		"finact/acct/coaformatset",
 		
-		"finact/acct/jurnal",
+		
 
 		"finact/procurement/ordercontract",
 		"finact/procurement/inquiry",
@@ -74,6 +224,7 @@
 		"finact/acct/rptagingardetil",
 
 		"finact/fin/billout",
+		"finact/fin/billoutrev",
 		
 		"finact/collection/collector",
 		"finact/collection/colltarget",
@@ -87,31 +238,6 @@
 		"finact/collection/colltarrowtype",
 		"finact/collection/colltarprd",
 		"finact/collection/collschupd"
-	],
-
-	"archieve": [
-		
-		"fgta/framework/fguser",
-		"hrms/master/empl",
-		"hrms/master/empluser",
-		"ent/organisation/auth",
-		"ent/organisation/deptgroup",
-		"ent/organisation/dept",
-		"ent/organisation/docs",
-
-		"ent/location/site",
-		"ent/location/room",
-
-		"ent/general/curr",
-		"ent/general/bank",
-
-		"ent/general/checktpl",
-		"ent/general/checktype",
-		"ent/general/checkval",
-
-		"finact/master/periode",
-
-		"finact/master/bankrekening"
 	]
 	
 }

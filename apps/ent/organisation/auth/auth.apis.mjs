@@ -15,4 +15,3 @@ export const load_deptmodel_id = 'ent/organisation/deptmodel/list'
 export const load_empl_id = 'hrms/master/empl/list'
 
 
-

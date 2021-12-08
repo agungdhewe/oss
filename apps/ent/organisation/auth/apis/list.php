@@ -5,25 +5,27 @@ if (!defined('FGTA4')) {
 }
 
 require_once __ROOT_DIR.'/core/sqlutil.php';
-
+require_once __DIR__ . '/xapi.base.php';
 
 
 use \FGTA4\exceptions\WebException;
 
-
-class DataList extends WebAPI {
-	function __construct() {
-		$this->debugoutput = true;
-		$DB_CONFIG = DB_CONFIG[$GLOBALS['MAINDB']];
-		$DB_CONFIG['param'] = DB_CONFIG_PARAM[$GLOBALS['MAINDBTYPE']];
-		$this->db = new \PDO(
-					$DB_CONFIG['DSN'], 
-					$DB_CONFIG['user'], 
-					$DB_CONFIG['pass'], 
-					$DB_CONFIG['param']
-		);
-
-	}
+/**
+ * ent/organisation/auth/apis/list.php
+ *
+ * ========
+ * DataList
+ * ========
+ * Menampilkan data-data pada tabel header auth (mst_auth)
+ * sesuai dengan parameter yang dikirimkan melalui variable $option->criteria
+ *
+ * Agung Nugroho <agung@fgta.net> http://www.fgta.net
+ * Tangerang, 26 Maret 2021
+ *
+ * digenerate dengan FGTA4 generator
+ * tanggal 04/12/2021
+ */
+$API = new class extends authBase {
 
 	public function execute($options) {
 
@@ -36,13 +38,11 @@ class DataList extends WebAPI {
 				throw new \Exception('your group authority is not allowed to do this action.');
 			}
 
-
+			// \FGTA4\utils\SqlUtility::setDefaultCriteria($options->criteria, '--fieldscriteria--', '--value--');
 			$where = \FGTA4\utils\SqlUtility::BuildCriteria(
 				$options->criteria,
 				[
-					"search" => " A.auth_id LIKE CONCAT('%', :search, '%') OR A.auth_name LIKE CONCAT('%', :search, '%') ",
-					"authlevel_id" => " A.authlevel_id = :authlevel_id ",
-					"disabled" => " A.auth_isdisabled = :disabled "
+					"search" => " A.auth_id LIKE CONCAT('%', :search, '%') OR A.auth_name LIKE CONCAT('%', :search, '%') "
 				]
 			);
 
@@ -58,9 +58,14 @@ class DataList extends WebAPI {
 			$limit = " LIMIT $maxrow OFFSET $offset ";
 			$stmt = $this->db->prepare("
 				select 
-				auth_id, auth_name, auth_isdisabled, auth_descr, authlevel_id, deptmodel_id, empl_id, _createby, _createdate, _modifyby, _modifydate 
+				  A.auth_id, A.auth_name, A.auth_isdisabled, A.auth_descr, A.authlevel_id
+				, (select authlevel_order from mst_authlevel where authlevel_id=A.authlevel_id) as autlevel_order
+				, A.deptmodel_id, A.empl_id, A._createby, A._createdate, A._modifyby, A._modifydate 
 				from mst_auth A
-			" . $where->sql . $limit);
+			" 
+			. $where->sql 
+			. " ORDER BY autlevel_order "
+			. $limit);
 			$stmt->execute($where->params);
 			$rows  = $stmt->fetchall(\PDO::FETCH_ASSOC);
 
@@ -93,6 +98,4 @@ class DataList extends WebAPI {
 		}
 	}
 
-}
-
-$API = new DataList();
+};

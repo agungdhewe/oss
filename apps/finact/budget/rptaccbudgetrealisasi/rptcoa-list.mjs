@@ -1,8 +1,15 @@
+import { fgta4slideselect } from '../../../../../index.php/asset/fgta/framework/fgta4libs/fgta4slideselect.mjs'
+import { fgta4ParallelProcess } from '../../../../../index.php/asset/fgta/framework/fgta4libs/fgta4parallel.mjs'
+import {fgta4report} from  '../../../../../index.php/asset/fgta/framework/fgta4libs/fgta4report.mjs'
+
+
+
 var this_page_id;
 var this_page_options;
 
-import {fgta4report} from  '../../../../../index.php/asset/fgta/framework/fgta4libs/fgta4report.mjs'
 
+
+const cbo_search_dept = $('#pnl_list-cbo_search_dept');
 const dt_report_date = $('#pnl_list-dt_report_date');
 const btn_export = $('#pnl_list-btn_export');
 const btn_print = $('#pnl_list-btn_print');
@@ -29,6 +36,50 @@ export async function init(opt) {
 	btn_export.linkbutton('disable');
 	btn_print.linkbutton('disable');
 	
+
+	var parallelProcess = fgta4ParallelProcess({
+		waitfor: {
+			cbo_search_dept_created: 1
+		},
+		onFinished: () => {
+			// btn_load_click();
+		}
+	})
+
+
+	cbo_search_dept.name = 'pnl_list-cbo_search_dept'	
+	new fgta4slideselect(cbo_search_dept, {
+		title: 'Pilih Department',
+		returnpage: this_page_id,
+		api: $ui.apis.load_dept_id,
+
+		fieldValue: 'dept_id',
+		fieldValueMap: 'dept_id',
+		fieldDisplay: 'dept_name',
+		fields: [
+			{ mapping: 'dept_name', text: 'Departemen' },
+		],
+		OnDataLoading: (criteria) => {
+			// console.log('loading...');
+		},
+		OnDataLoaded: (result, options) => {
+			if (global.setup.empluser_allowviewalldept=='1') {
+				result.records.unshift({ dept_id: 'ALL', dept_name: 'ALL' });
+			}
+		},
+		OnSelected: (value, display, record, options) => {
+			// console.log(record);
+			options.flashhighlight = false
+			// btn_load_click();
+		},
+		OnCreated: () => {
+			cbo_search_dept.combo('setValue', global.setup.dept_id);
+			cbo_search_dept.combo('setText', global.setup.dept_name);
+			parallelProcess.setFinished('cbo_search_dept_created');
+		}
+	});
+
+
 
 	document.addEventListener('OnSizeRecalculated', (ev) => {
 		OnSizeRecalculated(ev.detail.width, ev.detail.height)

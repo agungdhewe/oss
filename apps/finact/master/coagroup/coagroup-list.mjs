@@ -16,7 +16,7 @@ export async function init(opt) {
 	this_page_id = opt.id;
 	this_page_options = opt;
 
-
+	
 	grd_list = new global.fgta4grid(tbl_list, {
 		OnRowFormatting: (tr) => { grd_list_rowformatting(tr) },
 		OnRowClick: (tr, ev) => { grd_list_rowclick(tr, ev) },
@@ -26,12 +26,12 @@ export async function init(opt) {
 	})
 
 
-	txt_search.textbox('textbox').bind('keypress', (evt) => {
-		if (evt.key === 'Enter') {
+	txt_search.textbox('textbox').bind('keypress', (evt)=>{
+		if (evt.key==='Enter') {
 			btn_load_click(self)
 		}
 	})
-
+	
 
 	btn_load.linkbutton({
 		onClick: () => { btn_load_click() }
@@ -43,8 +43,18 @@ export async function init(opt) {
 
 	document.addEventListener('OnSizeRecalculated', (ev) => {
 		OnSizeRecalculated(ev.detail.width, ev.detail.height)
-	})
+	})	
 
+
+	document.addEventListener('scroll', (ev) => {
+		if ($ui.getPages().getCurrentPage()==this_page_id) {
+			if($(window).scrollTop() + $(window).height() == $(document).height()) {
+				grd_list.nextpageload();
+			}			
+		}
+	})	
+	
+	//button state
 
 	btn_load_click()
 }
@@ -55,10 +65,10 @@ export function OnSizeRecalculated(width, height) {
 
 
 export function updategrid(data, trid) {
-	if (trid == null) {
+	if (trid==null) {
 		grd_list.fill([data])
 		trid = grd_list.getLastId()
-
+		
 	} else {
 		grd_list.update(trid, data)
 	}
@@ -82,7 +92,7 @@ function btn_load_click() {
 
 	var fn_listloading = async (options) => {
 		var search = txt_search.textbox('getText')
-		if (search != '') {
+		if (search!='') {
 			options.criteria['search'] = search
 		}
 
@@ -102,7 +112,7 @@ function btn_load_click() {
 
 function btn_new_click() {
 	$ui.getPages().ITEMS['pnl_edit'].handler.createnew()
-	$ui.getPages().show('pnl_edit')
+	$ui.getPages().show('pnl_edit')	
 }
 
 
@@ -119,11 +129,11 @@ function grd_list_rowclick(tr, ev) {
 
 	var viewmode = true
 	last_scrolltop = $(window).scrollTop()
-	$ui.getPages().ITEMS['pnl_edit'].handler.open(record, trid, viewmode, (err) => {
+	$ui.getPages().ITEMS['pnl_edit'].handler.open(record, trid, viewmode, (err)=> {
 		if (err) {
 			console.log(err)
 		} else {
-			$ui.getPages().show('pnl_edit')
+			$ui.getPages().show('pnl_edit')	
 		}
 	})
 }
@@ -147,15 +157,13 @@ function grd_list_rowrender(tr) {
 
 	$(tr).find('td').each((i, td) => {
 		var mapping = td.getAttribute('mapping')
-		if (mapping == 'coagroup_name') {
+		if (mapping=='coagroup_name') {
+			// console.log(record.deptgroup_level);
 			var indent = record.coagroup_level * 15;
 			$(td).css("padding-left", `${indent}px`);
-		}
-
-		if (record.disabled == "1" || record.disabled == true) {
-			td.classList.add('fgtable-row-disabled')
-		} else {
-			td.classList.remove('fgtable-row-disabled')
+			if (record.coagroup_isparent=='1') {
+				$(td).css('font-weight', 'bold');
+			}
 		}
 	})
 }

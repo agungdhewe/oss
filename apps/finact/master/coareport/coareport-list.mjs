@@ -46,6 +46,16 @@ export async function init(opt) {
 	})	
 
 
+	document.addEventListener('scroll', (ev) => {
+		if ($ui.getPages().getCurrentPage()==this_page_id) {
+			if($(window).scrollTop() + $(window).height() == $(document).height()) {
+				grd_list.nextpageload();
+			}			
+		}
+	})	
+	
+	//button state
+
 	btn_load_click()
 }
 

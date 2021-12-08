@@ -1,4 +1,5 @@
 var this_page_id;
+var this_page_options;
 
 const tbl_list = $('#pnl_list-tbl_list')
 
@@ -12,7 +13,9 @@ let grd_list = {}
 let last_scrolltop = 0
 
 export async function init(opt) {
-	this_page_id = opt.id
+	this_page_id = opt.id;
+	this_page_options = opt;
+
 	
 	grd_list = new global.fgta4grid(tbl_list, {
 		OnRowFormatting: (tr) => { grd_list_rowformatting(tr) },
@@ -42,6 +45,16 @@ export async function init(opt) {
 		OnSizeRecalculated(ev.detail.width, ev.detail.height)
 	})	
 
+
+	document.addEventListener('scroll', (ev) => {
+		if ($ui.getPages().getCurrentPage()==this_page_id) {
+			if($(window).scrollTop() + $(window).height() == $(document).height()) {
+				grd_list.nextpageload();
+			}			
+		}
+	})	
+	
+	//button state
 
 	btn_load_click()
 }
@@ -82,6 +95,12 @@ function btn_load_click() {
 		if (search!='') {
 			options.criteria['search'] = search
 		}
+
+		// switch (this_page_options.variancename) {
+		// 	case 'commit' :
+		//		break;
+		// }
+
 	}
 
 	var fn_listloaded = async (result, options) => {
@@ -139,14 +158,13 @@ function grd_list_rowrender(tr) {
 	$(tr).find('td').each((i, td) => {
 		var mapping = td.getAttribute('mapping')
 		if (mapping=='dept_name') {
-			var indent = record.deptparent_level * 15;
+			var indent = record.dept_level * 15;
 			$(td).css("padding-left", `${indent}px`);
-		}
 
-		if (record.dept_isdisabled=="1" || record.dept_isdisabled==true) {
-			td.classList.add('fgtable-row-disabled')
-		} else {
-			td.classList.remove('fgtable-row-disabled')
+			if (record.dept_isparent=="1") {
+				$(td).css('font-weight', 'bold');
+			}
+
 		}
 	})
 }

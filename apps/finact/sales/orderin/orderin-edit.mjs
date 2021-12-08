@@ -18,34 +18,37 @@ const pnl_form = $('#pnl_edit-form')
 const obj = {
 	txt_orderin_id: $('#pnl_edit-txt_orderin_id'),
 	cbo_unit_id: $('#pnl_edit-cbo_unit_id'),
+	cbo_orderintype_id: $('#pnl_edit-cbo_orderintype_id'),
 	txt_orderin_ref: $('#pnl_edit-txt_orderin_ref'),
 	txt_orderin_descr: $('#pnl_edit-txt_orderin_descr'),
 	dt_orderin_dtstart: $('#pnl_edit-dt_orderin_dtstart'),
-	dt_orderin_eta: $('#pnl_edit-dt_orderin_eta'),
 	dt_orderin_dtend: $('#pnl_edit-dt_orderin_dtend'),
 	cbo_partner_id: $('#pnl_edit-cbo_partner_id'),
-	cbo_partnercontact_id: $('#pnl_edit-cbo_partnercontact_id'),
-	txt_partnercontact_position: $('#pnl_edit-txt_partnercontact_position'),
-	txt_partnercontact_mobilephone: $('#pnl_edit-txt_partnercontact_mobilephone'),
-	txt_partnercontact_email: $('#pnl_edit-txt_partnercontact_email'),
-	chk_orderin_isunquot: $('#pnl_edit-chk_orderin_isunquot'),
-	cbo_quot_id: $('#pnl_edit-cbo_quot_id'),
 	cbo_ae_empl_id: $('#pnl_edit-cbo_ae_empl_id'),
 	cbo_trxmodel_id: $('#pnl_edit-cbo_trxmodel_id'),
-	cbo_site_id: $('#pnl_edit-cbo_site_id'),
-	cbo_sender_dept_id: $('#pnl_edit-cbo_sender_dept_id'),
-	txt_deliver_siteaddress: $('#pnl_edit-txt_deliver_siteaddress'),
-	txt_deliver_city: $('#pnl_edit-txt_deliver_city'),
-	txt_deliver_upname: $('#pnl_edit-txt_deliver_upname'),
-	txt_deliver_uptelp: $('#pnl_edit-txt_deliver_uptelp'),
-	cbo_curr_id: $('#pnl_edit-cbo_curr_id'),
-	txt_curr_rate: $('#pnl_edit-txt_curr_rate'),
 	cbo_project_id: $('#pnl_edit-cbo_project_id'),
-	cbo_projecttask_id: $('#pnl_edit-cbo_projecttask_id'),
 	cbo_ppn_taxtype_id: $('#pnl_edit-cbo_ppn_taxtype_id'),
+	txt_ppn_taxvalue: $('#pnl_edit-txt_ppn_taxvalue'),
+	chk_ppn_include: $('#pnl_edit-chk_ppn_include'),
 	cbo_pph_taxtype_id: $('#pnl_edit-cbo_pph_taxtype_id'),
+	txt_pph_taxvalue: $('#pnl_edit-txt_pph_taxvalue'),
+	cbo_sales_coa_id: $('#pnl_edit-cbo_sales_coa_id'),
+	cbo_salesdisc_coa_id: $('#pnl_edit-cbo_salesdisc_coa_id'),
+	cbo_ppn_coa_id: $('#pnl_edit-cbo_ppn_coa_id'),
+	cbo_ppnsubsidi_coa_id: $('#pnl_edit-cbo_ppnsubsidi_coa_id'),
+	cbo_pph_coa_id: $('#pnl_edit-cbo_pph_coa_id'),
 	cbo_sales_dept_id: $('#pnl_edit-cbo_sales_dept_id'),
-	cbo_doc_id: $('#pnl_edit-cbo_doc_id'),
+	txt_orderin_totalitem: $('#pnl_edit-txt_orderin_totalitem'),
+	txt_orderin_totalqty: $('#pnl_edit-txt_orderin_totalqty'),
+	txt_orderin_salesgross: $('#pnl_edit-txt_orderin_salesgross'),
+	txt_orderin_discount: $('#pnl_edit-txt_orderin_discount'),
+	txt_orderin_subtotal: $('#pnl_edit-txt_orderin_subtotal'),
+	txt_orderin_pph: $('#pnl_edit-txt_orderin_pph'),
+	txt_orderin_nett: $('#pnl_edit-txt_orderin_nett'),
+	txt_orderin_ppn: $('#pnl_edit-txt_orderin_ppn'),
+	txt_orderin_total: $('#pnl_edit-txt_orderin_total'),
+	txt_orderin_totaladdcost: $('#pnl_edit-txt_orderin_totaladdcost'),
+	txt_orderin_payment: $('#pnl_edit-txt_orderin_payment'),
 	txt_orderin_version: $('#pnl_edit-txt_orderin_version'),
 	chk_orderin_isdateinterval: $('#pnl_edit-chk_orderin_isdateinterval'),
 	chk_orderin_iscommit: $('#pnl_edit-chk_orderin_iscommit'),
@@ -63,7 +66,7 @@ const rec_commitdate = $('#pnl_edit_record-commitdate');
 		
 
 
-let form = {}
+let form;
 
 export async function init(opt) {
 	this_page_id = opt.id;
@@ -133,9 +136,34 @@ export async function init(opt) {
 			{mapping: 'unit_id', text: 'unit_id'},
 			{mapping: 'unit_name', text: 'unit_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+						
+		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({unit_id:'--NULL--', unit_name:'NONE'});	
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {				
+			}
+		}
+	})				
+				
+	new fgta4slideselect(obj.cbo_orderintype_id, {
+		title: 'Pilih orderintype_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_orderintype_id,
+		fieldValue: 'orderintype_id',
+		fieldValueMap: 'orderintype_id',
+		fieldDisplay: 'orderintype_name',
+		fields: [
+			{mapping: 'orderintype_id', text: 'orderintype_id'},
+			{mapping: 'orderintype_name', text: 'orderintype_name'},
+		],
+		OnDataLoading: (criteria) => {
+						
+		},
+		OnDataLoaded : (result, options) => {
+				
 		},
 		OnSelected: (value, display, record, args) => {
 			if (value!=args.PreviousValue ) {				
@@ -154,51 +182,11 @@ export async function init(opt) {
 			{mapping: 'partner_id', text: 'partner_id'},
 			{mapping: 'partner_name', text: 'partner_name'},
 		],
-		OnDataLoading: (criteria) => {},
-		OnDataLoaded : (result, options) => {
-				
+		OnDataLoading: (criteria) => {
+						
 		},
-		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
-			}
-		}
-	})				
-				
-	new fgta4slideselect(obj.cbo_partnercontact_id, {
-		title: 'Pilih partnercontact_id',
-		returnpage: this_page_id,
-		api: $ui.apis.load_partnercontact_id,
-		fieldValue: 'partnercontact_id',
-		fieldValueMap: 'partnercontact_id',
-		fieldDisplay: 'partnercontact_name',
-		fields: [
-			{mapping: 'partnercontact_id', text: 'partnercontact_id'},
-			{mapping: 'partnercontact_name', text: 'partnercontact_name'},
-		],
-		OnDataLoading: (criteria) => {},
 		OnDataLoaded : (result, options) => {
 				
-		},
-		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
-			}
-		}
-	})				
-				
-	new fgta4slideselect(obj.cbo_quot_id, {
-		title: 'Pilih quot_id',
-		returnpage: this_page_id,
-		api: $ui.apis.load_quot_id,
-		fieldValue: 'quot_id',
-		fieldValueMap: 'quot_id',
-		fieldDisplay: 'quot_descr',
-		fields: [
-			{mapping: 'quot_id', text: 'quot_id'},
-			{mapping: 'quot_descr', text: 'quot_descr'},
-		],
-		OnDataLoading: (criteria) => {},
-		OnDataLoaded : (result, options) => {
-			result.records.unshift({quot_id:'--NULL--', quot_descr:'NONE'});	
 		},
 		OnSelected: (value, display, record, args) => {
 			if (value!=args.PreviousValue ) {				
@@ -217,7 +205,9 @@ export async function init(opt) {
 			{mapping: 'empl_id', text: 'empl_id'},
 			{mapping: 'empl_name', text: 'empl_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+						
+		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({empl_id:'--NULL--', empl_name:'NONE'});	
 		},
@@ -238,70 +228,9 @@ export async function init(opt) {
 			{mapping: 'trxmodel_id', text: 'trxmodel_id'},
 			{mapping: 'trxmodel_name', text: 'trxmodel_name'},
 		],
-		OnDataLoading: (criteria) => {},
-		OnDataLoaded : (result, options) => {
-				
+		OnDataLoading: (criteria) => {
+						
 		},
-		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
-			}
-		}
-	})				
-				
-	new fgta4slideselect(obj.cbo_site_id, {
-		title: 'Pilih site_id',
-		returnpage: this_page_id,
-		api: $ui.apis.load_site_id,
-		fieldValue: 'site_id',
-		fieldValueMap: 'site_id',
-		fieldDisplay: 'site_name',
-		fields: [
-			{mapping: 'site_id', text: 'site_id'},
-			{mapping: 'site_name', text: 'site_name'},
-		],
-		OnDataLoading: (criteria) => {},
-		OnDataLoaded : (result, options) => {
-				
-		},
-		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
-			}
-		}
-	})				
-				
-	new fgta4slideselect(obj.cbo_sender_dept_id, {
-		title: 'Pilih sender_dept_id',
-		returnpage: this_page_id,
-		api: $ui.apis.load_sender_dept_id,
-		fieldValue: 'sender_dept_id',
-		fieldValueMap: 'dept_id',
-		fieldDisplay: 'dept_name',
-		fields: [
-			{mapping: 'dept_id', text: 'dept_id'},
-			{mapping: 'dept_name', text: 'dept_name'},
-		],
-		OnDataLoading: (criteria) => {},
-		OnDataLoaded : (result, options) => {
-				
-		},
-		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
-			}
-		}
-	})				
-				
-	new fgta4slideselect(obj.cbo_curr_id, {
-		title: 'Pilih curr_id',
-		returnpage: this_page_id,
-		api: $ui.apis.load_curr_id,
-		fieldValue: 'curr_id',
-		fieldValueMap: 'curr_id',
-		fieldDisplay: 'curr_name',
-		fields: [
-			{mapping: 'curr_id', text: 'curr_id'},
-			{mapping: 'curr_name', text: 'curr_name'},
-		],
-		OnDataLoading: (criteria) => {},
 		OnDataLoaded : (result, options) => {
 				
 		},
@@ -322,30 +251,11 @@ export async function init(opt) {
 			{mapping: 'project_id', text: 'project_id'},
 			{mapping: 'project_name', text: 'project_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+						
+		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({project_id:'--NULL--', project_name:'NONE'});	
-		},
-		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
-			}
-		}
-	})				
-				
-	new fgta4slideselect(obj.cbo_projecttask_id, {
-		title: 'Pilih projecttask_id',
-		returnpage: this_page_id,
-		api: $ui.apis.load_projecttask_id,
-		fieldValue: 'projecttask_id',
-		fieldValueMap: 'projecttask_id',
-		fieldDisplay: 'projecttask_name',
-		fields: [
-			{mapping: 'projecttask_id', text: 'projecttask_id'},
-			{mapping: 'projecttask_name', text: 'projecttask_name'},
-		],
-		OnDataLoading: (criteria) => {},
-		OnDataLoaded : (result, options) => {
-			result.records.unshift({projecttask_id:'--NULL--', projecttask_name:'NONE'});	
 		},
 		OnSelected: (value, display, record, args) => {
 			if (value!=args.PreviousValue ) {				
@@ -364,7 +274,9 @@ export async function init(opt) {
 			{mapping: 'taxtype_id', text: 'taxtype_id'},
 			{mapping: 'taxtype_name', text: 'taxtype_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+						
+		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({taxtype_id:'--NULL--', taxtype_name:'NONE'});	
 		},
@@ -385,9 +297,126 @@ export async function init(opt) {
 			{mapping: 'taxtype_id', text: 'taxtype_id'},
 			{mapping: 'taxtype_name', text: 'taxtype_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+						
+		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({taxtype_id:'--NULL--', taxtype_name:'NONE'});	
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {				
+			}
+		}
+	})				
+				
+	new fgta4slideselect(obj.cbo_sales_coa_id, {
+		title: 'Pilih sales_coa_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_sales_coa_id,
+		fieldValue: 'sales_coa_id',
+		fieldValueMap: 'coa_id',
+		fieldDisplay: 'coa_name',
+		fields: [
+			{mapping: 'coa_id', text: 'coa_id'},
+			{mapping: 'coa_name', text: 'coa_name'},
+		],
+		OnDataLoading: (criteria) => {
+						
+		},
+		OnDataLoaded : (result, options) => {
+				
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {				
+			}
+		}
+	})				
+				
+	new fgta4slideselect(obj.cbo_salesdisc_coa_id, {
+		title: 'Pilih salesdisc_coa_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_salesdisc_coa_id,
+		fieldValue: 'salesdisc_coa_id',
+		fieldValueMap: 'coa_id',
+		fieldDisplay: 'coa_name',
+		fields: [
+			{mapping: 'coa_id', text: 'coa_id'},
+			{mapping: 'coa_name', text: 'coa_name'},
+		],
+		OnDataLoading: (criteria) => {
+						
+		},
+		OnDataLoaded : (result, options) => {
+			result.records.unshift({coa_id:'--NULL--', coa_name:'NONE'});	
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {				
+			}
+		}
+	})				
+				
+	new fgta4slideselect(obj.cbo_ppn_coa_id, {
+		title: 'Pilih ppn_coa_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_ppn_coa_id,
+		fieldValue: 'ppn_coa_id',
+		fieldValueMap: 'coa_id',
+		fieldDisplay: 'coa_name',
+		fields: [
+			{mapping: 'coa_id', text: 'coa_id'},
+			{mapping: 'coa_name', text: 'coa_name'},
+		],
+		OnDataLoading: (criteria) => {
+						
+		},
+		OnDataLoaded : (result, options) => {
+			result.records.unshift({coa_id:'--NULL--', coa_name:'NONE'});	
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {				
+			}
+		}
+	})				
+				
+	new fgta4slideselect(obj.cbo_ppnsubsidi_coa_id, {
+		title: 'Pilih ppnsubsidi_coa_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_ppnsubsidi_coa_id,
+		fieldValue: 'ppnsubsidi_coa_id',
+		fieldValueMap: 'coa_id',
+		fieldDisplay: 'coa_name',
+		fields: [
+			{mapping: 'coa_id', text: 'coa_id'},
+			{mapping: 'coa_name', text: 'coa_name'},
+		],
+		OnDataLoading: (criteria) => {
+						
+		},
+		OnDataLoaded : (result, options) => {
+			result.records.unshift({coa_id:'--NULL--', coa_name:'NONE'});	
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {				
+			}
+		}
+	})				
+				
+	new fgta4slideselect(obj.cbo_pph_coa_id, {
+		title: 'Pilih pph_coa_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_pph_coa_id,
+		fieldValue: 'pph_coa_id',
+		fieldValueMap: 'coa_id',
+		fieldDisplay: 'coa_name',
+		fields: [
+			{mapping: 'coa_id', text: 'coa_id'},
+			{mapping: 'coa_name', text: 'coa_name'},
+		],
+		OnDataLoading: (criteria) => {
+						
+		},
+		OnDataLoaded : (result, options) => {
+			result.records.unshift({coa_id:'--NULL--', coa_name:'NONE'});	
 		},
 		OnSelected: (value, display, record, args) => {
 			if (value!=args.PreviousValue ) {				
@@ -406,28 +435,9 @@ export async function init(opt) {
 			{mapping: 'dept_id', text: 'dept_id'},
 			{mapping: 'dept_name', text: 'dept_name'},
 		],
-		OnDataLoading: (criteria) => {},
-		OnDataLoaded : (result, options) => {
-				
+		OnDataLoading: (criteria) => {
+						
 		},
-		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
-			}
-		}
-	})				
-				
-	new fgta4slideselect(obj.cbo_doc_id, {
-		title: 'Pilih doc_id',
-		returnpage: this_page_id,
-		api: $ui.apis.load_doc_id,
-		fieldValue: 'doc_id',
-		fieldValueMap: 'doc_id',
-		fieldDisplay: 'doc_name',
-		fields: [
-			{mapping: 'doc_id', text: 'doc_id'},
-			{mapping: 'doc_name', text: 'doc_name'},
-		],
-		OnDataLoading: (criteria) => {},
 		OnDataLoaded : (result, options) => {
 				
 		},
@@ -497,68 +507,75 @@ export function getForm() {
 
 export function open(data, rowid, viewmode=true, fn_callback) {
 
-
+	var pOpt = form.getDefaultPrompt(false)
 	var fn_dataopening = async (options) => {
 		options.criteria[form.primary.mapping] = data[form.primary.mapping]
 	}
 
 	var fn_dataopened = async (result, options) => {
+		var record = result.record;
+		updatefilebox(record);
 
-		updatefilebox(result.record);
-
+		/*
 		if (result.record.unit_id==null) { result.record.unit_id='--NULL--'; result.record.unit_name='NONE'; }
-		if (result.record.quot_id==null) { result.record.quot_id='--NULL--'; result.record.quot_descr='NONE'; }
 		if (result.record.ae_empl_id==null) { result.record.ae_empl_id='--NULL--'; result.record.ae_empl_name='NONE'; }
 		if (result.record.project_id==null) { result.record.project_id='--NULL--'; result.record.project_name='NONE'; }
-		if (result.record.projecttask_id==null) { result.record.projecttask_id='--NULL--'; result.record.projecttask_name='NONE'; }
 		if (result.record.ppn_taxtype_id==null) { result.record.ppn_taxtype_id='--NULL--'; result.record.ppn_taxtype_name='NONE'; }
 		if (result.record.pph_taxtype_id==null) { result.record.pph_taxtype_id='--NULL--'; result.record.pph_taxtype_name='NONE'; }
+		if (result.record.salesdisc_coa_id==null) { result.record.salesdisc_coa_id='--NULL--'; result.record.salesdisc_coa_name='NONE'; }
+		if (result.record.ppn_coa_id==null) { result.record.ppn_coa_id='--NULL--'; result.record.ppn_coa_name='NONE'; }
+		if (result.record.ppnsubsidi_coa_id==null) { result.record.ppnsubsidi_coa_id='--NULL--'; result.record.ppnsubsidi_coa_name='NONE'; }
+		if (result.record.pph_coa_id==null) { result.record.pph_coa_id='--NULL--'; result.record.pph_coa_name='NONE'; }
 
-  		updaterecordstatus(result.record)
+		*/
+		for (var objid in obj) {
+			let o = obj[objid]
+			if (o.isCombo() && !o.isRequired()) {
+				var value =  result.record[o.getFieldValueName()];
+				if (value==null ) {
+					record[o.getFieldValueName()] = pOpt.value;
+					record[o.getFieldDisplayName()] = pOpt.text;
+				}
+			}
+		}
+  		updaterecordstatus(record)
 
 		form.SuspendEvent(true);
 		form
-			.fill(result.record)
-			.setValue(obj.cbo_unit_id, result.record.unit_id, result.record.unit_name)
-			.setValue(obj.cbo_partner_id, result.record.partner_id, result.record.partner_name)
-			.setValue(obj.cbo_partnercontact_id, result.record.partnercontact_id, result.record.partnercontact_name)
-			.setValue(obj.cbo_quot_id, result.record.quot_id, result.record.quot_descr)
-			.setValue(obj.cbo_ae_empl_id, result.record.ae_empl_id, result.record.ae_empl_name)
-			.setValue(obj.cbo_trxmodel_id, result.record.trxmodel_id, result.record.trxmodel_name)
-			.setValue(obj.cbo_site_id, result.record.site_id, result.record.site_name)
-			.setValue(obj.cbo_sender_dept_id, result.record.sender_dept_id, result.record.recv_dept_name)
-			.setValue(obj.cbo_curr_id, result.record.curr_id, result.record.curr_name)
-			.setValue(obj.cbo_project_id, result.record.project_id, result.record.project_name)
-			.setValue(obj.cbo_projecttask_id, result.record.projecttask_id, result.record.projecttask_name)
-			.setValue(obj.cbo_ppn_taxtype_id, result.record.ppn_taxtype_id, result.record.ppn_taxtype_name)
-			.setValue(obj.cbo_pph_taxtype_id, result.record.pph_taxtype_id, result.record.pph_taxtype_name)
-			.setValue(obj.cbo_sales_dept_id, result.record.sales_dept_id, result.record.owner_dept_name)
-			.setValue(obj.cbo_doc_id, result.record.doc_id, result.record.doc_name)
-			.commit()
+			.fill(record)
+			.setValue(obj.cbo_unit_id, record.unit_id, record.unit_name)
+			.setValue(obj.cbo_orderintype_id, record.orderintype_id, record.orderintype_name)
+			.setValue(obj.cbo_partner_id, record.partner_id, record.partner_name)
+			.setValue(obj.cbo_ae_empl_id, record.ae_empl_id, record.ae_empl_name)
+			.setValue(obj.cbo_trxmodel_id, record.trxmodel_id, record.trxmodel_name)
+			.setValue(obj.cbo_project_id, record.project_id, record.project_name)
+			.setValue(obj.cbo_ppn_taxtype_id, record.ppn_taxtype_id, record.ppn_taxtype_name)
+			.setValue(obj.cbo_pph_taxtype_id, record.pph_taxtype_id, record.pph_taxtype_name)
+			.setValue(obj.cbo_sales_coa_id, record.sales_coa_id, record.sales_coa_name)
+			.setValue(obj.cbo_salesdisc_coa_id, record.salesdisc_coa_id, record.salesdisc_coa_name)
+			.setValue(obj.cbo_ppn_coa_id, record.ppn_coa_id, record.ppn_coa_name)
+			.setValue(obj.cbo_ppnsubsidi_coa_id, record.ppnsubsidi_coa_id, record.ppnsubsidi_coa_name)
+			.setValue(obj.cbo_pph_coa_id, record.pph_coa_id, record.pph_coa_name)
+			.setValue(obj.cbo_sales_dept_id, record.sales_dept_id, record.sales_dept_name)
 			.setViewMode(viewmode)
 			.lock(false)
 			.rowid = rowid
 
+
+		/* tambahkan event atau behaviour saat form dibuka
+		   apabila ada rutin mengubah form dan tidak mau dijalankan pada saat opening,
+		   cek dengan form.isEventSuspended()
+		*/   
+
+
+
+		/* commit form */
+		form.commit()
+		form.SuspendEvent(false); 
+		updatebuttonstate(record)
+
 		// tampilkan form untuk data editor
 		fn_callback()
-		form.SuspendEvent(false);
-
-		updatebuttonstate(result.record)
-		
-
-
-		// fill data, bisa dilakukan secara manual dengan cara berikut:	
-		// form
-			// .setValue(obj.txt_id, result.record.id)
-			// .setValue(obj.txt_nama, result.record.nama)
-			// .setValue(obj.cbo_prov, result.record.prov_id, result.record.prov_nama)
-			// .setValue(obj.chk_isdisabled, result.record.disabled)
-			// .setValue(obj.txt_alamat, result.record.alamat)
-			// ....... dst dst
-			// .commit()
-			// .setViewMode()
-			// ....... dst dst
-
 	}
 
 	var fn_dataopenerror = (err) => {
@@ -578,10 +595,21 @@ export function createnew() {
 
 		// set nilai-nilai default untuk form
 		data.orderin_dtstart = global.now()
-		data.orderin_eta = global.now()
 		data.orderin_dtend = global.now()
-		data.orderin_isunquot = '0'
-		data.curr_rate = 0
+		data.ppn_taxvalue = 0
+		data.ppn_include = '0'
+		data.pph_taxvalue = 0
+		data.orderin_totalitem = 0
+		data.orderin_totalqty = 0
+		data.orderin_salesgross = 0
+		data.orderin_discount = 0
+		data.orderin_subtotal = 0
+		data.orderin_pph = 0
+		data.orderin_nett = 0
+		data.orderin_ppn = 0
+		data.orderin_total = 0
+		data.orderin_totaladdcost = 0
+		data.orderin_payment = 0
 		data.orderin_version = 0
 		data.orderin_isdateinterval = '0'
 		data.orderin_iscommit = '0'
@@ -590,34 +618,32 @@ export function createnew() {
 
 		data.unit_id = '--NULL--'
 		data.unit_name = 'NONE'
+		data.orderintype_id = '0'
+		data.orderintype_name = '-- PILIH --'
 		data.partner_id = '0'
 		data.partner_name = '-- PILIH --'
-		data.partnercontact_id = '0'
-		data.partnercontact_name = '-- PILIH --'
-		data.quot_id = '--NULL--'
-		data.quot_descr = 'NONE'
 		data.ae_empl_id = '--NULL--'
 		data.ae_empl_name = 'NONE'
 		data.trxmodel_id = '0'
 		data.trxmodel_name = '-- PILIH --'
-		data.site_id = '0'
-		data.site_name = '-- PILIH --'
-		data.sender_dept_id = '0'
-		data.recv_dept_name = '-- PILIH --'
-		data.curr_id = '0'
-		data.curr_name = '-- PILIH --'
 		data.project_id = '--NULL--'
 		data.project_name = 'NONE'
-		data.projecttask_id = '--NULL--'
-		data.projecttask_name = 'NONE'
 		data.ppn_taxtype_id = '--NULL--'
 		data.ppn_taxtype_name = 'NONE'
 		data.pph_taxtype_id = '--NULL--'
 		data.pph_taxtype_name = 'NONE'
+		data.sales_coa_id = '0'
+		data.sales_coa_name = '-- PILIH --'
+		data.salesdisc_coa_id = '--NULL--'
+		data.salesdisc_coa_name = 'NONE'
+		data.ppn_coa_id = '--NULL--'
+		data.ppn_coa_name = 'NONE'
+		data.ppnsubsidi_coa_id = '--NULL--'
+		data.ppnsubsidi_coa_name = 'NONE'
+		data.pph_coa_id = '--NULL--'
+		data.pph_coa_name = 'NONE'
 		data.sales_dept_id = '0'
-		data.owner_dept_name = '-- PILIH --'
-		data.doc_id = '0'
-		data.doc_name = '-- PILIH --'
+		data.sales_dept_name = '-- PILIH --'
 
 
 		rec_commitby.html('');
@@ -743,7 +769,17 @@ async function form_datasaving(data, options) {
 	//    options.cancel = true
 
 	// Modifikasi object data, apabila ingin menambahkan variabel yang akan dikirim ke server
-	options.skipmappingresponse = ['unit_id', 'quot_id', 'ae_empl_id', 'project_id', 'projecttask_id', 'ppn_taxtype_id', 'pph_taxtype_id', ];
+	// options.skipmappingresponse = ['unit_id', 'ae_empl_id', 'project_id', 'ppn_taxtype_id', 'pph_taxtype_id', 'salesdisc_coa_id', 'ppn_coa_id', 'ppnsubsidi_coa_id', 'pph_coa_id', ];
+	options.skipmappingresponse = [];
+	for (var objid in obj) {
+		var o = obj[objid]
+		if (o.isCombo() && !o.isRequired()) {
+			var id = o.getFieldValueName()
+			options.skipmappingresponse.push(id)
+			console.log(id)
+		}
+	}
+
 }
 
 async function form_datasaveerror(err, options) {
@@ -770,15 +806,32 @@ async function form_datasaved(result, options) {
 
 	var data = {}
 	Object.assign(data, form.getData(), result.dataresponse)
-
+	/*
 	form.setValue(obj.cbo_unit_id, result.dataresponse.unit_name!=='--NULL--' ? result.dataresponse.unit_id : '--NULL--', result.dataresponse.unit_name!=='--NULL--'?result.dataresponse.unit_name:'NONE')
-	form.setValue(obj.cbo_quot_id, result.dataresponse.quot_descr!=='--NULL--' ? result.dataresponse.quot_id : '--NULL--', result.dataresponse.quot_descr!=='--NULL--'?result.dataresponse.quot_descr:'NONE')
 	form.setValue(obj.cbo_ae_empl_id, result.dataresponse.ae_empl_name!=='--NULL--' ? result.dataresponse.ae_empl_id : '--NULL--', result.dataresponse.ae_empl_name!=='--NULL--'?result.dataresponse.ae_empl_name:'NONE')
 	form.setValue(obj.cbo_project_id, result.dataresponse.project_name!=='--NULL--' ? result.dataresponse.project_id : '--NULL--', result.dataresponse.project_name!=='--NULL--'?result.dataresponse.project_name:'NONE')
-	form.setValue(obj.cbo_projecttask_id, result.dataresponse.projecttask_name!=='--NULL--' ? result.dataresponse.projecttask_id : '--NULL--', result.dataresponse.projecttask_name!=='--NULL--'?result.dataresponse.projecttask_name:'NONE')
 	form.setValue(obj.cbo_ppn_taxtype_id, result.dataresponse.ppn_taxtype_name!=='--NULL--' ? result.dataresponse.ppn_taxtype_id : '--NULL--', result.dataresponse.ppn_taxtype_name!=='--NULL--'?result.dataresponse.ppn_taxtype_name:'NONE')
 	form.setValue(obj.cbo_pph_taxtype_id, result.dataresponse.pph_taxtype_name!=='--NULL--' ? result.dataresponse.pph_taxtype_id : '--NULL--', result.dataresponse.pph_taxtype_name!=='--NULL--'?result.dataresponse.pph_taxtype_name:'NONE')
+	form.setValue(obj.cbo_salesdisc_coa_id, result.dataresponse.salesdisc_coa_name!=='--NULL--' ? result.dataresponse.salesdisc_coa_id : '--NULL--', result.dataresponse.salesdisc_coa_name!=='--NULL--'?result.dataresponse.salesdisc_coa_name:'NONE')
+	form.setValue(obj.cbo_ppn_coa_id, result.dataresponse.ppn_coa_name!=='--NULL--' ? result.dataresponse.ppn_coa_id : '--NULL--', result.dataresponse.ppn_coa_name!=='--NULL--'?result.dataresponse.ppn_coa_name:'NONE')
+	form.setValue(obj.cbo_ppnsubsidi_coa_id, result.dataresponse.ppnsubsidi_coa_name!=='--NULL--' ? result.dataresponse.ppnsubsidi_coa_id : '--NULL--', result.dataresponse.ppnsubsidi_coa_name!=='--NULL--'?result.dataresponse.ppnsubsidi_coa_name:'NONE')
+	form.setValue(obj.cbo_pph_coa_id, result.dataresponse.pph_coa_name!=='--NULL--' ? result.dataresponse.pph_coa_id : '--NULL--', result.dataresponse.pph_coa_name!=='--NULL--'?result.dataresponse.pph_coa_name:'NONE')
 
+	*/
+
+	var pOpt = form.getDefaultPrompt(false)
+	for (var objid in obj) {
+		var o = obj[objid]
+		if (o.isCombo() && !o.isRequired()) {
+			var value =  result.dataresponse[o.getFieldValueName()];
+			var text = result.dataresponse[o.getFieldDisplayName()];
+			if (value==null ) {
+				value = pOpt.value;
+				text = pOpt.text;
+			}
+			form.setValue(o, value, text);
+		}
+	}
 	form.rowid = $ui.getPages().ITEMS['pnl_list'].handler.updategrid(data, form.rowid)
 }
 

@@ -5,25 +5,31 @@ if (!defined('FGTA4')) {
 }
 
 require_once __ROOT_DIR.'/core/sqlutil.php';
+// require_once __ROOT_DIR . "/core/sequencer.php";
+require_once __DIR__ . '/xapi.base.php';
 
 
 use \FGTA4\exceptions\WebException;
+// use \FGTA4\utils\Sequencer;
 
 
 
-class DataSave extends WebAPI {
-	function __construct() {
-		$this->debugoutput = true;
-		$DB_CONFIG = DB_CONFIG[$GLOBALS['MAINDB']];
-		$DB_CONFIG['param'] = DB_CONFIG_PARAM[$GLOBALS['MAINDBTYPE']];
-		$this->db = new \PDO(
-					$DB_CONFIG['DSN'], 
-					$DB_CONFIG['user'], 
-					$DB_CONFIG['pass'], 
-					$DB_CONFIG['param']
-		);	
-
-	}
+/**
+ * /ent/organisation/deptgroup/apis/save.php
+ *
+ * ====
+ * Save
+ * ====
+ * Menampilkan satu baris data/record sesuai PrimaryKey,
+ * dari tabel header deptgroup (mst_deptgroup)
+ *
+ * Agung Nugroho <agung@fgta.net> http://www.fgta.net
+ * Tangerang, 26 Maret 2021
+ *
+ * digenerate dengan FGTA4 generator
+ * tanggal 03/12/2021
+ */
+$API = new class extends deptgroupBase {
 	
 	public function execute($data, $options) {
 		$tablename = 'mst_deptgroup';
@@ -56,14 +62,16 @@ class DataSave extends WebAPI {
 			// $obj->tanggal = (\DateTime::createFromFormat('d/m/Y',$obj->tanggal))->format('Y-m-d');
 
 			$obj->deptgroup_id = strtoupper($obj->deptgroup_id);
-			// $obj->deptgroup_name = strtoupper($obj->deptgroup_name);
-			// $obj->deptgroup_parent = strtoupper($obj->deptgroup_parent);
-			// $obj->depttype_id = strtoupper($obj->depttype_id);
+			$obj->deptgroup_name = strtoupper($obj->deptgroup_name);
+			$obj->deptgroup_parent = strtoupper($obj->deptgroup_parent);
+			$obj->depttype_id = strtoupper($obj->depttype_id);
 
-			$obj->deptgroup_level = 0;	
-			// if ($obj->deptgroup_parent=="" || $obj->deptgroup_parent=="--NULL--") {
-			// 	unset($obj->deptgroup_parent);
-			// }
+
+			if ($obj->deptgroup_descr=='') { $obj->deptgroup_descr = '--NULL--'; }
+
+
+
+
 
 			$this->db->setAttribute(\PDO::ATTR_AUTOCOMMIT,0);
 			$this->db->beginTransaction();
@@ -91,7 +99,37 @@ class DataSave extends WebAPI {
 
 				\FGTA4\utils\SqlUtility::WriteLog($this->db, $this->reqinfo->modulefullname, $tablename, $obj->{$primarykey}, $action, $userdata->username, (object)[]);
 
+
+
+
+				// result
+				$where = \FGTA4\utils\SqlUtility::BuildCriteria((object)[$primarykey=>$obj->{$primarykey}], [$primarykey=>"$primarykey=:$primarykey"]);
+				$sql = \FGTA4\utils\SqlUtility::Select($tablename , [
+					$primarykey
+					, 'deptgroup_id', 'deptgroup_name', 'deptgroup_descr', 'deptgroup_parent', 'deptgroup_pathid', 'deptgroup_path', 'deptgroup_level', 'deptgroup_isexselect', 'depttype_id', '_createby', '_createdate', '_modifyby', '_modifydate', '_createby', '_createdate', '_modifyby', '_modifydate'
+				], $where->sql);
+				$stmt = $this->db->prepare($sql);
+				$stmt->execute($where->params);
+				$row  = $stmt->fetch(\PDO::FETCH_ASSOC);			
+
+				$record = [];
+				foreach ($row as $key => $value) {
+					$record[$key] = $value;
+				}
+				$result->dataresponse = (object) array_merge($record, [
+					//  untuk lookup atau modify response ditaruh disini
+				'deptgroup_parent_name' => \FGTA4\utils\SqlUtility::Lookup($record['deptgroup_parent'], $this->db, 'mst_deptgroup', 'deptgroup_id', 'deptgroup_name'),
+				'depttype_name' => \FGTA4\utils\SqlUtility::Lookup($record['depttype_id'], $this->db, 'mst_depttype', 'depttype_id', 'depttype_name'),
+
+					'_createby' => \FGTA4\utils\SqlUtility::Lookup($record['_createby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+					'_modifyby' => \FGTA4\utils\SqlUtility::Lookup($record['_modifyby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+				]);
+
+
+
 				$this->db->commit();
+				return $result;
+
 			} catch (\Exception $ex) {
 				$this->db->rollBack();
 				throw $ex;
@@ -99,36 +137,13 @@ class DataSave extends WebAPI {
 				$this->db->setAttribute(\PDO::ATTR_AUTOCOMMIT,1);
 			}
 
-
-			$where = \FGTA4\utils\SqlUtility::BuildCriteria((object)[$primarykey=>$obj->{$primarykey}], [$primarykey=>"$primarykey=:$primarykey"]);
-			$sql = \FGTA4\utils\SqlUtility::Select($tablename , [
-				$primarykey, 'deptgroup_id', 'deptgroup_name', 'deptgroup_parent', 'deptgroup_pathid', 'deptgroup_path', 'deptgroup_level', 'depttype_id', '_createby', '_createdate', '_modifyby', '_modifydate'
-			], $where->sql);
-			$stmt = $this->db->prepare($sql);
-			$stmt->execute($where->params);
-			$row  = $stmt->fetch(\PDO::FETCH_ASSOC);			
-
-			$dataresponse = [];
-			foreach ($row as $key => $value) {
-				$dataresponse[$key] = $value;
-			}
-			$result->dataresponse = (object) array_merge($dataresponse, [
-				// misalnya ada data yang perlu dilookup ditaruh disini
-				'deptgroup_parent_name' => \FGTA4\utils\SqlUtility::Lookup($data->deptgroup_parent, $this->db, 'mst_deptgroup', 'deptgroup_id', 'deptgroup_name'),
-				'depttype_name' => \FGTA4\utils\SqlUtility::Lookup($data->depttype_id, $this->db, 'mst_depttype', 'depttype_id', 'depttype_name'),
-				
-			]);
-
-			return $result;
 		} catch (\Exception $ex) {
 			throw $ex;
 		}
 	}
 
 	public function NewId($param) {
-		return uniqid();
+					return uniqid();
 	}
 
-}
-
-$API = new DataSave();
+};

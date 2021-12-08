@@ -46,6 +46,16 @@ export async function init(opt) {
 	})	
 
 
+	document.addEventListener('scroll', (ev) => {
+		if ($ui.getPages().getCurrentPage()==this_page_id) {
+			if($(window).scrollTop() + $(window).height() == $(document).height()) {
+				grd_list.nextpageload();
+			}			
+		}
+	})	
+	
+	//button state
+
 	btn_load_click()
 }
 
@@ -152,7 +162,7 @@ function grd_list_rowrender(tr) {
 		// 		td.classList.add('fgtable-rowred')
 		// 	}
 		// }
-		if (record.disabled=="1" || record.disabled==true) {
+		if (record.empl_id==null) {
 			td.classList.add('fgtable-row-disabled')
 		} else {
 			td.classList.remove('fgtable-row-disabled')

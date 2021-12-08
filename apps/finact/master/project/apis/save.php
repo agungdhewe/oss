@@ -27,7 +27,7 @@ use \FGTA4\utils\Sequencer;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 19/09/2021
+ * tanggal 05/12/2021
  */
 $API = new class extends projectBase {
 	
@@ -102,7 +102,7 @@ $API = new class extends projectBase {
 				$where = \FGTA4\utils\SqlUtility::BuildCriteria((object)[$primarykey=>$obj->{$primarykey}], [$primarykey=>"$primarykey=:$primarykey"]);
 				$sql = \FGTA4\utils\SqlUtility::Select($tablename , [
 					$primarykey
-					, 'project_id', 'projecttype_id', 'projectmodel_id', 'orderin_id', 'project_name', 'project_descr', 'dept_id', 'project_isdisabled', 'project_isallowalldept', '_createby', '_createdate', '_modifyby', '_modifydate', '_createby', '_createdate', '_modifyby', '_modifydate'
+					, 'project_id', 'projectmodel_id', 'project_name', 'project_descr', 'dept_id', 'project_isdisabled', 'project_isallowalldept', 'orderin_id', 'projecttype_id', '_createby', '_createdate', '_modifyby', '_modifydate', '_createby', '_createdate', '_modifyby', '_modifydate'
 				], $where->sql);
 				$stmt = $this->db->prepare($sql);
 				$stmt->execute($where->params);
@@ -114,10 +114,10 @@ $API = new class extends projectBase {
 				}
 				$result->dataresponse = (object) array_merge($record, [
 					//  untuk lookup atau modify response ditaruh disini
-				'projecttype_name' => \FGTA4\utils\SqlUtility::Lookup($record['projecttype_id'], $this->db, 'mst_projecttype', 'projecttype_id', 'projecttype_name'),
 				'projectmodel_name' => \FGTA4\utils\SqlUtility::Lookup($record['projectmodel_id'], $this->db, 'mst_projectmodel', 'projectmodel_id', 'projectmodel_name'),
-				'orderin_descr' => \FGTA4\utils\SqlUtility::Lookup($record['orderin_id'], $this->db, 'trn_orderin', 'orderin_id', 'orderin_descr'),
 				'dept_name' => \FGTA4\utils\SqlUtility::Lookup($record['dept_id'], $this->db, 'mst_dept', 'dept_id', 'dept_name'),
+				'orderin_descr' => \FGTA4\utils\SqlUtility::Lookup($record['orderin_id'], $this->db, 'trn_orderin', 'orderin_id', 'orderin_descr'),
+				'projecttype_name' => \FGTA4\utils\SqlUtility::Lookup($record['projecttype_id'], $this->db, 'mst_projecttype', 'projecttype_id', 'projecttype_name'),
 
 					'_createby' => \FGTA4\utils\SqlUtility::Lookup($record['_createby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
 					'_modifyby' => \FGTA4\utils\SqlUtility::Lookup($record['_modifyby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
