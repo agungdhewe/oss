@@ -3,9 +3,10 @@ var this_page_options;
 
 const tbl_list = $('#pnl_edititemgrid-tbl_list');
 const txt_title = $('#pnl_edititemgrid-title');
-const pnl_control = $('#pnl_edititemgrid-control');
+const pnl_control = $('.pnl_edititemgrid-control');
 const btn_removechecked  = $('#pnl_edititemgrid-removechecked');
 const btn_addrow = $('#pnl_edititemgrid-addrow');
+const btn_generate = $('#pnl_edititemgrid-btn_generate');
 
 let grd_list = {};
 let header_data = {};
@@ -24,13 +25,10 @@ export async function init(opt) {
 		OnRowRender: (tr) => { grd_list_rowrender(tr) }
 	});	
 
-	btn_removechecked.linkbutton({
-		onClick: () => { btn_removechecked_click() }
-	});
+	btn_removechecked.linkbutton({ onClick: () => { btn_removechecked_click() } });
+	btn_addrow.linkbutton({ onClick: () => { btn_addrow_click() } });
+	btn_generate.linkbutton({ onClick: () => { btn_generate_click() } });
 
-	btn_addrow.linkbutton({
-		onClick: () => { btn_addrow_click() }
-	});
 
 	document.addEventListener('OnButtonBack', (ev) => {
 		if ($ui.getPages().getCurrentPage()==this_page_id) {
@@ -196,3 +194,24 @@ function btn_addrow_click() {
 		$ui.getPages().ITEMS['pnl_edititemform'].handler.createnew(header_data)
 	})	
 }
+
+
+async function btn_generate_click() {
+	// var id = header_data.logproof_id
+	// var apiurl = `${global.modulefullname}/xtion-generate`
+	// var args = {
+	// 	id: 
+	// }
+
+	// try {
+	// 	let result = await $ui.apicall(apiurl, args)
+	// 	if (stay) {
+	// 		grd_list.removerow(result._trid);
+	// 	}
+	// } catch (err) {
+	// 	console.log(err)
+	// }
+
+
+}
+

@@ -15,12 +15,13 @@ $MODULE = new class extends WebModule {
 	}
 	
 	
-	public function LoadPage($dt) {
+	public function LoadPage($dept_id, $dt) {
 		$userdata = $this->auth->session_get_user();
 		// $this->report_date = $dt;
 		// $this->report_date_sql = (\DateTime::createFromFormat('d/m/Y',$dt))->format('Y-m-d');
 		
-		// $objdt = \DateTime::createFromFormat('d/m/Y',$dt);
+		$date_sql = \DateTime::createFromFormat('d/m/Y',$dt)->format('Y-m-d');
+
 
 		try {
 
@@ -29,57 +30,27 @@ $MODULE = new class extends WebModule {
 			// $stmt->execute();
 			// $row =  $stmt->fetch(\PDO::FETCH_ASSOC);
 			// $cacheid = $row['cacheid'];
+			$sql = "call deptbudget_usage(:dept_id, :dt)";
+			$stmt = $this->db->prepare($sql);
+			$stmt->execute([
+				':dept_id'=>$dept_id, 
+				':dt' => $date_sql
+			]);
 
-			$stmt = $this->db->prepare("
-				select
-				AX.accbudget_id,
-				(select accbudget_name from mst_accbudget where accbudget_id=AX.accbudget_id) as accbudget_name,
-				FORMAT(SUM(AX.budget), 0) as budget,
-				FORMAT(SUM(AX.inquiry), 0) as inquiry,
-				FORMAT(SUM(AX.realisasi), 0) as realisasi
-				from (
-					
-					select 
-					accbudget_id,
-					projbudgetdet_value as budget,
-					0 as inquiry,
-					0 as realisasi
-					from mst_projbudgetdet 
-					-- where projbudget_id = 'BP21100001'
-					
-					
-					union all
-					
-					
-					select 
-					A.accbudget_id,
-					0 as budget,
-					A.inquirydetil_estvalue as inquiry,
-					0 as realisasi
-					from
-					trn_inquirydetil A inner join mst_projbudgetdet B on B.projbudgetdet_id = A.projbudgetdet_id
-					-- where
-					-- B.projbudget_id = 'BP21100001'
-					
-					
-					union all
-					
-					
-					select
-					A.accbudget_id,
-					0 as budget,
-					0 as inquiry,
-					A.recvitem_idr as realisasi
-					from
-					trn_recvitem A inner join trn_inquirydetil B on B.inquirydetil_id=A.inquiryitem_id
-								inner join mst_projbudgetdet C on C.projbudgetdet_id = B.projbudgetdet_id
-					-- where
-					-- C.projbudget_id = 'BP21100001'
-				
-				) AX
-				group by
-				AX.accbudget_id
-			");
+			$sql = "
+				select 
+				A.accbudget_id,
+				B.accbudget_name,
+				C.coa_name,
+				A.deptbudget_value,
+				A.projbudget_value,
+				A.inquiry_value,
+				A.receive_value
+				from 
+				TEMP_BUDGET_RESULT A inner join mst_accbudget B on B.accbudget_id=A.accbudget_id
+									inner join mst_coa C on C.coa_id=B.coa_id 			
+			";
+			$stmt = $this->db->prepare($sql);
 			$stmt->execute();
 			$this->rows =  $stmt->fetchall(\PDO::FETCH_ASSOC);
 

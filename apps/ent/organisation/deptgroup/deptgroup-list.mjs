@@ -6,6 +6,7 @@ const tbl_list = $('#pnl_list-tbl_list')
 const txt_search = $('#pnl_list-txt_search')
 const btn_load = $('#pnl_list-btn_load')
 const btn_new = $('#pnl_list-btn_new')
+const btn_reindex = $('#pnl_list-btn_reindex')
 
 
 let grd_list = {}
@@ -33,13 +34,10 @@ export async function init(opt) {
 	})
 	
 
-	btn_load.linkbutton({
-		onClick: () => { btn_load_click() }
-	})
+	btn_load.linkbutton({ onClick: () => { btn_load_click() } })
+	btn_new.linkbutton({ onClick: () => { btn_new_click() } 	})
+	btn_reindex.linkbutton({ onClick: () => { btn_reindex_click() } 	})
 
-	btn_new.linkbutton({
-		onClick: () => { btn_new_click() }
-	})
 
 	document.addEventListener('OnSizeRecalculated', (ev) => {
 		OnSizeRecalculated(ev.detail.width, ev.detail.height)
@@ -165,3 +163,14 @@ function grd_list_rowrender(tr) {
 	})
 }
 
+function btn_reindex_click() {
+	// var apiurl = `${global.modulefullname}/billout-add`
+	// var args = {data: options.data, options: {}}
+
+	// try {
+	// 	var result = await $ui.apicall(apiurl, args)
+	// 	console.log(result)
+	// } catch (err) {
+	// 	console.error(err)
+	// }
+}

@@ -70,6 +70,7 @@
 					<th class="rowhead rptdata-col-coacode" data-fill-color='CCCCCC'>ID</th>
 					<th class="rowhead rptdata-col-coaname" data-fill-color='CCCCCC'>Account</th>
 					<th class="rowhead rptdata-col-coaparent" data-fill-color='CCCCCC'>Budget</th>
+					<th class="rowhead rptdata-col-coaparent" data-fill-color='CCCCCC'>Allocated</th>
 					<th class="rowhead rptdata-col-coaparent" data-fill-color='CCCCCC'>Inquiry</th>
 					<th class="rowhead rptdata-col-coaparent" data-fill-color='CCCCCC'>Realisasi</th>
 				</tr>
@@ -78,23 +79,53 @@
 				<!-- 45 -->
 				<?php 
 				$i=0;
+
+				$TOTAL = [
+					'deptbudget_value' => 0,
+					'projbudget_value' => 0,
+					'inquiry_value' => 0,
+					'receive_value' => 0
+				];
+
+
+				function add_to_total(&$TOTAL, $add) {
+					foreach ($add as $key=>$value) {
+						if (!array_key_exists($key, $TOTAL)) {
+							$TOTAL[$key] = 0;
+						}
+						$TOTAL[$key] += $value;
+					}
+				}
+				
+
 				foreach ($this->rows as $row) { 
 					$i++;
+
+					add_to_total($TOTAL, [
+						'deptbudget_value' => (float)$row['deptbudget_value'],
+						'projbudget_value' => (float)$row['projbudget_value'],
+						'inquiry_value' => (float)$row['inquiry_value'],
+						'receive_value' => (float)$row['receive_value']
+					]);
+
 				?>
 				<tr>
 					<td class="row rptdata-col-no"><?=$i?></td>
-					<td><?=$row['accbudget_id']?></td>
-					<td><?=$row['accbudget_name']?></td>
-					<td style="text-align: right"><?=$row['budget']?></td>
-					<td style="text-align: right"><?=$row['inquiry']?></td>
-					<td style="text-align: right"><?=$row['realisasi']?></td>
-
+					<td class="row"><?=$row['accbudget_id']?></td>
+					<td class="row"><?=$row['accbudget_name']?></td>
+					<td class="row"style="text-align: right"><?=number_format($row['deptbudget_value'])?></td>
+					<td class="row" style="text-align: right"><?=number_format($row['projbudget_value'])?></td>
+					<td class="row" style="text-align: right"><?=number_format($row['inquiry_value'])?></td>
+					<td class="row" style="text-align: right"><?=number_format($row['receive_value'])?></td>
 				</tr>
 				<?php } ?>
-				<!-- <tr>
-					<td class="rowfoot" colspan="2" style="text-align: center" data-fill-color='CCCCCC'>TOTAL</td>
-					<td class="rowfoot rptdata-col-val" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'>10000</td>
-				</tr>				 -->
+				<tr>
+					<td class="rowfoot" colspan="3" style="text-align: center" data-fill-color='CCCCCC'>TOTAL</td>
+					<td class="rowfoot rptdata-col-val" style="text-align: right" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format($TOTAL['deptbudget_value'])?></td>
+					<td class="rowfoot rptdata-col-val" style="text-align: right" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format($TOTAL['projbudget_value'])?></td>
+					<td class="rowfoot rptdata-col-val" style="text-align: right" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format($TOTAL['inquiry_value'])?></td>
+					<td class="rowfoot rptdata-col-val" style="text-align: right" data-t="n" data-num-fmt="#,##0" data-fill-color='CCCCCC'><?=number_format($TOTAL['receive_value'])?></td>
+				</tr>
 			</tbody>
 			<tfoot>
 			</tfoot>			

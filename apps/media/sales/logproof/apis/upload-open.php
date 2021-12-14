@@ -44,7 +44,13 @@ $API = new class extends logproofBase {
 			);
 
 			$sql = \FGTA4\utils\SqlUtility::Select('trn_medialogproofupload A', [
-				'medialogproofupload_id', 'nobaris', 'mediaadslot_timestart', 'mediaadslot_timeend', 'mediaadslot_duration', 'mediaadslot_descr', 'mediaadslot_code', 'actual_timestart', 'actual_timeend', 'actual_duration', 'spot_id', 'mediaorder_ref', 'mediaorder_reftype', 'mediaorder_descr', 'mediaorder_id', 'mediaordertype_id', 'agency_code', 'agency_name', 'agency_partner_id', 'advertiser_code', 'advertiser_name', 'advertiser_partner_id', 'brand_code', 'brand_name', 'brand_id', 'programme_code', 'programme_name', 'project_id', 'episode_code', 'episode_name', 'projecttask_id', 'medialogproof_validr', 'medialogproof_ppnidr', 'pph_taxtype_id', 'medialogproof_id', '_createby', '_createdate', '_modifyby', '_modifydate' 
+				  'medialogproofupload_id', 'nobaris', 'mediaadslot_timestart', 'mediaadslot_timeend', 'mediaadslot_duration', 'mediaadslot_descr'
+				, 'mediaadslot_code', 'actual_timestart', 'actual_timeend', 'actual_duration', 'spot_id', 'mediaorder_ref'
+				, 'mediaorder_reftype', 'mediaorder_descr', 'mediaorder_id', 'mediaordertype_id', 'agency_code', 'agency_name'
+				, 'agency_partner_id', 'advertiser_code', 'advertiser_name', 'advertiser_partner_id', 'brand_code', 'brand_name'
+				, 'brand_id', 'programme_code', 'programme_name', 'project_id', 'episode_code', 'episode_name', 'projecttask_id'
+				, 'medialogproof_validr', 'medialogproof_ppnidr', 'pph_taxtype_id', 'billoutpreprocess_id', 'medialogproof_id'
+				, '_createby', '_createdate', '_modifyby', '_modifydate' 
 			], $where->sql);
 
 			$stmt = $this->db->prepare($sql);
@@ -64,6 +70,7 @@ $API = new class extends logproofBase {
 				//'gendername' => $record['gender']
 
 				'pph_taxtype_name' => \FGTA4\utils\SqlUtility::Lookup($record['pph_taxtype_id'], $this->db, 'mst_taxtype', 'taxtype_id', 'taxtype_name'),
+				'billoutpreprocess_name' => \FGTA4\utils\SqlUtility::Lookup($record['billoutpreprocess_id'], $this->db, 'mst_billoutpreprocess', 'billoutpreprocess_id', 'billoutpreprocess_name'),
 				
 				'_createby' => \FGTA4\utils\SqlUtility::Lookup($record['_createby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
 				'_modifyby' => \FGTA4\utils\SqlUtility::Lookup($record['_modifyby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),

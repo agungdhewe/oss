@@ -43,6 +43,7 @@ export async function init(opt) {
 		},
 		onFinished: () => {
 			// btn_load_click();
+			dt_report_date.datebox('setValue', global.setup.current_date)
 		}
 	})
 
@@ -122,27 +123,16 @@ export function opendetil(partner_id, date) {
 
 function btn_load_click() {
 	var dt = dt_report_date.datebox('getValue');
-	
-	// try {
-	// 	if (dt=='') {
-	// 		throw 'Tanggal belum diisi';
-	// 	}
-
-	// } catch (err) {
-	// 	$ui.ShowMessage('[WARNING]' + err);
-	// 	return;
-	// }
-	
+	var dept_id = cbo_search_dept.combo('getValue');	
 
 
 	// var reportmodule = window.global.modulefullname + '/rptcoa.xprint' + '?template=format-01-a4-landscape';
 	var reportmodule = window.global.modulefullname + '/rptcoa.xprint';
 	var params = {
+		dept_id: dept_id,
 		dt: dt
 	}
 
-
-	console.log(params);
 	rpt.load(reportmodule, params);
 }
 
@@ -151,5 +141,5 @@ function btn_print_click() {
 }
 
 function btn_export_click() {
-	rpt.export('obj_reporttable', 'ReportTable.xlsx', 'TrialBalance');
+	rpt.export('obj_reporttable', 'RealisasiBudget-.xlsx', 'TrialBalance');
 }

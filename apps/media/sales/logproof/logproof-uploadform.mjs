@@ -48,6 +48,7 @@ const obj = {
 	txt_medialogproof_validr: $('#pnl_edituploadform-txt_medialogproof_validr'),
 	txt_medialogproof_ppnidr: $('#pnl_edituploadform-txt_medialogproof_ppnidr'),
 	cbo_pph_taxtype_id: $('#pnl_edituploadform-cbo_pph_taxtype_id'),
+	cbo_billoutpreprocess_id: $('#pnl_edituploadform-cbo_billoutpreprocess_id'),
 	txt_medialogproof_id: $('#pnl_edituploadform-txt_medialogproof_id')
 }
 
@@ -99,7 +100,9 @@ export async function init(opt) {
 			{mapping: 'taxtype_id', text: 'taxtype_id'},
 			{mapping: 'taxtype_name', text: 'taxtype_name'},
 		],
-		OnDataLoading: (criteria, options) => {},
+		OnDataLoading: (criteria, options) => {
+			criteria.taxmodel_id = 'PPH'
+		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({taxtype_id:'--NULL--', taxtype_name:'NONE'});	
 		},
@@ -108,7 +111,28 @@ export async function init(opt) {
 			}			
 		}
 	})				
-			
+	
+	
+	obj.cbo_billoutpreprocess_id.name = 'pnl_edituploadform-cbo_billoutpreprocess_id'		
+	new fgta4slideselect(obj.cbo_billoutpreprocess_id, {
+		title: 'Pilih Proses',
+		returnpage: this_page_id,
+		api: $ui.apis.load_billoutpreprocess_id,
+		fieldValue: 'billoutpreprocess_id',
+		fieldValueMap: 'billoutpreprocess_id',
+		fieldDisplay: 'billoutpreprocess_name',
+		fields: [
+			{mapping: 'billoutpreprocess_id', text: 'billoutpreprocess_id'},
+			{mapping: 'billoutpreprocess_name', text: 'billoutpreprocess_name'},
+		],
+		OnDataLoading: (criteria, options) => {},
+		OnDataLoaded : (result, options) => {
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+			}			
+		}
+	})
 
 
 	btn_addnew.linkbutton({ onClick: () => { btn_addnew_click() }  })
@@ -289,11 +313,10 @@ export function createnew(hdata) {
 		data.medialogproof_validr = 0
 		data.medialogproof_ppnidr = 0
 
-			data.pph_taxtype_id = '--NULL--'
-			data.pph_taxtype_name = 'NONE'
-
-
-
+		data.pph_taxtype_id = '--NULL--'
+		data.pph_taxtype_name = 'NONE'
+		data.billoutpreprocess_id = '0'
+		data.billoutpreprocess_name = '--PILIH--'
 
 		form.rowid = null
 		options.OnCanceled = () => {

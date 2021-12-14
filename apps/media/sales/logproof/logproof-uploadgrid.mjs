@@ -398,6 +398,19 @@ class NumberParser {
   }
 
 
-  function btn_generate_click() {
-	  
+  async function btn_generate_click() {
+	var apiurl = `${global.modulefullname}/xtion-generate`
+	var args = {
+		id: header_data.medialogproof_id
+	}
+
+	try {
+		let result = await $ui.apicall(apiurl, args)
+
+		
+
+
+	} catch (err) {
+		console.log(err)
+	}
   }
