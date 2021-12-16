@@ -2,6 +2,21 @@
 	"title": "home",
 	"modules": [
 
+		"finact/sales/orderintype",
+
+		"media/sales/mediaorder",
+		"media/sales/logproof",
+		"media/sales/logproofassign",
+ 
+		{
+			"title" : "Account",
+			"modules" : [
+				"finact/master/coagroup",
+				"finact/master/coa",
+				"finact/master/accbudgetgroup",
+				"finact/master/accbudget"
+			]
+		},
 
 		{
 			"title" : "Budgeting",
@@ -27,13 +42,15 @@
 				{"program": "finact/budget/projbudgetrev", "variancename":"propose"},
 				{"program": "finact/budget/projbudgetrev", "variancename":"approval"},
 				"finact/budget/projbudgetrev",
-
-
-				
+			
 
 				{
 					"title" : "Budget Setup",
 					"modules" : [
+
+						"finact/master/projecttype",
+						"finact/master/project",
+
 						"finact/master/accbudgetmodel",
 						"finact/master/accbudgetgroup",
 						"finact/master/accbudget",
@@ -54,7 +71,8 @@
 			"modules": [
 
 
-
+				"finact/sales/orderintype",
+				"finact/items/itemclass",
 
 				{
 					"title" : "General Setup",
@@ -71,7 +89,8 @@
 						"ent/affiliation/partnercategory",
 						"ent/affiliation/partner",
 						"ent/affiliation/brandtype",
-						"ent/affiliation/brand"
+						"ent/affiliation/brand",
+						{"program":"ent/affiliation/brand", "variancename":"manual-id-input"}
 					]
 				},
 		

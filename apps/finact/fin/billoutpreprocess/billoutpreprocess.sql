@@ -21,7 +21,7 @@ COMMENT='Daftar pre processs billout';
 
 
 INSERT INTO mst_billoutpreprocess (`billoutpreprocess_id`, `billoutpreprocess_name`, `billoutpreprocess_descr`, `_createby`, `_createdate`) VALUES ('BL', 'Create Bill', 'Generate bill dari data terkait', 'root', NOW());
-INSERT INTO mst_billoutpreprocess (`billoutpreprocess_id`, `billoutpreprocess_name`, `billoutpreprocess_descr`, `_createby`, `_createdate`) VALUES ('CN', 'Buat Credit Note', '', 'root', NOW());
+INSERT INTO mst_billoutpreprocess (`billoutpreprocess_id`, `billoutpreprocess_name`, `billoutpreprocess_descr`, `_createby`, `_createdate`) VALUES ('DN', 'Buat Debit Note', '', 'root', NOW());
 INSERT INTO mst_billoutpreprocess (`billoutpreprocess_id`, `billoutpreprocess_name`, `billoutpreprocess_descr`, `_createby`, `_createdate`) VALUES ('SK', 'Skip', 'Skip generate', 'root', NOW());
 
 

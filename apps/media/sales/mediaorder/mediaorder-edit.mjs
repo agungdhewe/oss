@@ -20,21 +20,39 @@ const btn_decline = $('#pnl_edit-btn_decline')
 const pnl_form = $('#pnl_edit-form')
 const obj = {
 	txt_mediaorder_id: $('#pnl_edit-txt_mediaorder_id'),
-	cbo_mediaordertype_id: $('#pnl_edit-cbo_mediaordertype_id'),
+	cbo_project_id: $('#pnl_edit-cbo_project_id'),
+	cbo_orderintype_id: $('#pnl_edit-cbo_orderintype_id'),
 	dt_mediaorder_date: $('#pnl_edit-dt_mediaorder_date'),
 	txt_mediaorder_descr: $('#pnl_edit-txt_mediaorder_descr'),
 	txt_mediaorder_ref: $('#pnl_edit-txt_mediaorder_ref'),
+	cbo_dept_id: $('#pnl_edit-cbo_dept_id'),
 	cbo_ae_empl_id: $('#pnl_edit-cbo_ae_empl_id'),
 	cbo_agency_partner_id: $('#pnl_edit-cbo_agency_partner_id'),
 	cbo_advertiser_partner_id: $('#pnl_edit-cbo_advertiser_partner_id'),
-	cbo_brand_id: $('#pnl_edit-cbo_brand_id'),
-	cbo_curr_id: $('#pnl_edit-cbo_curr_id'),
-	chk_mediaorder_istax: $('#pnl_edit-chk_mediaorder_istax'),
-	cbo_taxtype_id: $('#pnl_edit-cbo_taxtype_id'),
-	cbo_mediapackage_id: $('#pnl_edit-cbo_mediapackage_id'),
-	cbo_salesordertype_id: $('#pnl_edit-cbo_salesordertype_id'),
+	txt_mediaorder_traffic: $('#pnl_edit-txt_mediaorder_traffic'),
+	txt_mediaorder_status: $('#pnl_edit-txt_mediaorder_status'),
+	txt_mediaorder_direct: $('#pnl_edit-txt_mediaorder_direct'),
+	txt_mediaorder_bundling: $('#pnl_edit-txt_mediaorder_bundling'),
+	txt_orderin_totalqty: $('#pnl_edit-txt_orderin_totalqty'),
+	txt_orderin_totalitem: $('#pnl_edit-txt_orderin_totalitem'),
+	txt_orderin_salesgross: $('#pnl_edit-txt_orderin_salesgross'),
+	txt_orderin_discount: $('#pnl_edit-txt_orderin_discount'),
+	txt_orderin_subtotal: $('#pnl_edit-txt_orderin_subtotal'),
+	txt_orderin_pph: $('#pnl_edit-txt_orderin_pph'),
+	txt_orderin_nett: $('#pnl_edit-txt_orderin_nett'),
+	txt_orderin_ppn: $('#pnl_edit-txt_orderin_ppn'),
+	txt_orderin_total: $('#pnl_edit-txt_orderin_total'),
+	txt_orderin_totaladdcost: $('#pnl_edit-txt_orderin_totaladdcost'),
+	txt_orderin_payment: $('#pnl_edit-txt_orderin_payment'),
+	cbo_arunbill_coa_id: $('#pnl_edit-cbo_arunbill_coa_id'),
+	cbo_ar_coa_id: $('#pnl_edit-cbo_ar_coa_id'),
+	cbo_dp_coa_id: $('#pnl_edit-cbo_dp_coa_id'),
+	cbo_sales_coa_id: $('#pnl_edit-cbo_sales_coa_id'),
+	cbo_salesdisc_coa_id: $('#pnl_edit-cbo_salesdisc_coa_id'),
+	cbo_ppn_coa_id: $('#pnl_edit-cbo_ppn_coa_id'),
+	cbo_ppnsubsidi_coa_id: $('#pnl_edit-cbo_ppnsubsidi_coa_id'),
+	cbo_pph_coa_id: $('#pnl_edit-cbo_pph_coa_id'),
 	cbo_trxmodel_id: $('#pnl_edit-cbo_trxmodel_id'),
-	cbo_dept_id: $('#pnl_edit-cbo_dept_id'),
 	cbo_doc_id: $('#pnl_edit-cbo_doc_id'),
 	txt_mediaorder_version: $('#pnl_edit-txt_mediaorder_version'),
 	chk_mediaorder_iscommit: $('#pnl_edit-chk_mediaorder_iscommit'),
@@ -64,7 +82,7 @@ const rec_declinedate = $('#pnl_edit_record-declinedate');
 			
 
 
-let form = {}
+let form;
 
 export async function init(opt) {
 	this_page_id = opt.id;
@@ -155,184 +173,59 @@ export async function init(opt) {
 
 
 
-	new fgta4slideselect(obj.cbo_mediaordertype_id, {
-		title: 'Pilih mediaordertype_id',
+	new fgta4slideselect(obj.cbo_project_id, {
+		title: 'Pilih project_id',
 		returnpage: this_page_id,
-		api: $ui.apis.load_mediaordertype_id,
-		fieldValue: 'mediaordertype_id',
-		fieldValueMap: 'mediaordertype_id',
-		fieldDisplay: 'mediaordertype_name',
+		api: $ui.apis.load_project_id,
+		fieldValue: 'project_id',
+		fieldValueMap: 'project_id',
+		fieldDisplay: 'project_name',
 		fields: [
-			{mapping: 'mediaordertype_id', text: 'mediaordertype_id'},
-			{mapping: 'mediaordertype_name', text: 'mediaordertype_name'},
+			{mapping: 'project_id', text: 'project_id'},
+			{mapping: 'project_name', text: 'project_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+						
+		},
 		OnDataLoaded : (result, options) => {
 				
 		},
-		OnSelected: (value, display, record) => {}
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {				
+			}
+		}
 	})				
 				
-	new fgta4slideselect(obj.cbo_ae_empl_id, {
-		title: 'Pilih ae_empl_id',
+	new fgta4slideselect(obj.cbo_orderintype_id, {
+		title: 'Pilih orderintype_id',
 		returnpage: this_page_id,
-		api: $ui.apis.load_ae_empl_id,
-		fieldValue: 'ae_empl_id',
-		fieldValueMap: 'empl_id',
-		fieldDisplay: 'empl_name',
+		api: $ui.apis.load_orderintype_id,
+		fieldValue: 'orderintype_id',
+		fieldValueMap: 'orderintype_id',
+		fieldDisplay: 'orderintype_name',
 		fields: [
-			{mapping: 'empl_id', text: 'empl_id'},
-			{mapping: 'empl_name', text: 'empl_name'},
+			{mapping: 'orderintype_id', text: 'orderintype_id'},
+			{mapping: 'orderintype_name', text: 'orderintype_name'},
 		],
-		OnDataLoading: (criteria) => {},
-		OnDataLoaded : (result, options) => {
-			result.records.unshift({empl_id:'--NULL--', empl_name:'NONE'});	
+		OnDataLoading: (criteria) => {
+						
 		},
-		OnSelected: (value, display, record) => {}
-	})				
-				
-	new fgta4slideselect(obj.cbo_agency_partner_id, {
-		title: 'Pilih agency_partner_id',
-		returnpage: this_page_id,
-		api: $ui.apis.load_agency_partner_id,
-		fieldValue: 'agency_partner_id',
-		fieldValueMap: 'partner_id',
-		fieldDisplay: 'partner_name',
-		fields: [
-			{mapping: 'partner_id', text: 'partner_id'},
-			{mapping: 'partner_name', text: 'partner_name'},
-		],
-		OnDataLoading: (criteria) => {},
 		OnDataLoaded : (result, options) => {
 				
 		},
-		OnSelected: (value, display, record) => {}
-	})				
-				
-	new fgta4slideselect(obj.cbo_advertiser_partner_id, {
-		title: 'Pilih advertiser_partner_id',
-		returnpage: this_page_id,
-		api: $ui.apis.load_advertiser_partner_id,
-		fieldValue: 'advertiser_partner_id',
-		fieldValueMap: 'partner_id',
-		fieldDisplay: 'partner_name',
-		fields: [
-			{mapping: 'partner_id', text: 'partner_id'},
-			{mapping: 'partner_name', text: 'partner_name'},
-		],
-		OnDataLoading: (criteria) => {},
-		OnDataLoaded : (result, options) => {
-				
-		},
-		OnSelected: (value, display, record) => {}
-	})				
-				
-	new fgta4slideselect(obj.cbo_brand_id, {
-		title: 'Pilih brand_id',
-		returnpage: this_page_id,
-		api: $ui.apis.load_brand_id,
-		fieldValue: 'brand_id',
-		fieldValueMap: 'brand_id',
-		fieldDisplay: 'brand_name',
-		fields: [
-			{mapping: 'brand_id', text: 'brand_id'},
-			{mapping: 'brand_name', text: 'brand_name'},
-		],
-		OnDataLoading: (criteria) => {},
-		OnDataLoaded : (result, options) => {
-				
-		},
-		OnSelected: (value, display, record) => {}
-	})				
-				
-	new fgta4slideselect(obj.cbo_curr_id, {
-		title: 'Pilih curr_id',
-		returnpage: this_page_id,
-		api: $ui.apis.load_curr_id,
-		fieldValue: 'curr_id',
-		fieldValueMap: 'curr_id',
-		fieldDisplay: 'curr_name',
-		fields: [
-			{mapping: 'curr_id', text: 'curr_id'},
-			{mapping: 'curr_name', text: 'curr_name'},
-		],
-		OnDataLoading: (criteria) => {},
-		OnDataLoaded : (result, options) => {
-				
-		},
-		OnSelected: (value, display, record) => {}
-	})				
-				
-	new fgta4slideselect(obj.cbo_taxtype_id, {
-		title: 'Pilih taxtype_id',
-		returnpage: this_page_id,
-		api: $ui.apis.load_taxtype_id,
-		fieldValue: 'taxtype_id',
-		fieldValueMap: 'taxtype_id',
-		fieldDisplay: 'taxtype_name',
-		fields: [
-			{mapping: 'taxtype_id', text: 'taxtype_id'},
-			{mapping: 'taxtype_name', text: 'taxtype_name'},
-		],
-		OnDataLoading: (criteria) => {},
-		OnDataLoaded : (result, options) => {
-				
-		},
-		OnSelected: (value, display, record) => {}
-	})				
-				
-	new fgta4slideselect(obj.cbo_mediapackage_id, {
-		title: 'Pilih mediapackage_id',
-		returnpage: this_page_id,
-		api: $ui.apis.load_mediapackage_id,
-		fieldValue: 'mediapackage_id',
-		fieldValueMap: 'mediapackage_id',
-		fieldDisplay: 'mediapackage_descr',
-		fields: [
-			{mapping: 'mediapackage_id', text: 'mediapackage_id'},
-			{mapping: 'mediapackage_descr', text: 'mediapackage_descr'},
-		],
-		OnDataLoading: (criteria) => {},
-		OnDataLoaded : (result, options) => {
-			result.records.unshift({mediapackage_id:'--NULL--', mediapackage_descr:'NONE'});	
-		},
-		OnSelected: (value, display, record) => {}
-	})				
-				
-	new fgta4slideselect(obj.cbo_salesordertype_id, {
-		title: 'Pilih salesordertype_id',
-		returnpage: this_page_id,
-		api: $ui.apis.load_salesordertype_id,
-		fieldValue: 'salesordertype_id',
-		fieldValueMap: 'salesordertype_id',
-		fieldDisplay: 'salesordertype_name',
-		fields: [
-			{mapping: 'salesordertype_id', text: 'salesordertype_id'},
-			{mapping: 'salesordertype_name', text: 'salesordertype_name'},
-		],
-		OnDataLoading: (criteria) => {},
-		OnDataLoaded : (result, options) => {
-				
-		},
-		OnSelected: (value, display, record) => {}
-	})				
-				
-	new fgta4slideselect(obj.cbo_trxmodel_id, {
-		title: 'Pilih trxmodel_id',
-		returnpage: this_page_id,
-		api: $ui.apis.load_trxmodel_id,
-		fieldValue: 'trxmodel_id',
-		fieldValueMap: 'trxmodel_id',
-		fieldDisplay: 'trxmodel_name',
-		fields: [
-			{mapping: 'trxmodel_id', text: 'trxmodel_id'},
-			{mapping: 'trxmodel_name', text: 'trxmodel_name'},
-		],
-		OnDataLoading: (criteria) => {},
-		OnDataLoaded : (result, options) => {
-				
-		},
-		OnSelected: (value, display, record) => {}
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+				form.setValue(obj.cbo_arunbill_coa_id, record.arunbill_coa_id==null?'--NULL--':record.arunbill_coa_id, record.arunbill_coa_name);
+				form.setValue(obj.cbo_ar_coa_id, record.ar_coa_id==null?'--NULL--':record.ar_coa_id, record.ar_coa_name);
+				form.setValue(obj.cbo_dp_coa_id, record.dp_coa_id==null?'--NULL--':record.dp_coa_id, record.dp_coa_name);
+				form.setValue(obj.cbo_sales_coa_id, record.sales_coa_id==null?'--NULL--':record.sales_coa_id, record.sales_coa_name);
+				form.setValue(obj.cbo_salesdisc_coa_id, record.salesdisc_coa_id==null?'--NULL--':record.salesdisc_coa_id, record.salesdisc_coa_name);
+				form.setValue(obj.cbo_ppn_coa_id, record.ppn_coa_id==null?'--NULL--':record.ppn_coa_id, record.ppn_coa_name);
+				form.setValue(obj.cbo_ppnsubsidi_coa_id, record.ppnsubsidi_coa_id==null?'--NULL--':record.ppnsubsidi_coa_id, record.ppnsubsidi_coa_name);
+				form.setValue(obj.cbo_pph_coa_id, record.pph_coa_id==null?'--NULL--':record.pph_coa_id, record.pph_coa_name);						
+										
+			}
+		}
 	})				
 				
 	new fgta4slideselect(obj.cbo_dept_id, {
@@ -346,11 +239,292 @@ export async function init(opt) {
 			{mapping: 'dept_id', text: 'dept_id'},
 			{mapping: 'dept_name', text: 'dept_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+						
+		},
 		OnDataLoaded : (result, options) => {
 				
 		},
-		OnSelected: (value, display, record) => {}
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {				
+			}
+		}
+	})				
+				
+	new fgta4slideselect(obj.cbo_ae_empl_id, {
+		title: 'Pilih ae_empl_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_ae_empl_id,
+		fieldValue: 'ae_empl_id',
+		fieldValueMap: 'empl_id',
+		fieldDisplay: 'empl_name',
+		fields: [
+			{mapping: 'empl_id', text: 'empl_id'},
+			{mapping: 'empl_name', text: 'empl_name'},
+		],
+		OnDataLoading: (criteria) => {
+						
+		},
+		OnDataLoaded : (result, options) => {
+			result.records.unshift({empl_id:'--NULL--', empl_name:'NONE'});	
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {				
+			}
+		}
+	})				
+				
+	new fgta4slideselect(obj.cbo_agency_partner_id, {
+		title: 'Pilih agency_partner_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_agency_partner_id,
+		fieldValue: 'agency_partner_id',
+		fieldValueMap: 'partner_id',
+		fieldDisplay: 'partner_name',
+		fields: [
+			{mapping: 'partner_id', text: 'partner_id'},
+			{mapping: 'partner_name', text: 'partner_name'},
+		],
+		OnDataLoading: (criteria) => {
+						
+		},
+		OnDataLoaded : (result, options) => {
+				
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {				
+			}
+		}
+	})				
+				
+	new fgta4slideselect(obj.cbo_advertiser_partner_id, {
+		title: 'Pilih advertiser_partner_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_advertiser_partner_id,
+		fieldValue: 'advertiser_partner_id',
+		fieldValueMap: 'partner_id',
+		fieldDisplay: 'partner_name',
+		fields: [
+			{mapping: 'partner_id', text: 'partner_id'},
+			{mapping: 'partner_name', text: 'partner_name'},
+		],
+		OnDataLoading: (criteria) => {
+						
+		},
+		OnDataLoaded : (result, options) => {
+				
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {				
+			}
+		}
+	})				
+				
+	new fgta4slideselect(obj.cbo_arunbill_coa_id, {
+		title: 'Pilih arunbill_coa_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_arunbill_coa_id,
+		fieldValue: 'arunbill_coa_id',
+		fieldValueMap: 'coa_id',
+		fieldDisplay: 'coa_name',
+		fields: [
+			{mapping: 'coa_id', text: 'coa_id'},
+			{mapping: 'coa_name', text: 'coa_name'},
+		],
+		OnDataLoading: (criteria) => {
+						
+		},
+		OnDataLoaded : (result, options) => {
+				
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {				
+			}
+		}
+	})				
+				
+	new fgta4slideselect(obj.cbo_ar_coa_id, {
+		title: 'Pilih ar_coa_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_ar_coa_id,
+		fieldValue: 'ar_coa_id',
+		fieldValueMap: 'coa_id',
+		fieldDisplay: 'coa_name',
+		fields: [
+			{mapping: 'coa_id', text: 'coa_id'},
+			{mapping: 'coa_name', text: 'coa_name'},
+		],
+		OnDataLoading: (criteria) => {
+						
+		},
+		OnDataLoaded : (result, options) => {
+				
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {				
+			}
+		}
+	})				
+				
+	new fgta4slideselect(obj.cbo_dp_coa_id, {
+		title: 'Pilih dp_coa_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_dp_coa_id,
+		fieldValue: 'dp_coa_id',
+		fieldValueMap: 'coa_id',
+		fieldDisplay: 'coa_name',
+		fields: [
+			{mapping: 'coa_id', text: 'coa_id'},
+			{mapping: 'coa_name', text: 'coa_name'},
+		],
+		OnDataLoading: (criteria) => {
+						
+		},
+		OnDataLoaded : (result, options) => {
+				
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {				
+			}
+		}
+	})				
+				
+	new fgta4slideselect(obj.cbo_sales_coa_id, {
+		title: 'Pilih sales_coa_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_sales_coa_id,
+		fieldValue: 'sales_coa_id',
+		fieldValueMap: 'coa_id',
+		fieldDisplay: 'coa_name',
+		fields: [
+			{mapping: 'coa_id', text: 'coa_id'},
+			{mapping: 'coa_name', text: 'coa_name'},
+		],
+		OnDataLoading: (criteria) => {
+						
+		},
+		OnDataLoaded : (result, options) => {
+				
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {				
+			}
+		}
+	})				
+				
+	new fgta4slideselect(obj.cbo_salesdisc_coa_id, {
+		title: 'Pilih salesdisc_coa_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_salesdisc_coa_id,
+		fieldValue: 'salesdisc_coa_id',
+		fieldValueMap: 'coa_id',
+		fieldDisplay: 'coa_name',
+		fields: [
+			{mapping: 'coa_id', text: 'coa_id'},
+			{mapping: 'coa_name', text: 'coa_name'},
+		],
+		OnDataLoading: (criteria) => {
+						
+		},
+		OnDataLoaded : (result, options) => {
+			result.records.unshift({coa_id:'--NULL--', coa_name:'NONE'});	
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {				
+			}
+		}
+	})				
+				
+	new fgta4slideselect(obj.cbo_ppn_coa_id, {
+		title: 'Pilih ppn_coa_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_ppn_coa_id,
+		fieldValue: 'ppn_coa_id',
+		fieldValueMap: 'coa_id',
+		fieldDisplay: 'coa_name',
+		fields: [
+			{mapping: 'coa_id', text: 'coa_id'},
+			{mapping: 'coa_name', text: 'coa_name'},
+		],
+		OnDataLoading: (criteria) => {
+						
+		},
+		OnDataLoaded : (result, options) => {
+			result.records.unshift({coa_id:'--NULL--', coa_name:'NONE'});	
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {				
+			}
+		}
+	})				
+				
+	new fgta4slideselect(obj.cbo_ppnsubsidi_coa_id, {
+		title: 'Pilih ppnsubsidi_coa_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_ppnsubsidi_coa_id,
+		fieldValue: 'ppnsubsidi_coa_id',
+		fieldValueMap: 'coa_id',
+		fieldDisplay: 'coa_name',
+		fields: [
+			{mapping: 'coa_id', text: 'coa_id'},
+			{mapping: 'coa_name', text: 'coa_name'},
+		],
+		OnDataLoading: (criteria) => {
+						
+		},
+		OnDataLoaded : (result, options) => {
+			result.records.unshift({coa_id:'--NULL--', coa_name:'NONE'});	
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {				
+			}
+		}
+	})				
+				
+	new fgta4slideselect(obj.cbo_pph_coa_id, {
+		title: 'Pilih pph_coa_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_pph_coa_id,
+		fieldValue: 'pph_coa_id',
+		fieldValueMap: 'coa_id',
+		fieldDisplay: 'coa_name',
+		fields: [
+			{mapping: 'coa_id', text: 'coa_id'},
+			{mapping: 'coa_name', text: 'coa_name'},
+		],
+		OnDataLoading: (criteria) => {
+						
+		},
+		OnDataLoaded : (result, options) => {
+			result.records.unshift({coa_id:'--NULL--', coa_name:'NONE'});	
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {				
+			}
+		}
+	})				
+				
+	new fgta4slideselect(obj.cbo_trxmodel_id, {
+		title: 'Pilih trxmodel_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_trxmodel_id,
+		fieldValue: 'trxmodel_id',
+		fieldValueMap: 'trxmodel_id',
+		fieldDisplay: 'trxmodel_name',
+		fields: [
+			{mapping: 'trxmodel_id', text: 'trxmodel_id'},
+			{mapping: 'trxmodel_name', text: 'trxmodel_name'},
+		],
+		OnDataLoading: (criteria) => {
+						
+		},
+		OnDataLoaded : (result, options) => {
+				
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {				
+			}
+		}
 	})				
 				
 	new fgta4slideselect(obj.cbo_doc_id, {
@@ -364,11 +538,16 @@ export async function init(opt) {
 			{mapping: 'doc_id', text: 'doc_id'},
 			{mapping: 'doc_name', text: 'doc_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+						
+		},
 		OnDataLoaded : (result, options) => {
 				
 		},
-		OnSelected: (value, display, record) => {}
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {				
+			}
+		}
 	})				
 				
 
@@ -421,69 +600,83 @@ export async function init(opt) {
 
 }
 
-
 export function OnSizeRecalculated(width, height) {
 }
 
-
+export function getForm() {
+	return form
+}
 
 
 export function open(data, rowid, viewmode=true, fn_callback) {
 
-
+	var pOpt = form.getDefaultPrompt(false)
 	var fn_dataopening = async (options) => {
 		options.criteria[form.primary.mapping] = data[form.primary.mapping]
 	}
 
 	var fn_dataopened = async (result, options) => {
+		var record = result.record;
+		updatefilebox(record);
 
-		updatefilebox(result.record);
-
+		/*
 		if (result.record.ae_empl_id==null) { result.record.ae_empl_id='--NULL--'; result.record.ae_empl_name='NONE'; }
-		if (result.record.mediapackage_id==null) { result.record.mediapackage_id='--NULL--'; result.record.mediapackage_descr='NONE'; }
+		if (result.record.salesdisc_coa_id==null) { result.record.salesdisc_coa_id='--NULL--'; result.record.salesdisc_coa_name='NONE'; }
+		if (result.record.ppn_coa_id==null) { result.record.ppn_coa_id='--NULL--'; result.record.ppn_coa_name='NONE'; }
+		if (result.record.ppnsubsidi_coa_id==null) { result.record.ppnsubsidi_coa_id='--NULL--'; result.record.ppnsubsidi_coa_name='NONE'; }
+		if (result.record.pph_coa_id==null) { result.record.pph_coa_id='--NULL--'; result.record.pph_coa_name='NONE'; }
 
-  		updaterecordstatus(result.record)
+		*/
+		for (var objid in obj) {
+			let o = obj[objid]
+			if (o.isCombo() && !o.isRequired()) {
+				var value =  result.record[o.getFieldValueName()];
+				if (value==null ) {
+					record[o.getFieldValueName()] = pOpt.value;
+					record[o.getFieldDisplayName()] = pOpt.text;
+				}
+			}
+		}
+  		updaterecordstatus(record)
 
 		form.SuspendEvent(true);
 		form
-			.fill(result.record)
-			.setValue(obj.cbo_mediaordertype_id, result.record.mediaordertype_id, result.record.mediaordertype_name)
-			.setValue(obj.cbo_ae_empl_id, result.record.ae_empl_id, result.record.ae_empl_name)
-			.setValue(obj.cbo_agency_partner_id, result.record.agency_partner_id, result.record.agency_partner_name)
-			.setValue(obj.cbo_advertiser_partner_id, result.record.advertiser_partner_id, result.record.advertiser_partner_name)
-			.setValue(obj.cbo_brand_id, result.record.brand_id, result.record.brand_name)
-			.setValue(obj.cbo_curr_id, result.record.curr_id, result.record.curr_name)
-			.setValue(obj.cbo_taxtype_id, result.record.taxtype_id, result.record.taxtype_name)
-			.setValue(obj.cbo_mediapackage_id, result.record.mediapackage_id, result.record.mediapackage_descr)
-			.setValue(obj.cbo_salesordertype_id, result.record.salesordertype_id, result.record.salesordertype_name)
-			.setValue(obj.cbo_trxmodel_id, result.record.trxmodel_id, result.record.trxmodel_name)
-			.setValue(obj.cbo_dept_id, result.record.dept_id, result.record.dept_name)
-			.setValue(obj.cbo_doc_id, result.record.doc_id, result.record.doc_name)
-			.commit()
+			.fill(record)
+			.setValue(obj.cbo_project_id, record.project_id, record.project_name)
+			.setValue(obj.cbo_orderintype_id, record.orderintype_id, record.orderintype_name)
+			.setValue(obj.cbo_dept_id, record.dept_id, record.dept_name)
+			.setValue(obj.cbo_ae_empl_id, record.ae_empl_id, record.ae_empl_name)
+			.setValue(obj.cbo_agency_partner_id, record.agency_partner_id, record.agency_partner_name)
+			.setValue(obj.cbo_advertiser_partner_id, record.advertiser_partner_id, record.advertiser_partner_name)
+			.setValue(obj.cbo_arunbill_coa_id, record.arunbill_coa_id, record.arunbill_coa_name)
+			.setValue(obj.cbo_ar_coa_id, record.ar_coa_id, record.ar_coa_name)
+			.setValue(obj.cbo_dp_coa_id, record.dp_coa_id, record.dp_coa_name)
+			.setValue(obj.cbo_sales_coa_id, record.sales_coa_id, record.sales_coa_name)
+			.setValue(obj.cbo_salesdisc_coa_id, record.salesdisc_coa_id, record.salesdisc_coa_name)
+			.setValue(obj.cbo_ppn_coa_id, record.ppn_coa_id, record.ppn_coa_name)
+			.setValue(obj.cbo_ppnsubsidi_coa_id, record.ppnsubsidi_coa_id, record.ppnsubsidi_coa_name)
+			.setValue(obj.cbo_pph_coa_id, record.pph_coa_id, record.pph_coa_name)
+			.setValue(obj.cbo_trxmodel_id, record.trxmodel_id, record.trxmodel_name)
+			.setValue(obj.cbo_doc_id, record.doc_id, record.doc_name)
 			.setViewMode(viewmode)
 			.lock(false)
 			.rowid = rowid
 
+
+		/* tambahkan event atau behaviour saat form dibuka
+		   apabila ada rutin mengubah form dan tidak mau dijalankan pada saat opening,
+		   cek dengan form.isEventSuspended()
+		*/   
+
+
+
+		/* commit form */
+		form.commit()
+		form.SuspendEvent(false); 
+		updatebuttonstate(record)
+
 		// tampilkan form untuk data editor
 		fn_callback()
-		form.SuspendEvent(false);
-
-		updatebuttonstate(result.record)
-		
-
-
-		// fill data, bisa dilakukan secara manual dengan cara berikut:	
-		// form
-			// .setValue(obj.txt_id, result.record.id)
-			// .setValue(obj.txt_nama, result.record.nama)
-			// .setValue(obj.cbo_prov, result.record.prov_id, result.record.prov_nama)
-			// .setValue(obj.chk_isdisabled, result.record.disabled)
-			// .setValue(obj.txt_alamat, result.record.alamat)
-			// ....... dst dst
-			// .commit()
-			// .setViewMode()
-			// ....... dst dst
-
 	}
 
 	var fn_dataopenerror = (err) => {
@@ -503,7 +696,17 @@ export function createnew() {
 
 		// set nilai-nilai default untuk form
 		data.mediaorder_date = global.now()
-		data.mediaorder_istax = '1'
+		data.orderin_totalqty = 0
+		data.orderin_totalitem = 0
+		data.orderin_salesgross = 0
+		data.orderin_discount = 0
+		data.orderin_subtotal = 0
+		data.orderin_pph = 0
+		data.orderin_nett = 0
+		data.orderin_ppn = 0
+		data.orderin_total = 0
+		data.orderin_totaladdcost = 0
+		data.orderin_payment = 0
 		data.mediaorder_version = 0
 		data.mediaorder_iscommit = '0'
 		data.mediaorder_isapprovalprogress = '0'
@@ -511,28 +714,36 @@ export function createnew() {
 		data.mediaorder_isdeclined = '0'
 		data.mediaorder_isclose = '0'
 
-		data.mediaordertype_id = '0'
-		data.mediaordertype_name = '-- PILIH --'
+		data.project_id = '0'
+		data.project_name = '-- PILIH --'
+		data.orderintype_id = '0'
+		data.orderintype_name = '-- PILIH --'
+		data.dept_id = '0'
+		data.dept_name = '-- PILIH --'
 		data.ae_empl_id = '--NULL--'
 		data.ae_empl_name = 'NONE'
 		data.agency_partner_id = '0'
 		data.agency_partner_name = '-- PILIH --'
 		data.advertiser_partner_id = '0'
 		data.advertiser_partner_name = '-- PILIH --'
-		data.brand_id = '0'
-		data.brand_name = '-- PILIH --'
-		data.curr_id = '0'
-		data.curr_name = '-- PILIH --'
-		data.taxtype_id = '0'
-		data.taxtype_name = '-- PILIH --'
-		data.mediapackage_id = '--NULL--'
-		data.mediapackage_descr = 'NONE'
-		data.salesordertype_id = 'MO'
-		data.salesordertype_name = 'MEDIA ORDER'
+		data.arunbill_coa_id = '0'
+		data.arunbill_coa_name = '-- PILIH --'
+		data.ar_coa_id = '0'
+		data.ar_coa_name = '-- PILIH --'
+		data.dp_coa_id = '0'
+		data.dp_coa_name = '-- PILIH --'
+		data.sales_coa_id = '0'
+		data.sales_coa_name = '-- PILIH --'
+		data.salesdisc_coa_id = '--NULL--'
+		data.salesdisc_coa_name = 'NONE'
+		data.ppn_coa_id = '--NULL--'
+		data.ppn_coa_name = 'NONE'
+		data.ppnsubsidi_coa_id = '--NULL--'
+		data.ppnsubsidi_coa_name = 'NONE'
+		data.pph_coa_id = '--NULL--'
+		data.pph_coa_name = 'NONE'
 		data.trxmodel_id = 'SAL'
 		data.trxmodel_name = 'SALES'
-		data.dept_id = '0'
-		data.dept_name = '-- PILIH --'
 		data.doc_id = global.setup.doc_id
 		data.doc_name = global.setup.doc_id
 
@@ -717,9 +928,16 @@ async function form_datasaving(data, options) {
 	//    options.cancel = true
 
 	// Modifikasi object data, apabila ingin menambahkan variabel yang akan dikirim ke server
-
-	options.skipmappingresponse = ["ae_empl_id"];
-	options.skipmappingresponse = ["mediapackage_id"];
+	// options.skipmappingresponse = ['ae_empl_id', 'salesdisc_coa_id', 'ppn_coa_id', 'ppnsubsidi_coa_id', 'pph_coa_id', ];
+	options.skipmappingresponse = [];
+	for (var objid in obj) {
+		var o = obj[objid]
+		if (o.isCombo() && !o.isRequired()) {
+			var id = o.getFieldValueName()
+			options.skipmappingresponse.push(id)
+			console.log(id)
+		}
+	}
 
 }
 
@@ -747,10 +965,28 @@ async function form_datasaved(result, options) {
 
 	var data = {}
 	Object.assign(data, form.getData(), result.dataresponse)
-
+	/*
 	form.setValue(obj.cbo_ae_empl_id, result.dataresponse.ae_empl_name!=='--NULL--' ? result.dataresponse.ae_empl_id : '--NULL--', result.dataresponse.ae_empl_name!=='--NULL--'?result.dataresponse.ae_empl_name:'NONE')
-	form.setValue(obj.cbo_mediapackage_id, result.dataresponse.mediapackage_descr!=='--NULL--' ? result.dataresponse.mediapackage_id : '--NULL--', result.dataresponse.mediapackage_descr!=='--NULL--'?result.dataresponse.mediapackage_descr:'NONE')
+	form.setValue(obj.cbo_salesdisc_coa_id, result.dataresponse.salesdisc_coa_name!=='--NULL--' ? result.dataresponse.salesdisc_coa_id : '--NULL--', result.dataresponse.salesdisc_coa_name!=='--NULL--'?result.dataresponse.salesdisc_coa_name:'NONE')
+	form.setValue(obj.cbo_ppn_coa_id, result.dataresponse.ppn_coa_name!=='--NULL--' ? result.dataresponse.ppn_coa_id : '--NULL--', result.dataresponse.ppn_coa_name!=='--NULL--'?result.dataresponse.ppn_coa_name:'NONE')
+	form.setValue(obj.cbo_ppnsubsidi_coa_id, result.dataresponse.ppnsubsidi_coa_name!=='--NULL--' ? result.dataresponse.ppnsubsidi_coa_id : '--NULL--', result.dataresponse.ppnsubsidi_coa_name!=='--NULL--'?result.dataresponse.ppnsubsidi_coa_name:'NONE')
+	form.setValue(obj.cbo_pph_coa_id, result.dataresponse.pph_coa_name!=='--NULL--' ? result.dataresponse.pph_coa_id : '--NULL--', result.dataresponse.pph_coa_name!=='--NULL--'?result.dataresponse.pph_coa_name:'NONE')
 
+	*/
+
+	var pOpt = form.getDefaultPrompt(false)
+	for (var objid in obj) {
+		var o = obj[objid]
+		if (o.isCombo() && !o.isRequired()) {
+			var value =  result.dataresponse[o.getFieldValueName()];
+			var text = result.dataresponse[o.getFieldDisplayName()];
+			if (value==null ) {
+				value = pOpt.value;
+				text = pOpt.text;
+			}
+			form.setValue(o, value, text);
+		}
+	}
 	form.rowid = $ui.getPages().ITEMS['pnl_list'].handler.updategrid(data, form.rowid)
 }
 

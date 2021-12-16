@@ -25,20 +25,52 @@ module.exports = {
 			data: {
 				mediaorder_id: { text: 'ID', type: dbtype.varchar(30), null: false, options: { required: true, invalidMessage: 'ID harus diisi' } },
 
-				mediaordertype_id: { 
-					text: 'Media Order Type', type: dbtype.varchar(10), null: false, 
-					options: { required: true, invalidMessage: 'Media Order Type harus diisi' }, 
-					// initialvalue: {id:'RTL', display:'RETAIL'},
+
+				project_id: {
+					text: 'Project', type: dbtype.varchar(30), null: false,
+					options: { required: true, invalidMessage: 'Project harus diisi', prompt: '-- PILIH --' },
 					comp: comp.Combo({
-						table: 'mst_mediaordertype',
-						field_value: 'mediaordertype_id', field_display: 'mediaordertype_name',
-						api: 'media/master/mediaordertype/list'
-					})				
+						table: 'mst_project',
+						field_value: 'project_id', field_display: 'project_name',
+						api: 'finact/master/project/list'
+					})
+				},
+
+
+				
+				orderintype_id: {
+					text:'Order Type', type: dbtype.varchar(10), null:true, suppresslist: true,
+					options: { required: true, invalidMessage: 'Order Type Harus diisi', disabled:false } ,
+					comp: comp.Combo({
+						table: 'mst_orderintype', 
+						field_value: 'orderintype_id', field_display: 'orderintype_name',  field_display_name: 'orderintype_name',
+						api: 'finact/sales/orderintype/list',
+						OnSelectedScript: `
+				form.setValue(obj.cbo_arunbill_coa_id, record.arunbill_coa_id==null?'--NULL--':record.arunbill_coa_id, record.arunbill_coa_name);
+				form.setValue(obj.cbo_ar_coa_id, record.ar_coa_id==null?'--NULL--':record.ar_coa_id, record.ar_coa_name);
+				form.setValue(obj.cbo_dp_coa_id, record.dp_coa_id==null?'--NULL--':record.dp_coa_id, record.dp_coa_name);
+				form.setValue(obj.cbo_sales_coa_id, record.sales_coa_id==null?'--NULL--':record.sales_coa_id, record.sales_coa_name);
+				form.setValue(obj.cbo_salesdisc_coa_id, record.salesdisc_coa_id==null?'--NULL--':record.salesdisc_coa_id, record.salesdisc_coa_name);
+				form.setValue(obj.cbo_ppn_coa_id, record.ppn_coa_id==null?'--NULL--':record.ppn_coa_id, record.ppn_coa_name);
+				form.setValue(obj.cbo_ppnsubsidi_coa_id, record.ppnsubsidi_coa_id==null?'--NULL--':record.ppnsubsidi_coa_id, record.ppnsubsidi_coa_name);
+				form.setValue(obj.cbo_pph_coa_id, record.pph_coa_id==null?'--NULL--':record.pph_coa_id, record.pph_coa_name);						
+						`
+					})
 				},
 
 				mediaorder_date: {text:'Date', type: dbtype.date, null:false},
 				mediaorder_descr: { text: 'Descr', type: dbtype.varchar(255), null: false, options: { required: true, invalidMessage: 'Descr harus diisi' } },
 				mediaorder_ref: { text: 'Ref', type: dbtype.varchar(90), null: false },
+
+				dept_id: {
+					text: 'Dept', type: dbtype.varchar(30), null: false, suppresslist: true,
+					options: { required: true, invalidMessage: 'Departemen harus diisi', prompt: '-- PILIH --' },
+					comp: comp.Combo({
+						table: 'mst_dept',
+						field_value: 'dept_id', field_display: 'dept_name',
+						api: 'ent/organisation/dept/list-byuser'
+					})
+				},
 
 				ae_empl_id: {
 					text:'AE', type: dbtype.varchar(14), null:true, suppresslist: true,
@@ -63,6 +95,7 @@ module.exports = {
 					
 					})
 				},	
+				
 				advertiser_partner_id: {
 					suppresslist: true,
 					options:{required:true,invalidMessage:'Adveriser harus diisi', prompt:'-- PILIH --'},
@@ -75,54 +108,128 @@ module.exports = {
 							partnertype_id: 'ADVERTISER'
 						}
 					})
-				},				
-				brand_id: { 
-					text: 'Brand', type: dbtype.varchar(14), uppercase: true, null: false, 
-					options: { required: true, invalidMessage: 'Brand harus diisi' }, 
-					comp: comp.Combo({
-						table: 'mst_brand',
-						field_value: 'brand_id', field_display: 'brand_name',
-						api: 'ent/affiliation/brand/list'
-					})				
-				},
-				curr_id: {
-					text:'Currency', type: dbtype.varchar(10), null:false, suppresslist: true,
-					options:{required:true,invalidMessage:'Currency harus diisi', prompt:'-- PILIH --'},
-					comp: comp.Combo({
-						table: 'mst_curr', 
-						field_value: 'curr_id', field_display: 'curr_name', 
-						api: 'ent/general/curr/list'})
 				},
 
-				mediaorder_istax: {text:'Tax', type: dbtype.boolean, null:false, default:'1'},
-				taxtype_id: { text: 'Tax', type: dbtype.varchar(10), null: false, suppresslist: true,
-					options:{required:true,invalidMessage:'Kode Tax harus diisi', prompt:'-- PILIH --'},
+				mediaorder_traffic: { text: 'Traffic Code', type: dbtype.varchar(90), null: false, suppresslist: true },
+				mediaorder_status: { text: 'Status', type: dbtype.varchar(90), null: false , suppresslist: true},
+				mediaorder_direct: { text: 'Direct', type: dbtype.varchar(90), null: false , suppresslist: true},
+				mediaorder_bundling: { text: 'Bundling', type: dbtype.varchar(90), null: false , suppresslist: true},
+
+
+
+
+
+
+
+				orderin_totalqty: { text: 'Total Qty Spot', type: dbtype.int(5), null: false, default:0, suppresslist: true },
+				orderin_totalitem: { text: 'Total Baris', type: dbtype.int(5), null: false, default:0, suppresslist: true, options: { disabled: true} },
+				orderin_salesgross: { text: 'Gross Sales', type: dbtype.decimal(16,0), null: false, default:0, suppresslist: true, options: { disabled: true} },
+				orderin_discount: { text: 'Dicount', type: dbtype.decimal(16,0), null: false, default:0, suppresslist: true, options: { disabled: true} },
+				orderin_subtotal: { text: 'Sub Total', type: dbtype.decimal(16,0), null: false, default:0, suppresslist: true, options: { disabled: true} },
+				orderin_pph: { text: 'PPh', type: dbtype.decimal(16,0), null: false, default:0, suppresslist: true, options: { disabled: true} },
+				orderin_nett: { text: 'Sales Nett', type: dbtype.decimal(16,0), null: false, default:0, suppresslist: true, options: { disabled: true} },
+				orderin_ppn: { text: 'PPN', type: dbtype.decimal(16,0), null: false, default:0, suppresslist: true, options: { disabled: true} },
+				orderin_total: { text: 'Total', type: dbtype.decimal(16,0), null: false, default:0, suppresslist: true, options: { disabled: true} },
+				orderin_totaladdcost: { text: 'Additional Cost', type: dbtype.decimal(16,0), null: false, default:0, suppresslist: true, options: { disabled: true} },
+				orderin_payment: { text: 'Total Payment', type: dbtype.decimal(16,0), null: false, default:0, suppresslist: true, options: { disabled: true} },
+
+
+
+				arunbill_coa_id: { 
+					section: section.Begin('Chart of Accounts'),  // , 'defbottomborder'
+					text: 'COA AR Unbill', type: dbtype.varchar(17), null: false, suppresslist: true,
+					options: { required: true, invalidMessage: 'AR harus diisi' }, 
+					tips: '',
+					tipstype: 'visible',
 					comp: comp.Combo({
-						table: 'mst_taxtype', 
-						field_value: 'taxtype_id', field_display: 'taxtype_name', field_display_name: 'taxtype_name', 
-						api: 'finact/master/taxtype/list'})				
+						table: 'mst_coa', 
+						field_value: 'coa_id', field_display: 'coa_name', field_display_name: 'arunbill_coa_name', 
+						api: 'finact/master/coa/list'})				
+				
+				},
+				ar_coa_id: { 
+					text: 'COA AR', type: dbtype.varchar(17), null: false, suppresslist: true,
+					options: { required: true, invalidMessage: 'AR harus diisi' }, 
+					tips: '',
+					tipstype: 'visible',
+					comp: comp.Combo({
+						table: 'mst_coa', 
+						field_value: 'coa_id', field_display: 'coa_name', field_display_name: 'ar_coa_name', 
+						api: 'finact/master/coa/list'})				
 				
 				},
 
-				mediapackage_id: { 
-					text: 'Package', type: dbtype.varchar(10), null: true, suppresslist: true,
-					options: { prompt: 'NONE' },
+	
+				dp_coa_id: { 
+					text: 'COA Downpayment', type: dbtype.varchar(17), null: false, suppresslist: true,
+					options: { required: true, invalidMessage: 'OrderIn COA Downpayment harus diisi' }, 
+					tips: '',
+					tipstype: 'visible',
 					comp: comp.Combo({
-						table: 'mst_mediapackage',
-						field_value: 'mediapackage_id', field_display: 'mediapackage_descr',
-						api: 'media/master/mediapackage/list'
-					})				
+						table: 'mst_coa', 
+						field_value: 'coa_id', field_display: 'coa_name', field_display_name: 'dp_coa_name', 
+						api: 'finact/master/coa/list'})				
+				
 				},
-				salesordertype_id: { 
-					text: 'Order Type', type: dbtype.varchar(10), uppercase: true, null: false, 
-					options: { required: true, invalidMessage: 'Order Type harus diisi' , disabled: true }, 
-					initialvalue: {id:'MO', display:'MEDIA ORDER'},
+
+				sales_coa_id: { 
+					text: 'COA Sales', type: dbtype.varchar(17), null: false, suppresslist: true,
+					options: { required: true, invalidMessage: 'OrderIn Sales COA harus diisi' }, 
+					tips: '',
+					tipstype: 'visible',
 					comp: comp.Combo({
-						table: 'mst_salesordertype',
-						field_value: 'salesordertype_id', field_display: 'salesordertype_name',
-						api: 'finact/master/salesordertype/list'
-					})				
+						table: 'mst_coa', 
+						field_value: 'coa_id', field_display: 'coa_name', field_display_name: 'sales_coa_name', 
+						api: 'finact/master/coa/list'})				
+				
+				},	
+				
+				salesdisc_coa_id: { 
+					text: 'COA Disc Sales', type: dbtype.varchar(17), null: true, suppresslist: true,
+					options: { prompt: 'NONE' }, 
+					tips: '',
+					tipstype: 'visible',
+					comp: comp.Combo({
+						table: 'mst_coa', 
+						field_value: 'coa_id', field_display: 'coa_name', field_display_name: 'salesdisc_coa_name', 
+						api: 'finact/master/coa/list'})				
 				},
+
+				ppn_coa_id: { 
+					text: 'COA PPN Payable', type: dbtype.varchar(17), null: true, suppresslist: true,
+					options: { prompt: 'NONE' }, 
+					tips: '',
+					tipstype: 'visible',
+					comp: comp.Combo({
+						table: 'mst_coa', 
+						field_value: 'coa_id', field_display: 'coa_name', field_display_name: 'ppn_coa_name', 
+						api: 'finact/master/coa/list'})				
+				},
+
+				ppnsubsidi_coa_id: { 
+					text: 'COA Subsidi PPN', type: dbtype.varchar(17), null: true, suppresslist: true,
+					options: { prompt: 'NONE' }, 
+					tips: 'Apabila PPN include COA ini perlu diisi',
+					tipstype: 'visible',
+					comp: comp.Combo({
+						table: 'mst_coa', 
+						field_value: 'coa_id', field_display: 'coa_name', field_display_name: 'ppnsubsidi_coa_name', 
+						api: 'finact/master/coa/list'})				
+				},
+
+				pph_coa_id: { 
+					section: section.End(),
+					text: 'COA PPH Prepaid', type: dbtype.varchar(17), null: true, suppresslist: true,
+					options: { prompt: 'NONE' }, 
+					tips: '',
+					tipstype: 'visible',
+					comp: comp.Combo({
+						table: 'mst_coa', 
+						field_value: 'coa_id', field_display: 'coa_name', field_display_name: 'pph_coa_name', 
+						api: 'finact/master/coa/list'})				
+				},		
+				
+				
 
 				trxmodel_id: { 
 					text: 'Transaksi', type: dbtype.varchar(10), null: false, suppresslist: true, 
@@ -133,16 +240,6 @@ module.exports = {
 						field_value: 'trxmodel_id', field_display: 'trxmodel_name', field_display_name: 'trxmodel_name', 
 						api: 'finact/master/trxmodel/list'})				
 				
-				},
-
-				dept_id: {
-					text: 'Dept', type: dbtype.varchar(30), null: false,
-					options: { required: true, invalidMessage: 'Departemen harus diisi', prompt: '-- PILIH --' },
-					comp: comp.Combo({
-						table: 'mst_dept',
-						field_value: 'dept_id', field_display: 'dept_name',
-						api: 'ent/organisation/dept/list-byuser'
-					})
 				},
 
 				doc_id: {
@@ -161,16 +258,16 @@ module.exports = {
 				mediaorder_commitby: {text:'CommitBy', type: dbtype.varchar(14), suppresslist: true, unset:true, options:{disabled:true}, hidden: true, lookup:'user'},
 				mediaorder_commitdate: {text:'CommitDate', type: dbtype.datetime, suppresslist: true, unset:true, comp:comp.Textbox(), options:{disabled:true}, hidden: true},	
 
-				mediaorder_isapprovalprogress: {text:'Progress', type: dbtype.boolean, null:false, default:'0', unset:true, options:{disabled:true}, hidden: true},
-				mediaorder_isapproved: { text: 'Approved', type: dbtype.boolean, null: false, default: '0', unset:true, options: { disabled: true } },
+				mediaorder_isapprovalprogress: {text:'Progress', type: dbtype.boolean, null:false, default:'0', unset:true, suppresslist: true, options:{disabled:true}, hidden: true},
+				mediaorder_isapproved: { text: 'Approved', type: dbtype.boolean, null: false, default: '0', unset:true, suppresslist: true, options: { disabled: true } },
 				mediaorder_approveby: { text: 'Approve By', type: dbtype.varchar(14), suppresslist: true, unset:true, options: { disabled: true }, hidden: true, lookup:'user' },
 				mediaorder_approvedate: { text: 'Approve Date', type: dbtype.datetime, suppresslist: true, unset:true, comp: comp.Textbox(), options: { disabled: true }, hidden: true },
-				mediaorder_isdeclined: { text: 'Declined', type: dbtype.boolean, null: false, default: '0', unset:true, options: { disabled: true } },
+				mediaorder_isdeclined: { text: 'Declined', type: dbtype.boolean, null: false, default: '0', unset:true, suppresslist: true, options: { disabled: true } },
 				mediaorder_declineby: { text: 'Decline By', type: dbtype.varchar(14), suppresslist: true, unset:true, options: { disabled: true }, hidden: true, lookup:'user' },
 				mediaorder_declinedate: { text: 'Decline Date', type: dbtype.datetime, suppresslist: true, unset:true, comp: comp.Textbox(), options: { disabled: true }, hidden: true },
 				mediaorder_notes: { text: 'Notes', type: dbtype.varchar(255), null: true, suppresslist: true, hidden: true },
 
-				mediaorder_isclose: {text:'Close', type: dbtype.boolean, null:false, default:'0', unset:true, options:{disabled:true}},
+				mediaorder_isclose: {text:'Close', type: dbtype.boolean, null:false, default:'0', suppresslist: true, unset:true, options:{disabled:true}},
 				mediaorder_closeby: {text:'Close By', type: dbtype.varchar(14), suppresslist: true, unset:true, options:{disabled:true}, hidden: true, lookup:'user'},
 				mediaorder_closedate: {text:'Close Date', type: dbtype.datetime, suppresslist: true, unset:true, comp:comp.Textbox(), options:{disabled:true}, hidden: true},	
 
@@ -184,17 +281,6 @@ module.exports = {
 			primarykeys: ['mediaorderitem_id'],		
 			data: {
 				mediaorderitem_id: { text: 'ID', type: dbtype.varchar(14), null: false, suppresslist: true, },
-
-				mediaadslot_id: {
-					text: 'Slot', type: dbtype.varchar(14), null: true, suppresslist: true,
-					options: { prompt: 'NONE' },
-					comp: comp.Combo({
-						table: 'mst_mediaadslot',
-						field_value: 'mediaadslot_id', field_display: 'mediaadslot_descr',
-						api: 'media/master/adslot/list'
-					})
-				},
-
 				itemclass_id: {
 					text:'Class', type: dbtype.varchar(14), null:false, suppresslist: true,
 					options: { required: true, invalidMessage: 'Class harus diisi' } ,
@@ -208,35 +294,71 @@ module.exports = {
 					})					
 				},
 
-				mediaordertype_id: { 
-					text: 'Media Order Type', type: dbtype.varchar(10), null: false, 
-					options: { required: true, invalidMessage: 'Media Order Type harus diisi' }, 
-					initialvalue: {id:'RTL', display:'RETAIL'},
+
+				brand_id: { 
+					text: 'Brand', type: dbtype.varchar(14), uppercase: true, null: false, 
+					options: { required: true, invalidMessage: 'Brand harus diisi' }, 
 					comp: comp.Combo({
-						table: 'mst_mediaordertype',
-						field_value: 'mediaordertype_id', field_display: 'mediaordertype_name',
-						api: 'media/master/mediaordertype/list'
+						table: 'mst_brand',
+						field_value: 'brand_id', field_display: 'brand_name',
+						api: 'ent/affiliation/brand/list'
 					})				
 				},
 
+
+				mediaorderitem_spot: { text: 'Spot Code', type: dbtype.varchar(90), null: false },
 				mediaorderitem_descr: { text: 'Descr', type: dbtype.varchar(90), null: false, options: { required: true, invalidMessage: 'Descr harus diisi' } },
-
-				curr_id: {
-					text:'Currency', type: dbtype.varchar(10), null:false, suppresslist: true,
-					options:{required:true,invalidMessage:'Currency harus diisi', prompt:'-- PILIH --'},
-					comp: comp.Combo({
-						table: 'mst_curr', 
-						field_value: 'curr_id', field_display: 'curr_name', 
-						api: 'ent/general/curr/list'})
-				},
-
-				mediaorderitem_valfrg: { text: 'Valas', type: dbtype.decimal(14, 2), null: false, default: 0, suppresslist: true, options: { required: true } },
-				mediaorderitem_valfrgrate: { text: 'Rate', type: dbtype.decimal(14, 0), null: false, default: 0, suppresslist: true, options: { required: true } },
 				mediaorderitem_validr: { text: 'Value IDR', type: dbtype.decimal(14, 2), null: false, default: 0, suppresslist: true, options: { required: true } },
 
-				mediaorderitem_discountidr: { text: 'Discount IDR', type: dbtype.decimal(14, 2), null: false, default: 0, suppresslist: true, options: { required: true } },
+				projbudget_id: {
+					text: 'Budget', type: dbtype.varchar(30), null:true,  suppresslist: true,
+					options: { required: true, invalidMessage: 'Budget harus diisi', prompt: '-- PILIH --' },
+					comp: comp.Combo({
+						table: 'mst_projbudget',
+						field_value: 'projbudget_id', field_display: 'projbudget_name',
+						api: 'finact/budget/projbudget/list',
+						OnSelectedScript: `
+				form.setValue(obj.cbo_project_id, record.project_id, record.project_name);			
+						`
+					})
+				},
 
-				mediaorderitem_totalidr: { text: 'Total IDR', type: dbtype.decimal(14, 2), null: false, default: 0, suppresslist: true, options: { required: true } },
+				projbudgettask_id: {
+					text: 'Budget Task', type: dbtype.varchar(14), null:true,  suppresslist: true,
+					options: { prompt: 'NONE' },
+					comp: comp.Combo({
+						table: 'mst_projbudgettask',
+						field_value: 'projbudgettask_id', field_display: 'projbudgettask_name', field_display_name:'projbudgettask_name',
+						api: 'finact/budget/projbudget/task-list',
+						staticfilter: `
+				criteria.projbudget_id = form.getValue(obj.cbo_projbudget_id);		
+						`,
+						OnSelectedScript: `
+				form.setValue(obj.cbo_projecttask_id, record.projecttask_id, record.projecttask_name);			
+						`
+					})
+				},
+
+				project_id: {
+					text: 'Project', type: dbtype.varchar(30), null: true,
+					options: { required: true, invalidMessage: 'Project harus diisi', prompt: '-- PILIH --', disabled: true },
+					comp: comp.Combo({
+						table: 'mst_project',
+						field_value: 'project_id', field_display: 'project_name',
+						api: 'finact/master/project/list'
+					})
+				},
+
+				projecttask_id: {
+					text: 'Project Task', type: dbtype.varchar(14), null: true, suppresslist: true,
+					options: { prompt: 'NONE', disabled: true },
+					comp: comp.Combo({
+						table: 'mst_projecttask',
+						field_value: 'projecttask_id', field_display: 'projecttask_name',
+						api: 'finact/master/projecttask/list-byproject'
+					})
+				},
+
 
 				mediaorder_id: { text: 'Order', type: dbtype.varchar(30), null: false, uppercase: true },
 			}	
@@ -248,7 +370,8 @@ module.exports = {
 	schema: {
 		header: 'trn_mediaorder',
 		detils: {
-			'items': {title: 'Items', table: 'trn_mediaorderitem', form: true, headerview: 'mediaorder_descr' }
+			'items': {title: 'Items', table: 'trn_mediaorderitem', form: true, headerview: 'mediaorder_descr' },
+			'uploads': {title: 'Uploads', table: 'trn_mediaorderitem', form: false, headerview: 'mediaorder_descr' }
 		}
 	}
 

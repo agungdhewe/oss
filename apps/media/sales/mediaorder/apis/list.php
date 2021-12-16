@@ -23,7 +23,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 22/04/2021
+ * tanggal 15/12/2021
  */
 $API = new class extends mediaorderBase {
 
@@ -38,7 +38,7 @@ $API = new class extends mediaorderBase {
 				throw new \Exception('your group authority is not allowed to do this action.');
 			}
 
-
+			// \FGTA4\utils\SqlUtility::setDefaultCriteria($options->criteria, '--fieldscriteria--', '--value--');
 			$where = \FGTA4\utils\SqlUtility::BuildCriteria(
 				$options->criteria,
 				[
@@ -58,12 +58,9 @@ $API = new class extends mediaorderBase {
 			$limit = " LIMIT $maxrow OFFSET $offset ";
 			$stmt = $this->db->prepare("
 				select 
-				mediaorder_id, mediaordertype_id, mediaorder_date, mediaorder_descr, mediaorder_ref, ae_empl_id, agency_partner_id, advertiser_partner_id, brand_id, curr_id, mediaorder_istax, taxtype_id, mediapackage_id, salesordertype_id, trxmodel_id, dept_id, doc_id, mediaorder_version, mediaorder_iscommit, mediaorder_commitby, mediaorder_commitdate, mediaorder_isapprovalprogress, mediaorder_isapproved, mediaorder_approveby, mediaorder_approvedate, mediaorder_isdeclined, mediaorder_declineby, mediaorder_declinedate, mediaorder_notes, mediaorder_isclose, mediaorder_closeby, mediaorder_closedate, _createby, _createdate, _modifyby, _modifydate 
+				A.mediaorder_id, A.project_id, A.orderintype_id, A.mediaorder_date, A.mediaorder_descr, A.mediaorder_ref, A.dept_id, A.ae_empl_id, A.agency_partner_id, A.advertiser_partner_id, A.mediaorder_traffic, A.mediaorder_status, A.mediaorder_direct, A.mediaorder_bundling, A.orderin_totalqty, A.orderin_totalitem, A.orderin_salesgross, A.orderin_discount, A.orderin_subtotal, A.orderin_pph, A.orderin_nett, A.orderin_ppn, A.orderin_total, A.orderin_totaladdcost, A.orderin_payment, A.arunbill_coa_id, A.ar_coa_id, A.dp_coa_id, A.sales_coa_id, A.salesdisc_coa_id, A.ppn_coa_id, A.ppnsubsidi_coa_id, A.pph_coa_id, A.trxmodel_id, A.doc_id, A.mediaorder_version, A.mediaorder_iscommit, A.mediaorder_commitby, A.mediaorder_commitdate, A.mediaorder_isapprovalprogress, A.mediaorder_isapproved, A.mediaorder_approveby, A.mediaorder_approvedate, A.mediaorder_isdeclined, A.mediaorder_declineby, A.mediaorder_declinedate, A.mediaorder_notes, A.mediaorder_isclose, A.mediaorder_closeby, A.mediaorder_closedate, A._createby, A._createdate, A._modifyby, A._modifydate 
 				from trn_mediaorder A
-			" 
-			. $where->sql 
-			. " order by mediaorder_date desc "
-			. $limit);
+			" . $where->sql . $limit);
 			$stmt->execute($where->params);
 			$rows  = $stmt->fetchall(\PDO::FETCH_ASSOC);
 
@@ -78,22 +75,26 @@ $API = new class extends mediaorderBase {
 					// // jikalau ingin menambah atau edit field di result record, dapat dilakukan sesuai contoh sbb: 
 					//'tanggal' => date("d/m/y", strtotime($record['tanggal'])),
 				 	//'tambahan' => 'dta'
-					'mediaordertype_name' => \FGTA4\utils\SqlUtility::Lookup($record['mediaordertype_id'], $this->db, 'mst_mediaordertype', 'mediaordertype_id', 'mediaordertype_name'),
+					'project_name' => \FGTA4\utils\SqlUtility::Lookup($record['project_id'], $this->db, 'mst_project', 'project_id', 'project_name'),
+					'orderintype_name' => \FGTA4\utils\SqlUtility::Lookup($record['orderintype_id'], $this->db, 'mst_orderintype', 'orderintype_id', 'orderintype_name'),
+					'dept_name' => \FGTA4\utils\SqlUtility::Lookup($record['dept_id'], $this->db, 'mst_dept', 'dept_id', 'dept_name'),
 					'ae_empl_name' => \FGTA4\utils\SqlUtility::Lookup($record['ae_empl_id'], $this->db, 'mst_empl', 'empl_id', 'empl_name'),
 					'agency_partner_name' => \FGTA4\utils\SqlUtility::Lookup($record['agency_partner_id'], $this->db, 'mst_partner', 'partner_id', 'partner_name'),
 					'advertiser_partner_name' => \FGTA4\utils\SqlUtility::Lookup($record['advertiser_partner_id'], $this->db, 'mst_partner', 'partner_id', 'partner_name'),
-					'brand_name' => \FGTA4\utils\SqlUtility::Lookup($record['brand_id'], $this->db, 'mst_brand', 'brand_id', 'brand_name'),
-					'curr_name' => \FGTA4\utils\SqlUtility::Lookup($record['curr_id'], $this->db, 'mst_curr', 'curr_id', 'curr_name'),
-					'taxtype_name' => \FGTA4\utils\SqlUtility::Lookup($record['taxtype_id'], $this->db, 'mst_taxtype', 'taxtype_id', 'taxtype_name'),
-					'mediapackage_descr' => \FGTA4\utils\SqlUtility::Lookup($record['mediapackage_id'], $this->db, 'mst_mediapackage', 'mediapackage_id', 'mediapackage_descr'),
-					'salesordertype_name' => \FGTA4\utils\SqlUtility::Lookup($record['salesordertype_id'], $this->db, 'mst_salesordertype', 'salesordertype_id', 'salesordertype_name'),
+					'arunbill_coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['arunbill_coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
+					'ar_coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['ar_coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
+					'dp_coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['dp_coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
+					'sales_coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['sales_coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
+					'salesdisc_coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['salesdisc_coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
+					'ppn_coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['ppn_coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
+					'ppnsubsidi_coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['ppnsubsidi_coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
+					'pph_coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['pph_coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
 					'trxmodel_name' => \FGTA4\utils\SqlUtility::Lookup($record['trxmodel_id'], $this->db, 'mst_trxmodel', 'trxmodel_id', 'trxmodel_name'),
-					'dept_name' => \FGTA4\utils\SqlUtility::Lookup($record['dept_id'], $this->db, 'mst_dept', 'dept_id', 'dept_name'),
 					'doc_name' => \FGTA4\utils\SqlUtility::Lookup($record['doc_id'], $this->db, 'mst_doc', 'doc_id', 'doc_name'),
-				'mediaorder_commitby' => \FGTA4\utils\SqlUtility::Lookup($record['mediaorder_commitby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
-				'mediaorder_approveby' => \FGTA4\utils\SqlUtility::Lookup($record['mediaorder_approveby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
-				'mediaorder_declineby' => \FGTA4\utils\SqlUtility::Lookup($record['mediaorder_declineby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
-				'mediaorder_closeby' => \FGTA4\utils\SqlUtility::Lookup($record['mediaorder_closeby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+					'mediaorder_commitby' => \FGTA4\utils\SqlUtility::Lookup($record['mediaorder_commitby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+					'mediaorder_approveby' => \FGTA4\utils\SqlUtility::Lookup($record['mediaorder_approveby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+					'mediaorder_declineby' => \FGTA4\utils\SqlUtility::Lookup($record['mediaorder_declineby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+					'mediaorder_closeby' => \FGTA4\utils\SqlUtility::Lookup($record['mediaorder_closeby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
 					 
 				]));
 			}

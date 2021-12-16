@@ -2,7 +2,9 @@
 	"title" : "Brand",
 	
 	
-	"variance" : {},
+	"variance" : {
+		"manual-id-input" : {"title":"Brand (Manual-ID)"}
+	},
 	"allowanonymous" : true,
 	"allowedgroups" : ["public"],
 	"apis" : {

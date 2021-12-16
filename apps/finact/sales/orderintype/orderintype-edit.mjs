@@ -17,12 +17,16 @@ const obj = {
 	txt_orderintype_name: $('#pnl_edit-txt_orderintype_name'),
 	txt_orderintype_descr: $('#pnl_edit-txt_orderintype_descr'),
 	cbo_trxmodel_id: $('#pnl_edit-cbo_trxmodel_id'),
-	chk_orderintype__isdateinterval: $('#pnl_edit-chk_orderintype__isdateinterval'),
+	chk_orderintype_isdateinterval: $('#pnl_edit-chk_orderintype_isdateinterval'),
 	cbo_ppn_taxtype_id: $('#pnl_edit-cbo_ppn_taxtype_id'),
 	txt_ppn_taxvalue: $('#pnl_edit-txt_ppn_taxvalue'),
 	chk_ppn_include: $('#pnl_edit-chk_ppn_include'),
 	cbo_pph_taxtype_id: $('#pnl_edit-cbo_pph_taxtype_id'),
 	txt_pph_taxvalue: $('#pnl_edit-txt_pph_taxvalue'),
+	cbo_arunbill_coa_id: $('#pnl_edit-cbo_arunbill_coa_id'),
+	cbo_ar_coa_id: $('#pnl_edit-cbo_ar_coa_id'),
+	chk_ar_coa_isbypartnertype: $('#pnl_edit-chk_ar_coa_isbypartnertype'),
+	cbo_dp_coa_id: $('#pnl_edit-cbo_dp_coa_id'),
 	cbo_sales_coa_id: $('#pnl_edit-cbo_sales_coa_id'),
 	cbo_salesdisc_coa_id: $('#pnl_edit-cbo_salesdisc_coa_id'),
 	cbo_ppn_coa_id: $('#pnl_edit-cbo_ppn_coa_id'),
@@ -120,8 +124,14 @@ export async function init(opt) {
 		},
 		OnSelected: (value, display, record, args) => {
 			if (value!=args.PreviousValue ) {
-				form.setValue(obj.txt_ppn_taxvalue, record.taxtype_value)
-				form.setValue(obj.chk_ppn_include, record.taxtype_include)						
+				if (record.taxtype_id=='--NULL--') {
+					form.setValue(obj.txt_ppn_taxvalue, 0)
+					form.setValue(obj.chk_ppn_include, 0)
+				} else {
+					form.setValue(obj.txt_ppn_taxvalue, record.taxtype_value)
+					form.setValue(obj.chk_ppn_include, record.taxtype_include)
+				}
+						
 										
 			}
 		}
@@ -146,8 +156,81 @@ export async function init(opt) {
 		},
 		OnSelected: (value, display, record, args) => {
 			if (value!=args.PreviousValue ) {
-				form.setValue(obj.txt_pph_taxvalue, record.taxtype_value)
+				if (record.taxtype_id=='--NULL--') {		
+					form.setValue(obj.txt_pph_taxvalue, 0)
+				} else {
+					form.setValue(obj.txt_pph_taxvalue, record.taxtype_value)
+				}
 										
+			}
+		}
+	})				
+				
+	new fgta4slideselect(obj.cbo_arunbill_coa_id, {
+		title: 'Pilih arunbill_coa_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_arunbill_coa_id,
+		fieldValue: 'arunbill_coa_id',
+		fieldValueMap: 'coa_id',
+		fieldDisplay: 'coa_name',
+		fields: [
+			{mapping: 'coa_id', text: 'coa_id'},
+			{mapping: 'coa_name', text: 'coa_name'},
+		],
+		OnDataLoading: (criteria) => {
+						
+		},
+		OnDataLoaded : (result, options) => {
+				
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {				
+			}
+		}
+	})				
+				
+	new fgta4slideselect(obj.cbo_ar_coa_id, {
+		title: 'Pilih ar_coa_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_ar_coa_id,
+		fieldValue: 'ar_coa_id',
+		fieldValueMap: 'coa_id',
+		fieldDisplay: 'coa_name',
+		fields: [
+			{mapping: 'coa_id', text: 'coa_id'},
+			{mapping: 'coa_name', text: 'coa_name'},
+		],
+		OnDataLoading: (criteria) => {
+						
+		},
+		OnDataLoaded : (result, options) => {
+				
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {				
+			}
+		}
+	})				
+				
+	new fgta4slideselect(obj.cbo_dp_coa_id, {
+		title: 'Pilih dp_coa_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_dp_coa_id,
+		fieldValue: 'dp_coa_id',
+		fieldValueMap: 'coa_id',
+		fieldDisplay: 'coa_name',
+		fields: [
+			{mapping: 'coa_id', text: 'coa_id'},
+			{mapping: 'coa_name', text: 'coa_name'},
+		],
+		OnDataLoading: (criteria) => {
+						
+		},
+		OnDataLoaded : (result, options) => {
+				
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {				
 			}
 		}
 	})				
@@ -363,6 +446,9 @@ export function open(data, rowid, viewmode=true, fn_callback) {
 			.setValue(obj.cbo_trxmodel_id, record.trxmodel_id, record.trxmodel_name)
 			.setValue(obj.cbo_ppn_taxtype_id, record.ppn_taxtype_id, record.ppn_taxtype_name)
 			.setValue(obj.cbo_pph_taxtype_id, record.pph_taxtype_id, record.pph_taxtype_name)
+			.setValue(obj.cbo_arunbill_coa_id, record.arunbill_coa_id, record.arunbill_coa_name)
+			.setValue(obj.cbo_ar_coa_id, record.ar_coa_id, record.ar_coa_name)
+			.setValue(obj.cbo_dp_coa_id, record.dp_coa_id, record.dp_coa_name)
 			.setValue(obj.cbo_sales_coa_id, record.sales_coa_id, record.sales_coa_name)
 			.setValue(obj.cbo_salesdisc_coa_id, record.salesdisc_coa_id, record.salesdisc_coa_name)
 			.setValue(obj.cbo_ppn_coa_id, record.ppn_coa_id, record.ppn_coa_name)
@@ -405,10 +491,11 @@ export function createnew() {
 		form.rowid = null
 
 		// set nilai-nilai default untuk form
-		data.orderintype__isdateinterval = '0'
+		data.orderintype_isdateinterval = '0'
 		data.ppn_taxvalue = 0
 		data.ppn_include = '0'
 		data.pph_taxvalue = 0
+		data.ar_coa_isbypartnertype = '0'
 
 		data.trxmodel_id = '0'
 		data.trxmodel_name = '-- PILIH --'
@@ -416,6 +503,12 @@ export function createnew() {
 		data.ppn_taxtype_name = 'NONE'
 		data.pph_taxtype_id = '--NULL--'
 		data.pph_taxtype_name = 'NONE'
+		data.arunbill_coa_id = '0'
+		data.arunbill_coa_name = '-- PILIH --'
+		data.ar_coa_id = '0'
+		data.ar_coa_name = '-- PILIH --'
+		data.dp_coa_id = '0'
+		data.dp_coa_name = '-- PILIH --'
 		data.sales_coa_id = '0'
 		data.sales_coa_name = '-- PILIH --'
 		data.salesdisc_coa_id = '--NULL--'
@@ -439,6 +532,7 @@ export function createnew() {
 			$ui.getPages().show('pnl_list')
 		}
 
+		$ui.getPages().ITEMS['pnl_editrefgrid'].handler.createnew(data, options)
 
 
 	})

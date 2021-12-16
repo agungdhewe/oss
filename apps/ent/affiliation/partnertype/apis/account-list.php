@@ -24,7 +24,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 27/10/2021
+ * tanggal 15/12/2021
  */
 $API = new class extends partnertypeBase {
 
@@ -57,7 +57,7 @@ $API = new class extends partnertypeBase {
 			$limit = " LIMIT $maxrow OFFSET $offset ";
 			$stmt = $this->db->prepare("
 				select 
-				A.partnertypeaccbudget_id, A.projectmodel_id, A.unbill_accbudget_id, A.unbill_coa_id, A.payable_accbudget_id, A.payable_coa_id, A.partnertype_id, A._createby, A._createdate, A._modifyby, A._modifydate 
+				A.partnertypeaccbudget_id, A.projectmodel_id, A.unbill_accbudget_id, A.unbill_coa_id, A.payable_accbudget_id, A.payable_coa_id, A.arunbill_accbudget_id, A.arunbill_coa_id, A.ar_accbudget_id, A.ar_coa_id, A.partnertype_id, A._createby, A._createdate, A._modifyby, A._modifydate 
 				from mst_partnertypeaccbudget A
 			" . $where->sql . $limit);
 			$stmt->execute($where->params);
@@ -80,6 +80,10 @@ $API = new class extends partnertypeBase {
 					'unbill_coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['unbill_coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
 					'payable_accbudget_name' => \FGTA4\utils\SqlUtility::Lookup($record['payable_accbudget_id'], $this->db, 'mst_accbudget', 'accbudget_id', 'accbudget_name'),
 					'payable_coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['payable_coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
+					'arunbill_accbudget_name' => \FGTA4\utils\SqlUtility::Lookup($record['arunbill_accbudget_id'], $this->db, 'mst_accbudget', 'accbudget_id', 'accbudget_name'),
+					'arunbill_coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['arunbill_coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
+					'ar_accbudget_name' => \FGTA4\utils\SqlUtility::Lookup($record['ar_accbudget_id'], $this->db, 'mst_accbudget', 'accbudget_id', 'accbudget_name'),
+					'ar_coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['ar_coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
 					 
 				]));
 			}

@@ -22,6 +22,10 @@ const obj = {
 	cbo_unbill_coa_id: $('#pnl_edit-cbo_unbill_coa_id'),
 	cbo_payable_accbudget_id: $('#pnl_edit-cbo_payable_accbudget_id'),
 	cbo_payable_coa_id: $('#pnl_edit-cbo_payable_coa_id'),
+	cbo_arunbill_accbudget_id: $('#pnl_edit-cbo_arunbill_accbudget_id'),
+	cbo_arunbill_coa_id: $('#pnl_edit-cbo_arunbill_coa_id'),
+	cbo_ar_accbudget_id: $('#pnl_edit-cbo_ar_accbudget_id'),
+	cbo_ar_coa_id: $('#pnl_edit-cbo_ar_coa_id'),
 	chk_partnertype_isempl: $('#pnl_edit-chk_partnertype_isempl'),
 	chk_partnertype_ishaveae: $('#pnl_edit-chk_partnertype_ishaveae'),
 	chk_partnertype_ishavecollector: $('#pnl_edit-chk_partnertype_ishavecollector'),
@@ -87,7 +91,9 @@ export async function init(opt) {
 			{mapping: 'partnercategory_id', text: 'partnercategory_id'},
 			{mapping: 'partnercategory_name', text: 'partnercategory_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+						
+		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({partnercategory_id:'--NULL--', partnercategory_name:'NONE'});	
 		},
@@ -108,7 +114,9 @@ export async function init(opt) {
 			{mapping: 'itemclass_id', text: 'itemclass_id'},
 			{mapping: 'itemclass_name', text: 'itemclass_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+						
+		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({itemclass_id:'--NULL--', itemclass_name:'NONE'});	
 		},
@@ -129,7 +137,9 @@ export async function init(opt) {
 			{mapping: 'accbudget_id', text: 'accbudget_id'},
 			{mapping: 'accbudget_name', text: 'accbudget_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+						
+		},
 		OnDataLoaded : (result, options) => {
 				
 		},
@@ -152,7 +162,9 @@ export async function init(opt) {
 			{mapping: 'coa_id', text: 'coa_id'},
 			{mapping: 'coa_name', text: 'coa_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+						
+		},
 		OnDataLoaded : (result, options) => {
 				
 		},
@@ -173,7 +185,9 @@ export async function init(opt) {
 			{mapping: 'accbudget_id', text: 'accbudget_id'},
 			{mapping: 'accbudget_name', text: 'accbudget_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+						
+		},
 		OnDataLoaded : (result, options) => {
 				
 		},
@@ -195,7 +209,105 @@ export async function init(opt) {
 			{mapping: 'coa_id', text: 'coa_id'},
 			{mapping: 'coa_name', text: 'coa_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+						
+		},
+		OnDataLoaded : (result, options) => {
+				
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {				
+			}
+		}
+	})				
+				
+	new fgta4slideselect(obj.cbo_arunbill_accbudget_id, {
+		title: 'Pilih arunbill_accbudget_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_arunbill_accbudget_id,
+		fieldValue: 'arunbill_accbudget_id',
+		fieldValueMap: 'accbudget_id',
+		fieldDisplay: 'accbudget_name',
+		fields: [
+			{mapping: 'accbudget_id', text: 'accbudget_id'},
+			{mapping: 'accbudget_name', text: 'accbudget_name'},
+		],
+		OnDataLoading: (criteria) => {
+						
+		},
+		OnDataLoaded : (result, options) => {
+				
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+				form.setValue(obj.cbo_arunbill_coa_id, record.coa_id, record.coa_name);
+										
+			}
+		}
+	})				
+				
+	new fgta4slideselect(obj.cbo_arunbill_coa_id, {
+		title: 'Pilih arunbill_coa_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_arunbill_coa_id,
+		fieldValue: 'arunbill_coa_id',
+		fieldValueMap: 'coa_id',
+		fieldDisplay: 'coa_name',
+		fields: [
+			{mapping: 'coa_id', text: 'coa_id'},
+			{mapping: 'coa_name', text: 'coa_name'},
+		],
+		OnDataLoading: (criteria) => {
+						
+		},
+		OnDataLoaded : (result, options) => {
+				
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {				
+			}
+		}
+	})				
+				
+	new fgta4slideselect(obj.cbo_ar_accbudget_id, {
+		title: 'Pilih ar_accbudget_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_ar_accbudget_id,
+		fieldValue: 'ar_accbudget_id',
+		fieldValueMap: 'accbudget_id',
+		fieldDisplay: 'accbudget_name',
+		fields: [
+			{mapping: 'accbudget_id', text: 'accbudget_id'},
+			{mapping: 'accbudget_name', text: 'accbudget_name'},
+		],
+		OnDataLoading: (criteria) => {
+						
+		},
+		OnDataLoaded : (result, options) => {
+				
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+				form.setValue(obj.cbo_ar_coa_id, record.coa_id, record.coa_name);		
+										
+			}
+		}
+	})				
+				
+	new fgta4slideselect(obj.cbo_ar_coa_id, {
+		title: 'Pilih ar_coa_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_ar_coa_id,
+		fieldValue: 'ar_coa_id',
+		fieldValueMap: 'coa_id',
+		fieldDisplay: 'coa_name',
+		fields: [
+			{mapping: 'coa_id', text: 'coa_id'},
+			{mapping: 'coa_name', text: 'coa_name'},
+		],
+		OnDataLoading: (criteria) => {
+						
+		},
 		OnDataLoaded : (result, options) => {
 				
 		},
@@ -300,6 +412,10 @@ export function open(data, rowid, viewmode=true, fn_callback) {
 			.setValue(obj.cbo_unbill_coa_id, record.unbill_coa_id, record.unbill_coa_name)
 			.setValue(obj.cbo_payable_accbudget_id, record.payable_accbudget_id, record.payable_accbudget_name)
 			.setValue(obj.cbo_payable_coa_id, record.payable_coa_id, record.payable_coa_name)
+			.setValue(obj.cbo_arunbill_accbudget_id, record.arunbill_accbudget_id, record.arunbill_accbudget_name)
+			.setValue(obj.cbo_arunbill_coa_id, record.arunbill_coa_id, record.arunbill_coa_name)
+			.setValue(obj.cbo_ar_accbudget_id, record.ar_accbudget_id, record.ar_accbudget_name)
+			.setValue(obj.cbo_ar_coa_id, record.ar_coa_id, record.ar_coa_name)
 			.setViewMode(viewmode)
 			.lock(false)
 			.rowid = rowid
@@ -354,6 +470,14 @@ export function createnew() {
 		data.payable_accbudget_name = '-- PILIH --'
 		data.payable_coa_id = '0'
 		data.payable_coa_name = '-- PILIH --'
+		data.arunbill_accbudget_id = '0'
+		data.arunbill_accbudget_name = '-- PILIH --'
+		data.arunbill_coa_id = '0'
+		data.arunbill_coa_name = '-- PILIH --'
+		data.ar_accbudget_id = '0'
+		data.ar_accbudget_name = '-- PILIH --'
+		data.ar_coa_id = '0'
+		data.ar_coa_name = '-- PILIH --'
 
 
 

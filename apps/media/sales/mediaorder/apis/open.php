@@ -24,7 +24,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 22/04/2021
+ * tanggal 15/12/2021
  */
 $API = new class extends mediaorderBase {
 	
@@ -50,8 +50,7 @@ $API = new class extends mediaorderBase {
 			);
 
 			$sql = \FGTA4\utils\SqlUtility::Select('trn_mediaorder A', [
-				'mediaorder_id', 'mediaordertype_id', 'mediaorder_date', 'mediaorder_descr', 'mediaorder_ref', 'ae_empl_id', 'agency_partner_id', 'advertiser_partner_id', 'brand_id', 'curr_id', 'mediaorder_istax', 'taxtype_id', 'mediapackage_id', 'salesordertype_id', 'trxmodel_id', 'dept_id', 'doc_id', 'mediaorder_version', 'mediaorder_iscommit', 'mediaorder_commitby', 'mediaorder_commitdate', 'mediaorder_isapprovalprogress', 'mediaorder_isapproved', 'mediaorder_approveby', 'mediaorder_approvedate', 'mediaorder_isdeclined', 'mediaorder_declineby', 'mediaorder_declinedate', 'mediaorder_notes', 'mediaorder_isclose', 'mediaorder_closeby', 'mediaorder_closedate', '_createby', '_createdate', '_modifyby', '_modifydate'
-				, '_createby', '_createdate', '_modifyby', '_modifydate' 
+				'mediaorder_id', 'project_id', 'orderintype_id', 'mediaorder_date', 'mediaorder_descr', 'mediaorder_ref', 'dept_id', 'ae_empl_id', 'agency_partner_id', 'advertiser_partner_id', 'mediaorder_traffic', 'mediaorder_status', 'mediaorder_direct', 'mediaorder_bundling', 'orderin_totalqty', 'orderin_totalitem', 'orderin_salesgross', 'orderin_discount', 'orderin_subtotal', 'orderin_pph', 'orderin_nett', 'orderin_ppn', 'orderin_total', 'orderin_totaladdcost', 'orderin_payment', 'arunbill_coa_id', 'ar_coa_id', 'dp_coa_id', 'sales_coa_id', 'salesdisc_coa_id', 'ppn_coa_id', 'ppnsubsidi_coa_id', 'pph_coa_id', 'trxmodel_id', 'doc_id', 'mediaorder_version', 'mediaorder_iscommit', 'mediaorder_commitby', 'mediaorder_commitdate', 'mediaorder_isapprovalprogress', 'mediaorder_isapproved', 'mediaorder_approveby', 'mediaorder_approvedate', 'mediaorder_isdeclined', 'mediaorder_declineby', 'mediaorder_declinedate', 'mediaorder_notes', 'mediaorder_isclose', 'mediaorder_closeby', 'mediaorder_closedate', '_createby', '_createdate', '_modifyby', '_modifydate'
 			], $where->sql);
 
 			$stmt = $this->db->prepare($sql);
@@ -76,17 +75,21 @@ $API = new class extends mediaorderBase {
 				//'tanggal' => date("d/m/Y", strtotime($record['tanggal'])),
 				//'gendername' => $record['gender']
 				
-				'mediaordertype_name' => \FGTA4\utils\SqlUtility::Lookup($record['mediaordertype_id'], $this->db, 'mst_mediaordertype', 'mediaordertype_id', 'mediaordertype_name'),
+				'project_name' => \FGTA4\utils\SqlUtility::Lookup($record['project_id'], $this->db, 'mst_project', 'project_id', 'project_name'),
+				'orderintype_name' => \FGTA4\utils\SqlUtility::Lookup($record['orderintype_id'], $this->db, 'mst_orderintype', 'orderintype_id', 'orderintype_name'),
+				'dept_name' => \FGTA4\utils\SqlUtility::Lookup($record['dept_id'], $this->db, 'mst_dept', 'dept_id', 'dept_name'),
 				'ae_empl_name' => \FGTA4\utils\SqlUtility::Lookup($record['ae_empl_id'], $this->db, 'mst_empl', 'empl_id', 'empl_name'),
 				'agency_partner_name' => \FGTA4\utils\SqlUtility::Lookup($record['agency_partner_id'], $this->db, 'mst_partner', 'partner_id', 'partner_name'),
 				'advertiser_partner_name' => \FGTA4\utils\SqlUtility::Lookup($record['advertiser_partner_id'], $this->db, 'mst_partner', 'partner_id', 'partner_name'),
-				'brand_name' => \FGTA4\utils\SqlUtility::Lookup($record['brand_id'], $this->db, 'mst_brand', 'brand_id', 'brand_name'),
-				'curr_name' => \FGTA4\utils\SqlUtility::Lookup($record['curr_id'], $this->db, 'mst_curr', 'curr_id', 'curr_name'),
-				'taxtype_name' => \FGTA4\utils\SqlUtility::Lookup($record['taxtype_id'], $this->db, 'mst_taxtype', 'taxtype_id', 'taxtype_name'),
-				'mediapackage_descr' => \FGTA4\utils\SqlUtility::Lookup($record['mediapackage_id'], $this->db, 'mst_mediapackage', 'mediapackage_id', 'mediapackage_descr'),
-				'salesordertype_name' => \FGTA4\utils\SqlUtility::Lookup($record['salesordertype_id'], $this->db, 'mst_salesordertype', 'salesordertype_id', 'salesordertype_name'),
+				'arunbill_coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['arunbill_coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
+				'ar_coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['ar_coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
+				'dp_coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['dp_coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
+				'sales_coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['sales_coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
+				'salesdisc_coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['salesdisc_coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
+				'ppn_coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['ppn_coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
+				'ppnsubsidi_coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['ppnsubsidi_coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
+				'pph_coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['pph_coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
 				'trxmodel_name' => \FGTA4\utils\SqlUtility::Lookup($record['trxmodel_id'], $this->db, 'mst_trxmodel', 'trxmodel_id', 'trxmodel_name'),
-				'dept_name' => \FGTA4\utils\SqlUtility::Lookup($record['dept_id'], $this->db, 'mst_dept', 'dept_id', 'dept_name'),
 				'doc_name' => \FGTA4\utils\SqlUtility::Lookup($record['doc_id'], $this->db, 'mst_doc', 'doc_id', 'doc_name'),
 				'mediaorder_commitby' => \FGTA4\utils\SqlUtility::Lookup($record['mediaorder_commitby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
 				'mediaorder_approveby' => \FGTA4\utils\SqlUtility::Lookup($record['mediaorder_approveby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),

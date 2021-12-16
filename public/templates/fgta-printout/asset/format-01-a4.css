@@ -127,6 +127,8 @@ tfoot:after {
 	background-color: #fff
 }
 
+
+
 #reporthead-col-dochead-1 {
 	width: calc(var(--page-width) - var(--margin-right) - var(--margin-left) - var(--qr-width));
 }
@@ -160,6 +162,7 @@ tfoot:after {
 	border: 1px solid #fff;
 	padding: 0;
 	margin: 0;
+	pointer-events: none;
 	/* display: none; */
 }
 

@@ -65,7 +65,6 @@ class DataSave extends WebAPI {
 			// apabila ada tanggal, ubah ke format sql sbb:
 			// $obj->tanggal = (\DateTime::createFromFormat('d/m/Y',$obj->tanggal))->format('Y-m-d');
 
-			$obj->brand_id = strtoupper($obj->brand_id);
 			$obj->brand_name = strtoupper($obj->brand_name);
 			$obj->brand_grouping01 = strtoupper($obj->brand_grouping01);
 			$obj->brand_grouping02 = strtoupper($obj->brand_grouping02);

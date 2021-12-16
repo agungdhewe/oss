@@ -29,7 +29,7 @@ module.exports = {
 					})				
 				},
 
-				orderintype__isdateinterval: { text: 'Date Interval', type: dbtype.boolean, null: false, default: '0', suppresslist: true },
+				orderintype_isdateinterval: { text: 'Date Interval', type: dbtype.boolean, null: false, default: '0', suppresslist: true },
 
 
 				ppn_taxtype_id: { text: 'PPN', type: dbtype.varchar(10), null: true, suppresslist: true,
@@ -42,8 +42,14 @@ module.exports = {
 							criteria.taxmodel_id='PPN' 
 						`,
 						OnSelectedScript: `
-				form.setValue(obj.txt_ppn_taxvalue, record.taxtype_value)
-				form.setValue(obj.chk_ppn_include, record.taxtype_include)						
+				if (record.taxtype_id=='--NULL--') {
+					form.setValue(obj.txt_ppn_taxvalue, 0)
+					form.setValue(obj.chk_ppn_include, 0)
+				} else {
+					form.setValue(obj.txt_ppn_taxvalue, record.taxtype_value)
+					form.setValue(obj.chk_ppn_include, record.taxtype_include)
+				}
+						
 						`			
 					})				
 				},
@@ -61,7 +67,11 @@ module.exports = {
 							criteria.taxmodel_id='PPH' 
 						`,
 						OnSelectedScript: `
-				form.setValue(obj.txt_pph_taxvalue, record.taxtype_value)
+				if (record.taxtype_id=='--NULL--') {		
+					form.setValue(obj.txt_pph_taxvalue, 0)
+				} else {
+					form.setValue(obj.txt_pph_taxvalue, record.taxtype_value)
+				}
 						`
 					})				
 				},
@@ -79,9 +89,45 @@ module.exports = {
 				// Expedisi Accru
 
 
+				arunbill_coa_id: { 
+					text: 'COA AR Unbill', type: dbtype.varchar(17), null: false, suppresslist: true,
+					options: { required: true, invalidMessage: 'AR harus diisi' }, 
+					tips: '',
+					tipstype: 'visible',
+					comp: comp.Combo({
+						table: 'mst_coa', 
+						field_value: 'coa_id', field_display: 'coa_name', field_display_name: 'arunbill_coa_name', 
+						api: 'finact/master/coa/list'})				
+				
+				},
+				ar_coa_id: { 
+					text: 'COA AR', type: dbtype.varchar(17), null: false, suppresslist: true,
+					options: { required: true, invalidMessage: 'AR harus diisi' }, 
+					tips: '',
+					tipstype: 'visible',
+					comp: comp.Combo({
+						table: 'mst_coa', 
+						field_value: 'coa_id', field_display: 'coa_name', field_display_name: 'ar_coa_name', 
+						api: 'finact/master/coa/list'})				
+				
+				},
+				ar_coa_isbypartnertype: {text:'Override by Partner Type', type: dbtype.boolean, null:false, default:'0', suppresslist: true, options: { labelWidth: '300px'   }},
+
+
+				dp_coa_id: { 
+					text: 'COA Downpayment', type: dbtype.varchar(17), null: false, suppresslist: true,
+					options: { required: true, invalidMessage: 'OrderIn COA Downpayment harus diisi' }, 
+					tips: '',
+					tipstype: 'visible',
+					comp: comp.Combo({
+						table: 'mst_coa', 
+						field_value: 'coa_id', field_display: 'coa_name', field_display_name: 'dp_coa_name', 
+						api: 'finact/master/coa/list'})				
+				
+				},
 
 				sales_coa_id: { 
-					text: 'COA Sales', type: dbtype.varchar(10), null: false, suppresslist: true,
+					text: 'COA Sales', type: dbtype.varchar(17), null: false, suppresslist: true,
 					options: { required: true, invalidMessage: 'OrderIn Sales COA harus diisi' }, 
 					tips: '',
 					tipstype: 'visible',
@@ -93,7 +139,7 @@ module.exports = {
 				},	
 				
 				salesdisc_coa_id: { 
-					text: 'COA Disc Sales', type: dbtype.varchar(10), null: true, suppresslist: true,
+					text: 'COA Disc Sales', type: dbtype.varchar(17), null: true, suppresslist: true,
 					options: { prompt: 'NONE' }, 
 					tips: '',
 					tipstype: 'visible',
@@ -104,7 +150,7 @@ module.exports = {
 				},
 
 				ppn_coa_id: { 
-					text: 'COA PPN Payable', type: dbtype.varchar(10), null: true, suppresslist: true,
+					text: 'COA PPN Payable', type: dbtype.varchar(17), null: true, suppresslist: true,
 					options: { prompt: 'NONE' }, 
 					tips: '',
 					tipstype: 'visible',
@@ -115,7 +161,7 @@ module.exports = {
 				},
 
 				ppnsubsidi_coa_id: { 
-					text: 'COA Subsidi PPN', type: dbtype.varchar(10), null: true, suppresslist: true,
+					text: 'COA Subsidi PPN', type: dbtype.varchar(17), null: true, suppresslist: true,
 					options: { prompt: 'NONE' }, 
 					tips: 'Apabila PPN include COA ini perlu diisi',
 					tipstype: 'visible',
@@ -126,7 +172,7 @@ module.exports = {
 				},
 
 				pph_coa_id: { 
-					text: 'COA PPH Prepaid', type: dbtype.varchar(10), null: true, suppresslist: true,
+					text: 'COA PPH Prepaid', type: dbtype.varchar(17), null: true, suppresslist: true,
 					options: { prompt: 'NONE' }, 
 					tips: '',
 					tipstype: 'visible',
@@ -145,12 +191,37 @@ module.exports = {
 			defaultsearch: ['orderintype_id', 'orderintype_name']
 		
 
-    	}
+    	},
+
+		'mst_orderintyperef' : {
+			comment: 'Kode referensi Tipe Orderin untuk keperluan interfacing dengan system lain',
+			primarykeys: ['orderintyperef_id'],		
+			data: {
+				orderintyperef_id: {text:'ID', type: dbtype.varchar(14), null:false, uppercase: true, suppresslist: true},
+				interface_id: { 
+					text: 'Interface', type: dbtype.varchar(7), uppercase: true, null: false, 
+					options: { required: true, invalidMessage: 'Interface harus diisi' }, 
+					comp: comp.Combo({
+						table: 'mst_interface', 
+						field_value: 'interface_id', field_display: 'interface_name', field_display_name: 'interface_name', 
+						api: 'ent/general/interface/list'})				
+				
+				},
+				orderintyperef_code: {text:'Code', type: dbtype.varchar(30), null:false},			
+				orderintype_id: {text:'Partner', type: dbtype.varchar(10), null:false, uppercase: true},
+			},
+			uniques: {
+				'orderintyperef_pair': ['orderintype_id', 'interface_id', 'orderintyperef_code'],
+				'orderintyperef_code': ['interface_id', 'orderintyperef_code'],
+			},			
+		}
+
 	},
 
 	schema: {
 		header: 'mst_orderintype',
 		detils: {
+			'ref' : {title: 'Referensi', table:'mst_orderintyperef', form: true, headerview:'orderintype_name'},
 		}
 	}
 }

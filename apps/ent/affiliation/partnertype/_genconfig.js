@@ -37,6 +37,7 @@ module.exports = {
 
 
 				unbill_accbudget_id: {
+					section: section.Begin('Payable'),  // , 'defbottomborder'
 					text:'Budget Unbill', type: dbtype.varchar(20), null:true, suppresslist: true,
 					options: {required:true, invalidMessage:'Budget Unbill harus diisi', prompt:'-- PILIH --'},
 					comp: comp.Combo({
@@ -73,6 +74,7 @@ module.exports = {
 				},
 
 				payable_coa_id: {
+					section: section.End(),
 					text:'COA Hutang', type: dbtype.varchar(20), null:true, suppresslist: true,
 					options: {required:true, invalidMessage:'COA Hutang harus diisi', prompt:'-- PILIH --'},
 					comp: comp.Combo({
@@ -82,6 +84,54 @@ module.exports = {
 				},
 
 				
+
+				arunbill_accbudget_id: {
+					section: section.Begin('Receivable'),  // , 'defbottomborder'
+					text:'Budget AR Unbill', type: dbtype.varchar(20), null:true, suppresslist: true,
+					options: {required:true, invalidMessage:'Budget Unbill harus diisi', prompt:'-- PILIH --'},
+					comp: comp.Combo({
+						table: 'mst_accbudget', 
+						field_value: 'accbudget_id', field_display: 'accbudget_name', field_display_name: 'arunbill_accbudget_name', 
+						api: 'finact/master/accbudget/list',
+						OnSelectedScript: `
+				form.setValue(obj.cbo_arunbill_coa_id, record.coa_id, record.coa_name);
+						`
+					})
+				},
+
+				arunbill_coa_id: {
+					text:'COA AR Unbill', type: dbtype.varchar(20), null:true, suppresslist: true,
+					options: {required:true, invalidMessage:'COA Unbill harus diisi', prompt:'-- PILIH --'},
+					comp: comp.Combo({
+						table: 'mst_coa', 
+						field_value: 'coa_id', field_display: 'coa_name', field_display_name: 'arunbill_coa_name', 
+						api: 'finact/master/coa/list'})
+				},
+
+
+				ar_accbudget_id: {
+					text:'Budget AR', type: dbtype.varchar(20), null:true, suppresslist: true,
+					options: {required:true, invalidMessage:'Budget AR harus diisi', prompt:'-- PILIH --'},
+					comp: comp.Combo({
+						table: 'mst_accbudget', 
+						field_value: 'accbudget_id', field_display: 'accbudget_name', field_display_name: 'ar_accbudget_name', 
+						api: 'finact/master/accbudget/list',
+						OnSelectedScript: `
+				form.setValue(obj.cbo_ar_coa_id, record.coa_id, record.coa_name);		
+						`
+					})
+				},
+
+				ar_coa_id: {
+					section: section.End(),
+					text:'COA Hutang', type: dbtype.varchar(20), null:true, suppresslist: true,
+					options: {required:true, invalidMessage:'COA AR harus diisi', prompt:'-- PILIH --'},
+					comp: comp.Combo({
+						table: 'mst_coa', 
+						field_value: 'coa_id', field_display: 'coa_name', field_display_name: 'ar_coa_name', 
+						api: 'finact/master/coa/list'})
+				},
+
 				partnertype_isempl: {text:'IsEmployee', type: dbtype.boolean, null:false, default:'0', suppresslist: true},	
 				partnertype_ishaveae: {text:'Have AE', type: dbtype.boolean, null:false, default:'0', suppresslist: true, options: {labelWidth: '300px'}},
 				partnertype_ishavecollector: {text:'Have Collector', type: dbtype.boolean, null:false, default:'0', suppresslist: true, options: {labelWidth: '300px'}},				
@@ -115,6 +165,7 @@ module.exports = {
 
 		
 				unbill_accbudget_id: {
+					section: section.Begin('Payable'),  // , 'defbottomborder'
 					text:'Budget Unbill', type: dbtype.varchar(20), null:true, suppresslist: true,
 					options: {required:true, invalidMessage:'Budget Unbill harus diisi', prompt:'-- PILIH --'},
 					comp: comp.Combo({
@@ -137,6 +188,8 @@ module.exports = {
 				},
 
 
+
+
 				payable_accbudget_id: {
 					text:'Budget Hutang', type: dbtype.varchar(20), null:true, suppresslist: true,
 					options: {required:true, invalidMessage:'Budget Hutang harus diisi', prompt:'-- PILIH --'},
@@ -151,6 +204,7 @@ module.exports = {
 				},
 
 				payable_coa_id: {
+					section: section.End(),
 					text:'COA Hutang', type: dbtype.varchar(20), null:true, suppresslist: true,
 					options: {required:true, invalidMessage:'COA Hutang harus diisi', prompt:'-- PILIH --'},
 					comp: comp.Combo({
@@ -160,6 +214,55 @@ module.exports = {
 				},
 
 
+
+
+
+				arunbill_accbudget_id: {
+					section: section.Begin('Receivable'),  // , 'defbottomborder'
+					text:'Budget AR Unbill', type: dbtype.varchar(20), null:true, suppresslist: true,
+					options: {required:true, invalidMessage:'Budget Unbill harus diisi', prompt:'-- PILIH --'},
+					comp: comp.Combo({
+						table: 'mst_accbudget', 
+						field_value: 'accbudget_id', field_display: 'accbudget_name', field_display_name: 'arunbill_accbudget_name', 
+						api: 'finact/master/accbudget/list',
+						OnSelectedScript: `
+				form.setValue(obj.cbo_arunbill_coa_id, record.coa_id, record.coa_name);
+						`
+					})
+				},
+
+				arunbill_coa_id: {
+					text:'COA AR Unbill', type: dbtype.varchar(20), null:true, suppresslist: true,
+					options: {required:true, invalidMessage:'COA Unbill harus diisi', prompt:'-- PILIH --'},
+					comp: comp.Combo({
+						table: 'mst_coa', 
+						field_value: 'coa_id', field_display: 'coa_name', field_display_name: 'arunbill_coa_name', 
+						api: 'finact/master/coa/list'})
+				},
+
+
+				ar_accbudget_id: {
+					text:'Budget Hutang', type: dbtype.varchar(20), null:true, suppresslist: true,
+					options: {required:true, invalidMessage:'Budget Hutang harus diisi', prompt:'-- PILIH --'},
+					comp: comp.Combo({
+						table: 'mst_accbudget', 
+						field_value: 'accbudget_id', field_display: 'accbudget_name', field_display_name: 'ar_accbudget_name', 
+						api: 'finact/master/accbudget/list',
+						OnSelectedScript: `
+				form.setValue(obj.cbo_ar_coa_id, record.coa_id, record.coa_name);		`
+					
+					})
+				},
+
+				ar_coa_id: {
+					section: section.End(),
+					text:'COA Hutang', type: dbtype.varchar(20), null:true, suppresslist: true,
+					options: {required:true, invalidMessage:'COA Hutang harus diisi', prompt:'-- PILIH --'},
+					comp: comp.Combo({
+						table: 'mst_coa', 
+						field_value: 'coa_id', field_display: 'coa_name', field_display_name: 'ar_coa_name', 
+						api: 'finact/master/coa/list'})
+				},
 
 				partnertype_id: {text:'PartnerType', type: dbtype.varchar(14), null:false, hidden: true},	
 			},

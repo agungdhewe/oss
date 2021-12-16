@@ -112,6 +112,12 @@ h1 {
 }
 
 
+.hidden {
+	display: none;
+}
+
+
+
 @media screen and (max-width: 450px) {
 
 	.panel-pdf-view {
@@ -204,6 +210,11 @@ h1 {
 }
 
 
+.infobox {
+	border: 1px solid #bbb;
+	background-color: #ffe095;
+}
+
 
 /* CSS untuk keperluan crud: halaman list */
 .list-search-item {
@@ -221,6 +232,13 @@ h1 {
 .list-buttonbaru {
 	padding-bottom: 0px;
 }
+
+.list-info {
+	margin-top: 15px;
+	margin-bottom: 10px;
+	padding: 10px;
+}
+
 
 @media screen and (max-width: 450px) {
 
@@ -383,7 +401,7 @@ h1 {
 }
 
 .fgtable-row-disabled {
-	background: #999;
+	background: #ccc;
 	color: #666
 	/* background-image: linear-gradient(to bottom, #aaaaaa 100%, rgba(0,0,0,.5) 100%) ; */
 }
@@ -426,6 +444,14 @@ h1 {
 	flex-direction: row;	
 }
 
+
+.fgtable-head-drow-info {
+	color: #3F4756;
+	border-bottom: 1px solid #ddd;
+	display: flex;
+	flex-direction: row;
+
+}
 
 
 .fgpaging-link {
@@ -477,6 +503,10 @@ h1 {
 	background: #ffe095;
 }
 
+.input-modeedit-force {
+	background: #ffe095 !important;
+}
+
 
 
 .detilgrid-value {
@@ -513,4 +543,132 @@ h1 {
 	}
 
 
+}
+
+
+.detilbox {
+	border: 0px solid black; background-color: #ffffff; box-shadow: 0px 0px 20px -3px rgba(0,0,0,0.64);
+}
+
+.detilbox div:last-child {
+	border-bottom: 0px;
+}
+
+
+
+.inrow-id-block {
+	display: inline-block;
+	margin-bottom: 5px;
+	margin-right: 3px;
+}
+
+.inrow-id-block .draft {
+	width: 34px;
+	background: url(rdraft.png) no-repeat center center; background-size: 34px 14px;
+}
+
+.inrow-id-block .commit {
+	width: 34px;
+	background: url(rcommit.png) no-repeat center center; background-size: 34px 14px;
+}
+
+.inrow-id-block .submit {
+	width: 34px;
+	background: url(rsubmit.png) no-repeat center center; background-size: 34px 14px;
+}
+
+.inrow-id-block .approval {
+	width: 34px;
+	background: url(rapproval.png) no-repeat center center; background-size: 34px 14px;
+}
+
+.inrow-id-block .approved {
+	width: 34px;
+	background: url(rapproved.png) no-repeat center center; background-size: 34px 14px;
+}
+
+.inrow-id-block .rejected {
+	width: 34px;
+	background: url(rrejected.png) no-repeat center center; background-size: 34px 14px;
+}
+
+.inrow-id-block .posted {
+	width: 34px;
+	background: url(rposted.png) no-repeat center center; background-size: 34px 14px;
+}
+
+.inrow-id-block .verified {
+	width: 34px;
+	background: url(rverified.png) no-repeat center center; background-size: 34px 14px;
+}
+
+.inrow-id-block .closed {
+	width: 34px;
+	background: url(rclosed.png) no-repeat center center; background-size: 34px 14px;
+}
+
+
+.deftable td[class="fgtable-head"]:first-child {
+	padding-right: 10px;
+}
+
+.deftable td[mapping="__CHECKBOX__"] {
+	padding-right: 10px;
+}
+
+.deftable tr td:first-child {
+	padding-left: 10px;
+}
+
+.deftable tr td:last-child {
+	padding-right: 10px;
+}
+
+
+.declinereasonbox {
+	background-color: #ffe095;
+}
+
+
+.pastebox {
+	height: 32px;
+	width: 200px;
+	background-color: #00000033;
+	padding-top: 8px;
+	margin-left: 15px;
+	padding-left: 15px;
+	overflow: hidden;
+}
+
+
+.flashhighlight-on {
+	transition: 100ms;
+	background-color: #d9b800af;
+	/* background: rgb(217,184,0);
+	background: linear-gradient(180deg, rgba(217,184,0,1) 0%, rgba(217,184,0,1) 89%, rgba(255,255,255,0) 100%); */
+	box-shadow: -1px -7px 5px 0px rgba(217,184,0,0.75);
+	-webkit-box-shadow: -1px -7px 5px 0px rgba(217,184,0,0.75);
+	-moz-box-shadow: -1px -7px 5px 0px rgba(217,184,0,0.75);
+}
+
+.flashhighlight-off {
+	background-color: #ffffff00;
+	transition: 500ms;
+}
+
+/* @media only screen and (max-width: 768px) {
+	.flashhighlight-on {
+		background-color: rgba(217, 184, 0, 0.685);
+	}
+
+	.flashhighlight-off {
+		background-color: rgba(217, 184, 0, 0.685);
+		transition: 1000ms;
+	}
+} */
+
+
+
+.defbottomborder {
+	border-bottom: 1px solid #ccc;
 }

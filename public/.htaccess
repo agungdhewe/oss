@@ -1,3 +1,8 @@
 SetEnv FGTA_APP_NAME "tvone"
-SetEnv FGTA_APP_TITLE "One Development"
+SetEnv FGTA_APP_TITLE "Development"
+SetEnv FGTA_DBCONF_PATH "/home/agung/Development/fgtacloud4u/server_clients2/oss/public/dbconfig.php"
+SetEnv FGTA_LOCALDB_DIR "/home/agung/Development/fgtacloud4u/server_clients2/oss/core/database"	
+SetEnv FGTA_MENUDEF "modules_tvone"	
+
+
 

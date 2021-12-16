@@ -16,6 +16,10 @@ export const load_unbill_accbudget_id = 'finact/master/accbudget/list'
 export const load_unbill_coa_id = 'finact/master/coa/list'
 export const load_payable_accbudget_id = 'finact/master/accbudget/list'
 export const load_payable_coa_id = 'finact/master/coa/list'
+export const load_arunbill_accbudget_id = 'finact/master/accbudget/list'
+export const load_arunbill_coa_id = 'finact/master/coa/list'
+export const load_ar_accbudget_id = 'finact/master/accbudget/list'
+export const load_ar_coa_id = 'finact/master/coa/list'
 export const load_projectmodel_id = 'finact/master/projectmodel/list'
 
 

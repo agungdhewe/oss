@@ -28,20 +28,18 @@ export async function init(opt) {
 	this_page_options = opt;
 
 
+	var autoid = true;
 	var disableedit = false;
-	// switch (this_page_options.variancename) {
-	// 	case 'commit' :
-	//		disableedit = true;
-	//		btn_edit.linkbutton('disable');
-	//		btn_save.linkbutton('disable');
-	//		btn_delete.linkbutton('disable');
-	//		break;
-	// }
+	switch (this_page_options.variancename) {
+		case 'manual-id-input' :
+			autoid = false;
+			break;
+	}
 
 
 	form = new global.fgta4form(pnl_form, {
 		primary: obj.txt_brand_id,
-		autoid: false,
+		autoid: autoid,
 		logview: 'mst_brand',
 		btn_edit: disableedit==true? $('<a>edit</a>') : btn_edit,
 		btn_save: disableedit==true? $('<a>save</a>') : btn_save,
@@ -210,11 +208,10 @@ export function createnew() {
 		form.rowid = null
 
 		// set nilai-nilai default untuk form
-
-			data.brandtype_id = '0'
-			data.brandtype_name = '-- PILIH --'
-			data.unit_id = '0'
-			data.unit_name = '-- PILIH --'
+		data.brandtype_id = '0'
+		data.brandtype_name = '-- PILIH --'
+		data.unit_id = '0'
+		data.unit_name = '-- PILIH --'
 
 
 

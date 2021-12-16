@@ -26,7 +26,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 22/04/2021
+ * tanggal 15/12/2021
  */
 $API = new class extends mediaorderBase {
 	
@@ -55,10 +55,10 @@ $API = new class extends mediaorderBase {
 			// apabila ada tanggal, ubah ke format sql sbb:
 			// $obj->tanggal = (\DateTime::createFromFormat('d/m/Y',$obj->tanggal))->format('Y-m-d');
 
+			$obj->brand_id = strtoupper($obj->brand_id);
 			$obj->mediaorder_id = strtoupper($obj->mediaorder_id);
 
 
-			// if ($obj->mediaadslot_id=='--NULL--') { unset($obj->mediaadslot_id); }
 
 
 
@@ -103,40 +103,77 @@ $API = new class extends mediaorderBase {
 
 
 
+
+				// result
+				$where = \FGTA4\utils\SqlUtility::BuildCriteria((object)[$primarykey=>$obj->{$primarykey}], [$primarykey=>"$primarykey=:$primarykey"]);
+				$sql = \FGTA4\utils\SqlUtility::Select($tablename , [
+					$primarykey
+					, 'mediaorderitem_id', 'itemclass_id', 'brand_id', 'mediaorderitem_spot', 'mediaorderitem_descr', 'mediaorderitem_validr', 'projbudget_id', 'projbudgettask_id', 'project_id', 'projecttask_id', 'mediaorder_id', '_createby', '_createdate', '_modifyby', '_modifydate', '_createby', '_createdate', '_modifyby', '_modifydate'
+				], $where->sql);
+				$stmt = $this->db->prepare($sql);
+				$stmt->execute($where->params);
+				$row  = $stmt->fetch(\PDO::FETCH_ASSOC);			
+
+				$record = [];
+				foreach ($row as $key => $value) {
+					$record[$key] = $value;
+				}
+				$result->dataresponse = (object) array_merge($record, [
+					// untuk lookup atau modify response ditaruh disini
+					'itemclass_name' => \FGTA4\utils\SqlUtility::Lookup($record['itemclass_id'], $this->db, 'mst_itemclass', 'itemclass_id', 'itemclass_name'),
+					'brand_name' => \FGTA4\utils\SqlUtility::Lookup($record['brand_id'], $this->db, 'mst_brand', 'brand_id', 'brand_name'),
+					'projbudget_name' => \FGTA4\utils\SqlUtility::Lookup($record['projbudget_id'], $this->db, 'mst_projbudget', 'projbudget_id', 'projbudget_name'),
+					'projbudgettask_name' => \FGTA4\utils\SqlUtility::Lookup($record['projbudgettask_id'], $this->db, 'view_projbudgettask', 'projbudgettask_id', 'projbudgettask_name'),
+					'project_name' => \FGTA4\utils\SqlUtility::Lookup($record['project_id'], $this->db, 'mst_project', 'project_id', 'project_name'),
+					'projecttask_name' => \FGTA4\utils\SqlUtility::Lookup($record['projecttask_id'], $this->db, 'mst_projecttask', 'projecttask_id', 'projecttask_name'),
+
+					'_createby' => \FGTA4\utils\SqlUtility::Lookup($record['_createby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+					'_modifyby' => \FGTA4\utils\SqlUtility::Lookup($record['_modifyby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+				]);
+
+
+
+				// hitung summary
+				$sql = "
+					select sum(mediaorderitem_validr) as mediaorderitem_validr from trn_mediaorderitem where mediaorder_id = :mediaorder_id 
+				";
+				$stmt = $this->db->prepare($sql);
+				$stmt->execute([
+					':mediaorder_id' => $result->dataresponse->mediaorder_id
+				]);
+				$row  = $stmt->fetch(\PDO::FETCH_ASSOC);	
+				$mediaorderitem_validr = $row['mediaorderitem_validr']; 
+
+
+				$sql = "
+					update trn_mediaorder
+					set
+					orderin_subtotal = :orderin_subtotal,
+					orderin_total = :orderin_total,
+					orderin_payment = :orderin_payment
+					where
+					mediaorder_id = :mediaorder_id 
+				";
+				$stmt = $this->db->prepare($sql);
+				$stmt->execute([
+					':mediaorder_id' => $result->dataresponse->mediaorder_id,
+					':orderin_subtotal' => $mediaorderitem_validr,
+					':orderin_total' => $mediaorderitem_validr,
+					':orderin_payment' => $mediaorderitem_validr
+				]);
+
 				$this->db->commit();
+
+
+				
+				return $result;
 			} catch (\Exception $ex) {
 				$this->db->rollBack();
 				throw $ex;
 			} finally {
 				$this->db->setAttribute(\PDO::ATTR_AUTOCOMMIT,1);
 			}
-
-
-			$where = \FGTA4\utils\SqlUtility::BuildCriteria((object)[$primarykey=>$obj->{$primarykey}], [$primarykey=>"$primarykey=:$primarykey"]);
-			$sql = \FGTA4\utils\SqlUtility::Select($tablename , [
-				$primarykey
-				, 'mediaorderitem_id', 'mediaadslot_id', 'itemclass_id', 'mediaordertype_id', 'mediaorderitem_descr', 'curr_id', 'mediaorderitem_valfrg', 'mediaorderitem_valfrgrate', 'mediaorderitem_validr', 'mediaorderitem_discountidr', 'mediaorderitem_totalidr', 'mediaorder_id', '_createby', '_createdate', '_modifyby', '_modifydate', '_createby', '_createdate', '_modifyby', '_modifydate'
-			], $where->sql);
-			$stmt = $this->db->prepare($sql);
-			$stmt->execute($where->params);
-			$row  = $stmt->fetch(\PDO::FETCH_ASSOC);			
-
-			$record = [];
-			foreach ($row as $key => $value) {
-				$record[$key] = $value;
-			}
-			$result->dataresponse = (object) array_merge($record, [
-				// untuk lookup atau modify response ditaruh disini
-				'mediaadslot_descr' => \FGTA4\utils\SqlUtility::Lookup($record['mediaadslot_id'], $this->db, 'mst_mediaadslot', 'mediaadslot_id', 'mediaadslot_descr'),
-				'itemclass_name' => \FGTA4\utils\SqlUtility::Lookup($record['itemclass_id'], $this->db, 'mst_itemclass', 'itemclass_id', 'itemclass_name'),
-				'mediaordertype_name' => \FGTA4\utils\SqlUtility::Lookup($record['mediaordertype_id'], $this->db, 'mst_mediaordertype', 'mediaordertype_id', 'mediaordertype_name'),
-				'curr_name' => \FGTA4\utils\SqlUtility::Lookup($record['curr_id'], $this->db, 'mst_curr', 'curr_id', 'curr_name'),
-
-				'_createby' => \FGTA4\utils\SqlUtility::Lookup($record['_createby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
-				'_modifyby' => \FGTA4\utils\SqlUtility::Lookup($record['_modifyby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
-			]);
-
-			return $result;
+			
 		} catch (\Exception $ex) {
 			throw $ex;
 		}

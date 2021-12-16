@@ -47,6 +47,9 @@
 			</div>
 		</div>
 
+		<?=$this->Section('Payable', true, true)?>
+		<div class="fgta_section_collapsible " style="display: none">
+					
 		<div class="form_row" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Budget Unbill</div>
 			<div class="form_input_col" style="border: 0px solid black">
@@ -79,6 +82,45 @@
 			</div>
 		</div>
 
+		</div>
+					
+		<?=$this->Section('Receivable', true, true)?>
+		<div class="fgta_section_collapsible " style="display: none">
+					
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Budget AR Unbill</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-cbo_arunbill_accbudget_id" class="easyui-combo" style="width: 400px" mapping="arunbill_accbudget_id" display="arunbill_accbudget_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Budget Unbill harus diisi', prompt: '-- PILIH --'"   validType="requiredcombo['pnl_edit-cbo_arunbill_accbudget_id']" >
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">COA AR Unbill</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-cbo_arunbill_coa_id" class="easyui-combo" style="width: 400px" mapping="arunbill_coa_id" display="arunbill_coa_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'COA Unbill harus diisi', prompt: '-- PILIH --'"   validType="requiredcombo['pnl_edit-cbo_arunbill_coa_id']" >
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Budget AR</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-cbo_ar_accbudget_id" class="easyui-combo" style="width: 400px" mapping="ar_accbudget_id" display="ar_accbudget_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Budget AR harus diisi', prompt: '-- PILIH --'"   validType="requiredcombo['pnl_edit-cbo_ar_accbudget_id']" >
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">COA Hutang</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-cbo_ar_coa_id" class="easyui-combo" style="width: 400px" mapping="ar_coa_id" display="ar_coa_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'COA AR harus diisi', prompt: '-- PILIH --'"   validType="requiredcombo['pnl_edit-cbo_ar_coa_id']" >
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		</div>
+					
 		<div class="form_row" >
 			<div class="form_label_col"></div>
 			<div class="form_input_col" style="border: 0px solid black">

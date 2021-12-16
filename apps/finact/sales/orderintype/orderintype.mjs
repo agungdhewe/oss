@@ -5,11 +5,15 @@ import * as fgta4pageslider from '../../../../../index.php/asset/fgta/framework/
 import * as apis from './orderintype.apis.mjs'
 import * as pList from './orderintype-list.mjs'
 import * as pEdit from './orderintype-edit.mjs'
+import * as pEditRefgrid from './orderintype-refgrid.mjs'
+import * as pEditRefform from './orderintype-refform.mjs'
 
 
 
 const pnl_list = $('#pnl_list')
 const pnl_edit = $('#pnl_edit')
+const pnl_editrefgrid = $('#pnl_editrefgrid')
+const pnl_editrefform = $('#pnl_editrefform')
 
 
 
@@ -35,7 +39,8 @@ export async function init(opt) {
 		.initPages([
 			{panel: pnl_list, handler: pList},
 			{panel: pnl_edit, handler: pEdit},
-			
+			{panel: pnl_editrefgrid, handler: pEditRefgrid},
+			{panel: pnl_editrefform, handler: pEditRefform}			
 		], opt)
 
 	$ui.setPages(pages)

@@ -23,7 +23,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 02/12/2021
+ * tanggal 15/12/2021
  */
 $API = new class extends orderintypeBase {
 
@@ -58,7 +58,7 @@ $API = new class extends orderintypeBase {
 			$limit = " LIMIT $maxrow OFFSET $offset ";
 			$stmt = $this->db->prepare("
 				select 
-				A.orderintype_id, A.orderintype_name, A.orderintype_descr, A.trxmodel_id, A.orderintype__isdateinterval, A.ppn_taxtype_id, A.ppn_taxvalue, A.ppn_include, A.pph_taxtype_id, A.pph_taxvalue, A.sales_coa_id, A.salesdisc_coa_id, A.ppn_coa_id, A.ppnsubsidi_coa_id, A.pph_coa_id, A._createby, A._createdate, A._modifyby, A._modifydate 
+				A.orderintype_id, A.orderintype_name, A.orderintype_descr, A.trxmodel_id, A.orderintype_isdateinterval, A.ppn_taxtype_id, A.ppn_taxvalue, A.ppn_include, A.pph_taxtype_id, A.pph_taxvalue, A.arunbill_coa_id, A.ar_coa_id, A.ar_coa_isbypartnertype, A.dp_coa_id, A.sales_coa_id, A.salesdisc_coa_id, A.ppn_coa_id, A.ppnsubsidi_coa_id, A.pph_coa_id, A._createby, A._createdate, A._modifyby, A._modifydate 
 				from mst_orderintype A
 			" . $where->sql . $limit);
 			$stmt->execute($where->params);
@@ -78,6 +78,9 @@ $API = new class extends orderintypeBase {
 					'trxmodel_name' => \FGTA4\utils\SqlUtility::Lookup($record['trxmodel_id'], $this->db, 'mst_trxmodel', 'trxmodel_id', 'trxmodel_name'),
 					'ppn_taxtype_name' => \FGTA4\utils\SqlUtility::Lookup($record['ppn_taxtype_id'], $this->db, 'mst_taxtype', 'taxtype_id', 'taxtype_name'),
 					'pph_taxtype_name' => \FGTA4\utils\SqlUtility::Lookup($record['pph_taxtype_id'], $this->db, 'mst_taxtype', 'taxtype_id', 'taxtype_name'),
+					'arunbill_coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['arunbill_coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
+					'ar_coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['ar_coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
+					'dp_coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['dp_coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
 					'sales_coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['sales_coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
 					'salesdisc_coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['salesdisc_coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
 					'ppn_coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['ppn_coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),

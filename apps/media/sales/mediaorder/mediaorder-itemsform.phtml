@@ -17,14 +17,6 @@
 		</div>
 
 		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Slot</div>
-			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_edititemsform-cbo_mediaadslot_id" class="easyui-combo" style="width: 400px" mapping="mediaadslot_id" display="mediaadslot_descr" data-options="editable:false, valueField:'id', textField:'text' , prompt: 'NONE'" >
-				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
-			</div>
-		</div>
-
-		<div class="form_row" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Class</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_edititemsform-cbo_itemclass_id" class="easyui-combo" style="width: 400px" mapping="itemclass_id" display="itemclass_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Class harus diisi'"  validType="requiredcombo['pnl_edititemsform-cbo_itemclass_id']" >
@@ -33,9 +25,17 @@
 		</div>
 
 		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Media Order Type</div>
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Brand</div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_edititemsform-cbo_mediaordertype_id" class="easyui-combo" style="width: 400px" mapping="mediaordertype_id" display="mediaordertype_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Media Order Type harus diisi'"  validType="requiredcombo['pnl_edititemsform-cbo_mediaordertype_id']" >
+				<input id="pnl_edititemsform-cbo_brand_id" class="easyui-combo" style="width: 400px" mapping="brand_id" display="brand_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Brand harus diisi'"  validType="requiredcombo['pnl_edititemsform-cbo_brand_id']" >
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Spot Code</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edititemsform-txt_mediaorderitem_spot" class="easyui-textbox" mapping="mediaorderitem_spot"  maxlength="90"  style="width: 400px" data-options="multiline:false  ">
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>
@@ -49,30 +49,6 @@
 		</div>
 
 		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Currency</div>
-			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_edititemsform-cbo_curr_id" class="easyui-combo" style="width: 400px" mapping="curr_id" display="curr_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Currency harus diisi', prompt: '-- PILIH --'"  validType="requiredcombo['pnl_edititemsform-cbo_curr_id']" >
-				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
-			</div>
-		</div>
-
-		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Valas</div>
-			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_edititemsform-txt_mediaorderitem_valfrg" class="easyui-numberbox" mapping="mediaorderitem_valfrg" style="width: 400px; text-align:right" data-options="precision: 2, decimalSeparator:'.', groupSeparator:','  , required: true">
-				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
-			</div>
-		</div>
-
-		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Rate</div>
-			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_edititemsform-txt_mediaorderitem_valfrgrate" class="easyui-numberbox" mapping="mediaorderitem_valfrgrate" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  , required: true">
-				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
-			</div>
-		</div>
-
-		<div class="form_row" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Value IDR</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_edititemsform-txt_mediaorderitem_validr" class="easyui-numberbox" mapping="mediaorderitem_validr" style="width: 400px; text-align:right" data-options="precision: 2, decimalSeparator:'.', groupSeparator:','  , required: true">
@@ -81,17 +57,33 @@
 		</div>
 
 		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Discount IDR</div>
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Budget</div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_edititemsform-txt_mediaorderitem_discountidr" class="easyui-numberbox" mapping="mediaorderitem_discountidr" style="width: 400px; text-align:right" data-options="precision: 2, decimalSeparator:'.', groupSeparator:','  , required: true">
+				<input id="pnl_edititemsform-cbo_projbudget_id" class="easyui-combo" style="width: 400px" mapping="projbudget_id" display="projbudget_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Budget harus diisi', prompt: '-- PILIH --'"  validType="requiredcombo['pnl_edititemsform-cbo_projbudget_id']" >
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>
 
 		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Total IDR</div>
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Budget Task</div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_edititemsform-txt_mediaorderitem_totalidr" class="easyui-numberbox" mapping="mediaorderitem_totalidr" style="width: 400px; text-align:right" data-options="precision: 2, decimalSeparator:'.', groupSeparator:','  , required: true">
+				<input id="pnl_edititemsform-cbo_projbudgettask_id" class="easyui-combo" style="width: 400px" mapping="projbudgettask_id" display="projbudgettask_name" data-options="editable:false, valueField:'id', textField:'text' , prompt: 'NONE'" >
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Project</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edititemsform-cbo_project_id" class="easyui-combo" style="width: 400px" mapping="project_id" display="project_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Project harus diisi', prompt: '-- PILIH --', disabled: true"  validType="requiredcombo['pnl_edititemsform-cbo_project_id']" >
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Project Task</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edititemsform-cbo_projecttask_id" class="easyui-combo" style="width: 400px" mapping="projecttask_id" display="projecttask_name" data-options="editable:false, valueField:'id', textField:'text' , prompt: 'NONE', disabled: true" >
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>

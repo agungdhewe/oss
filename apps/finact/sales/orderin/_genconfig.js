@@ -55,6 +55,17 @@ module.exports = {
 					})
 				},
 
+
+				dept_id: {
+					text: 'Dept', type: dbtype.varchar(30), null: false,
+					options: { required: true, invalidMessage: 'Departemen harus diisi', prompt: '-- PILIH --' },
+					comp: comp.Combo({
+						table: 'mst_dept',
+						field_value: 'dept_id', field_display: 'dept_name',
+						api: 'ent/organisation/dept/list-byuser'
+					})
+				},
+
 				ae_empl_id: {
 					text:'AE', type: dbtype.varchar(14), null:true, suppresslist: true,
 					options:{prompt:'NONE'},

@@ -250,6 +250,7 @@ async function obj_pastebox_paste(pastedData, fn_finish) {
 		'ActualTimeEnd', 
 		'ActualDuration', 
 		'SpotId', 
+		'MediaOrderId', 
 		'MediaOrderRef', 
 		'TypeMediaOrder', 
 		'MediaOrderDescr', 
@@ -284,6 +285,7 @@ async function obj_pastebox_paste(pastedData, fn_finish) {
 				var headpatt = cellpattern.join(' $ ').trim().toUpperCase();
 				var colspatt = colspattern.join(' $ ').trim().toUpperCase();
 
+	
 				// if (true) {
 				if (headpatt!=colspatt) {
 					// console.log(headpatt);
@@ -303,20 +305,21 @@ async function obj_pastebox_paste(pastedData, fn_finish) {
 					ActualTimeEnd: cells[7],
 					ActualDuration: cells[8],
 					SpotId: cells[9],
-					MediaOrderRef: cells[10],
-					TypeMediaOrder: cells[11],
-					MediaOrderDescr: cells[12],
-					AgencyCode: cells[13],
-					AgencyName: cells[14],
-					AdvertiserCode: cells[15],
-					AdvertiserName: cells[16],
-					BrandCode: cells[17],
-					BrandName: cells[18],
-					ProgrammeCode: cells[19],
-					ProgrammeName: cells[20],
-					EpisodeCode: cells[21],
-					EpisodeName: cells[22],
-					Value:  parser.parse(cells[23])
+					MediaOrderId: cells[10],
+					MediaOrderRef: cells[11],
+					TypeMediaOrder: cells[12],
+					MediaOrderDescr: cells[13],
+					AgencyCode: cells[14],
+					AgencyName: cells[15],
+					AdvertiserCode: cells[16],
+					AdvertiserName: cells[17],
+					BrandCode: cells[18],
+					BrandName: cells[19],
+					ProgrammeCode: cells[20],
+					ProgrammeName: cells[21],
+					EpisodeCode: cells[22],
+					EpisodeName: cells[23],
+					Value:  parser.parse(cells[24])
 				}
 
 				dataupload.push(celldata);
@@ -407,10 +410,11 @@ class NumberParser {
 	try {
 		let result = await $ui.apicall(apiurl, args)
 
-		
+
 
 
 	} catch (err) {
 		console.log(err)
+		$ui.ShowMessage('[ERROR]' + err.errormessage);
 	}
   }

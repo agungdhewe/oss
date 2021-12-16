@@ -24,7 +24,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 27/10/2021
+ * tanggal 15/12/2021
  */
 $API = new class extends partnertypeBase {
 
@@ -44,7 +44,7 @@ $API = new class extends partnertypeBase {
 			);
 
 			$sql = \FGTA4\utils\SqlUtility::Select('mst_partnertypeaccbudget A', [
-				'partnertypeaccbudget_id', 'projectmodel_id', 'unbill_accbudget_id', 'unbill_coa_id', 'payable_accbudget_id', 'payable_coa_id', 'partnertype_id', '_createby', '_createdate', '_modifyby', '_modifydate' 
+				'partnertypeaccbudget_id', 'projectmodel_id', 'unbill_accbudget_id', 'unbill_coa_id', 'payable_accbudget_id', 'payable_coa_id', 'arunbill_accbudget_id', 'arunbill_coa_id', 'ar_accbudget_id', 'ar_coa_id', 'partnertype_id', '_createby', '_createdate', '_modifyby', '_modifydate' 
 			], $where->sql);
 
 			$stmt = $this->db->prepare($sql);
@@ -68,6 +68,10 @@ $API = new class extends partnertypeBase {
 				'unbill_coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['unbill_coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
 				'payable_accbudget_name' => \FGTA4\utils\SqlUtility::Lookup($record['payable_accbudget_id'], $this->db, 'mst_accbudget', 'accbudget_id', 'accbudget_name'),
 				'payable_coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['payable_coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
+				'arunbill_accbudget_name' => \FGTA4\utils\SqlUtility::Lookup($record['arunbill_accbudget_id'], $this->db, 'mst_accbudget', 'accbudget_id', 'accbudget_name'),
+				'arunbill_coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['arunbill_coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
+				'ar_accbudget_name' => \FGTA4\utils\SqlUtility::Lookup($record['ar_accbudget_id'], $this->db, 'mst_accbudget', 'accbudget_id', 'accbudget_name'),
+				'ar_coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['ar_coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
 				
 				'_createby' => \FGTA4\utils\SqlUtility::Lookup($record['_createby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
 				'_modifyby' => \FGTA4\utils\SqlUtility::Lookup($record['_modifyby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
