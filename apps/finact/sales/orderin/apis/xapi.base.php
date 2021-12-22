@@ -26,7 +26,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 02/12/2021
+ * tanggal 22/12/2021
  */
 class orderinBase extends WebAPI {
 
@@ -39,6 +39,26 @@ class orderinBase extends WebAPI {
 	protected $field_commitdate = "orderin_commitdate";		
 			
 	
+	protected $fields_isapprovalprogress = "orderin_isapprovalprogress";			
+	protected $field_isapprove = "orderin_isapproved";
+	protected $field_approveby = "orderin_approveby";
+	protected $field_approvedate = "orderin_approvedate";
+	protected $field_isdecline = "orderin_isdeclined";
+	protected $field_declineby = "orderin_declineby";
+	protected $field_declinedate = "orderin_declinedate";
+
+	protected $approval_tablename = "trn_orderinappr";
+	protected $approval_primarykey = "orderinappr_id";
+	protected $approval_field_approve = "orderinappr_isapproved";
+	protected $approval_field_approveby = "orderinappr_by";
+	protected $approval_field_approvedate = "orderinappr_date";
+	protected $approval_field_decline = "orderinappr_isdeclined";
+	protected $approval_field_declineby = "orderinappr_declinedby";
+	protected $approval_field_declinedate = "orderinappr_declineddate";
+	protected $approval_field_notes = "orderinappr_notes";
+	protected $approval_field_version = "orderin_version";
+
+			
 
 
 

@@ -12,7 +12,7 @@ module.exports = {
 			comment: 'Daftar Klasifikasi Item',
 			primarykeys: ['itemclass_id'],
 			data: {
-				itemclass_id: { text: 'ID', type: dbtype.varchar(14), uppercase: true, null: false},
+				itemclass_id: { text: 'ID', type: dbtype.varchar(14), null: false},
 				itemclass_name: { text: 'Item Class', type: dbtype.varchar(30), null: false, uppercase: true, options: { required: true, invalidMessage: 'Nama Klasifikasi item harus diisi' } },
 				itemclass_isdisabled: { text: 'Disabled', type: dbtype.boolean, null: false, default: '0' },
 				itemclass_isadvproces: { text: 'Process as Advance', type: dbtype.boolean, null: false, default: '0', suppresslist: true, options: {labelWidth:'200px'} },
@@ -28,8 +28,8 @@ module.exports = {
 				},	
 
 				itemclassgroup_id: {
-					text:'Group', type: dbtype.varchar(15), null:false, suppresslist: true,
-					options:{prompt:'-- PILIH --'},
+					text:'Group', type: dbtype.varchar(17), null:true, suppresslist: true,
+					options: { prompt:'NONE' },
 					comp: comp.Combo({
 						table: 'mst_itemclassgroup', 
 						field_value: 'itemclassgroup_id', field_display: 'itemclassgroup_name', field_display_name: 'itemclassgroup_name', 
@@ -188,13 +188,33 @@ module.exports = {
 				itemclass_id: {text:'Item', type: dbtype.varchar(14), null:false},	
 			},
 
-			uniques: {
-				'itemclassaccbudget_pair': ['itemclass_id', 'projecttype_id']
-			},
+			// uniques: {
+			// 	'itemclassaccbudget_pair': ['itemclass_id', 'projecttype_id']
+			// },
 
 		},
 
 
+		'mst_itemclassfiles' : {
+			primarykeys: ['itemclassfiles_id'],
+			comment: 'Daftar FIle Inquiry',
+			data: {
+				itemclassfiles_id: {text:'ID', type: dbtype.varchar(14), null:false},	
+				doctype_id: {
+					text:'Document Type', type: dbtype.varchar(10), null:false, 
+					options: { required: true, invalidMessage: 'Tipe dokumen harus diisi' } ,
+					comp: comp.Combo({
+						table: 'mst_doctype', 
+						field_value: 'doctype_id', field_display: 'doctype_name', 
+						api: 'ent/general/doctype/list'})
+				},
+				itemclassfiles_descr: {text:'Descr', type: dbtype.varchar(90), null:false},	
+				itemclassfiles_order: {text:'Order', type: dbtype.int(4), null:false, default:'0', suppresslist: true},
+				itemclassfiles_file: {text:'File', type: dbtype.varchar(90), suppresslist: true,  comp: comp.Filebox(), options: { accept: 'image/*' }},
+				itemclass_id: {text:'ID', type: dbtype.varchar(14), null:false, hidden: true},		
+			},
+			defaultsearch: ['itemclassfiles_descr']
+		},
 
 
 	},
@@ -203,6 +223,7 @@ module.exports = {
 		header: 'mst_itemclass',
 		detils: {
 			'account': {title: 'Account Ovveride by Project Type', table: 'mst_itemclassaccbudget', form: true, headerview: 'itemclass_name' },
+			'files': {title: 'Files', table: 'mst_itemclassfiles', form: true, headerview: 'itemclass_name' },
 		}
 	}
 

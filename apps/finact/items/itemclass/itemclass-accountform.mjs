@@ -70,7 +70,9 @@ export async function init(opt) {
 			{mapping: 'projectmodel_id', text: 'projectmodel_id'},
 			{mapping: 'projectmodel_name', text: 'projectmodel_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria, options) => {
+				
+		},
 		OnDataLoaded : (result, options) => {
 				
 		},
@@ -92,7 +94,9 @@ export async function init(opt) {
 			{mapping: 'accbudget_id', text: 'accbudget_id'},
 			{mapping: 'accbudget_name', text: 'accbudget_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria, options) => {
+				
+		},
 		OnDataLoaded : (result, options) => {
 				
 		},
@@ -114,7 +118,9 @@ export async function init(opt) {
 			{mapping: 'coa_id', text: 'coa_id'},
 			{mapping: 'coa_name', text: 'coa_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria, options) => {
+				
+		},
 		OnDataLoaded : (result, options) => {
 				
 		},

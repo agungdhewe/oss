@@ -250,8 +250,6 @@ $API = new class extends logproofBase {
 					':spot_id' => $spot_id
 				]);
 				$items = $stmt_cek_spot->fetchall(\PDO::FETCH_ASSOC);
-				
-
 				$tablename = "trn_medialogproofitem";
 				$key = new \stdClass;
 				$medialogproofitem_id = '';

@@ -24,7 +24,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 19/04/2021
+ * tanggal 22/12/2021
  */
 $API = new class extends billoutBase {
 
@@ -45,7 +45,6 @@ $API = new class extends billoutBase {
 
 			$sql = \FGTA4\utils\SqlUtility::Select('trn_billoutdetil A', [
 				'billoutdetil_id', 'billrowtype_id', 'taxtype_id', 'billoutdetil_descr', 'curr_id', 'billoutdetil_valfrg', 'billoutdetil_valfrgrate', 'billoutdetil_validr', 'itemclass_id', 'coa_id', 'billout_id', '_createby', '_createdate', '_modifyby', '_modifydate' 
-				, '_createby', '_createdate', '_modifyby', '_modifydate' 
 			], $where->sql);
 
 			$stmt = $this->db->prepare($sql);

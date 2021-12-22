@@ -140,13 +140,17 @@ function btn_load_click() {
 			options.criteria['search'] = search
 		}
 
-		var asigned = cbo_asigned.combobox('getValue');
-	
+		var assigned = cbo_asigned.combobox('getValue');
+		var periode = cbo_search_periode.combo('getValue');
 
-		// switch (this_page_options.variancename) {
-		// 	case 'commit' :
-		//		break;
-		// }
+		if (periode!=='ALL') {
+			options.criteria.periodemo_id = periode
+		}
+
+		if (assigned!=='ALL') {
+			options.criteria.assigned = assigned
+		}	
+
 
 	}
 

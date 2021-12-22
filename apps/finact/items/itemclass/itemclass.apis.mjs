@@ -21,5 +21,6 @@ export const load_settl_coa_id = 'finact/master/coa/list'
 export const load_cost_coa_id = 'finact/master/coa/list'
 export const load_depremodel_id = 'finact/master/depremodel/list'
 export const load_projectmodel_id = 'finact/master/projectmodel/list'
+export const load_doctype_id = 'ent/general/doctype/list'
 
 

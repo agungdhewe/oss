@@ -3,7 +3,7 @@
 -- drop table if exists `mst_doctype`;
 
 
-CREATE TABLE `mst_doctype` (
+CREATE TABLE IF NOT EXISTS `mst_doctype` (
 	`doctype_id` varchar(10) NOT NULL , 
 	`doctype_name` varchar(90) NOT NULL , 
 	`_createby` varchar(13) NOT NULL , 
@@ -15,6 +15,15 @@ CREATE TABLE `mst_doctype` (
 ) 
 ENGINE=InnoDB
 COMMENT='Master Document Type';
+
+
+ALTER TABLE `mst_doctype` ADD COLUMN IF NOT EXISTS  `doctype_name` varchar(90) NOT NULL  AFTER `doctype_id`;
+
+
+ALTER TABLE `mst_doctype` MODIFY COLUMN IF EXISTS  `doctype_name` varchar(90) NOT NULL  AFTER `doctype_id`;
+
+
+ALTER TABLE `mst_doctype` ADD CONSTRAINT `doctype_name` UNIQUE IF NOT EXISTS  (`doctype_name`);
 
 
 

@@ -10,7 +10,7 @@
 		<div class="form_row" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">ID</div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_edit-txt_itemclass_id" class="easyui-textbox" mapping="itemclass_id" uppercase="true" maxlength="14" style="width: 400px" data-options="multiline: false  ">
+				<input id="pnl_edit-txt_itemclass_id" class="easyui-textbox" mapping="itemclass_id"  maxlength="14" style="width: 400px" data-options="multiline: false  ">
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>
@@ -56,7 +56,7 @@
 		<div class="form_row" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Group</div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_edit-cbo_itemclassgroup_id" class="easyui-combo" style="width: 400px" mapping="itemclassgroup_id" display="itemclassgroup_name" data-options="editable:false, valueField:'id', textField:'text' , prompt: '-- PILIH --'"  >
+				<input id="pnl_edit-cbo_itemclassgroup_id" class="easyui-combo" style="width: 400px" mapping="itemclassgroup_id" display="itemclassgroup_name" data-options="editable:false, valueField:'id', textField:'text' , prompt: 'NONE'"  >
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>
@@ -80,7 +80,7 @@
 		<div class="form_row" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Unit of Measurement</div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_edit-cbo_unitmeasurement_id" class="easyui-combo" style="width: 400px" mapping="unitmeasurement_id" display="unitmeasurement_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Unit measurement harus diisi'"   validType="requiredcombo['pnl_edit-cbo_unitmeasurement_id']"  >
+				<input id="pnl_edit-cbo_unitmeasurement_id" class="easyui-combo" style="width: 400px" mapping="unitmeasurement_id" display="unitmeasurement_name" data-options="editable:false, valueField:'id', textField:'text' , prompt: 'NONE'"  >
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>
@@ -203,6 +203,10 @@
 				<div class="fgtable-head-drow" style="height: 25px; padding: 5px 5px 0px 5px" onclick="$ui.getPages().ITEMS['pnl_edit'].handler.detil_open('pnl_editaccountgrid')">
 					<div id="pnl_edit-txt_account_title" class="detilgrid-text">Account Ovveride by Project Type</div>
 					<div id="pnl_edit-txt_account_value" class="detilgrid-value">&nbsp;</div>
+				</div>
+				<div class="fgtable-head-drow" style="height: 25px; padding: 5px 5px 0px 5px" onclick="$ui.getPages().ITEMS['pnl_edit'].handler.detil_open('pnl_editfilesgrid')">
+					<div id="pnl_edit-txt_files_title" class="detilgrid-text">Files</div>
+					<div id="pnl_edit-txt_files_value" class="detilgrid-value">&nbsp;</div>
 				</div>
 
 			</div>		

@@ -27,7 +27,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 27/10/2021
+ * tanggal 21/12/2021
  */
 $API = new class extends itemclassBase {
 	
@@ -61,7 +61,6 @@ $API = new class extends itemclassBase {
 			// apabila ada tanggal, ubah ke format sql sbb:
 			// $obj->tanggal = (\DateTime::createFromFormat('d/m/Y',$obj->tanggal))->format('Y-m-d');
 
-			$obj->itemclass_id = strtoupper($obj->itemclass_id);
 			$obj->itemclass_name = strtoupper($obj->itemclass_name);
 			$obj->itemmodel_id = strtoupper($obj->itemmodel_id);
 

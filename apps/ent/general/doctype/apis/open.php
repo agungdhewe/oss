@@ -24,7 +24,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 06/10/2021
+ * tanggal 21/12/2021
  */
 $API = new class extends doctypeBase {
 	

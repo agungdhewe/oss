@@ -29,8 +29,8 @@ const obj = {
 }
 
 
-let form = {}
-let header_data = {}
+let form;
+let header_data;
 
 
 
@@ -76,11 +76,16 @@ export async function init(opt) {
 			{mapping: 'billrowtype_id', text: 'billrowtype_id'},
 			{mapping: 'billrowtype_name', text: 'billrowtype_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria, options) => {
+				
+		},
 		OnDataLoaded : (result, options) => {
 				
 		},
-		OnSelected: (value, display, record) => {}
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+			}			
+		}
 	})				
 			
 	obj.cbo_taxtype_id.name = 'pnl_editdetilform-cbo_taxtype_id'		
@@ -95,11 +100,16 @@ export async function init(opt) {
 			{mapping: 'taxtype_id', text: 'taxtype_id'},
 			{mapping: 'taxtype_name', text: 'taxtype_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria, options) => {
+				
+		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({taxtype_id:'--NULL--', taxtype_name:'NONE'});	
 		},
-		OnSelected: (value, display, record) => {}
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+			}			
+		}
 	})				
 			
 	obj.cbo_curr_id.name = 'pnl_editdetilform-cbo_curr_id'		
@@ -114,11 +124,16 @@ export async function init(opt) {
 			{mapping: 'curr_id', text: 'curr_id'},
 			{mapping: 'curr_name', text: 'curr_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria, options) => {
+				
+		},
 		OnDataLoaded : (result, options) => {
 				
 		},
-		OnSelected: (value, display, record) => {}
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+			}			
+		}
 	})				
 			
 	obj.cbo_itemclass_id.name = 'pnl_editdetilform-cbo_itemclass_id'		
@@ -133,11 +148,16 @@ export async function init(opt) {
 			{mapping: 'itemclass_id', text: 'itemclass_id'},
 			{mapping: 'itemclass_name', text: 'itemclass_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria, options) => {
+				
+		},
 		OnDataLoaded : (result, options) => {
 				
 		},
-		OnSelected: (value, display, record) => {}
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+			}			
+		}
 	})				
 			
 	obj.cbo_coa_id.name = 'pnl_editdetilform-cbo_coa_id'		
@@ -152,26 +172,23 @@ export async function init(opt) {
 			{mapping: 'coa_id', text: 'coa_id'},
 			{mapping: 'coa_name', text: 'coa_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria, options) => {
+				
+		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({coa_id:'--NULL--', coa_name:'NONE'});	
 		},
-		OnSelected: (value, display, record) => {}
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+			}			
+		}
 	})				
 			
 
 
-	btn_addnew.linkbutton({
-		onClick: () => { btn_addnew_click() }
-	})
-
-	btn_prev.linkbutton({
-		onClick: () => { btn_prev_click() }
-	})
-
-	btn_next.linkbutton({
-		onClick: () => { btn_next_click() }
-	})
+	btn_addnew.linkbutton({ onClick: () => { btn_addnew_click() }  })
+	btn_prev.linkbutton({ onClick: () => { btn_prev_click() } })
+	btn_next.linkbutton({ onClick: () => { btn_next_click() } })
 
 	document.addEventListener('keydown', (ev)=>{
 		if ($ui.getPages().getCurrentPage()==this_page_id) {
@@ -247,31 +264,51 @@ export function open(data, rowid, hdata) {
 	txt_title.html(hdata.billout_descr)
 	header_data = hdata
 
+	var pOpt = form.getDefaultPrompt(false)
 	var fn_dataopening = async (options) => {
 		options.api = `${global.modulefullname}/detil-open`
 		options.criteria[form.primary.mapping] = data[form.primary.mapping]
 	}
 
 	var fn_dataopened = async (result, options) => {
-
+		var record = result.record;
 		updatefilebox(result.record);
+/*
+		if (record.taxtype_id==null) { record.taxtype_id='--NULL--'; record.taxtype_name='NONE'; }
+		if (record.coa_id==null) { record.coa_id='--NULL--'; record.coa_name='NONE'; }
 
-		if (result.record.taxtype_id==null) { result.record.taxtype_id='--NULL--'; result.record.taxtype_name='NONE'; }
-		if (result.record.coa_id==null) { result.record.coa_id='--NULL--'; result.record.coa_name='NONE'; }
-
-
+*/
+		for (var objid in obj) {
+			let o = obj[objid]
+			if (o.isCombo() && !o.isRequired()) {
+				var value =  result.record[o.getFieldValueName()];
+				if (value==null ) {
+					record[o.getFieldValueName()] = pOpt.value;
+					record[o.getFieldDisplayName()] = pOpt.text;
+				}
+			}
+		}
 		form.SuspendEvent(true);
 		form
-			.fill(result.record)
-			.setValue(obj.cbo_billrowtype_id, result.record.billrowtype_id, result.record.billrowtype_name)
-			.setValue(obj.cbo_taxtype_id, result.record.taxtype_id, result.record.taxtype_name)
-			.setValue(obj.cbo_curr_id, result.record.curr_id, result.record.curr_name)
-			.setValue(obj.cbo_itemclass_id, result.record.itemclass_id, result.record.itemclass_name)
-			.setValue(obj.cbo_coa_id, result.record.coa_id, result.record.coa_name)
-			.commit()
+			.fill(record)
+			.setValue(obj.cbo_billrowtype_id, record.billrowtype_id, record.billrowtype_name)
+			.setValue(obj.cbo_taxtype_id, record.taxtype_id, record.taxtype_name)
+			.setValue(obj.cbo_curr_id, record.curr_id, record.curr_name)
+			.setValue(obj.cbo_itemclass_id, record.itemclass_id, record.itemclass_name)
+			.setValue(obj.cbo_coa_id, record.coa_id, record.coa_name)
 			.setViewMode()
 			.rowid = rowid
 
+
+
+		/* tambahkan event atau behaviour saat form dibuka
+		   apabila ada rutin mengubah form dan tidak mau dijalankan pada saat opening,
+		   cek dengan form.isEventSuspended()
+		*/ 
+
+
+
+		form.commit()
 		form.SuspendEvent(false);
 
 
@@ -356,19 +393,41 @@ export function createnew(hdata) {
 async function form_datasaving(data, options) {
 	options.api = `${global.modulefullname}/detil-save`
 
-	options.skipmappingresponse = ["taxtype_id"];
-	options.skipmappingresponse = ["coa_id"];
-
-
+	// options.skipmappingresponse = ['taxtype_id', 'coa_id', ];
+	options.skipmappingresponse = [];
+	for (var objid in obj) {
+		var o = obj[objid]
+		if (o.isCombo() && !o.isRequired()) {
+			var id = o.getFieldValueName()
+			options.skipmappingresponse.push(id)
+			console.log(id)
+		}
+	}	
 }
 
 async function form_datasaved(result, options) {
 	var data = {}
 	Object.assign(data, form.getData(), result.dataresponse)
 
+	/*
 	form.setValue(obj.cbo_taxtype_id, result.dataresponse.taxtype_name!=='--NULL--' ? result.dataresponse.taxtype_id : '--NULL--', result.dataresponse.taxtype_name!=='--NULL--'?result.dataresponse.taxtype_name:'NONE')
 	form.setValue(obj.cbo_coa_id, result.dataresponse.coa_name!=='--NULL--' ? result.dataresponse.coa_id : '--NULL--', result.dataresponse.coa_name!=='--NULL--'?result.dataresponse.coa_name:'NONE')
 
+	*/
+
+	var pOpt = form.getDefaultPrompt(false)
+	for (var objid in obj) {
+		var o = obj[objid]
+		if (o.isCombo() && !o.isRequired()) {
+			var value =  result.dataresponse[o.getFieldValueName()];
+			var text = result.dataresponse[o.getFieldDisplayName()];
+			if (value==null ) {
+				value = pOpt.value;
+				text = pOpt.text;
+			}
+			form.setValue(o, value, text);
+		}
+	}
 	form.rowid = $ui.getPages().ITEMS['pnl_editdetilgrid'].handler.updategrid(data, form.rowid)
 
 	var autoadd = chk_autoadd.prop("checked")

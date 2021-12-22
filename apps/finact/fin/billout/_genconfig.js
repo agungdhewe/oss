@@ -20,24 +20,59 @@ module.exports = {
 			data: {
 				billout_id: { text: 'ID', type: dbtype.varchar(14), null: false, uppercase: true, options: { required: true, invalidMessage: 'ID harus diisi' } },
 
-				dept_id: {
-					text: 'Dept', type: dbtype.varchar(30), null: true, suppresslist: true,
-					options: { prompt: 'NONE' },
+				billtype_id: {
+					text:'Type', type: dbtype.varchar(3), null:false, suppresslist: true,
+					options:{required:true,invalidMessage:'Type Bill', prompt:'-- PILIH --'},
 					comp: comp.Combo({
-						table: 'mst_dept',
-						field_value: 'dept_id', field_display: 'dept_name',
-						api: 'ent/organisation/dept/list-forsalesorder'
+						table: 'mst_billtype', 
+						field_value: 'billtype_id', field_display: 'billtype_name', 
+						api: 'finact/master/billtype/list-selector',
+						staticfilter: `
+				criteria.billtype_direction = 'OUT'		
+						`
 					})
 				},
 
-				salesorder_id: { 
-					text: 'Sales Order', type: dbtype.varchar(10), null: true, suppresslist: true,
+				dept_id: {
+					text: 'Dept', type: dbtype.varchar(30), null: true, suppresslist: true,
+					options: { required: true, invalidMessage: 'Model Transaksi harus diisi' }, 
+					comp: comp.Combo({
+						table: 'mst_dept',
+						field_value: 'dept_id', field_display: 'dept_name',
+						api: 'ent/organisation/dept/list-byuser'
+					})
+				},
+
+				orderin_id: { 
+					text: 'Order in', type: dbtype.varchar(30), null: true, suppresslist: true,
 					options: { prompt: 'NONE' },
 					comp: comp.Combo({
-						table: 'trn_salesorder', 
-						field_value: 'salesorder_id', field_display: 'salesorder_descr', field_display_name: 'salesorder_descr', 
-						api: 'finact/sales/order/list'})				
-				
+						table: 'trn_orderin', 
+						field_value: 'orderin_id', field_display: 'orderin_descr', field_display_name: 'orderin_descr', 
+						api: 'finact/sales/orderin/list-selector',
+						staticfilter: `
+				criteria.dept_id = form.getValue(obj.cbo_dept_id);	
+						`,
+						OnSelectedScript: `
+						
+						`
+					})				
+				},
+
+				orderinterm_id: { 
+					text: 'Term', type: dbtype.varchar(14), null: true, suppresslist: true,
+					options: { prompt: 'NONE' },
+					comp: comp.Combo({
+						table: 'trn_orderinterm', 
+						field_value: 'orderinterm_id', field_display: 'orderinterm_descr', field_display_name: 'orderinterm_descr', 
+						api: 'finact/sales/orderin/terms-list',
+						staticfilter: `
+				criteria.id = form.getValue(obj.cbo_orderin_id);	
+						`,
+						OnSelectedScript: `
+						
+						`
+					})				
 				},
 
 				billout_descr: { text: 'Descr', type: dbtype.varchar(255), null: false, options: { required: true, invalidMessage: 'Descr harus diisi' } },
@@ -53,38 +88,184 @@ module.exports = {
 						api: 'ent/affiliation/partner/list'})
 				},	
 
-				coa_id: {
-					text: 'Account', type: dbtype.varchar(17), null: true, suppresslist: true,
-					options: { prompt:'NONE' },
+
+				// curr_id: {
+				// 	text:'Currency', type: dbtype.varchar(10), null:false, suppresslist: true,
+				// 	options:{required:true,invalidMessage:'Currency harus diisi', prompt:'-- PILIH --'},
+				// 	comp: comp.Combo({
+				// 		table: 'mst_curr', 
+				// 		field_value: 'curr_id', field_display: 'curr_name', 
+				// 		api: 'ent/general/curr/list'})
+				// },
+
+				// billout_valfrg: { text: 'Valas', type: dbtype.decimal(14, 2), null: false, default: 0, suppresslist: true, options: { required: true } },
+				// billout_valfrgrate: { text: 'Rate', type: dbtype.decimal(14, 0), null: false, default: 0, suppresslist: true, options: { required: true } },
+				// billout_validr: { text: 'Value IDR', type: dbtype.decimal(14, 2), null: false, default: 0, suppresslist: true, options: { required: true } },
+
+
+				ppn_taxtype_id: { 
+					section: section.Begin('Tax'),  //section.Begin('Related Dept', 'defbottomborder'),
+					text: 'PPN', type: dbtype.varchar(10), null: true, suppresslist: true,
+					options: { prompt: 'NONE' }, 
 					comp: comp.Combo({
-						table: 'mst_coa',
-						field_value: 'coa_id',
-						field_display: 'coa_name',
-						field_display_name: 'cost_coa_id_name', 
-						api: 'finact/master/coa/list'
+						table: 'mst_taxtype', 
+						field_value: 'taxtype_id', field_display: 'taxtype_name', field_display_name: 'ppn_taxtype_name', 
+						api: 'finact/master/taxtype/list'})				
+				
+				},
+				ppn_taxvalue: { text: 'PPN Value (%)', type: dbtype.decimal(4,2), null: false, default:0, suppresslist: true, options: { disabled: true} },
+				ppn_include: {text:'PPN Include', type: dbtype.boolean, null:false, default:'0', suppresslist: true, options: { disabled: true}},
+
+
+				pph_taxtype_id: { text: 'PPh', type: dbtype.varchar(10), null: true, suppresslist: true,
+					options: { prompt: 'NONE' }, 
+					comp: comp.Combo({
+						table: 'mst_taxtype', 
+						field_value: 'taxtype_id', field_display: 'taxtype_name', field_display_name: 'pph_taxtype_name', 
+						api: 'finact/master/taxtype/list'})				
+			
+				},
+
+				pph_taxvalue: { 
+					section: section.End(),  //section.Begin('Related Dept', 'defbottomborder'),
+					text: 'PPH Value (%)', type: dbtype.decimal(4,2), null: false, default:0, suppresslist: true, options: { disabled: true} 
+				},
+
+
+
+
+				arunbill_coa_id: { 
+					section: section.Begin('Chart of Accounts'),  // , 'defbottomborder'
+					text: 'COA AR Unbill', type: dbtype.varchar(17), null: false, suppresslist: true,
+					options: { required: true, invalidMessage: 'AR harus diisi' }, 
+					tips: '',
+					tipstype: 'visible',
+					comp: comp.Combo({
+						table: 'mst_coa', 
+						field_value: 'coa_id', field_display: 'coa_name', field_display_name: 'arunbill_coa_name', 
+						api: 'finact/master/coa/list'})				
+				
+				},
+
+				ar_coa_id: { 
+					text: 'COA AR', type: dbtype.varchar(17), null: false, suppresslist: true,
+					options: { required: true, invalidMessage: 'AR harus diisi' }, 
+					tips: '',
+					tipstype: 'visible',
+					comp: comp.Combo({
+						table: 'mst_coa', 
+						field_value: 'coa_id', field_display: 'coa_name', field_display_name: 'ar_coa_name', 
+						api: 'finact/master/coa/list'})				
+				
+				},
+
+	
+				dp_coa_id: { 
+					text: 'COA Downpayment', type: dbtype.varchar(17), null: false, suppresslist: true,
+					options: { required: true, invalidMessage: 'OrderIn COA Downpayment harus diisi' }, 
+					tips: '',
+					tipstype: 'visible',
+					comp: comp.Combo({
+						table: 'mst_coa', 
+						field_value: 'coa_id', field_display: 'coa_name', field_display_name: 'dp_coa_name', 
+						api: 'finact/master/coa/list'})				
+				
+				},
+
+				sales_coa_id: { 
+					text: 'COA Sales', type: dbtype.varchar(10), null: false, suppresslist: true,
+					options: { required: true, invalidMessage: 'OrderIn Sales COA harus diisi' }, 
+					tips: '',
+					tipstype: 'visible',
+					comp: comp.Combo({
+						table: 'mst_coa', 
+						field_value: 'coa_id', field_display: 'coa_name', field_display_name: 'sales_coa_name', 
+						api: 'finact/master/coa/list'})				
+				
+				},	
+				
+				salesdisc_coa_id: { 
+					text: 'COA Disc Sales', type: dbtype.varchar(10), null: true, suppresslist: true,
+					options: { prompt: 'NONE' }, 
+					tips: '',
+					tipstype: 'visible',
+					comp: comp.Combo({
+						table: 'mst_coa', 
+						field_value: 'coa_id', field_display: 'coa_name', field_display_name: 'salesdisc_coa_name', 
+						api: 'finact/master/coa/list'})				
+				},
+
+				ppn_coa_id: { 
+					text: 'COA PPN Payable', type: dbtype.varchar(10), null: true, suppresslist: true,
+					options: { prompt: 'NONE' }, 
+					tips: '',
+					tipstype: 'visible',
+					comp: comp.Combo({
+						table: 'mst_coa', 
+						field_value: 'coa_id', field_display: 'coa_name', field_display_name: 'ppn_coa_name', 
+						api: 'finact/master/coa/list'})				
+				},
+
+				ppnsubsidi_coa_id: { 
+					text: 'COA Subsidi PPN', type: dbtype.varchar(10), null: true, suppresslist: true,
+					options: { prompt: 'NONE' }, 
+					tips: 'Apabila PPN include COA ini perlu diisi',
+					tipstype: 'visible',
+					comp: comp.Combo({
+						table: 'mst_coa', 
+						field_value: 'coa_id', field_display: 'coa_name', field_display_name: 'ppnsubsidi_coa_name', 
+						api: 'finact/master/coa/list'})				
+				},
+
+				pph_coa_id: { 
+					section: section.End(),
+					text: 'COA PPH Prepaid', type: dbtype.varchar(10), null: true, suppresslist: true,
+					options: { prompt: 'NONE' }, 
+					tips: '',
+					tipstype: 'visible',
+					comp: comp.Combo({
+						table: 'mst_coa', 
+						field_value: 'coa_id', field_display: 'coa_name', field_display_name: 'pph_coa_name', 
+						api: 'finact/master/coa/list'})				
+				},						
+
+
+
+
+
+
+				billout_salesgross: { text: 'Gross Sales', type: dbtype.decimal(16,0), null: false, default:0, suppresslist: true, options: { disabled: true} },
+				billout_discount: { text: 'Dicount', type: dbtype.decimal(16,0), null: false, default:0, suppresslist: true, options: { disabled: true} },
+				billout_subtotal: { text: 'Sub Total', type: dbtype.decimal(16,0), null: false, default:0, suppresslist: true, options: { disabled: true} },
+				billout_pph: { text: 'PPh', type: dbtype.decimal(16,0), null: false, default:0, suppresslist: true, options: { disabled: true} },
+				billout_nett: { text: 'Sales Nett', type: dbtype.decimal(16,0), null: false, default:0, suppresslist: true, options: { disabled: true} },
+				billout_ppn: { text: 'PPN', type: dbtype.decimal(16,0), null: false, default:0, suppresslist: true, options: { disabled: true} },
+				billout_total: { text: 'Total', type: dbtype.decimal(16,0), null: false, default:0, suppresslist: true, options: { disabled: true} },
+				billout_totaladdcost: { text: 'Additional Cost', type: dbtype.decimal(16,0), null: false, default:0, suppresslist: true, options: { disabled: true} },
+				billout_payment: { 
+					section: section.End(),
+					text: 'Total Payment', type: dbtype.decimal(16,0), null: false, default:0, suppresslist: true, options: { disabled: true} },
+
+
+
+				unit_id: {
+					text: 'Unit', type: dbtype.varchar(10), null: true, suppresslist: true,
+					options: { prompt: 'NONE' },
+					comp: comp.Combo({
+						table: 'mst_unit',
+						field_value: 'unit_id', field_display: 'unit_name',
+						api: 'ent/organisation/unit/list'
 					})
 				},
 
-				curr_id: {
-					text:'Currency', type: dbtype.varchar(10), null:false, suppresslist: true,
-					options:{required:true,invalidMessage:'Currency harus diisi', prompt:'-- PILIH --'},
+				owner_dept_id: {
+					text: 'Item Owner Dept', type: dbtype.varchar(30), null: false, suppresslist: true,
+					options: { required: true, invalidMessage: 'Departemen harus diisi'},
 					comp: comp.Combo({
-						table: 'mst_curr', 
-						field_value: 'curr_id', field_display: 'curr_name', 
-						api: 'ent/general/curr/list'})
-				},
-
-				billout_valfrg: { text: 'Valas', type: dbtype.decimal(14, 2), null: false, default: 0, suppresslist: true, options: { required: true } },
-				billout_valfrgrate: { text: 'Rate', type: dbtype.decimal(14, 0), null: false, default: 0, suppresslist: true, options: { required: true } },
-				billout_validr: { text: 'Value IDR', type: dbtype.decimal(14, 2), null: false, default: 0, suppresslist: true, options: { required: true } },
-
-				billtype_id: {
-					text:'Type', type: dbtype.varchar(3), null:false, suppresslist: true,
-					options:{required:true,invalidMessage:'Type Bill', prompt:'-- PILIH --'},
-					comp: comp.Combo({
-						table: 'mst_billtype', 
-						field_value: 'billtype_id', field_display: 'billtype_name', 
-						api: 'finact/master/billtype/list'})
+						table: 'mst_dept',
+						field_value: 'dept_id', field_display: 'dept_name', field_display_name: 'sales_dept_name',
+						api: 'ent/organisation/dept/list-selector'
+					})
 				},
 
 				trxmodel_id: { 
@@ -97,9 +278,11 @@ module.exports = {
 				
 				},
 
+
 				doc_id: {
 					text:'Doc', type: dbtype.varchar(30), null:false, suppresslist: true,
 					options: {required:true, invalidMessage:'ID harus diisi' },
+					initialvalue: {id: 'BILLOUT', text:'BILLOUT'},
 					comp: comp.Combo({
 						table: 'mst_doc',
 						field_value: 'doc_id', field_display: 'doc_name', field_display_name: 'doc_name',
@@ -179,7 +362,6 @@ module.exports = {
 						api: 'finact/master/coa/list'
 					})
 				},			
-				
 				
 				billout_id: { text: 'Bill ID', type: dbtype.varchar(14), null: false },
 

@@ -1,13 +1,9 @@
 {
 	"title": "home",
 	"modules": [
+		
 
-		"finact/sales/orderintype",
 
-		"media/sales/mediaorder",
-		"media/sales/logproof",
-		"media/sales/logproofassign",
- 
 		{
 			"title" : "Account",
 			"modules" : [
@@ -67,6 +63,39 @@
 
 
 		{
+			"title" : "Items",
+			"modules" : [
+				"finact/items/itemclass",
+				"finact/items/item",
+				"finact/items/itemstock",
+				"finact/items/itemasset"
+			]
+		},
+
+		{
+			"title" : "Billing",
+			"modules" : [
+				"media/sales/mediaorder",
+				"media/sales/logproof",
+				"media/sales/logproofassign",
+				"media/sales/logproofbilling",
+				"finact/fin/billout"
+			]
+		},
+
+
+		{
+			"title" : "Expenditure",
+			"modules" : [
+				"finact/procurement/inquirytype",
+				"finact/procurement/inquiry",
+				"finact/procurement/request",
+				"finact/procurement/orderout",
+				"finact/procurement/recv"
+			]
+		},
+
+		{
 			"title": "Setup",
 			"modules": [
 
@@ -123,8 +152,6 @@
 						"ent/organisation/docs"
 					]
 				}
-
-				
 
 			]
 		},

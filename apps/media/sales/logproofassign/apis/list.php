@@ -39,10 +39,32 @@ $API = new class extends logproofassignBase {
 			}
 
 			// \FGTA4\utils\SqlUtility::setDefaultCriteria($options->criteria, '--fieldscriteria--', '--value--');
+
+			$assigned = $options->criteria->assigned;
+			if ($assigned=='all') {
+				unset($options->criteria->{"assigned"});
+			}
+
+			$periodemo_id = $options->criteria->periodemo_id;
+			$periodemo = \FGTA4\utils\SqlUtility::LookupRow($periodemo_id, $this->db, 'mst_periodemo', 'periodemo_id');
+			if (!empty($periodemo_id)) {
+				$options->criteria->periode = 1;
+				$options->criteria->datestart = $periodemo['periodemo_dtstart'];
+				$options->criteria->dateend = $periodemo['periodemo_dtend'];
+			} 
+			unset($options->criteria->{"periodemo_id"});
+			
+
+
+
 			$where = \FGTA4\utils\SqlUtility::BuildCriteria(
 				$options->criteria,
 				[
-					"search" => " A.medialogproofitem_id LIKE CONCAT('%', :search, '%') "
+					"search" => " A.medialogproofitem_id LIKE CONCAT('%', :search, '%') ",
+					"assigned" => $assigned=='assigned' ? " A.projbudgettask_id is not null " : " A.projbudgettask_id is null ",
+					"periode" => " ( A.medialogproof_date >= :datestart and  A.medialogproof_date <= :dateend) ",
+					"datestart" => '--',
+					"dateend" => '--'
 				]
 			);
 
@@ -50,7 +72,7 @@ $API = new class extends logproofassignBase {
 			$maxrow = 30;
 			$offset = (property_exists($options, 'offset')) ? $options->offset : 0;
 
-			$stmt = $this->db->prepare("select count(*) as n from trn_medialogproofitem A" . $where->sql);
+			$stmt = $this->db->prepare("select count(*) as n from view_medialogproof A" . $where->sql);
 			$stmt->execute($where->params);
 			$row  = $stmt->fetch(\PDO::FETCH_ASSOC);
 			$total = (float) $row['n'];
@@ -58,8 +80,8 @@ $API = new class extends logproofassignBase {
 			$limit = " LIMIT $maxrow OFFSET $offset ";
 			$stmt = $this->db->prepare("
 				select 
-				A.medialogproofitem_id, A.mediaadslot_timestart, A.mediaadslot_timeend, A.mediaadslot_descr, A.actual_timestart, A.actual_timeend, A.actual_duration, A.spot_id, A.mediaorderitem_validr, A.mediaorderitem_ppnidr, A.pph_taxtype_id, A.mediaorder_id, A.mediaorderitem_id, A.projbudget_id, A.projbudgettask_id, A.billoutpreprocess_id, A.mediaordertype_id, A.logproof_partnerinfo, A.agency_partner_id, A.advertiser_partner_id, A.brand_id, A.project_id, A.projecttask_id, A.medialogproof_id, A._createby, A._createdate, A._modifyby, A._modifydate 
-				from trn_medialogproofitem A
+				A.medialogproof_date, A.medialogproofitem_id, A.mediaadslot_timestart, A.mediaadslot_timeend, A.mediaadslot_descr, A.actual_timestart, A.actual_timeend, A.actual_duration, A.spot_id, A.mediaorderitem_validr, A.mediaorderitem_ppnidr, A.pph_taxtype_id, A.mediaorder_id, A.mediaorderitem_id, A.projbudget_id, A.projbudgettask_id, A.billoutpreprocess_id, A.mediaordertype_id, A.logproof_partnerinfo, A.agency_partner_id, A.advertiser_partner_id, A.brand_id, A.project_id, A.projecttask_id, A.medialogproof_id, A._createby, A._createdate, A._modifyby, A._modifydate 
+				from view_medialogproof A
 			" . $where->sql . $limit);
 			$stmt->execute($where->params);
 			$rows  = $stmt->fetchall(\PDO::FETCH_ASSOC);
@@ -79,7 +101,7 @@ $API = new class extends logproofassignBase {
 					'mediaorder_descr' => \FGTA4\utils\SqlUtility::Lookup($record['mediaorder_id'], $this->db, 'trn_mediaorder', 'mediaorder_id', 'mediaorder_descr'),
 					'mediaorderitem_descr' => \FGTA4\utils\SqlUtility::Lookup($record['mediaorderitem_id'], $this->db, 'trn_mediaorderitem', 'mediaorderitem_id', 'mediaorderitem_descr'),
 					'projbudget_name' => \FGTA4\utils\SqlUtility::Lookup($record['projbudget_id'], $this->db, 'mst_projbudget', 'projbudget_id', 'projbudget_name'),
-					'projbudgettask_name' => \FGTA4\utils\SqlUtility::Lookup($record['projbudgettask_id'], $this->db, 'mst_projbudgettask', 'projbudgettask_id', 'projbudgettask_name'),
+					'projbudgettask_name' => \FGTA4\utils\SqlUtility::Lookup($record['projbudgettask_id'], $this->db, 'view_projbudgettask', 'projbudgettask_id', 'projbudgettask_name'),
 					'billoutpreprocess_name' => \FGTA4\utils\SqlUtility::Lookup($record['billoutpreprocess_id'], $this->db, 'mst_billoutpreprocess', 'billoutpreprocess_id', 'billoutpreprocess_name'),
 					'mediaordertype_name' => \FGTA4\utils\SqlUtility::Lookup($record['mediaordertype_id'], $this->db, 'mst_mediaordertype', 'mediaordertype_id', 'mediaordertype_name'),
 					'partner_name' => \FGTA4\utils\SqlUtility::Lookup($record['agency_partner_id'], $this->db, 'mst_partner', 'partner_id', 'partner_name'),

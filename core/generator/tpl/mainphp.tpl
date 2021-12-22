@@ -31,7 +31,7 @@ $MODULE = new class extends WebModule {
 			// dengan memanggil variable global.setup.<namavariable>
 			$this->setup = (object)array(
 				'print_to_new_window' => false,
-				'username' => $userdata->username,/*--__DEFDOCID__--*/
+				'username' => $userdata->username,/*--__AUTOBYLOGIN__--*//*--__DEFDOCID__--*/
 			);
 
 			$variancename = $_GET['variancename'];

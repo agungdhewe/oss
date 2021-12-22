@@ -26,7 +26,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 19/04/2021
+ * tanggal 22/12/2021
  */
 class billoutBase extends WebAPI {
 
@@ -83,27 +83,6 @@ class billoutBase extends WebAPI {
 			$rows = $stmt->fetchall(\PDO::FETCH_ASSOC);
 			if (!count($rows)) { throw new \Exception("Data '$id' tidak ditemukan"); }
 			return (object)$rows[0];
-		} catch (\Exception $ex) {
-			throw $ex;
-		}
-	}
-
-
-
-	public function get_detil_row($id) {
-		try {
-			$sql = "
-				select 
-				A.*
-				from 
-				trn_billoutdetil A 
-				where 
-				A.billout_id = :id 
-			";
-			$stmt = $this->db->prepare($sql);
-			$stmt->execute([":id" => $id]);
-			$rows = $stmt->fetchall(\PDO::FETCH_ASSOC);
-			return $rows;
 		} catch (\Exception $ex) {
 			throw $ex;
 		}

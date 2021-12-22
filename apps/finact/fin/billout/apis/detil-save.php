@@ -26,7 +26,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 19/04/2021
+ * tanggal 22/12/2021
  */
 $API = new class extends billoutBase {
 	
@@ -59,8 +59,6 @@ $API = new class extends billoutBase {
 			$obj->itemclass_id = strtoupper($obj->itemclass_id);
 
 
-			// if ($obj->taxtype_id=='--NULL--') { unset($obj->taxtype_id); }
-			// if ($obj->coa_id=='--NULL--') { unset($obj->coa_id); }
 
 
 
@@ -105,41 +103,43 @@ $API = new class extends billoutBase {
 
 
 
-				$this->db->commit();
-			} catch (\Exception $ex) {
-				$this->db->rollBack();
-				throw $ex;
-			} finally {
-				$this->db->setAttribute(\PDO::ATTR_AUTOCOMMIT,1);
-			}
 
+				// result
+				$where = \FGTA4\utils\SqlUtility::BuildCriteria((object)[$primarykey=>$obj->{$primarykey}], [$primarykey=>"$primarykey=:$primarykey"]);
+				$sql = \FGTA4\utils\SqlUtility::Select($tablename , [
+					$primarykey
+					, 'billoutdetil_id', 'billrowtype_id', 'taxtype_id', 'billoutdetil_descr', 'curr_id', 'billoutdetil_valfrg', 'billoutdetil_valfrgrate', 'billoutdetil_validr', 'itemclass_id', 'coa_id', 'billout_id', '_createby', '_createdate', '_modifyby', '_modifydate', '_createby', '_createdate', '_modifyby', '_modifydate'
+				], $where->sql);
+				$stmt = $this->db->prepare($sql);
+				$stmt->execute($where->params);
+				$row  = $stmt->fetch(\PDO::FETCH_ASSOC);			
 
-			$where = \FGTA4\utils\SqlUtility::BuildCriteria((object)[$primarykey=>$obj->{$primarykey}], [$primarykey=>"$primarykey=:$primarykey"]);
-			$sql = \FGTA4\utils\SqlUtility::Select($tablename , [
-				$primarykey
-				, 'billoutdetil_id', 'billrowtype_id', 'taxtype_id', 'billoutdetil_descr', 'curr_id', 'billoutdetil_valfrg', 'billoutdetil_valfrgrate', 'billoutdetil_validr', 'itemclass_id', 'coa_id', 'billout_id', '_createby', '_createdate', '_modifyby', '_modifydate', '_createby', '_createdate', '_modifyby', '_modifydate'
-			], $where->sql);
-			$stmt = $this->db->prepare($sql);
-			$stmt->execute($where->params);
-			$row  = $stmt->fetch(\PDO::FETCH_ASSOC);			
-
-			$record = [];
-			foreach ($row as $key => $value) {
-				$record[$key] = $value;
-			}
-			$result->dataresponse = (object) array_merge($record, [
-				// untuk lookup atau modify response ditaruh disini
+				$record = [];
+				foreach ($row as $key => $value) {
+					$record[$key] = $value;
+				}
+				$result->dataresponse = (object) array_merge($record, [
+					// untuk lookup atau modify response ditaruh disini
 				'billrowtype_name' => \FGTA4\utils\SqlUtility::Lookup($record['billrowtype_id'], $this->db, 'mst_billrowtype', 'billrowtype_id', 'billrowtype_name'),
 				'taxtype_name' => \FGTA4\utils\SqlUtility::Lookup($record['taxtype_id'], $this->db, 'mst_taxtype', 'taxtype_id', 'taxtype_name'),
 				'curr_name' => \FGTA4\utils\SqlUtility::Lookup($record['curr_id'], $this->db, 'mst_curr', 'curr_id', 'curr_name'),
 				'itemclass_name' => \FGTA4\utils\SqlUtility::Lookup($record['itemclass_id'], $this->db, 'mst_itemclass', 'itemclass_id', 'itemclass_name'),
 				'coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
 
-				'_createby' => \FGTA4\utils\SqlUtility::Lookup($record['_createby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
-				'_modifyby' => \FGTA4\utils\SqlUtility::Lookup($record['_modifyby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
-			]);
+					'_createby' => \FGTA4\utils\SqlUtility::Lookup($record['_createby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+					'_modifyby' => \FGTA4\utils\SqlUtility::Lookup($record['_modifyby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+				]);
 
-			return $result;
+				$this->db->commit();
+
+				return $result;
+			} catch (\Exception $ex) {
+				$this->db->rollBack();
+				throw $ex;
+			} finally {
+				$this->db->setAttribute(\PDO::ATTR_AUTOCOMMIT,1);
+			}
+			
 		} catch (\Exception $ex) {
 			throw $ex;
 		}

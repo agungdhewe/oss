@@ -24,7 +24,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 19/04/2021
+ * tanggal 22/12/2021
  */
 $API = new class extends billoutBase {
 
@@ -33,6 +33,7 @@ $API = new class extends billoutBase {
 		
 		try {
 
+			// \FGTA4\utils\SqlUtility::setDefaultCriteria($options->criteria, '--fieldscriteria--', '--value--');
 			$where = \FGTA4\utils\SqlUtility::BuildCriteria(
 				$options->criteria,
 				[
@@ -56,7 +57,7 @@ $API = new class extends billoutBase {
 			$limit = " LIMIT $maxrow OFFSET $offset ";
 			$stmt = $this->db->prepare("
 				select 
-				billoutdetil_id, billrowtype_id, taxtype_id, billoutdetil_descr, curr_id, billoutdetil_valfrg, billoutdetil_valfrgrate, billoutdetil_validr, itemclass_id, coa_id, billout_id, _createby, _createdate, _modifyby, _modifydate 
+				A.billoutdetil_id, A.billrowtype_id, A.taxtype_id, A.billoutdetil_descr, A.curr_id, A.billoutdetil_valfrg, A.billoutdetil_valfrgrate, A.billoutdetil_validr, A.itemclass_id, A.coa_id, A.billout_id, A._createby, A._createdate, A._modifyby, A._modifydate 
 				from trn_billoutdetil A
 			" . $where->sql . $limit);
 			$stmt->execute($where->params);

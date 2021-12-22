@@ -97,14 +97,14 @@ export async function init(opt) {
 			{mapping: 'itemmodel_id', text: 'itemmodel_id'},
 			{mapping: 'itemmodel_name', text: 'itemmodel_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+						
+		},
 		OnDataLoaded : (result, options) => {
 				
 		},
 		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {		
-				console.log(record);
-				form.setValue(obj.cbo_itemmanage_id, record.itemmanage_id, record.itemmanage_name);		
+			if (value!=args.PreviousValue ) {				
 			}
 		}
 	})				
@@ -120,9 +120,11 @@ export async function init(opt) {
 			{mapping: 'itemclassgroup_id', text: 'itemclassgroup_id'},
 			{mapping: 'itemclassgroup_name', text: 'itemclassgroup_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+						
+		},
 		OnDataLoaded : (result, options) => {
-				
+			result.records.unshift({itemclassgroup_id:'--NULL--', itemclassgroup_name:'NONE'});	
 		},
 		OnSelected: (value, display, record, args) => {
 			if (value!=args.PreviousValue ) {				
@@ -141,7 +143,9 @@ export async function init(opt) {
 			{mapping: 'dept_id', text: 'dept_id'},
 			{mapping: 'dept_name', text: 'dept_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+						
+		},
 		OnDataLoaded : (result, options) => {
 				
 		},
@@ -167,7 +171,9 @@ export async function init(opt) {
 			{mapping: 'dept_id', text: 'dept_id'},
 			{mapping: 'dept_name', text: 'dept_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+						
+		},
 		OnDataLoaded : (result, options) => {
 				
 		},
@@ -188,7 +194,9 @@ export async function init(opt) {
 			{mapping: 'unitmeasurement_id', text: 'unitmeasurement_id'},
 			{mapping: 'unitmeasurement_name', text: 'unitmeasurement_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+						
+		},
 		OnDataLoaded : (result, options) => {
 				
 		},
@@ -209,7 +217,9 @@ export async function init(opt) {
 			{mapping: 'itemmanage_id', text: 'itemmanage_id'},
 			{mapping: 'itemmanage_name', text: 'itemmanage_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+						
+		},
 		OnDataLoaded : (result, options) => {
 				
 		},
@@ -230,7 +240,9 @@ export async function init(opt) {
 			{mapping: 'accbudget_id', text: 'accbudget_id'},
 			{mapping: 'accbudget_name', text: 'accbudget_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+						
+		},
 		OnDataLoaded : (result, options) => {
 				
 		},
@@ -251,7 +263,9 @@ export async function init(opt) {
 			{mapping: 'coa_id', text: 'coa_id'},
 			{mapping: 'coa_name', text: 'coa_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+						
+		},
 		OnDataLoaded : (result, options) => {
 				
 		},
@@ -272,7 +286,9 @@ export async function init(opt) {
 			{mapping: 'coa_id', text: 'coa_id'},
 			{mapping: 'coa_name', text: 'coa_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+						
+		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({coa_id:'--NULL--', coa_name:'NONE'});	
 		},
@@ -293,7 +309,9 @@ export async function init(opt) {
 			{mapping: 'depremodel_id', text: 'depremodel_id'},
 			{mapping: 'depremodel_name', text: 'depremodel_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+						
+		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({depremodel_id:'--NULL--', depremodel_name:'NONE'});	
 		},
@@ -373,6 +391,7 @@ export function open(data, rowid, viewmode=true, fn_callback) {
 		updatefilebox(record);
 
 		/*
+		if (result.record.itemclassgroup_id==null) { result.record.itemclassgroup_id='--NULL--'; result.record.itemclassgroup_name='NONE'; }
 		if (result.record.cost_coa_id==null) { result.record.cost_coa_id='--NULL--'; result.record.cost_coa_name='NONE'; }
 		if (result.record.depremodel_id==null) { result.record.depremodel_id='--NULL--'; result.record.depremodel_name='NONE'; }
 
@@ -484,6 +503,7 @@ export function createnew() {
 		}
 
 		$ui.getPages().ITEMS['pnl_editaccountgrid'].handler.createnew(data, options)
+		$ui.getPages().ITEMS['pnl_editfilesgrid'].handler.createnew(data, options)
 
 
 	})
@@ -560,7 +580,7 @@ async function form_datasaving(data, options) {
 	//    options.cancel = true
 
 	// Modifikasi object data, apabila ingin menambahkan variabel yang akan dikirim ke server
-	// options.skipmappingresponse = ['cost_coa_id', 'depremodel_id', ];
+	// options.skipmappingresponse = ['itemclassgroup_id', 'cost_coa_id', 'depremodel_id', ];
 	options.skipmappingresponse = [];
 	for (var objid in obj) {
 		var o = obj[objid]
@@ -598,6 +618,7 @@ async function form_datasaved(result, options) {
 	var data = {}
 	Object.assign(data, form.getData(), result.dataresponse)
 	/*
+	form.setValue(obj.cbo_itemclassgroup_id, result.dataresponse.itemclassgroup_name!=='--NULL--' ? result.dataresponse.itemclassgroup_id : '--NULL--', result.dataresponse.itemclassgroup_name!=='--NULL--'?result.dataresponse.itemclassgroup_name:'NONE')
 	form.setValue(obj.cbo_cost_coa_id, result.dataresponse.cost_coa_name!=='--NULL--' ? result.dataresponse.cost_coa_id : '--NULL--', result.dataresponse.cost_coa_name!=='--NULL--'?result.dataresponse.cost_coa_name:'NONE')
 	form.setValue(obj.cbo_depremodel_id, result.dataresponse.depremodel_name!=='--NULL--' ? result.dataresponse.depremodel_id : '--NULL--', result.dataresponse.depremodel_name!=='--NULL--'?result.dataresponse.depremodel_name:'NONE')
 

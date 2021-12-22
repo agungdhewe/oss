@@ -5,11 +5,23 @@ import * as fgta4pageslider from '../../../../../index.php/asset/fgta/framework/
 import * as apis from './orderin.apis.mjs'
 import * as pList from './orderin-list.mjs'
 import * as pEdit from './orderin-edit.mjs'
+import * as pEditItemsgrid from './orderin-itemsgrid.mjs'
+import * as pEditItemsform from './orderin-itemsform.mjs'
+import * as pEditTermsgrid from './orderin-termsgrid.mjs'
+import * as pEditTermsform from './orderin-termsform.mjs'
+import * as pEditApprovalgrid from './orderin-approvalgrid.mjs'
+import * as pEditApprovalform from './orderin-approvalform.mjs'
 
 
 
 const pnl_list = $('#pnl_list')
 const pnl_edit = $('#pnl_edit')
+const pnl_edititemsgrid = $('#pnl_edititemsgrid')
+const pnl_edititemsform = $('#pnl_edititemsform')
+const pnl_edittermsgrid = $('#pnl_edittermsgrid')
+const pnl_edittermsform = $('#pnl_edittermsform')
+const pnl_editapprovalgrid = $('#pnl_editapprovalgrid')
+const pnl_editapprovalform = $('#pnl_editapprovalform')
 
 
 
@@ -35,7 +47,12 @@ export async function init(opt) {
 		.initPages([
 			{panel: pnl_list, handler: pList},
 			{panel: pnl_edit, handler: pEdit},
-			
+			{panel: pnl_edititemsgrid, handler: pEditItemsgrid},
+			{panel: pnl_edititemsform, handler: pEditItemsform},
+			{panel: pnl_edittermsgrid, handler: pEditTermsgrid},
+			{panel: pnl_edittermsform, handler: pEditTermsform},
+			{panel: pnl_editapprovalgrid, handler: pEditApprovalgrid},
+			{panel: pnl_editapprovalform, handler: pEditApprovalform}			
 		], opt)
 
 	$ui.setPages(pages)
