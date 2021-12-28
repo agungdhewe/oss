@@ -3,6 +3,9 @@ var this_page_options;
 
 import {fgta4slideselect} from  '../../../../../index.php/asset/fgta/framework/fgta4libs/fgta4slideselect.mjs'
 
+const reload_header_modified = true;
+
+
 const txt_title = $('#pnl_editdetilform-title')
 const btn_edit = $('#pnl_editdetilform-btn_edit')
 const btn_save = $('#pnl_editdetilform-btn_save')
@@ -16,14 +19,23 @@ const chk_autoadd = $('#pnl_editdetilform-autoadd')
 const pnl_form = $('#pnl_editdetilform-form')
 const obj = {
 	txt_billoutdetil_id: $('#pnl_editdetilform-txt_billoutdetil_id'),
-	cbo_billrowtype_id: $('#pnl_editdetilform-cbo_billrowtype_id'),
-	cbo_taxtype_id: $('#pnl_editdetilform-cbo_taxtype_id'),
-	txt_billoutdetil_descr: $('#pnl_editdetilform-txt_billoutdetil_descr'),
-	cbo_curr_id: $('#pnl_editdetilform-cbo_curr_id'),
-	txt_billoutdetil_valfrg: $('#pnl_editdetilform-txt_billoutdetil_valfrg'),
-	txt_billoutdetil_valfrgrate: $('#pnl_editdetilform-txt_billoutdetil_valfrgrate'),
-	txt_billoutdetil_validr: $('#pnl_editdetilform-txt_billoutdetil_validr'),
+	cbo_billoutrowtype_id: $('#pnl_editdetilform-cbo_billoutrowtype_id'),
+	cbo_orderindelv_id: $('#pnl_editdetilform-cbo_orderindelv_id'),
 	cbo_itemclass_id: $('#pnl_editdetilform-cbo_itemclass_id'),
+	txt_billoutdetil_descr: $('#pnl_editdetilform-txt_billoutdetil_descr'),
+	txt_billoutdetil_totalitem: $('#pnl_editdetilform-txt_billoutdetil_totalitem'),
+	txt_billoutdetil_totalqty: $('#pnl_editdetilform-txt_billoutdetil_totalqty'),
+	txt_billoutdetil_salesgross: $('#pnl_editdetilform-txt_billoutdetil_salesgross'),
+	txt_billoutdetil_discount: $('#pnl_editdetilform-txt_billoutdetil_discount'),
+	txt_billoutdetil_subtotal: $('#pnl_editdetilform-txt_billoutdetil_subtotal'),
+	txt_billoutdetil_pph: $('#pnl_editdetilform-txt_billoutdetil_pph'),
+	txt_billoutdetil_nett: $('#pnl_editdetilform-txt_billoutdetil_nett'),
+	txt_billoutdetil_ppn: $('#pnl_editdetilform-txt_billoutdetil_ppn'),
+	txt_billoutdetil_total: $('#pnl_editdetilform-txt_billoutdetil_total'),
+	txt_billoutdetil_totaladdcost: $('#pnl_editdetilform-txt_billoutdetil_totaladdcost'),
+	txt_billoutdetil_dp: $('#pnl_editdetilform-txt_billoutdetil_dp'),
+	txt_billoutdetil_payment: $('#pnl_editdetilform-txt_billoutdetil_payment'),
+	cbo_accbudget_id: $('#pnl_editdetilform-cbo_accbudget_id'),
 	cbo_coa_id: $('#pnl_editdetilform-cbo_coa_id'),
 	txt_billout_id: $('#pnl_editdetilform-txt_billout_id')
 }
@@ -64,17 +76,17 @@ export async function init(opt) {
 
 
 
-	obj.cbo_billrowtype_id.name = 'pnl_editdetilform-cbo_billrowtype_id'		
-	new fgta4slideselect(obj.cbo_billrowtype_id, {
-		title: 'Pilih billrowtype_id',
+	obj.cbo_billoutrowtype_id.name = 'pnl_editdetilform-cbo_billoutrowtype_id'		
+	new fgta4slideselect(obj.cbo_billoutrowtype_id, {
+		title: 'Pilih billoutrowtype_id',
 		returnpage: this_page_id,
-		api: $ui.apis.load_billrowtype_id,
-		fieldValue: 'billrowtype_id',
-		fieldValueMap: 'billrowtype_id',
-		fieldDisplay: 'billrowtype_name',
+		api: $ui.apis.load_billoutrowtype_id,
+		fieldValue: 'billoutrowtype_id',
+		fieldValueMap: 'billoutrowtype_id',
+		fieldDisplay: 'billoutrowtype_name',
 		fields: [
-			{mapping: 'billrowtype_id', text: 'billrowtype_id'},
-			{mapping: 'billrowtype_name', text: 'billrowtype_name'},
+			{mapping: 'billoutrowtype_id', text: 'billoutrowtype_id'},
+			{mapping: 'billoutrowtype_name', text: 'billoutrowtype_name'},
 		],
 		OnDataLoading: (criteria, options) => {
 				
@@ -88,50 +100,61 @@ export async function init(opt) {
 		}
 	})				
 			
-	obj.cbo_taxtype_id.name = 'pnl_editdetilform-cbo_taxtype_id'		
-	new fgta4slideselect(obj.cbo_taxtype_id, {
-		title: 'Pilih taxtype_id',
+	obj.cbo_orderindelv_id.name = 'pnl_editdetilform-cbo_orderindelv_id'		
+	new fgta4slideselect(obj.cbo_orderindelv_id, {
+		title: 'Pilih orderindelv_id',
 		returnpage: this_page_id,
-		api: $ui.apis.load_taxtype_id,
-		fieldValue: 'taxtype_id',
-		fieldValueMap: 'taxtype_id',
-		fieldDisplay: 'taxtype_name',
+		api: $ui.apis.load_orderindelv_id,
+		fieldValue: 'orderindelv_id',
+		fieldValueMap: 'orderindelv_id',
+		fieldDisplay: 'orderindelv_descr',
 		fields: [
-			{mapping: 'taxtype_id', text: 'taxtype_id'},
-			{mapping: 'taxtype_name', text: 'taxtype_name'},
+			{mapping: 'orderindelv_id', text: 'orderindelv_id'},
+			{mapping: 'orderindelv_descr', text: 'orderindelv_descr'},
 		],
 		OnDataLoading: (criteria, options) => {
 				
 		},
 		OnDataLoaded : (result, options) => {
-			result.records.unshift({taxtype_id:'--NULL--', taxtype_name:'NONE'});	
+			result.records.unshift({orderindelv_id:'--NULL--', orderindelv_descr:'NONE'});	
 		},
 		OnSelected: (value, display, record, args) => {
 			if (value!=args.PreviousValue ) {
-			}			
-		}
-	})				
-			
-	obj.cbo_curr_id.name = 'pnl_editdetilform-cbo_curr_id'		
-	new fgta4slideselect(obj.cbo_curr_id, {
-		title: 'Pilih curr_id',
-		returnpage: this_page_id,
-		api: $ui.apis.load_curr_id,
-		fieldValue: 'curr_id',
-		fieldValueMap: 'curr_id',
-		fieldDisplay: 'curr_name',
-		fields: [
-			{mapping: 'curr_id', text: 'curr_id'},
-			{mapping: 'curr_name', text: 'curr_name'},
-		],
-		OnDataLoading: (criteria, options) => {
+				console.log(record);
+
+				if (record.orderindelv_id=='--NULL--')	{
+
+					record.orderindelv_descr = '';
+					record.orderindelv_totalitem = 0
+					record.orderindevl_totalqty = 0
+					record.orderindelv_salesgross = 0
+					record.orderindelv_discount = 0
+					record.orderindelv_subtotal = 0
+					record.orderindelv_pph = 0
+					record.orderindelv_nett = 0
+					record.orderindelv_ppn = 0
+					record.orderindelv_total = 0
+					record.orderindelv_totaladdcost = 0
+					record.orderindelv_payment = 0
+
+				}	
+
+				form.setValue(obj.txt_billoutdetil_descr, record.orderindelv_descr);
+
+
+				form.setValue(obj.txt_billoutdetil_totalitem, record.orderindelv_totalitem);
+				form.setValue(obj.txt_billoutdetil_totalqty, record.orderindevl_totalqty);
+				form.setValue(obj.txt_billoutdetil_salesgross, record.orderindelv_salesgross);
+				form.setValue(obj.txt_billoutdetil_discount, record.orderindelv_discount);
+				form.setValue(obj.txt_billoutdetil_subtotal, record.orderindelv_subtotal);
+				form.setValue(obj.txt_billoutdetil_pph, record.orderindelv_pph);
+				form.setValue(obj.txt_billoutdetil_nett, record.orderindelv_nett);
+				form.setValue(obj.txt_billoutdetil_ppn, record.orderindelv_ppn);
+				form.setValue(obj.txt_billoutdetil_total, record.orderindelv_total);
+				form.setValue(obj.txt_billoutdetil_totaladdcost, record.orderindelv_totaladdcost);
+				form.setValue(obj.txt_billoutdetil_payment, record.orderindelv_payment);
 				
-		},
-		OnDataLoaded : (result, options) => {
-				
-		},
-		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {
+						
 			}			
 		}
 	})				
@@ -152,7 +175,39 @@ export async function init(opt) {
 				
 		},
 		OnDataLoaded : (result, options) => {
+			result.records.unshift({itemclass_id:'--NULL--', itemclass_name:'NONE'});	
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+				console.log(record);
+
+				form.setValue(obj.txt_billoutdetil_descr, record.itemclass_name);
+
+				form.setValue(obj.cbo_accbudget_id, record.inquiry_accbudget_id, record.inquiry_accbudget_name );
+				form.setValue(obj.cbo_coa_id, record.settl_coa_id, record.settl_coa_name );
+							
+						
+			}			
+		}
+	})				
+			
+	obj.cbo_accbudget_id.name = 'pnl_editdetilform-cbo_accbudget_id'		
+	new fgta4slideselect(obj.cbo_accbudget_id, {
+		title: 'Pilih accbudget_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_accbudget_id,
+		fieldValue: 'accbudget_id',
+		fieldValueMap: 'accbudget_id',
+		fieldDisplay: 'accbudget_name',
+		fields: [
+			{mapping: 'accbudget_id', text: 'accbudget_id'},
+			{mapping: 'accbudget_name', text: 'accbudget_name'},
+		],
+		OnDataLoading: (criteria, options) => {
 				
+		},
+		OnDataLoaded : (result, options) => {
+			result.records.unshift({accbudget_id:'--NULL--', accbudget_name:'NONE'});	
 		},
 		OnSelected: (value, display, record, args) => {
 			if (value!=args.PreviousValue ) {
@@ -274,7 +329,9 @@ export function open(data, rowid, hdata) {
 		var record = result.record;
 		updatefilebox(result.record);
 /*
-		if (record.taxtype_id==null) { record.taxtype_id='--NULL--'; record.taxtype_name='NONE'; }
+		if (record.orderindelv_id==null) { record.orderindelv_id='--NULL--'; record.orderindelv_descr='NONE'; }
+		if (record.itemclass_id==null) { record.itemclass_id='--NULL--'; record.itemclass_name='NONE'; }
+		if (record.accbudget_id==null) { record.accbudget_id='--NULL--'; record.accbudget_name='NONE'; }
 		if (record.coa_id==null) { record.coa_id='--NULL--'; record.coa_name='NONE'; }
 
 */
@@ -291,10 +348,10 @@ export function open(data, rowid, hdata) {
 		form.SuspendEvent(true);
 		form
 			.fill(record)
-			.setValue(obj.cbo_billrowtype_id, record.billrowtype_id, record.billrowtype_name)
-			.setValue(obj.cbo_taxtype_id, record.taxtype_id, record.taxtype_name)
-			.setValue(obj.cbo_curr_id, record.curr_id, record.curr_name)
+			.setValue(obj.cbo_billoutrowtype_id, record.billoutrowtype_id, record.billoutrowtype_name)
+			.setValue(obj.cbo_orderindelv_id, record.orderindelv_id, record.orderindelv_descr)
 			.setValue(obj.cbo_itemclass_id, record.itemclass_id, record.itemclass_name)
+			.setValue(obj.cbo_accbudget_id, record.accbudget_id, record.accbudget_name)
 			.setValue(obj.cbo_coa_id, record.coa_id, record.coa_name)
 			.setViewMode()
 			.rowid = rowid
@@ -364,18 +421,27 @@ export function createnew(hdata) {
 		data.billout_id= hdata.billout_id
 		data.detil_value = 0
 
-		data.billoutdetil_valfrg = 0
-		data.billoutdetil_valfrgrate = 0
-		data.billoutdetil_validr = 0
+		data.billoutdetil_totalitem = 0
+		data.billoutdetil_totalqty = 0
+		data.billoutdetil_salesgross = 0
+		data.billoutdetil_discount = 0
+		data.billoutdetil_subtotal = 0
+		data.billoutdetil_pph = 0
+		data.billoutdetil_nett = 0
+		data.billoutdetil_ppn = 0
+		data.billoutdetil_total = 0
+		data.billoutdetil_totaladdcost = 0
+		data.billoutdetil_dp = 0
+		data.billoutdetil_payment = 0
 
-			data.billrowtype_id = '0'
-			data.billrowtype_name = '-- PILIH --'
-			data.taxtype_id = '--NULL--'
-			data.taxtype_name = 'NONE'
-			data.curr_id = '0'
-			data.curr_name = '-- PILIH --'
-			data.itemclass_id = '0'
-			data.itemclass_name = '-- PILIH --'
+			data.billoutrowtype_id = '0'
+			data.billoutrowtype_name = '-- PILIH --'
+			data.orderindelv_id = '--NULL--'
+			data.orderindelv_descr = 'NONE'
+			data.itemclass_id = '--NULL--'
+			data.itemclass_name = 'NONE'
+			data.accbudget_id = '--NULL--'
+			data.accbudget_name = 'NONE'
 			data.coa_id = '--NULL--'
 			data.coa_name = 'NONE'
 
@@ -393,7 +459,7 @@ export function createnew(hdata) {
 async function form_datasaving(data, options) {
 	options.api = `${global.modulefullname}/detil-save`
 
-	// options.skipmappingresponse = ['taxtype_id', 'coa_id', ];
+	// options.skipmappingresponse = ['orderindelv_id', 'itemclass_id', 'accbudget_id', 'coa_id', ];
 	options.skipmappingresponse = [];
 	for (var objid in obj) {
 		var o = obj[objid]
@@ -410,7 +476,9 @@ async function form_datasaved(result, options) {
 	Object.assign(data, form.getData(), result.dataresponse)
 
 	/*
-	form.setValue(obj.cbo_taxtype_id, result.dataresponse.taxtype_name!=='--NULL--' ? result.dataresponse.taxtype_id : '--NULL--', result.dataresponse.taxtype_name!=='--NULL--'?result.dataresponse.taxtype_name:'NONE')
+	form.setValue(obj.cbo_orderindelv_id, result.dataresponse.orderindelv_descr!=='--NULL--' ? result.dataresponse.orderindelv_id : '--NULL--', result.dataresponse.orderindelv_descr!=='--NULL--'?result.dataresponse.orderindelv_descr:'NONE')
+	form.setValue(obj.cbo_itemclass_id, result.dataresponse.itemclass_name!=='--NULL--' ? result.dataresponse.itemclass_id : '--NULL--', result.dataresponse.itemclass_name!=='--NULL--'?result.dataresponse.itemclass_name:'NONE')
+	form.setValue(obj.cbo_accbudget_id, result.dataresponse.accbudget_name!=='--NULL--' ? result.dataresponse.accbudget_id : '--NULL--', result.dataresponse.accbudget_name!=='--NULL--'?result.dataresponse.accbudget_name:'NONE')
 	form.setValue(obj.cbo_coa_id, result.dataresponse.coa_name!=='--NULL--' ? result.dataresponse.coa_id : '--NULL--', result.dataresponse.coa_name!=='--NULL--'?result.dataresponse.coa_name:'NONE')
 
 	*/
@@ -436,6 +504,14 @@ async function form_datasaved(result, options) {
 			btn_addnew_click()
 		}, 1000)
 	}
+
+	if (reload_header_modified) {
+		var currentRowdata =  $ui.getPages().ITEMS['pnl_edit'].handler.getCurrentRowdata();
+		$ui.getPages().ITEMS['pnl_edit'].handler.open(currentRowdata.data, currentRowdata.rowid, false, (err, data)=>{
+			$ui.getPages().ITEMS['pnl_list'].handler.updategrid(data, currentRowdata.rowid);
+		});	
+	}
+
 }
 
 async function form_deleting(data, options) {
@@ -446,7 +522,14 @@ async function form_deleted(result, options) {
 	options.suppressdialog = true
 	$ui.getPages().show('pnl_editdetilgrid', ()=>{
 		$ui.getPages().ITEMS['pnl_editdetilgrid'].handler.removerow(form.rowid)
-	})
+	});
+
+	if (reload_header_modified) {
+		var currentRowdata =  $ui.getPages().ITEMS['pnl_edit'].handler.getCurrentRowdata();
+		$ui.getPages().ITEMS['pnl_edit'].handler.open(currentRowdata.data, currentRowdata.rowid, false, (err, data)=>{
+			$ui.getPages().ITEMS['pnl_list'].handler.updategrid(data, currentRowdata.rowid);
+		});	
+	}
 	
 }
 

@@ -25,14 +25,6 @@
 		</div>
 
 		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Ref</div>
-			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editdetilform-cbo_jurnaldetil_id_ref" class="easyui-combo" style="width: 400px" mapping="jurnaldetil_id_ref" display="jurnaldetil_descr" data-options="editable:false, valueField:'id', textField:'text' , prompt: 'NONE'" >
-				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
-			</div>
-		</div>
-
-		<div class="form_row" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Descr</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-txt_jurnaldetil_descr" class="easyui-textbox" mapping="jurnaldetil_descr"  maxlength="255"  style="width: 400px" data-options="multiline:false , required: true, invalidMessage: 'Descr harus diisi' ">
@@ -67,7 +59,7 @@
 		<div class="form_row" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">IDR</div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editdetilform-txt_jurnaldetil_validr" class="easyui-numberbox" mapping="jurnaldetil_validr" style="width: 400px; text-align:right" data-options="precision: 2, decimalSeparator:'.', groupSeparator:','  , required: true">
+				<input id="pnl_editdetilform-txt_jurnaldetil_validr" class="easyui-numberbox" mapping="jurnaldetil_validr" style="width: 400px; text-align:right" data-options="precision: 2, decimalSeparator:'.', groupSeparator:','  , required: true, disabled: true">
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>
@@ -89,6 +81,14 @@
 		</div>
 
 		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Ref</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editdetilform-cbo_jurnaldetil_id_ref" class="easyui-combo" style="width: 400px" mapping="jurnaldetil_id_ref" display="jurnaldetil_descr" data-options="editable:false, valueField:'id', textField:'text' , prompt: 'NONE'" >
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row" style="display: none">
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Jurnal</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-txt_jurnal_id" class="easyui-textbox" mapping="jurnal_id"  maxlength="14"  style="width: 400px" data-options="multiline:false  , disabled: true">

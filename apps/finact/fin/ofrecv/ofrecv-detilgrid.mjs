@@ -1,6 +1,8 @@
 var this_page_id;
 var this_page_options;
 
+import * as hnd from  './ofrecv-detilgrid-hnd.mjs'
+
 const tbl_list = $('#pnl_editdetilgrid-tbl_list');
 const txt_title = $('#pnl_editdetilgrid-title');
 const pnl_control = $('#pnl_editdetilgrid-control');
@@ -63,7 +65,16 @@ export async function init(opt) {
 				grd_list.nextpageload();
 			}			
 		}
-	});			
+	});	
+
+	if (typeof hnd.init==='function') {
+		hnd.init({
+			grd_list: grd_list,
+			opt: opt,
+			header_data: header_data
+		})
+	}	
+
 }
 
 
@@ -89,7 +100,6 @@ export function OpenDetil(data) {
 	var fn_listloading = async (options) => {
 		options.api = `${global.modulefullname}/detil-list`
 		options.criteria['id'] = data.jurnal_id
-		options.criteria['jurnaldetil_debet'] = 1;
 	}
 	var fn_listloaded = async (result, options) => {
 		// console.log(result)
@@ -164,11 +174,22 @@ function grd_list_cellclick(td, ev) {
 }
 
 function grd_list_cellrender(td) {
-
+	if (typeof hnd.grd_list_cellrender === 'function') {
+		hnd.grd_list_cellrender({td:td, mapping:td.mapping, text:td.innerHTML});
+	}
 }
 
 function grd_list_rowrender(tr) {
 
+	var dataid = tr.getAttribute('dataid')
+	var record = grd_list.DATA[dataid]
+	$(tr).find('td').each((i, td) => {
+		var mapping = td.getAttribute('mapping')
+		if (typeof hnd.grd_list_rowrender === 'function') {
+			hnd.grd_list_rowrender({tr:tr, td:td, record:record, mapping:mapping, dataid:dataid, i:i});
+		}
+	});
+		
 }
 
 

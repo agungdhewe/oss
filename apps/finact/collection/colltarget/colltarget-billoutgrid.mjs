@@ -1,37 +1,17 @@
 var this_page_id;
 var this_page_options;
 
+import * as hnd from  './colltarget-billoutgrid-hnd.mjs'
+
 const tbl_list = $('#pnl_editbilloutgrid-tbl_list');
 const txt_title = $('#pnl_editbilloutgrid-title');
 const pnl_control = $('#pnl_editbilloutgrid-control');
 const btn_removechecked  = $('#pnl_editbilloutgrid-removechecked');
 const btn_addrow = $('#pnl_editbilloutgrid-addrow');
-const btn_addrowmulti = $('.pnl_edititemsgrid-addrow-multi');
-const btn_modifychecked = $('#pnl_editbilloutgrid-modifychecked');
-const pnl_modify = $('#pnl_editbilloutgrid-modify');
-const btn_apply = $('#pnl_editbilloutgrid-btn_apply');
-const btn_cancel = $('#pnl_editbilloutgrid-btn_cancel');
 
-
-const total_nett = $('#pnl_editbilloutgrid-totalnett');
-const total_ppn = $('#pnl_editbilloutgrid-totalppn');
-const total_pph = $('#pnl_editbilloutgrid-totalpph')
-const total_discval = $('#pnl_editbilloutgrid-totaldiscval')
-const total_idrtopay = $('#pnl_editbilloutgrid-totalidrtopay')
-const total_ppntopay = $('#pnl_editbilloutgrid-totalppntopay')
-const total_payment = $('#pnl_editbilloutgrid-totalpayment')
-
-const pnl_form = $('#pnl_editbilloutgrid-form')
-const obj = {
-	dt_colltargetbillout_datetarget: $('#pnl_editbilloutgrid-dt_colltargetbillout_datetarget'),
-	txt_billout_discp: $('#pnl_editbilloutgrid-txt_billout_discp')
-}
-
-
-let grd_list;
+let grd_list = {};
 let header_data = {};
 let last_scrolltop = 0;
-let form;
 
 export async function init(opt) {
 	this_page_id = opt.id;
@@ -46,17 +26,13 @@ export async function init(opt) {
 		OnRowRender: (tr) => { grd_list_rowrender(tr) }
 	});	
 
-
-	form = new global.fgta4form(pnl_form, {
-		objects : obj
+	btn_removechecked.linkbutton({
+		onClick: () => { btn_removechecked_click() }
 	});
 
-	btn_removechecked.linkbutton({ onClick: () => { btn_removechecked_click() } });
- 	btn_addrow.linkbutton({ onClick: () => { btn_addrow_click() } });
-	btn_addrowmulti.linkbutton({ onClick: () => { btn_addrowmulti_click() } });
-	btn_modifychecked.linkbutton({	onClick: () => { btn_modifychecked_click() } });
-	btn_apply.linkbutton({	onClick: () => { btn_apply_click() } });
-	btn_cancel.linkbutton({ onClick: () => { btn_cancel_click() }  })
+	btn_addrow.linkbutton({
+		onClick: () => { btn_addrow_click() }
+	});
 
 	document.addEventListener('OnButtonBack', (ev) => {
 		if ($ui.getPages().getCurrentPage()==this_page_id) {
@@ -89,7 +65,16 @@ export async function init(opt) {
 				grd_list.nextpageload();
 			}			
 		}
-	});			
+	});	
+
+	if (typeof hnd.init==='function') {
+		hnd.init({
+			grd_list: grd_list,
+			opt: opt,
+			header_data: header_data
+		})
+	}	
+
 }
 
 
@@ -105,10 +90,8 @@ export function createnew(data, options) {
 	header_data = data;
 }
 
-export function OpenDetil(data, fn_loaded) {
+export function OpenDetil(data) {
 	// saat di klik di edit utama, pada detil information
-
-	pnl_modify.hide();
 
 	grd_list.clear();
 	txt_title.html(data.periodemo_id)
@@ -119,17 +102,11 @@ export function OpenDetil(data, fn_loaded) {
 		options.criteria['id'] = data.colltarget_id
 	}
 	var fn_listloaded = async (result, options) => {
-		console.log(result)
+		// console.log(result)
 
 
-		total_nett.html(format_number(result.summary.total_nett)); 
-		total_ppn.html(format_number(result.summary.total_ppn)); 
-		total_pph.html(format_number(result.summary.total_pph)); 
 
-		total_discval.html(format_number(result.summary.total_discval)); 
-		total_idrtopay.html(format_number(result.summary.total_idrtopay));
-		total_ppntopay.html(format_number(result.summary.total_ppntopay));
-		total_payment.html(format_number(result.summary.total_payment))
+
 
 		var detilform = $ui.getPages().ITEMS['pnl_editbilloutform'].handler.getForm()
 
@@ -143,11 +120,6 @@ export function OpenDetil(data, fn_loaded) {
 			btn_removechecked.show()
 		} else {
 			btn_removechecked.hide()
-		}
-
-
-		if (typeof(fn_loaded)==='function') {
-			fn_loaded();
 		}
 
 	}
@@ -202,11 +174,22 @@ function grd_list_cellclick(td, ev) {
 }
 
 function grd_list_cellrender(td) {
-
+	if (typeof hnd.grd_list_cellrender === 'function') {
+		hnd.grd_list_cellrender({td:td, mapping:td.mapping, text:td.innerHTML});
+	}
 }
 
 function grd_list_rowrender(tr) {
 
+	var dataid = tr.getAttribute('dataid')
+	var record = grd_list.DATA[dataid]
+	$(tr).find('td').each((i, td) => {
+		var mapping = td.getAttribute('mapping')
+		if (typeof hnd.grd_list_rowrender === 'function') {
+			hnd.grd_list_rowrender({tr:tr, td:td, record:record, mapping:mapping, dataid:dataid, i:i});
+		}
+	});
+		
 }
 
 
@@ -234,97 +217,4 @@ function btn_addrow_click() {
 	$ui.getPages().show('pnl_editbilloutform', ()=>{
 		$ui.getPages().ITEMS['pnl_editbilloutform'].handler.createnew(header_data)
 	})	
-}
-
-
-function btn_addrowmulti_click() {
-	$ui.getPages().show('pnl_editmultiadd', ()=>{
-		$ui.getPages().ITEMS['pnl_editmultiadd'].handler.LoadData(header_data)
-	})
-}
-
-
-function btn_modifychecked_click() {
-	
-
-
-	let rowcount = 0
-	let totalpayment = 0;
-
-	grd_list.modifying = {
-		billoutdata: [],
-	}
-
-	// loop yang di check
-	grd_list.IterateChecked({
-		OnIterating: (opt) => {
-			console.log(opt);
-			rowcount++;
-			totalpayment += Number(opt.data.billout_idrtopay);
-			grd_list.modifying.billoutdata.push({
-				colltargetbillout_id: opt.data.colltargetbillout_id,
-				billout_idrnett: opt.data.billout_idrnett,
-			});
-		},
-
-		OnIterated: (args) => {
-			if (rowcount==0) {
-				$ui.ShowMessage('[WARNING]Pilih dulu baris yang akan di modifikasi')
-				return;
-			}
-
-			pnl_modify.show();
-
-
-			$('#pnl_editbilloutgrid-modifyrowcount').html(rowcount);
-			$('#pnl_editbilloutgrid-modifyrowtotalpay').html(format_number(totalpayment))
-
-			var colltarget_estdisc = Number(header_data.colltarget_discprop);
-			form.setViewMode(false);
-			form.setValue(obj.dt_colltargetbillout_datetarget, global.now())
-			form.setValue(obj.txt_billout_discp, colltarget_estdisc)
-		}
-	})
-
-
-
-}
-
-
-async function btn_apply_click() {
-	// pnl_modify.hide();
-	console.log(grd_list.modifying);
-	var discp = form.getValue(obj.txt_billout_discp);
-
-	
-
-
-
-	var apiurl = `${global.modulefullname}/billout-modify`
-	var args = {
-		data: grd_list.modifying.billoutdata,
-		options: {
-			colltarget_id: header_data.colltarget_id,
-			datetarget: form.getValue(obj.dt_colltargetbillout_datetarget),
-			discp: form.getValue(obj.txt_billout_discp)
-		}
-	}
-
-	try {
-		$('#pnl_editbilloutgrid-error').html('');
-		let result = await $ui.apicall(apiurl, args);
-		OpenDetil(header_data);
-		console.log(result);
-	} catch (err) {
-		console.log(err)
-		// $('#pnl_editbilloutgrid-error').html(err.errormessage);
-	}
-	
-
-}
-
-
-function btn_cancel_click() {
-	pnl_modify.hide();
-	grd_list.modifying = {}
 }

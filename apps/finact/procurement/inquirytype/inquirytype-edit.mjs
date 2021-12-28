@@ -2,10 +2,13 @@ var this_page_id;
 var this_page_options;
 
 import {fgta4slideselect} from  '../../../../../index.php/asset/fgta/framework/fgta4libs/fgta4slideselect.mjs'
+import * as hnd from  './inquirytype-edit-hnd.mjs'
+
 
 const btn_edit = $('#pnl_edit-btn_edit')
 const btn_save = $('#pnl_edit-btn_save')
 const btn_delete = $('#pnl_edit-btn_delete')
+
 
 
 
@@ -66,6 +69,7 @@ const obj = {
 
 
 let form;
+let rowdata;
 
 export async function init(opt) {
 	this_page_id = opt.id;
@@ -101,7 +105,12 @@ export async function init(opt) {
 		OnRecordStatusCreated: () => {
 			undefined			
 		}		
-	})
+	});
+	form.getHeaderData = () => {
+		return getHeaderData();
+	}
+
+
 
 
 
@@ -121,15 +130,27 @@ export async function init(opt) {
 			{mapping: 'inquirymodel_id', text: 'inquirymodel_id'},
 			{mapping: 'inquirymodel_name', text: 'inquirymodel_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+			
+			if (typeof hnd.cbo_inquirymodel_id_dataloading === 'function') {
+				hnd.cbo_inquirymodel_id_dataloading(criteria);
+			}	
+		},
 		OnDataLoaded : (result, options) => {
 				
+			if (typeof hnd.cbo_inquirymodel_id_dataloaded === 'function') {
+				hnd.cbo_inquirymodel_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
 			if (value!=args.PreviousValue ) {
+				form.setValue(obj.cbo_trxmodel_id, record.trxmodel_id, record.trxmodel_name);		
 				form.setValue(obj.chk_inquirytype_isdateinterval, record.inquirymodel_isdateinterval=='1'?true:false);
 				form.setValue(obj.chk_inquirytype_isqtybreakdown, record.inquirymodel_isqtybreakdown=='1'?true:false);
-										
+						
+				if (typeof hnd.cbo_inquirymodel_id_selected === 'function') {
+					hnd.cbo_inquirymodel_id_selected(value, display, record, args);
+				}
 			}
 		}
 	})				
@@ -145,12 +166,23 @@ export async function init(opt) {
 			{mapping: 'inquiryselect_id', text: 'inquiryselect_id'},
 			{mapping: 'inquiryselect_name', text: 'inquiryselect_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+			
+			if (typeof hnd.cbo_inquiryselect_id_dataloading === 'function') {
+				hnd.cbo_inquiryselect_id_dataloading(criteria);
+			}	
+		},
 		OnDataLoaded : (result, options) => {
 				
+			if (typeof hnd.cbo_inquiryselect_id_dataloaded === 'function') {
+				hnd.cbo_inquiryselect_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_inquiryselect_id_selected === 'function') {
+					hnd.cbo_inquiryselect_id_selected(value, display, record, args);
+				}
 			}
 		}
 	})				
@@ -166,12 +198,23 @@ export async function init(opt) {
 			{mapping: 'itemmanage_id', text: 'itemmanage_id'},
 			{mapping: 'itemmanage_name', text: 'itemmanage_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+			
+			if (typeof hnd.cbo_itemmanage_id_dataloading === 'function') {
+				hnd.cbo_itemmanage_id_dataloading(criteria);
+			}	
+		},
 		OnDataLoaded : (result, options) => {
 				
+			if (typeof hnd.cbo_itemmanage_id_dataloaded === 'function') {
+				hnd.cbo_itemmanage_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_itemmanage_id_selected === 'function') {
+					hnd.cbo_itemmanage_id_selected(value, display, record, args);
+				}
 			}
 		}
 	})				
@@ -187,12 +230,23 @@ export async function init(opt) {
 			{mapping: 'dept_id', text: 'dept_id'},
 			{mapping: 'dept_name', text: 'dept_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+			
+			if (typeof hnd.cbo_related_dept_id_dataloading === 'function') {
+				hnd.cbo_related_dept_id_dataloading(criteria);
+			}	
+		},
 		OnDataLoaded : (result, options) => {
 				
+			if (typeof hnd.cbo_related_dept_id_dataloaded === 'function') {
+				hnd.cbo_related_dept_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_related_dept_id_selected === 'function') {
+					hnd.cbo_related_dept_id_selected(value, display, record, args);
+				}
 			}
 		}
 	})				
@@ -208,12 +262,23 @@ export async function init(opt) {
 			{mapping: 'team_id', text: 'team_id'},
 			{mapping: 'team_name', text: 'team_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+			
+			if (typeof hnd.cbo_related_team_id_dataloading === 'function') {
+				hnd.cbo_related_team_id_dataloading(criteria);
+			}	
+		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({team_id:'--NULL--', team_name:'NONE'});	
+			if (typeof hnd.cbo_related_team_id_dataloaded === 'function') {
+				hnd.cbo_related_team_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_related_team_id_selected === 'function') {
+					hnd.cbo_related_team_id_selected(value, display, record, args);
+				}
 			}
 		}
 	})				
@@ -229,12 +294,23 @@ export async function init(opt) {
 			{mapping: 'dept_id', text: 'dept_id'},
 			{mapping: 'dept_name', text: 'dept_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+			
+			if (typeof hnd.cbo_owner_dept_id_dataloading === 'function') {
+				hnd.cbo_owner_dept_id_dataloading(criteria);
+			}	
+		},
 		OnDataLoaded : (result, options) => {
 				
+			if (typeof hnd.cbo_owner_dept_id_dataloaded === 'function') {
+				hnd.cbo_owner_dept_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_owner_dept_id_selected === 'function') {
+					hnd.cbo_owner_dept_id_selected(value, display, record, args);
+				}
 			}
 		}
 	})				
@@ -250,12 +326,23 @@ export async function init(opt) {
 			{mapping: 'team_id', text: 'team_id'},
 			{mapping: 'team_name', text: 'team_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+			
+			if (typeof hnd.cbo_owner_team_id_dataloading === 'function') {
+				hnd.cbo_owner_team_id_dataloading(criteria);
+			}	
+		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({team_id:'--NULL--', team_name:'NONE'});	
+			if (typeof hnd.cbo_owner_team_id_dataloaded === 'function') {
+				hnd.cbo_owner_team_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_owner_team_id_selected === 'function') {
+					hnd.cbo_owner_team_id_selected(value, display, record, args);
+				}
 			}
 		}
 	})				
@@ -271,12 +358,23 @@ export async function init(opt) {
 			{mapping: 'site_id', text: 'site_id'},
 			{mapping: 'site_name', text: 'site_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+			
+			if (typeof hnd.cbo_site_id_dataloading === 'function') {
+				hnd.cbo_site_id_dataloading(criteria);
+			}	
+		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({site_id:'--NULL--', site_name:'NONE'});	
+			if (typeof hnd.cbo_site_id_dataloaded === 'function') {
+				hnd.cbo_site_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_site_id_selected === 'function') {
+					hnd.cbo_site_id_selected(value, display, record, args);
+				}
 			}
 		}
 	})				
@@ -292,12 +390,23 @@ export async function init(opt) {
 			{mapping: 'room_id', text: 'room_id'},
 			{mapping: 'room_name', text: 'room_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+			
+			if (typeof hnd.cbo_room_id_dataloading === 'function') {
+				hnd.cbo_room_id_dataloading(criteria);
+			}	
+		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({room_id:'--NULL--', room_name:'NONE'});	
+			if (typeof hnd.cbo_room_id_dataloaded === 'function') {
+				hnd.cbo_room_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_room_id_selected === 'function') {
+					hnd.cbo_room_id_selected(value, display, record, args);
+				}
 			}
 		}
 	})				
@@ -313,12 +422,23 @@ export async function init(opt) {
 			{mapping: 'dept_id', text: 'dept_id'},
 			{mapping: 'dept_name', text: 'dept_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+			
+			if (typeof hnd.cbo_orderout_dept_id_dataloading === 'function') {
+				hnd.cbo_orderout_dept_id_dataloading(criteria);
+			}	
+		},
 		OnDataLoaded : (result, options) => {
 				
+			if (typeof hnd.cbo_orderout_dept_id_dataloaded === 'function') {
+				hnd.cbo_orderout_dept_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_orderout_dept_id_selected === 'function') {
+					hnd.cbo_orderout_dept_id_selected(value, display, record, args);
+				}
 			}
 		}
 	})				
@@ -334,12 +454,23 @@ export async function init(opt) {
 			{mapping: 'team_id', text: 'team_id'},
 			{mapping: 'team_name', text: 'team_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+			
+			if (typeof hnd.cbo_orderout_team_id_dataloading === 'function') {
+				hnd.cbo_orderout_team_id_dataloading(criteria);
+			}	
+		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({team_id:'--NULL--', team_name:'NONE'});	
+			if (typeof hnd.cbo_orderout_team_id_dataloaded === 'function') {
+				hnd.cbo_orderout_team_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_orderout_team_id_selected === 'function') {
+					hnd.cbo_orderout_team_id_selected(value, display, record, args);
+				}
 			}
 		}
 	})				
@@ -355,12 +486,23 @@ export async function init(opt) {
 			{mapping: 'trxmodel_id', text: 'trxmodel_id'},
 			{mapping: 'trxmodel_name', text: 'trxmodel_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+			
+			if (typeof hnd.cbo_trxmodel_id_dataloading === 'function') {
+				hnd.cbo_trxmodel_id_dataloading(criteria);
+			}	
+		},
 		OnDataLoaded : (result, options) => {
 				
+			if (typeof hnd.cbo_trxmodel_id_dataloaded === 'function') {
+				hnd.cbo_trxmodel_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_trxmodel_id_selected === 'function') {
+					hnd.cbo_trxmodel_id_selected(value, display, record, args);
+				}
 			}
 		}
 	})				
@@ -376,12 +518,23 @@ export async function init(opt) {
 			{mapping: 'doc_id', text: 'doc_id'},
 			{mapping: 'doc_name', text: 'doc_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+			
+			if (typeof hnd.cbo_inquiry_doc_id_dataloading === 'function') {
+				hnd.cbo_inquiry_doc_id_dataloading(criteria);
+			}	
+		},
 		OnDataLoaded : (result, options) => {
 				
+			if (typeof hnd.cbo_inquiry_doc_id_dataloaded === 'function') {
+				hnd.cbo_inquiry_doc_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_inquiry_doc_id_selected === 'function') {
+					hnd.cbo_inquiry_doc_id_selected(value, display, record, args);
+				}
 			}
 		}
 	})				
@@ -397,12 +550,23 @@ export async function init(opt) {
 			{mapping: 'doc_id', text: 'doc_id'},
 			{mapping: 'doc_name', text: 'doc_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+			
+			if (typeof hnd.cbo_request_doc_id_dataloading === 'function') {
+				hnd.cbo_request_doc_id_dataloading(criteria);
+			}	
+		},
 		OnDataLoaded : (result, options) => {
 				
+			if (typeof hnd.cbo_request_doc_id_dataloaded === 'function') {
+				hnd.cbo_request_doc_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_request_doc_id_selected === 'function') {
+					hnd.cbo_request_doc_id_selected(value, display, record, args);
+				}
 			}
 		}
 	})				
@@ -418,16 +582,30 @@ export async function init(opt) {
 			{mapping: 'doc_id', text: 'doc_id'},
 			{mapping: 'doc_name', text: 'doc_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+			
+			if (typeof hnd.cbo_orderout_doc_id_dataloading === 'function') {
+				hnd.cbo_orderout_doc_id_dataloading(criteria);
+			}	
+		},
 		OnDataLoaded : (result, options) => {
 				
+			if (typeof hnd.cbo_orderout_doc_id_dataloaded === 'function') {
+				hnd.cbo_orderout_doc_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_orderout_doc_id_selected === 'function') {
+					hnd.cbo_orderout_doc_id_selected(value, display, record, args);
+				}
 			}
 		}
 	})				
 				
+
+
+
 
 	document.addEventListener('keydown', (ev)=>{
 		if ($ui.getPages().getCurrentPage()==this_page_id) {
@@ -475,6 +653,13 @@ export async function init(opt) {
 	})
 
 	//button state
+	if (typeof hnd.init==='function') {
+		hnd.init({
+			form: form,
+			obj: obj,
+			opt: opt,
+		})
+	}
 
 }
 
@@ -485,8 +670,16 @@ export function getForm() {
 	return form
 }
 
+export function getCurrentRowdata() {
+	return rowdata;
+}
 
 export function open(data, rowid, viewmode=true, fn_callback) {
+
+	rowdata = {
+		data: data,
+		rowid: rowid
+	}
 
 	var pOpt = form.getDefaultPrompt(false)
 	var fn_dataopening = async (options) => {
@@ -544,7 +737,9 @@ export function open(data, rowid, viewmode=true, fn_callback) {
 		   apabila ada rutin mengubah form dan tidak mau dijalankan pada saat opening,
 		   cek dengan form.isEventSuspended()
 		*/   
-
+		if (typeof hnd.form_dataopened == 'function') {
+			hnd.form_dataopened(result, options);
+		}
 
 
 		/* commit form */
@@ -552,8 +747,19 @@ export function open(data, rowid, viewmode=true, fn_callback) {
 		form.SuspendEvent(false); 
 		updatebuttonstate(record)
 
+
+		/* update rowdata */
+		for (var nv in rowdata.data) {
+			if (record[nv]!=undefined) {
+				rowdata.data[nv] = record[nv];
+			}
+		}
+
 		// tampilkan form untuk data editor
-		fn_callback()
+		if (typeof fn_callback==='function') {
+			fn_callback(null, rowdata.data);
+		}
+		
 	}
 
 	var fn_dataopenerror = (err) => {
@@ -627,10 +833,9 @@ export function createnew() {
 		data.orderout_doc_id = '0'
 		data.orderout_doc_name = '-- PILIH --'
 
-
-
-
-
+		if (typeof hnd.form_newdata == 'function') {
+			hnd.form_newdata(data, options);
+		}
 
 
 
@@ -648,6 +853,14 @@ export function createnew() {
 }
 
 
+export function getHeaderData() {
+	var header_data = form.getData();
+	if (typeof hnd.form_getHeaderData == 'function') {
+		hnd.form_getHeaderData(header_data);
+	}
+	return header_data;
+}
+
 export function detil_open(pnlname) {
 	if (form.isDataChanged()) {
 		$ui.ShowMessage('Simpan dulu perubahan datanya.')
@@ -655,9 +868,23 @@ export function detil_open(pnlname) {
 	}
 
 	//$ui.getPages().show(pnlname)
-	$ui.getPages().show(pnlname, () => {
-		$ui.getPages().ITEMS[pnlname].handler.OpenDetil(form.getData())
-	})	
+	let header_data = getHeaderData();
+	if (typeof hnd.form_detil_opening == 'function') {
+		hnd.form_detil_opening(pnlname, (cancel)=>{
+			if (cancel===true) {
+				return;
+			}
+			$ui.getPages().show(pnlname, () => {
+				$ui.getPages().ITEMS[pnlname].handler.OpenDetil(header_data)
+			})
+		});
+	} else {
+		$ui.getPages().show(pnlname, () => {
+			$ui.getPages().ITEMS[pnlname].handler.OpenDetil(header_data)
+		})
+	}
+
+	
 }
 
 
@@ -729,6 +956,10 @@ async function form_datasaving(data, options) {
 		}
 	}
 
+	if (typeof hnd.form_datasaving == 'function') {
+		hnd.form_datasaving(data, options);
+	}
+
 }
 
 async function form_datasaveerror(err, options) {
@@ -778,17 +1009,31 @@ async function form_datasaved(result, options) {
 		}
 	}
 	form.rowid = $ui.getPages().ITEMS['pnl_list'].handler.updategrid(data, form.rowid)
+	rowdata = {
+		data: data,
+		rowid: form.rowid
+	}
+
+	if (typeof hnd.form_datasaved == 'function') {
+		hnd.form_datasaved(result, rowdata, options);
+	}
 }
 
 
 
 async function form_deleting(data) {
+	if (typeof hnd.form_deleting == 'function') {
+		hnd.form_deleting(data);
+	}
 }
 
 async function form_deleted(result, options) {
 	$ui.getPages().show('pnl_list')
 	$ui.getPages().ITEMS['pnl_list'].handler.removerow(form.rowid)
 
+	if (typeof hnd.form_deleted == 'function') {
+		hnd.form_deleted(result, options);
+	}
 }
 
 

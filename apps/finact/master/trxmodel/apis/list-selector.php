@@ -36,12 +36,15 @@ class DataList extends WebAPI {
 				throw new \Exception('your group authority is not allowed to do this action.');
 			}
 
-
+			// \FGTA4\utils\SqlUtility::setDefaultCriteria($options->criteria, 'minta', '0');
+			// \FGTA4\utils\SqlUtility::setDefaultCriteria($options->criteria, 'pinjam', '0');
 			$where = \FGTA4\utils\SqlUtility::BuildCriteria(
 				$options->criteria,
 				[
 					"search" => " A.trxmodel_id LIKE CONCAT('%', :search, '%') OR A.trxmodel_name LIKE CONCAT('%', :search, '%') ",
-					"trxmodel_direction" => "A.trxmodel_direction = :trxmodel_direction"	
+					"trxmodel_direction" => "A.trxmodel_direction = :trxmodel_direction",
+					"minta" => " A.trxmodel_isassetminta = 1 ",
+					"pinjam" => " A.trxmodel_isassetminta = 1 ",
 				]
 			);
 

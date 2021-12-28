@@ -26,7 +26,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 05/06/2021
+ * tanggal 25/12/2021
  */
 class jurnaltypeBase extends WebAPI {
 

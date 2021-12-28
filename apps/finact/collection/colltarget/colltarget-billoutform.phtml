@@ -8,7 +8,7 @@
 
 	<form id="pnl_editbilloutform-form">
 
-		<div class="form_row" >
+		<div class="form_row pnl_editbilloutform_row txt_colltargetbillout_id" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">ID</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editbilloutform-txt_colltargetbillout_id" class="easyui-textbox" mapping="colltargetbillout_id"  maxlength="14"  style="width: 400px" data-options="multiline:false , required: true, invalidMessage: 'ID harus diisi' ">
@@ -16,16 +16,15 @@
 			</div>
 		</div>
 
-
-		<div class="form_row" >
+		<div class="form_row pnl_editbilloutform_row cbo_partner_id" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Partner</div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editbilloutform-cbo_partner_id" class="easyui-combo" style="width: 400px" mapping="partner_id" display="partner_descr" data-options="editable:false, valueField:'id', textField:'text' , prompt: '-- PILIH --', required: true, invalidMessage: 'Partner harus diisi' " >
+				<input id="pnl_editbilloutform-cbo_partner_id" class="easyui-combo" style="width: 400px" mapping="partner_id" display="partner_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Partner harus diisi', prompt: '-- PILIH --'"  validType="requiredcombo['pnl_editbilloutform-cbo_partner_id']" >
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editbilloutform_row cbo_billout_id" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Tagihan</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editbilloutform-cbo_billout_id" class="easyui-combo" style="width: 400px" mapping="billout_id" display="billout_descr" data-options="editable:false, valueField:'id', textField:'text' , prompt: 'NONE'" >
@@ -33,7 +32,14 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editbilloutform_row chk_billout_isunreference" >
+			<div class="form_label_col"></div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editbilloutform-chk_billout_isunreference" class="easyui-checkbox c1" mapping="billout_isunreference" data-options="label: 'UnReferenced', labelPosition: 'after', checked: false , labelWidth: '200px'">
+			</div>
+		</div>
+
+		<div class="form_row pnl_editbilloutform_row dt_colltargetbillout_datetarget" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Target Date</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editbilloutform-dt_colltargetbillout_datetarget" class="easyui-datebox" style="width: 400px" mapping="colltargetbillout_datetarget" data-options="editable:false ">
@@ -41,123 +47,7 @@
 			</div>
 		</div>
 
-		<?=$this->Section('Bill Information', true, true)?>
-		<div class="fgta_section_collapsible defbottomborder" style="display: none">
-					
-		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Bill Due Date</div>
-			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editbilloutform-dt_billout_datedue" class="easyui-datebox" style="width: 400px" mapping="billout_datedue" data-options="editable:false , disabled: true">
-				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
-			</div>
-		</div>
-
-		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Days to TargetDate</div>
-			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editbilloutform-txt_billout_daystotarget" class="easyui-numberbox" mapping="billout_daystotarget" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  , disabled: true">
-				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
-			</div>
-		</div>
-
-		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Bill Value</div>
-			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editbilloutform-txt_billout_idr" class="easyui-numberbox" mapping="billout_idr" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  , disabled: true">
-				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
-			</div>
-		</div>
-
-		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">PPN (%)</div>
-			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editbilloutform-txt_billout_ppn" class="easyui-numberbox" mapping="billout_ppn" style="width: 400px; text-align:right" data-options="precision: 2, decimalSeparator:'.', groupSeparator:','  , disabled: true">
-				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
-			</div>
-		</div>
-
-		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">PPN Value</div>
-			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editbilloutform-txt_billout_ppnval" class="easyui-numberbox" mapping="billout_ppnval" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  , disabled: true">
-				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
-			</div>
-		</div>
-
-		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">PPh (%)</div>
-			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editbilloutform-txt_billout_pph" class="easyui-numberbox" mapping="billout_pph" style="width: 400px; text-align:right" data-options="precision: 2, decimalSeparator:'.', groupSeparator:','  , disabled: true">
-				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
-			</div>
-		</div>
-
-		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">PPh Value</div>
-			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editbilloutform-txt_billout_pphval" class="easyui-numberbox" mapping="billout_pphval" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  , disabled: true">
-				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
-			</div>
-		</div>
-
-		</div>
-					
-		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">IDR Nett</div>
-			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editbilloutform-txt_billout_idrnett" class="easyui-numberbox" mapping="billout_idrnett" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  , disabled: true">
-				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
-			</div>
-		</div>
-
-		<div class="form_row" >
-			<div class="form_label_col"></div>
-			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editbilloutform-chk_billout_isdiscvalue" class="easyui-checkbox c1" mapping="billout_isdiscvalue" data-options="label: 'Disc using value', labelPosition: 'after', checked: false , labelWidth: '200px'">
-			</div>
-		</div>
-
-		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Discount (%)</div>
-			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editbilloutform-txt_billout_discp" class="easyui-numberbox" mapping="billout_discp" style="width: 400px; text-align:right" data-options="precision: 2, decimalSeparator:'.', groupSeparator:','  ">
-				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
-			</div>
-		</div>
-
-		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Discount</div>
-			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editbilloutform-txt_billout_discval" class="easyui-numberbox" mapping="billout_discval" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','">
-				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
-			</div>
-		</div>
-
-		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">IDR Total</div>
-			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editbilloutform-txt_billout_idrtotal" class="easyui-numberbox" mapping="billout_idrtotal" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  , disabled: true">
-				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
-			</div>
-		</div>
-
-		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Payment</div>
-			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editbilloutform-txt_billout_idrtopay" class="easyui-numberbox" mapping="billout_idrtopay" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  , required: true">
-				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
-			</div>
-		</div>
-
-		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Payment PPN</div>
-			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editbilloutform-txt_billout_ppntopay" class="easyui-numberbox" mapping="billout_ppntopay" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  , required: true">
-				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
-			</div>
-		</div>
-
-		<div class="form_row" >
+		<div class="form_row pnl_editbilloutform_row txt_colltargetbillout_notes" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Notes</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editbilloutform-txt_colltargetbillout_notes" class="easyui-textbox" mapping="colltargetbillout_notes"  maxlength="90"  style="width: 400px" data-options="multiline:false  ">
@@ -165,7 +55,187 @@
 			</div>
 		</div>
 
-		<div class="form_row" style="display: none">
+		<div class="form_row pnl_editbilloutform_row txt_billout_idr" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Outstanding Payment</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editbilloutform-txt_billout_idr" class="easyui-numberbox" mapping="billout_idr" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  , disabled: true">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row pnl_editbilloutform_row chk_billout_isdiscvalue" >
+			<div class="form_label_col"></div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editbilloutform-chk_billout_isdiscvalue" class="easyui-checkbox c1" mapping="billout_isdiscvalue" data-options="label: 'Disc using value', labelPosition: 'after', checked: false , labelWidth: '200px'">
+			</div>
+		</div>
+
+		<div class="form_row pnl_editbilloutform_row txt_billout_discp" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Discount (%)</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editbilloutform-txt_billout_discp" class="easyui-numberbox" mapping="billout_discp" style="width: 400px; text-align:right" data-options="precision: 2, decimalSeparator:'.', groupSeparator:','  ">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row pnl_editbilloutform_row txt_billout_discval" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Discount</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editbilloutform-txt_billout_discval" class="easyui-numberbox" mapping="billout_discval" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  ">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row pnl_editbilloutform_row txt_billout_idrtopay" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Payment</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editbilloutform-txt_billout_idrtopay" class="easyui-numberbox" mapping="billout_idrtopay" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  , required: true">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row pnl_editbilloutform_row txt_billout_ppntopay" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Payment PPN</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editbilloutform-txt_billout_ppntopay" class="easyui-numberbox" mapping="billout_ppntopay" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  , required: true, disabled: true">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row pnl_editbilloutform_row txt_billout_idrtotal" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Subtotal Target</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editbilloutform-txt_billout_idrtotal" class="easyui-numberbox" mapping="billout_idrtotal" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  , disabled: true">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<?=$this->Section('Bill Information', true, true)?>
+		<div class="fgta_section_collapsible defbottomborder" style="display: none">
+					
+		<div class="form_row pnl_editbilloutform_row dt_billout_datedue" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Bill Due Date</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editbilloutform-dt_billout_datedue" class="easyui-datebox" style="width: 400px" mapping="billout_datedue" data-options="editable:false , disabled: true">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row pnl_editbilloutform_row txt_billout_daystotarget" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Days to TargetDate</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editbilloutform-txt_billout_daystotarget" class="easyui-numberbox" mapping="billout_daystotarget" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  , disabled: true">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row pnl_editbilloutform_row txt_billout_totalitem" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Total Item</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editbilloutform-txt_billout_totalitem" class="easyui-numberbox" mapping="billout_totalitem" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  , disabled: true">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row pnl_editbilloutform_row txt_billout_totalqty" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Total Qty</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editbilloutform-txt_billout_totalqty" class="easyui-numberbox" mapping="billout_totalqty" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  , disabled: true">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row pnl_editbilloutform_row txt_billout_salesgross" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Gross Sales</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editbilloutform-txt_billout_salesgross" class="easyui-numberbox" mapping="billout_salesgross" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  , disabled: true">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row pnl_editbilloutform_row txt_billout_discount" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Dicount</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editbilloutform-txt_billout_discount" class="easyui-numberbox" mapping="billout_discount" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  , disabled: true">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row pnl_editbilloutform_row txt_billout_subtotal" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Sub Total</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editbilloutform-txt_billout_subtotal" class="easyui-numberbox" mapping="billout_subtotal" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  , disabled: true">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row pnl_editbilloutform_row txt_billout_pph" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">PPh</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editbilloutform-txt_billout_pph" class="easyui-numberbox" mapping="billout_pph" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  , disabled: true">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row pnl_editbilloutform_row txt_billout_nett" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Sales Nett</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editbilloutform-txt_billout_nett" class="easyui-numberbox" mapping="billout_nett" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  , disabled: true">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row pnl_editbilloutform_row txt_billout_ppn" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">PPN</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editbilloutform-txt_billout_ppn" class="easyui-numberbox" mapping="billout_ppn" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  , disabled: true">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row pnl_editbilloutform_row txt_billout_total" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Total</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editbilloutform-txt_billout_total" class="easyui-numberbox" mapping="billout_total" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  , disabled: true">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row pnl_editbilloutform_row txt_billout_totaladdcost" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Additional Cost</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editbilloutform-txt_billout_totaladdcost" class="easyui-numberbox" mapping="billout_totaladdcost" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  , disabled: true">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row pnl_editbilloutform_row txt_billout_dp" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Down Payment</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editbilloutform-txt_billout_dp" class="easyui-numberbox" mapping="billout_dp" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  , disabled: true">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row pnl_editbilloutform_row txt_billout_payment" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Amount Tagihan</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editbilloutform-txt_billout_payment" class="easyui-numberbox" mapping="billout_payment" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  , disabled: true">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row pnl_editbilloutform_row txt_billout_paid" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Terbayar</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editbilloutform-txt_billout_paid" class="easyui-numberbox" mapping="billout_paid" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  , disabled: true">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		</div>
+					
+		<div class="form_row pnl_editbilloutform_row txt_colltarget_id" style="display: none">
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">ID</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editbilloutform-txt_colltarget_id" class="easyui-textbox" mapping="colltarget_id"  maxlength="14"  style="width: 400px" data-options="multiline:false  , disabled: true">

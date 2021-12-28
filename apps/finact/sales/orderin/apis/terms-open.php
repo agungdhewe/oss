@@ -24,7 +24,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 22/12/2021
+ * tanggal 24/12/2021
  */
 $API = new class extends orderinBase {
 
@@ -44,7 +44,7 @@ $API = new class extends orderinBase {
 			);
 
 			$sql = \FGTA4\utils\SqlUtility::Select('trn_orderinterm A', [
-				'orderinterm_id', 'orderinterm_descr', 'orderinterm_days', 'orderinterm_dtfrometa', 'orderinterm_dt', 'orderinterm_isdp', 'orderinterm_paymentpercent', 'orderinterm_payment', 'orderin_totalpayment', 'orderin_id', '_createby', '_createdate', '_modifyby', '_modifydate' 
+				'orderinterm_id', 'orderintermtype_id', 'orderinterm_descr', 'orderinterm_days', 'orderinterm_dtfrometa', 'orderinterm_dt', 'orderinterm_isdp', 'orderinterm_paymentpercent', 'orderinterm_payment', 'orderin_totalpayment', 'orderin_id', '_createby', '_createdate', '_modifyby', '_modifydate' 
 			], $where->sql);
 
 			$stmt = $this->db->prepare($sql);
@@ -65,6 +65,7 @@ $API = new class extends orderinBase {
 				//'tanggal' => date("d/m/Y", strtotime($record['tanggal'])),
 				//'gendername' => $record['gender']
 
+				'orderintermtype_name' => \FGTA4\utils\SqlUtility::Lookup($record['orderintermtype_id'], $this->db, 'mst_orderintermtype', 'orderintermtype_id', 'orderintermtype_name'),
 				
 				'_createby' => \FGTA4\utils\SqlUtility::Lookup($record['_createby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
 				'_modifyby' => \FGTA4\utils\SqlUtility::Lookup($record['_modifyby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),

@@ -8,7 +8,7 @@
 
 	<form id="pnl_editmodeltransaksiform-form">
 
-		<div class="form_row" >
+		<div class="form_row pnl_editmodeltransaksiform_row txt_partnertrxmodel_id" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">ID</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editmodeltransaksiform-txt_partnertrxmodel_id" class="easyui-textbox" mapping="partnertrxmodel_id" uppercase="true" maxlength="14"  style="width: 400px" data-options="multiline:false  ">
@@ -16,7 +16,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editmodeltransaksiform_row cbo_trxmodel_id" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Transaksi</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editmodeltransaksiform-cbo_trxmodel_id" class="easyui-combo" style="width: 400px" mapping="trxmodel_id" display="trxmodel_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Model Transaksi harus diisi'"  validType="requiredcombo['pnl_editmodeltransaksiform-cbo_trxmodel_id']" >
@@ -24,7 +24,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editmodeltransaksiform_row cbo_coa_id" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Account</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editmodeltransaksiform-cbo_coa_id" class="easyui-combo" style="width: 400px" mapping="coa_id" display="coa_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Account harus diisi', prompt: '-- PILIH --'"  validType="requiredcombo['pnl_editmodeltransaksiform-cbo_coa_id']" >
@@ -32,7 +32,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editmodeltransaksiform_row cbo_unbill_coa_id" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Account (unbill)</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editmodeltransaksiform-cbo_unbill_coa_id" class="easyui-combo" style="width: 400px" mapping="unbill_coa_id" display="coa_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Account Unbill harus diisi', prompt: '-- PILIH --'"  validType="requiredcombo['pnl_editmodeltransaksiform-cbo_unbill_coa_id']" >
@@ -40,7 +40,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editmodeltransaksiform_row txt_partner_id" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Partner</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editmodeltransaksiform-txt_partner_id" class="easyui-textbox" mapping="partner_id" uppercase="true" maxlength="14"  style="width: 400px" data-options="multiline:false  , disabled: true">

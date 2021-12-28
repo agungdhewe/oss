@@ -3,6 +3,7 @@ var this_page_options;
 
 import {fgta4slideselect} from  '../../../../../index.php/asset/fgta/framework/fgta4libs/fgta4slideselect.mjs'
 
+
 const btn_edit = $('#pnl_edit-btn_edit')
 const btn_save = $('#pnl_edit-btn_save')
 const btn_delete = $('#pnl_edit-btn_delete')
@@ -33,6 +34,8 @@ const obj = {
 	cbo_ae_empl_id: $('#pnl_edit-cbo_ae_empl_id'),
 	cbo_trxmodel_id: $('#pnl_edit-cbo_trxmodel_id'),
 	cbo_project_id: $('#pnl_edit-cbo_project_id'),
+	chk_orderin_ishasdp: $('#pnl_edit-chk_orderin_ishasdp'),
+	txt_orderin_dpvalue: $('#pnl_edit-txt_orderin_dpvalue'),
 	cbo_ppn_taxtype_id: $('#pnl_edit-cbo_ppn_taxtype_id'),
 	txt_ppn_taxvalue: $('#pnl_edit-txt_ppn_taxvalue'),
 	chk_ppn_include: $('#pnl_edit-chk_ppn_include'),
@@ -88,6 +91,7 @@ const rec_declinedate = $('#pnl_edit_record-declinedate');
 
 
 let form;
+let rowdata;
 
 export async function init(opt) {
 	this_page_id = opt.id;
@@ -672,8 +676,16 @@ export function getForm() {
 	return form
 }
 
+export function getCurrentRowdata() {
+	return rowdata;
+}
 
 export function open(data, rowid, viewmode=true, fn_callback) {
+
+	rowdata = {
+		data: data,
+		rowid: rowid
+	}
 
 	var pOpt = form.getDefaultPrompt(false)
 	var fn_dataopening = async (options) => {
@@ -749,8 +761,19 @@ export function open(data, rowid, viewmode=true, fn_callback) {
 		form.SuspendEvent(false); 
 		updatebuttonstate(record)
 
+
+		/* update rowdata */
+		for (var nv in rowdata.data) {
+			if (record[nv]!=undefined) {
+				rowdata.data[nv] = record[nv];
+			}
+		}
+
 		// tampilkan form untuk data editor
-		fn_callback()
+		if (typeof fn_callback==='function') {
+			fn_callback(null, rowdata.data);
+		}
+		
 	}
 
 	var fn_dataopenerror = (err) => {
@@ -772,6 +795,8 @@ export function createnew() {
 		data.orderin_dtstart = global.now()
 		data.orderin_dtend = global.now()
 		data.orderin_dteta = global.now()
+		data.orderin_ishasdp = '0'
+		data.orderin_dpvalue = 0
 		data.ppn_taxvalue = 0
 		data.ppn_include = '0'
 		data.pph_taxvalue = 0
@@ -1161,7 +1186,7 @@ async function btn_action_click(args) {
 	}
 
 
-	var docname = 'undefined'
+	var docname = 'Order In'
 	var txt_version = obj.txt_orderin_version;
 	var chk_iscommit = obj.chk_orderin_iscommit;
 	
@@ -1184,7 +1209,7 @@ async function btn_action_click(args) {
 
 	switch (args.action) {
 		case 'commit' :
-			args.act_url = `${global.modulefullname}/xtion-${args.action}`;
+			args.act_url = `${global.modulefullname}/xtion-commit`;
 			args.act_msg_quest = `Apakah anda yakin akan <b>${args.action}</b> ${docname} no ${args.id} ?`;
 			args.act_msg_result = `${docname} no ${args.id} telah di ${args.action}.`;
 			args.act_do = (result) => {
@@ -1197,7 +1222,7 @@ async function btn_action_click(args) {
 			break;
 
 		case 'uncommit' :
-			args.act_url = `${global.modulefullname}/xtion-${args.action}`;
+			args.act_url = `${global.modulefullname}/xtion-uncommit`;
 			args.act_msg_quest = `Apakah anda yakin akan <b>${args.action}</b> ${docname} no ${args.id} ?`;
 			args.act_msg_result = `${docname} no ${args.id} telah di ${args.action}.`;
 			args.act_do = (result) => {

@@ -7,12 +7,6 @@ import * as pList from './ofrecv-list.mjs'
 import * as pEdit from './ofrecv-edit.mjs'
 import * as pEditDetilgrid from './ofrecv-detilgrid.mjs'
 import * as pEditDetilform from './ofrecv-detilform.mjs'
-import * as pEditRecvgrid from './ofrecv-recvgrid.mjs'
-import * as pEditRecvform from './ofrecv-recvform.mjs'
-import * as pEditReferencegrid from './ofrecv-referencegrid.mjs'
-import * as pEditReferenceform from './ofrecv-referenceform.mjs'
-import * as pEditResponsegrid from './ofrecv-responsegrid.mjs'
-import * as pEditResponseform from './ofrecv-responseform.mjs'
 
 
 
@@ -20,12 +14,6 @@ const pnl_list = $('#pnl_list')
 const pnl_edit = $('#pnl_edit')
 const pnl_editdetilgrid = $('#pnl_editdetilgrid')
 const pnl_editdetilform = $('#pnl_editdetilform')
-const pnl_editrecvgrid = $('#pnl_editrecvgrid')
-const pnl_editrecvform = $('#pnl_editrecvform')
-const pnl_editreferencegrid = $('#pnl_editreferencegrid')
-const pnl_editreferenceform = $('#pnl_editreferenceform')
-const pnl_editresponsegrid = $('#pnl_editresponsegrid')
-const pnl_editresponseform = $('#pnl_editresponseform')
 
 
 
@@ -52,13 +40,7 @@ export async function init(opt) {
 			{panel: pnl_list, handler: pList},
 			{panel: pnl_edit, handler: pEdit},
 			{panel: pnl_editdetilgrid, handler: pEditDetilgrid},
-			{panel: pnl_editdetilform, handler: pEditDetilform},
-			{panel: pnl_editrecvgrid, handler: pEditRecvgrid},
-			{panel: pnl_editrecvform, handler: pEditRecvform},
-			{panel: pnl_editreferencegrid, handler: pEditReferencegrid},
-			{panel: pnl_editreferenceform, handler: pEditReferenceform},
-			{panel: pnl_editresponsegrid, handler: pEditResponsegrid},
-			{panel: pnl_editresponseform, handler: pEditResponseform}			
+			{panel: pnl_editdetilform, handler: pEditDetilform}			
 		], opt)
 
 	$ui.setPages(pages)

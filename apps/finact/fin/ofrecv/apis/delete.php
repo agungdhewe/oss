@@ -19,18 +19,18 @@ use \FGTA4\exceptions\WebException;
  * Delete
  * ======
  * Menghapus satu baris data/record berdasarkan PrimaryKey
- * pada tabel header ofrecv (trn_jurnal)
+ * pada tabel header ofrecv (trn_tjurnalor)
  *
  * Agung Nugroho <agung@fgta.net> http://www.fgta.net
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 08/06/2021
+ * tanggal 25/12/2021
  */
 $API = new class extends ofrecvBase {
 	
 	public function execute($data, $options) {
-		$tablename = 'trn_jurnal';
+		$tablename = 'trn_tjurnalor';
 		$primarykey = 'jurnal_id';
 
 		$userdata = $this->auth->session_get_user();
@@ -51,6 +51,14 @@ $API = new class extends ofrecvBase {
 			$this->db->beginTransaction();
 
 			try {
+				
+				$tabletodelete = ['trn_tjurnalordetil'];
+				foreach ($tabletodelete as $reftablename) {
+					$cmd = \FGTA4\utils\SqlUtility::CreateSQLDelete($reftablename, $key);
+					$stmt = $this->db->prepare($cmd->sql);
+					$stmt->execute($cmd->params);
+				}
+		
 				$cmd = \FGTA4\utils\SqlUtility::CreateSQLDelete($tablename, $key);
 				$stmt = $this->db->prepare($cmd->sql);
 				$stmt->execute($cmd->params);

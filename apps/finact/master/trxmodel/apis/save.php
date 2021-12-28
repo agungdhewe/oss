@@ -8,6 +8,10 @@ require_once __ROOT_DIR.'/core/sqlutil.php';
 // require_once __ROOT_DIR . "/core/sequencer.php";
 require_once __DIR__ . '/xapi.base.php';
 
+if (is_file(__DIR__ .'/data-header-handler.php')) {
+	require_once __DIR__ .'/data-header-handler.php';
+}
+
 
 use \FGTA4\exceptions\WebException;
 // use \FGTA4\utils\Sequencer;
@@ -27,7 +31,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 18/09/2021
+ * tanggal 27/12/2021
  */
 $API = new class extends trxmodelBase {
 	
@@ -38,6 +42,18 @@ $API = new class extends trxmodelBase {
 		$datastate = $data->_state;
 
 		$userdata = $this->auth->session_get_user();
+
+		$handlerclassname = "\\FGTA4\\apis\\trxmodel_headerHandler";
+		if (class_exists($handlerclassname)) {
+			$hnd = new trxmodel_headerHandler($data, $options);
+			$hnd->caller = $this;
+			$hnd->db = $this->db;
+			$hnd->auth = $this->auth;
+			$hnd->reqinfo = $reqinfo->reqinfo;
+		} else {
+			$hnd = new \stdClass;
+		}
+
 
 		try {
 
@@ -102,8 +118,8 @@ $API = new class extends trxmodelBase {
 				// result
 				$where = \FGTA4\utils\SqlUtility::BuildCriteria((object)[$primarykey=>$obj->{$primarykey}], [$primarykey=>"$primarykey=:$primarykey"]);
 				$sql = \FGTA4\utils\SqlUtility::Select($tablename , [
-					$primarykey
-					, 'trxmodel_id', 'trxmodel_name', 'trxmodel_descr', 'trxmodel_direction', 'ppn_taxtype_id', 'pph_taxtype_id', 'trxmodel_isuseqty', 'trxmodel_isusedays', 'trxmodel_isusetask', '_createby', '_createdate', '_modifyby', '_modifydate', '_createby', '_createdate', '_modifyby', '_modifydate'
+					  $primarykey
+					, 'trxmodel_id', 'trxmodel_name', 'trxmodel_descr', 'trxmodel_direction', 'ppn_taxtype_id', 'pph_taxtype_id', 'trxmodel_isuseqty', 'trxmodel_isusedays', 'trxmodel_isusetask', 'trxmodel_isassetminta', 'trxmodel_isassetpinjam', '_createby', '_createdate', '_modifyby', '_modifydate'
 				], $where->sql);
 				$stmt = $this->db->prepare($sql);
 				$stmt->execute($where->params);
@@ -115,14 +131,18 @@ $API = new class extends trxmodelBase {
 				}
 				$result->dataresponse = (object) array_merge($record, [
 					//  untuk lookup atau modify response ditaruh disini
-				'ppn_taxtype_name' => \FGTA4\utils\SqlUtility::Lookup($record['ppn_taxtype_id'], $this->db, 'mst_taxtype', 'taxtype_id', 'taxtype_name'),
-				'pph_taxtype_name' => \FGTA4\utils\SqlUtility::Lookup($record['pph_taxtype_id'], $this->db, 'mst_taxtype', 'taxtype_id', 'taxtype_name'),
+					'ppn_taxtype_name' => \FGTA4\utils\SqlUtility::Lookup($record['ppn_taxtype_id'], $this->db, 'mst_taxtype', 'taxtype_id', 'taxtype_name'),
+					'pph_taxtype_name' => \FGTA4\utils\SqlUtility::Lookup($record['pph_taxtype_id'], $this->db, 'mst_taxtype', 'taxtype_id', 'taxtype_name'),
 
 					'_createby' => \FGTA4\utils\SqlUtility::Lookup($record['_createby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
 					'_modifyby' => \FGTA4\utils\SqlUtility::Lookup($record['_modifyby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
 				]);
 
-
+				if (is_object($hnd)) {
+					if (method_exists(get_class($hnd), 'DataSavedSuccess')) {
+						$hnd->DataSavedSuccess($result);
+					}
+				}
 
 				$this->db->commit();
 				return $result;

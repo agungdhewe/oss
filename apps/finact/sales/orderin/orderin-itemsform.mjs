@@ -3,6 +3,9 @@ var this_page_options;
 
 import {fgta4slideselect} from  '../../../../../index.php/asset/fgta/framework/fgta4libs/fgta4slideselect.mjs'
 
+const reload_header_modified = true;
+
+
 const txt_title = $('#pnl_edititemsform-title')
 const btn_edit = $('#pnl_edititemsform-btn_edit')
 const btn_save = $('#pnl_edititemsform-btn_save')
@@ -384,6 +387,14 @@ async function form_datasaved(result, options) {
 			btn_addnew_click()
 		}, 1000)
 	}
+
+	if (reload_header_modified) {
+		var currentRowdata =  $ui.getPages().ITEMS['pnl_edit'].handler.getCurrentRowdata();
+		$ui.getPages().ITEMS['pnl_edit'].handler.open(currentRowdata.data, currentRowdata.rowid, false, (err, data)=>{
+			$ui.getPages().ITEMS['pnl_list'].handler.updategrid(data, currentRowdata.rowid);
+		});	
+	}
+
 }
 
 async function form_deleting(data, options) {
@@ -394,7 +405,14 @@ async function form_deleted(result, options) {
 	options.suppressdialog = true
 	$ui.getPages().show('pnl_edititemsgrid', ()=>{
 		$ui.getPages().ITEMS['pnl_edititemsgrid'].handler.removerow(form.rowid)
-	})
+	});
+
+	if (reload_header_modified) {
+		var currentRowdata =  $ui.getPages().ITEMS['pnl_edit'].handler.getCurrentRowdata();
+		$ui.getPages().ITEMS['pnl_edit'].handler.open(currentRowdata.data, currentRowdata.rowid, false, (err, data)=>{
+			$ui.getPages().ITEMS['pnl_list'].handler.updategrid(data, currentRowdata.rowid);
+		});	
+	}
 	
 }
 

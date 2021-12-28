@@ -26,17 +26,17 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 08/06/2021
+ * tanggal 25/12/2021
  */
 class ofrecvBase extends WebAPI {
 
-	protected $main_tablename = "trn_jurnal";
+	protected $main_tablename = "trn_tjurnalor";
 	protected $main_primarykey = "jurnal_id";
-	protected $main_field_version = "jurnal_version";	
+	protected $main_field_version = "tjurnalor_version";	
 	
-	protected $field_iscommit = "jurnal_iscommit";
-	protected $field_commitby = "jurnal_commitby";
-	protected $field_commitdate = "jurnal_commitdate";		
+	protected $field_iscommit = "tjurnalor_iscommit";
+	protected $field_commitby = "tjurnalor_commitby";
+	protected $field_commitdate = "tjurnalor_commitdate";		
 			
 	
 

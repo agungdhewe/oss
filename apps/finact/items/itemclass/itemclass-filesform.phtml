@@ -8,7 +8,7 @@
 
 	<form id="pnl_editfilesform-form">
 
-		<div class="form_row" >
+		<div class="form_row pnl_editfilesform_row txt_itemclassfiles_id" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">ID</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editfilesform-txt_itemclassfiles_id" class="easyui-textbox" mapping="itemclassfiles_id"  maxlength="14"  style="width: 400px" data-options="multiline:false  ">
@@ -16,7 +16,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editfilesform_row cbo_doctype_id" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Document Type</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editfilesform-cbo_doctype_id" class="easyui-combo" style="width: 400px" mapping="doctype_id" display="doctype_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Tipe dokumen harus diisi'"  validType="requiredcombo['pnl_editfilesform-cbo_doctype_id']" >
@@ -24,7 +24,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editfilesform_row txt_itemclassfiles_descr" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Descr</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editfilesform-txt_itemclassfiles_descr" class="easyui-textbox" mapping="itemclassfiles_descr"  maxlength="90"  style="width: 400px" data-options="multiline:false  ">
@@ -32,7 +32,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editfilesform_row txt_itemclassfiles_order" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Order</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editfilesform-txt_itemclassfiles_order" class="easyui-numberbox" mapping="itemclassfiles_order" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  ">
@@ -41,7 +41,7 @@
 		</div>
 
 
-		<div class="form_row" >
+		<div class="form_row pnl_editfilesform_row fl_itemclassfiles_file" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">File</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editfilesform-fl_itemclassfiles_file" class="easyui-filebox" mapping="itemclassfiles_file" style="width: 400px" data-options="multiline: false , accept: 'image/*' ">
@@ -53,7 +53,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" style="display: none">
+		<div class="form_row pnl_editfilesform_row txt_itemclass_id" style="display: none">
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">ID</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editfilesform-txt_itemclass_id" class="easyui-textbox" mapping="itemclass_id"  maxlength="14"  style="width: 400px" data-options="multiline:false  , disabled: true">

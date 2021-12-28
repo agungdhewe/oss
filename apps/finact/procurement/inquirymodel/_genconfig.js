@@ -15,6 +15,21 @@ module.exports = {
 				inquirymodel_id: { text: 'ID', type: dbtype.varchar(1), uppercase: true, null: false, options: { required: true, invalidMessage: 'ID harus diisi' } },
 				inquirymodel_name: { text: 'Model', type: dbtype.varchar(30), null: false, uppercase: true, options: { required: true, invalidMessage: 'Nama Model Pajak harus diisi' } },
 				inquirymodel_descr: { text: 'Descr', type: dbtype.varchar(90), suppresslist: true },
+
+				trxmodel_id: { 
+					text: 'Transaksi Default', type: dbtype.varchar(10), null: false, suppresslist: true,
+					options: { required: true, invalidMessage: 'Default Model Transaksi harus diisi' }, 
+					tips: 'Default Followup Transaksi yang akan dilakukan, apabila diperlukan',
+					tipstype: 'visible',
+					comp: comp.Combo({
+						table: 'mst_trxmodel', 
+						field_value: 'trxmodel_id', field_display: 'trxmodel_name', field_display_name: 'trxmodel_name', 
+						api: 'finact/master/trxmodel/list'})				
+				
+				},
+
+
+
 				inquirymodel_isqtybreakdown: { text: 'Quantity Breakdown', type: dbtype.boolean, null: false, default: '0', options: {labelWidth:'300px'} },
 				inquirymodel_isdateinterval: { text: 'Date Interval', type: dbtype.boolean, null: false, default: '0' },
 			},

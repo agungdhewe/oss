@@ -24,6 +24,7 @@ module.exports = {
 						field_display: 'inquirymodel_name',
 						api: 'finact/procurement/inquirymodel/list',
 						OnSelectedScript: `
+				form.setValue(obj.cbo_trxmodel_id, record.trxmodel_id, record.trxmodel_name);		
 				form.setValue(obj.chk_inquirytype_isdateinterval, record.inquirymodel_isdateinterval=='1'?true:false);
 				form.setValue(obj.chk_inquirytype_isqtybreakdown, record.inquirymodel_isqtybreakdown=='1'?true:false);
 						`

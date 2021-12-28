@@ -8,6 +8,13 @@ require_once __ROOT_DIR.'/core/sqlutil.php';
 require_once __DIR__ . '/xapi.base.php';
 //require_once __ROOT_DIR . "/core/sequencer.php";
 
+
+if (is_file(__DIR__ .'/data-contact-handler.php')) {
+	require_once __DIR__ .'/data-contact-handler.php';
+}
+
+
+
 use \FGTA4\exceptions\WebException;
 //use \FGTA4\utils\Sequencer;
 
@@ -26,7 +33,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 29/11/2021
+ * tanggal 28/12/2021
  */
 $API = new class extends partnerBase {
 	
@@ -37,6 +44,17 @@ $API = new class extends partnerBase {
 		$datastate = $data->_state;
 
 		$userdata = $this->auth->session_get_user();
+
+		$handlerclassname = "\\FGTA4\\apis\\partner_contactHandler";
+		if (class_exists($handlerclassname)) {
+			$hnd = new partner_contactHandler($data, $options);
+			$hnd->caller = $this;
+			$hnd->db = $this->db;
+			$hnd->auth = $this->auth;
+			$hnd->reqinfo = $reqinfo->reqinfo;
+		} else {
+			$hnd = new \stdClass;
+		}
 
 		try {
 			$result = new \stdClass; 
@@ -55,6 +73,12 @@ $API = new class extends partnerBase {
 			// apabila ada tanggal, ubah ke format sql sbb:
 			// $obj->tanggal = (\DateTime::createFromFormat('d/m/Y',$obj->tanggal))->format('Y-m-d');
 
+			$obj->partnercontact_id = strtoupper($obj->partnercontact_id);
+			$obj->partnercontact_name = strtoupper($obj->partnercontact_name);
+			$obj->partnercontact_position = strtoupper($obj->partnercontact_position);
+			$obj->partnercontact_mobilephone = strtoupper($obj->partnercontact_mobilephone);
+			$obj->partnercontact_email = strtoupper($obj->partnercontact_email);
+			$obj->partner_id = strtoupper($obj->partner_id);
 
 
 
@@ -123,8 +147,14 @@ $API = new class extends partnerBase {
 					'_modifyby' => \FGTA4\utils\SqlUtility::Lookup($record['_modifyby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
 				]);
 
-				$this->db->commit();
 
+				if (is_object($hnd)) {
+					if (method_exists(get_class($hnd), 'DataSavedSuccess')) {
+						$hnd->DataSavedSuccess($result);
+					}
+				}
+
+				$this->db->commit();
 				return $result;
 			} catch (\Exception $ex) {
 				$this->db->rollBack();

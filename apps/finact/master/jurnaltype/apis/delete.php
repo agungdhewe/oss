@@ -25,7 +25,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 05/06/2021
+ * tanggal 25/12/2021
  */
 $API = new class extends jurnaltypeBase {
 	
@@ -51,6 +51,14 @@ $API = new class extends jurnaltypeBase {
 			$this->db->beginTransaction();
 
 			try {
+				
+				$tabletodelete = ['mst_jurnaltypecoa'];
+				foreach ($tabletodelete as $reftablename) {
+					$cmd = \FGTA4\utils\SqlUtility::CreateSQLDelete($reftablename, $key);
+					$stmt = $this->db->prepare($cmd->sql);
+					$stmt->execute($cmd->params);
+				}
+		
 				$cmd = \FGTA4\utils\SqlUtility::CreateSQLDelete($tablename, $key);
 				$stmt = $this->db->prepare($cmd->sql);
 				$stmt->execute($cmd->params);

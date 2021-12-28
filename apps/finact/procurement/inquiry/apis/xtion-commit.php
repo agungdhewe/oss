@@ -107,6 +107,27 @@ $API = new class extends inquiryBase {
 	}
 
 
+	public function pre_action_check($currentdata, $action) {
+		try {
+			$inquiry_id = $currentdata->header->inquiry_id;
+			$sql = "
+				select * from trn_inquirydetil where inquiry_id = :inquiry_id 
+			";
+			$stmt = $this->db->prepare($sql);
+			$stmt->execute([':inquiry_id'=>$inquiry_id]);
+			$rows  = $stmt->fetchall(\PDO::FETCH_ASSOC);
+			
+			if (count($rows)==0) {
+				throw new \Exception("Item detil belum dibuat"); 
+			}
+
+		} catch (Exception $ex) {
+			throw $ex;
+		}		
+	}
+
+
+
 	public function set_approval($currentdata) {
 		try {
 			StandartApproval::copy(

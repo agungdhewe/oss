@@ -7,6 +7,10 @@ if (!defined('FGTA4')) {
 require_once __ROOT_DIR.'/core/sqlutil.php';
 require_once __DIR__ . '/xapi.base.php';
 
+if (is_file(__DIR__ .'/data-header-handler.php')) {
+	require_once __DIR__ .'/data-header-handler.php';
+}
+
 
 use \FGTA4\exceptions\WebException;
 
@@ -24,7 +28,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 18/09/2021
+ * tanggal 28/12/2021
  */
 $API = new class extends inquirymodelBase {
 	
@@ -32,6 +36,18 @@ $API = new class extends inquirymodelBase {
 		$tablename = 'mst_inquirymodel';
 		$primarykey = 'inquirymodel_id';
 		$userdata = $this->auth->session_get_user();
+
+		$handlerclassname = "\\FGTA4\\apis\\inquirymodel_headerHandler";
+		if (class_exists($handlerclassname)) {
+			$hnd = new inquirymodel_headerHandler($data, $options);
+			$hnd->caller = $this;
+			$hnd->db = $this->db;
+			$hnd->auth = $this->auth;
+			$hnd->reqinfo = $reqinfo->reqinfo;
+		} else {
+			$hnd = new \stdClass;
+		}
+
 
 		try {
 
@@ -50,7 +66,7 @@ $API = new class extends inquirymodelBase {
 			);
 
 			$sql = \FGTA4\utils\SqlUtility::Select('mst_inquirymodel A', [
-				'inquirymodel_id', 'inquirymodel_name', 'inquirymodel_descr', 'inquirymodel_isqtybreakdown', 'inquirymodel_isdateinterval', '_createby', '_createdate', '_modifyby', '_modifydate'
+				'inquirymodel_id', 'inquirymodel_name', 'inquirymodel_descr', 'trxmodel_id', 'inquirymodel_isqtybreakdown', 'inquirymodel_isdateinterval', '_createby', '_createdate', '_modifyby', '_modifydate'
 			], $where->sql);
 
 			$stmt = $this->db->prepare($sql);
@@ -71,12 +87,20 @@ $API = new class extends inquirymodelBase {
 				//'tanggal' => date("d/m/Y", strtotime($record['tanggal'])),
 				//'gendername' => $record['gender']
 				
+				'trxmodel_name' => \FGTA4\utils\SqlUtility::Lookup($record['trxmodel_id'], $this->db, 'mst_trxmodel', 'trxmodel_id', 'trxmodel_name'),
 
 
 				'_createby' => \FGTA4\utils\SqlUtility::Lookup($record['_createby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
 				'_modifyby' => \FGTA4\utils\SqlUtility::Lookup($record['_modifyby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
 
 			]);
+
+			if (is_object($hnd)) {
+				if (method_exists(get_class($hnd), 'DataOpen')) {
+					$hnd->DataOpen($result->record);
+				}
+			}
+
 
 			// $date = DateTime::createFromFormat('d/m/Y', "24/04/2012");
 			// echo $date->format('Y-m-d');

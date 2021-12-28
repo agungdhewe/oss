@@ -1,6 +1,8 @@
 var this_page_id;
 var this_page_options;
 
+import {fgta4slideselect} from  '../../../../../index.php/asset/fgta/framework/fgta4libs/fgta4slideselect.mjs'
+import * as hnd from  './inquirymodel-edit-hnd.mjs'
 
 
 const btn_edit = $('#pnl_edit-btn_edit')
@@ -11,11 +13,13 @@ const btn_delete = $('#pnl_edit-btn_delete')
 
 
 
+
 const pnl_form = $('#pnl_edit-form')
 const obj = {
 	txt_inquirymodel_id: $('#pnl_edit-txt_inquirymodel_id'),
 	txt_inquirymodel_name: $('#pnl_edit-txt_inquirymodel_name'),
 	txt_inquirymodel_descr: $('#pnl_edit-txt_inquirymodel_descr'),
+	cbo_trxmodel_id: $('#pnl_edit-cbo_trxmodel_id'),
 	chk_inquirymodel_isqtybreakdown: $('#pnl_edit-chk_inquirymodel_isqtybreakdown'),
 	chk_inquirymodel_isdateinterval: $('#pnl_edit-chk_inquirymodel_isdateinterval')
 }
@@ -24,6 +28,7 @@ const obj = {
 
 
 let form;
+let rowdata;
 
 export async function init(opt) {
 	this_page_id = opt.id;
@@ -59,12 +64,52 @@ export async function init(opt) {
 		OnRecordStatusCreated: () => {
 			undefined			
 		}		
-	})
+	});
+	form.getHeaderData = () => {
+		return getHeaderData();
+	}
 
 
 
 
 
+
+
+
+
+
+	new fgta4slideselect(obj.cbo_trxmodel_id, {
+		title: 'Pilih trxmodel_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_trxmodel_id,
+		fieldValue: 'trxmodel_id',
+		fieldValueMap: 'trxmodel_id',
+		fieldDisplay: 'trxmodel_name',
+		fields: [
+			{mapping: 'trxmodel_id', text: 'trxmodel_id'},
+			{mapping: 'trxmodel_name', text: 'trxmodel_name'},
+		],
+		OnDataLoading: (criteria) => {
+			
+			if (typeof hnd.cbo_trxmodel_id_dataloading === 'function') {
+				hnd.cbo_trxmodel_id_dataloading(criteria);
+			}	
+		},
+		OnDataLoaded : (result, options) => {
+				
+			if (typeof hnd.cbo_trxmodel_id_dataloaded === 'function') {
+				hnd.cbo_trxmodel_id_dataloaded(result, options);
+			}
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_trxmodel_id_selected === 'function') {
+					hnd.cbo_trxmodel_id_selected(value, display, record, args);
+				}
+			}
+		}
+	})				
+				
 
 
 
@@ -115,6 +160,13 @@ export async function init(opt) {
 	})
 
 	//button state
+	if (typeof hnd.init==='function') {
+		hnd.init({
+			form: form,
+			obj: obj,
+			opt: opt,
+		})
+	}
 
 }
 
@@ -125,8 +177,16 @@ export function getForm() {
 	return form
 }
 
+export function getCurrentRowdata() {
+	return rowdata;
+}
 
 export function open(data, rowid, viewmode=true, fn_callback) {
+
+	rowdata = {
+		data: data,
+		rowid: rowid
+	}
 
 	var pOpt = form.getDefaultPrompt(false)
 	var fn_dataopening = async (options) => {
@@ -155,6 +215,7 @@ export function open(data, rowid, viewmode=true, fn_callback) {
 		form.SuspendEvent(true);
 		form
 			.fill(record)
+			.setValue(obj.cbo_trxmodel_id, record.trxmodel_id, record.trxmodel_name)
 			.setViewMode(viewmode)
 			.lock(false)
 			.rowid = rowid
@@ -164,7 +225,9 @@ export function open(data, rowid, viewmode=true, fn_callback) {
 		   apabila ada rutin mengubah form dan tidak mau dijalankan pada saat opening,
 		   cek dengan form.isEventSuspended()
 		*/   
-
+		if (typeof hnd.form_dataopened == 'function') {
+			hnd.form_dataopened(result, options);
+		}
 
 
 		/* commit form */
@@ -172,8 +235,19 @@ export function open(data, rowid, viewmode=true, fn_callback) {
 		form.SuspendEvent(false); 
 		updatebuttonstate(record)
 
+
+		/* update rowdata */
+		for (var nv in rowdata.data) {
+			if (record[nv]!=undefined) {
+				rowdata.data[nv] = record[nv];
+			}
+		}
+
 		// tampilkan form untuk data editor
-		fn_callback()
+		if (typeof fn_callback==='function') {
+			fn_callback(null, rowdata.data);
+		}
+		
 	}
 
 	var fn_dataopenerror = (err) => {
@@ -195,11 +269,12 @@ export function createnew() {
 		data.inquirymodel_isqtybreakdown = '0'
 		data.inquirymodel_isdateinterval = '0'
 
+		data.trxmodel_id = '0'
+		data.trxmodel_name = '-- PILIH --'
 
-
-
-
-
+		if (typeof hnd.form_newdata == 'function') {
+			hnd.form_newdata(data, options);
+		}
 
 
 
@@ -214,6 +289,14 @@ export function createnew() {
 }
 
 
+export function getHeaderData() {
+	var header_data = form.getData();
+	if (typeof hnd.form_getHeaderData == 'function') {
+		hnd.form_getHeaderData(header_data);
+	}
+	return header_data;
+}
+
 export function detil_open(pnlname) {
 	if (form.isDataChanged()) {
 		$ui.ShowMessage('Simpan dulu perubahan datanya.')
@@ -221,9 +304,23 @@ export function detil_open(pnlname) {
 	}
 
 	//$ui.getPages().show(pnlname)
-	$ui.getPages().show(pnlname, () => {
-		$ui.getPages().ITEMS[pnlname].handler.OpenDetil(form.getData())
-	})	
+	let header_data = getHeaderData();
+	if (typeof hnd.form_detil_opening == 'function') {
+		hnd.form_detil_opening(pnlname, (cancel)=>{
+			if (cancel===true) {
+				return;
+			}
+			$ui.getPages().show(pnlname, () => {
+				$ui.getPages().ITEMS[pnlname].handler.OpenDetil(header_data)
+			})
+		});
+	} else {
+		$ui.getPages().show(pnlname, () => {
+			$ui.getPages().ITEMS[pnlname].handler.OpenDetil(header_data)
+		})
+	}
+
+	
 }
 
 
@@ -295,6 +392,10 @@ async function form_datasaving(data, options) {
 		}
 	}
 
+	if (typeof hnd.form_datasaving == 'function') {
+		hnd.form_datasaving(data, options);
+	}
+
 }
 
 async function form_datasaveerror(err, options) {
@@ -339,17 +440,31 @@ async function form_datasaved(result, options) {
 		}
 	}
 	form.rowid = $ui.getPages().ITEMS['pnl_list'].handler.updategrid(data, form.rowid)
+	rowdata = {
+		data: data,
+		rowid: form.rowid
+	}
+
+	if (typeof hnd.form_datasaved == 'function') {
+		hnd.form_datasaved(result, rowdata, options);
+	}
 }
 
 
 
 async function form_deleting(data) {
+	if (typeof hnd.form_deleting == 'function') {
+		hnd.form_deleting(data);
+	}
 }
 
 async function form_deleted(result, options) {
 	$ui.getPages().show('pnl_list')
 	$ui.getPages().ITEMS['pnl_list'].handler.removerow(form.rowid)
 
+	if (typeof hnd.form_deleted == 'function') {
+		hnd.form_deleted(result, options);
+	}
 }
 
 

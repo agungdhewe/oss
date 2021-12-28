@@ -99,13 +99,21 @@ module.exports = {
 				},
 
 				project_id: {
-					text: 'Project', type: dbtype.varchar(30), null: true, suppresslist: true, hidden: true,
+					text: 'Project', type: dbtype.varchar(30), null: true, suppresslist: true, 
 					options: { prompt: 'NONE' },
 					comp: comp.Combo({
 						table: 'mst_project',
 						field_value: 'project_id', field_display: 'project_name',
 						api: 'finact/master/project/list'
 					})
+				},
+
+				orderin_ishasdp: {
+					section: section.Begin('Down Payment'),  //section.Begin('Related Dept', 'defbottomborder'),
+					caption:'Down Payment', text:'has down payment', type: dbtype.boolean, null:false, default:'0', suppresslist: true, options: {labelWidth: '300px'}},
+				orderin_dpvalue: { 
+					section: section.End(),
+					text: 'Value (%)', type: dbtype.decimal(4,2), null: false, default:0, suppresslist: true 
 				},
 
 				ppn_taxtype_id: { 
@@ -334,14 +342,28 @@ module.exports = {
 			primarykeys: ['orderinterm_id'],		
 			data: {
 				orderinterm_id: { text: 'ID', type: dbtype.varchar(14), null: false, suppresslist: true, },
+
+				orderintermtype_id: {
+					text: 'Type', type: dbtype.varchar(17), null: true, 
+					options: {required:true, invalidMessage:'Type harus diisi' },
+					comp: comp.Combo({
+						table: 'mst_orderintermtype',
+						field_value: 'orderintermtype_id', field_display: 'orderintermtype_name'  , field_display_name: 'orderintermtype_name',
+						api: 'finact/sales/orderintermtype/list',
+						OnSelectedScript: `
+				form.setValue(obj.chk_merchorderinterm_isdp, record.orderintermtype_isdp)		
+						`
+					})
+				},
+
 				orderinterm_descr: { text: 'Descr', type: dbtype.varchar(255), null: true,  options: { required: true, invalidMessage: 'Descr harus diisi' } },
 				orderinterm_days: {text:'Days', type: dbtype.int(4), default: 0, null:false},
-				orderinterm_dtfrometa: {text:'Date Due (ETA)', type: dbtype.date, null:false},
-				orderinterm_dt: {text:'Date Due (Actual)', type: dbtype.date, null:false},
+				orderinterm_dtfrometa: {text:'Date Due (ETA)', type: dbtype.date, null:false, suppresslist: true},
+				orderinterm_dt: {text:'Date Due (Actual)', type: dbtype.date, null:false, suppresslist: true},
 				orderinterm_isdp: {text:'Down Payment', type: dbtype.boolean, null:false, default:'0', suppresslist: true},
 				orderinterm_paymentpercent: { text: 'Value', type: dbtype.decimal(3,0), null: false, default:0, suppresslist: true },
 				orderinterm_payment: { text: 'Value', type: dbtype.decimal(16,0), null: false, default:0},
-				orderin_totalpayment: { text: 'Total', type: dbtype.decimal(16,0), null: false, default:0, hidden: true, options: { disabled: true }},
+				orderin_totalpayment: { text: 'Total', type: dbtype.decimal(16,0), null: false, default:0, hidden: true, suppresslist: true, options: { disabled: true }},
 				orderin_id: { text: 'ID', type: dbtype.varchar(30), null: false, hidden: true },
 			}
 		}

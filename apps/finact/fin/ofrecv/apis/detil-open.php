@@ -18,18 +18,18 @@ use \FGTA4\exceptions\WebException;
  * Detil-Open
  * ==========
  * Menampilkan satu baris data/record sesuai PrimaryKey,
- * dari tabel detil} ofrecv (trn_jurnal)
+ * dari tabel detil} ofrecv (trn_tjurnalor)
  *
  * Agung Nugroho <agung@fgta.net> http://www.fgta.net
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 08/06/2021
+ * tanggal 25/12/2021
  */
 $API = new class extends ofrecvBase {
 
 	public function execute($options) {
-		$tablename = 'trn_jurnaldetil';
+		$tablename = 'trn_tjurnalordetil';
 		$primarykey = 'jurnaldetil_id';
 		$userdata = $this->auth->session_get_user();
 		
@@ -39,13 +39,12 @@ $API = new class extends ofrecvBase {
 			$where = \FGTA4\utils\SqlUtility::BuildCriteria(
 				$options->criteria,
 				[
-					"jurnaldetil_id" => " jurnaldetil_id = :jurnaldetil_id ",
+					"jurnaldetil_id" => " jurnaldetil_id = :jurnaldetil_id "
 				]
 			);
 
-			$sql = \FGTA4\utils\SqlUtility::Select('trn_jurnaldetil A', [
-				'jurnaldetil_id', 'partner_id', 'jurnaldetil_id_ref', 'jurnaldetil_descr', 'jurnaldetil_valfrg', 'curr_id', 'jurnaldetil_valfrgrate', 'jurnaldetil_validr', 'coa_id', 'dept_id', 'jurnal_id', '_createby', '_createdate', '_modifyby', '_modifydate' 
-				, '_createby', '_createdate', '_modifyby', '_modifydate' 
+			$sql = \FGTA4\utils\SqlUtility::Select('trn_tjurnalordetil A', [
+				'jurnaldetil_id', 'partner_id', 'jurnaldetil_descr', 'jurnaldetil_valfrg', 'curr_id', 'jurnaldetil_valfrgrate', 'jurnaldetil_validr', 'coa_id', 'dept_id', 'jurnaldetil_id_ref', 'jurnal_id', '_createby', '_createdate', '_modifyby', '_modifydate' 
 			], $where->sql);
 
 			$stmt = $this->db->prepare($sql);
@@ -65,10 +64,10 @@ $API = new class extends ofrecvBase {
 				//'gendername' => $record['gender']
 
 				'partner_name' => \FGTA4\utils\SqlUtility::Lookup($record['partner_id'], $this->db, 'mst_partner', 'partner_id', 'partner_name'),
-				'jurnaldetil_descr' => \FGTA4\utils\SqlUtility::Lookup($record['jurnaldetil_id_ref'], $this->db, 'trn_jurnaldetil', 'jurnaldetil_id', 'jurnaldetil_descr'),
 				'curr_name' => \FGTA4\utils\SqlUtility::Lookup($record['curr_id'], $this->db, 'mst_curr', 'curr_id', 'curr_name'),
 				'coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
 				'dept_name' => \FGTA4\utils\SqlUtility::Lookup($record['dept_id'], $this->db, 'mst_dept', 'dept_id', 'dept_name'),
+				'jurnaldetil_descr' => \FGTA4\utils\SqlUtility::Lookup($record['jurnaldetil_id_ref'], $this->db, 'trn_jurnaldetil', 'jurnaldetil_id', 'jurnaldetil_descr'),
 				
 				'_createby' => \FGTA4\utils\SqlUtility::Lookup($record['_createby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
 				'_modifyby' => \FGTA4\utils\SqlUtility::Lookup($record['_modifyby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),

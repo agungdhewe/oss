@@ -172,10 +172,12 @@ $API = new class extends inquiryBase {
 				$ret = StandartApproval::Approve($this->db, $param, $dept_id_field);
 				if ($ret->isfinalapproval) {
 					$this->finalize($currentdata, $param, $dept_id_field);
+					$this->create_inquiryitem_for_process($currentdata, $param, $dept_id_field);
 				}
 			} else {
 				// echo "declining...\r\n";
 				StandartApproval::Decline($this->db, $param, $dept_id_field);
+				$this->remove_inquiryitem($currentdata, $param, $dept_id_field);
 			}
 
 			return $ret;
@@ -183,6 +185,112 @@ $API = new class extends inquiryBase {
 			throw $ex;
 		}		
 	}
+
+
+	function remove_inquiryitem($currentdata, $param, $dept_id_field) {
+		try {
+			$inquiry_id = $currentdata->header->inquiry_id;
+			$sql = "delete from trn_inquiryitem where inquiry_id = :inquiry_id ";
+			$stmt = $this->db->prepare($sql);
+			$stmt->execute([':inquiry_id'=>$inquiry_id]);
+		} catch (\Exception $ex) {
+			throw $ex;
+		}	
+	}
+
+	function create_inquiryitem_for_process($currentdata, $param, $dept_id_field) {
+		try {
+			$this->remove_inquiryitem($currentdata, $param, $dept_id_field);
+
+			// Get inquirytype data
+			$inquirytype_id = $currentdata->header->inquirytype_id;
+			$sql = "select * from mst_inquirytype where inquirytype_id = :inquirytype_id";
+			$stmt = $this->db->prepare($sql);
+			$stmt->execute([':inquirytype_id'=>$inquirytype_id]);
+			$inquirytype = (object)$stmt->fetch(\PDO::FETCH_ASSOC);		
+			
+			$inquirytype_isqtybreakdown = $inquirytype->inquirytype_isqtybreakdown;
+			
+
+			$inquiry_id = $currentdata->header->inquiry_id;
+			$sql = "select * from trn_inquirydetil where inquiry_id = :inquiry_id ";
+			$stmt = $this->db->prepare($sql);
+			$stmt->execute([':inquiry_id'=>$inquiry_id]);
+			$rows = $stmt->fetchall(\PDO::FETCH_ASSOC);		
+
+			$itemproc = [];
+			foreach ($rows as $row) {
+				$inquirydetil_qty = $row['inquirydetil_qty'];
+				$objdef = new \stdClass;
+				
+				$objdef->itemasset_id = $row['itemasset_id'];
+				$objdef->item_id = $row['item_id'];
+				$objdef->itemstock_id = $row['itemstock_id'];
+				$objdef->partner_id = $row['partner_id'];
+				$objdef->itemclass_id = $row['itemclass_id'];
+				$objdef->inquirydetil_descr = $row['inquirydetil_descr'];
+				$objdef->inquirydetil_qty = $row['inquirydetil_qty'];
+				$objdef->inquirydetil_days = $row['inquirydetil_days'];
+				$objdef->inquirydetil_task = $row['inquirydetil_task'];
+				$objdef->inquirydetil_qty_proc = $row['inquirydetil_qty'];
+				$objdef->proc_trxmodel_id = $inquirytype->trxmodel_id;
+				$objdef->inquirydetil_qty_outstd = $row['inquirydetil_qty'];
+				$objdef->outstd_trxmodel_id = $inquirytype->trxmodel_id;
+				$objdef->inquirydetil_estrate = $row['inquirydetil_estrate'];
+				$objdef->inquirydetil_estvalue = $row['inquirydetil_estvalue'];
+				$objdef->projbudgetdet_id = $row['projbudgetdet_id'];
+				$objdef->inquirydetil_isunbudget = $row['inquirydetil_isunbudget'];
+				$objdef->inquirydetil_isallowoverbudget = $row['inquirydetil_isallowoverbudget'];
+				$objdef->accbudget_id = $row['accbudget_id'];
+				$objdef->coa_id = $row['coa_id'];
+				$objdef->inquirydetil_id = $row['inquirydetil_id'];
+				$objdef->inquiry_id = $row['inquiry_id'];
+				$objdef->_createby = $row['_createby'];
+				$objdef->_createdate = $row['_createdate'];
+				$objdef->_modifyby = $row['_modifyby'];
+				$objdef->_modifydate = $row['_modifydate'];
+				
+				if ($inquirytype_isqtybreakdown==1) {
+					for ($i=0; $i<$inquirydetil_qty; $i++) {
+						$obj = clone $objdef;
+						$obj->inquiryitem_id = \uniqid();
+						$obj->inquirydetil_qty = 1;
+						$obj->inquirydetil_qty_proc = 1;
+						$obj->inquirydetil_qty_outstd = 0;
+						$obj->inquirydetil_estvalue = $objdef->inquirydetil_estrate;
+						$itemproc[] = $obj;
+					}
+				} else {
+					$obj = clone $objdef;
+					$obj->inquiryitem_id = \uniqid();
+					$itemproc[] = $obj;
+				}
+			}
+
+
+			foreach ($itemproc as $obj) {
+				$cmd = \FGTA4\utils\SqlUtility::CreateSQLInsert("trn_inquiryitem", $obj);
+				$stmt = $this->db->prepare($cmd->sql);
+				$stmt->execute($cmd->params);
+			}
+
+
+		} catch (\Exception $ex) {
+			throw $ex;
+		}
+	}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 	public function finalize($currentdata, $param, $dept_id_field) {

@@ -24,7 +24,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 22/10/2021
+ * tanggal 26/12/2021
  */
 $API = new class extends colltargetBase {
 	
@@ -50,7 +50,7 @@ $API = new class extends colltargetBase {
 			);
 
 			$sql = \FGTA4\utils\SqlUtility::Select('trn_colltarget A', [
-				'colltarget_id', 'periodemo_id', 'empl_id', 'dept_id', 'colltarget_discprop', 'colltarget_idr', 'colltarget_discval', 'colltarget_idrtotal', 'colltarget_idrtopay', 'doc_id', 'colltarget_version', 'colltarget_iscommit', 'colltarget_commitby', 'colltarget_commitdate', 'colltarget_isapprovalprogress', 'colltarget_isapproved', 'colltarget_approveby', 'colltarget_approvedate', 'colltarget_isdeclined', 'colltarget_declineby', 'colltarget_declinedate', '_createby', '_createdate', '_modifyby', '_modifydate'
+				'colltarget_id', 'periodemo_id', 'empl_id', 'dept_id', 'colltarget_discprop', 'colltarget_idr', 'colltarget_discval', 'colltarget_idrtopay', 'doc_id', 'colltarget_version', 'colltarget_iscommit', 'colltarget_commitby', 'colltarget_commitdate', 'colltarget_isapprovalprogress', 'colltarget_isapproved', 'colltarget_approveby', 'colltarget_approvedate', 'colltarget_isdeclined', 'colltarget_declineby', 'colltarget_declinedate', '_createby', '_createdate', '_modifyby', '_modifydate'
 			], $where->sql);
 
 			$stmt = $this->db->prepare($sql);

@@ -3,6 +3,9 @@ var this_page_options;
 
 import {fgta4slideselect} from  '../../../../../index.php/asset/fgta/framework/fgta4libs/fgta4slideselect.mjs'
 
+const reload_header_modified = true;
+
+
 const txt_title = $('#pnl_editmodeltransaksiform-title')
 const btn_edit = $('#pnl_editmodeltransaksiform-btn_edit')
 const btn_save = $('#pnl_editmodeltransaksiform-btn_save')
@@ -47,13 +50,17 @@ export async function init(opt) {
 		OnDataDeleted: async (result, options) => { await form_deleted(result, options) },
 		OnIdSetup : (options) => { form_idsetup(options) },
 		OnViewModeChanged : (viewonly) => { form_viewmodechanged(viewonly) }
-	})	
+	});
+	form.getHeaderData = () => {
+		return header_data;
+	}	
 
 	form.AllowAddRecord = true
 	form.AllowRemoveRecord = true
 	form.AllowEditRecord = true
 	form.CreateRecordStatusPage(this_page_id)
 	form.CreateLogPage(this_page_id)
+
 
 
 
@@ -70,12 +77,23 @@ export async function init(opt) {
 			{mapping: 'trxmodel_id', text: 'trxmodel_id'},
 			{mapping: 'trxmodel_name', text: 'trxmodel_name'},
 		],
-		OnDataLoading: (criteria, options) => {},
+		OnDataLoading: (criteria, options) => {
+				
+			if (typeof hnd.cbo_trxmodel_id_dataloading === 'function') {
+				hnd.cbo_trxmodel_id_dataloading(criteria);
+			}
+		},
 		OnDataLoaded : (result, options) => {
 				
+			if (typeof hnd.cbo_trxmodel_id_dataloaded === 'function') {
+				hnd.cbo_trxmodel_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
 			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_trxmodel_id_selected === 'function') {
+					hnd.cbo_trxmodel_id_selected(value, display, record, args);
+				}
 			}			
 		}
 	})				
@@ -92,12 +110,23 @@ export async function init(opt) {
 			{mapping: 'coa_id', text: 'coa_id'},
 			{mapping: 'coa_name', text: 'coa_name'},
 		],
-		OnDataLoading: (criteria, options) => {},
+		OnDataLoading: (criteria, options) => {
+				
+			if (typeof hnd.cbo_coa_id_dataloading === 'function') {
+				hnd.cbo_coa_id_dataloading(criteria);
+			}
+		},
 		OnDataLoaded : (result, options) => {
 				
+			if (typeof hnd.cbo_coa_id_dataloaded === 'function') {
+				hnd.cbo_coa_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
 			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_coa_id_selected === 'function') {
+					hnd.cbo_coa_id_selected(value, display, record, args);
+				}
 			}			
 		}
 	})				
@@ -114,12 +143,23 @@ export async function init(opt) {
 			{mapping: 'coa_id', text: 'coa_id'},
 			{mapping: 'coa_name', text: 'coa_name'},
 		],
-		OnDataLoading: (criteria, options) => {},
+		OnDataLoading: (criteria, options) => {
+				
+			if (typeof hnd.cbo_unbill_coa_id_dataloading === 'function') {
+				hnd.cbo_unbill_coa_id_dataloading(criteria);
+			}
+		},
 		OnDataLoaded : (result, options) => {
 				
+			if (typeof hnd.cbo_unbill_coa_id_dataloaded === 'function') {
+				hnd.cbo_unbill_coa_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
 			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_unbill_coa_id_selected === 'function') {
+					hnd.cbo_unbill_coa_id_selected(value, display, record, args);
+				}
 			}			
 		}
 	})				
@@ -188,6 +228,9 @@ export async function init(opt) {
 			chk_autoadd.prop("checked", false);
 		}
 	})
+
+
+
 }
 
 
@@ -241,7 +284,7 @@ export function open(data, rowid, hdata) {
 		   apabila ada rutin mengubah form dan tidak mau dijalankan pada saat opening,
 		   cek dengan form.isEventSuspended()
 		*/ 
-
+		
 
 
 		form.commit()
@@ -301,12 +344,12 @@ export function createnew(hdata) {
 		data.modeltransaksi_value = 0
 
 
-			data.trxmodel_id = '0'
-			data.trxmodel_name = '-- PILIH --'
-			data.coa_id = '0'
-			data.coa_name = '-- PILIH --'
-			data.unbill_coa_id = '0'
-			data.unbill_coa_name = '-- PILIH --'
+		data.trxmodel_id = '0'
+		data.trxmodel_name = '-- PILIH --'
+		data.coa_id = '0'
+		data.coa_name = '-- PILIH --'
+		data.unbill_coa_id = '0'
+		data.unbill_coa_name = '-- PILIH --'
 
 
 
@@ -331,7 +374,9 @@ async function form_datasaving(data, options) {
 			options.skipmappingresponse.push(id)
 			console.log(id)
 		}
-	}	
+	}
+
+		
 }
 
 async function form_datasaved(result, options) {
@@ -363,17 +408,37 @@ async function form_datasaved(result, options) {
 			btn_addnew_click()
 		}, 1000)
 	}
+
+	if (reload_header_modified) {
+		var currentRowdata =  $ui.getPages().ITEMS['pnl_edit'].handler.getCurrentRowdata();
+		$ui.getPages().ITEMS['pnl_edit'].handler.open(currentRowdata.data, currentRowdata.rowid, false, (err, data)=>{
+			$ui.getPages().ITEMS['pnl_list'].handler.updategrid(data, currentRowdata.rowid);
+		});	
+	}
+
+	
+
 }
 
 async function form_deleting(data, options) {
 	options.api = `${global.modulefullname}/modeltransaksi-delete`
+	
 }
 
 async function form_deleted(result, options) {
 	options.suppressdialog = true
 	$ui.getPages().show('pnl_editmodeltransaksigrid', ()=>{
 		$ui.getPages().ITEMS['pnl_editmodeltransaksigrid'].handler.removerow(form.rowid)
-	})
+	});
+
+	if (reload_header_modified) {
+		var currentRowdata =  $ui.getPages().ITEMS['pnl_edit'].handler.getCurrentRowdata();
+		$ui.getPages().ITEMS['pnl_edit'].handler.open(currentRowdata.data, currentRowdata.rowid, false, (err, data)=>{
+			$ui.getPages().ITEMS['pnl_list'].handler.updategrid(data, currentRowdata.rowid);
+		});	
+	}
+
+	
 	
 }
 

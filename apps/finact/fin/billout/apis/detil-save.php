@@ -26,7 +26,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 22/12/2021
+ * tanggal 24/12/2021
  */
 $API = new class extends billoutBase {
 	
@@ -55,8 +55,6 @@ $API = new class extends billoutBase {
 			// apabila ada tanggal, ubah ke format sql sbb:
 			// $obj->tanggal = (\DateTime::createFromFormat('d/m/Y',$obj->tanggal))->format('Y-m-d');
 
-			$obj->billoutdetil_descr = strtoupper($obj->billoutdetil_descr);
-			$obj->itemclass_id = strtoupper($obj->itemclass_id);
 
 
 
@@ -108,7 +106,7 @@ $API = new class extends billoutBase {
 				$where = \FGTA4\utils\SqlUtility::BuildCriteria((object)[$primarykey=>$obj->{$primarykey}], [$primarykey=>"$primarykey=:$primarykey"]);
 				$sql = \FGTA4\utils\SqlUtility::Select($tablename , [
 					$primarykey
-					, 'billoutdetil_id', 'billrowtype_id', 'taxtype_id', 'billoutdetil_descr', 'curr_id', 'billoutdetil_valfrg', 'billoutdetil_valfrgrate', 'billoutdetil_validr', 'itemclass_id', 'coa_id', 'billout_id', '_createby', '_createdate', '_modifyby', '_modifydate', '_createby', '_createdate', '_modifyby', '_modifydate'
+					, 'billoutdetil_id', 'billoutrowtype_id', 'orderindelv_id', 'itemclass_id', 'billoutdetil_descr', 'billoutdetil_totalitem', 'billoutdetil_totalqty', 'billoutdetil_salesgross', 'billoutdetil_discount', 'billoutdetil_subtotal', 'billoutdetil_pph', 'billoutdetil_nett', 'billoutdetil_ppn', 'billoutdetil_total', 'billoutdetil_totaladdcost', 'billoutdetil_dp', 'billoutdetil_payment', 'accbudget_id', 'coa_id', 'billout_id', '_createby', '_createdate', '_modifyby', '_modifydate', '_createby', '_createdate', '_modifyby', '_modifydate'
 				], $where->sql);
 				$stmt = $this->db->prepare($sql);
 				$stmt->execute($where->params);
@@ -120,10 +118,10 @@ $API = new class extends billoutBase {
 				}
 				$result->dataresponse = (object) array_merge($record, [
 					// untuk lookup atau modify response ditaruh disini
-				'billrowtype_name' => \FGTA4\utils\SqlUtility::Lookup($record['billrowtype_id'], $this->db, 'mst_billrowtype', 'billrowtype_id', 'billrowtype_name'),
-				'taxtype_name' => \FGTA4\utils\SqlUtility::Lookup($record['taxtype_id'], $this->db, 'mst_taxtype', 'taxtype_id', 'taxtype_name'),
-				'curr_name' => \FGTA4\utils\SqlUtility::Lookup($record['curr_id'], $this->db, 'mst_curr', 'curr_id', 'curr_name'),
+				'billoutrowtype_name' => \FGTA4\utils\SqlUtility::Lookup($record['billoutrowtype_id'], $this->db, 'mst_billoutrowtype', 'billoutrowtype_id', 'billoutrowtype_name'),
+				'orderindelv_descr' => \FGTA4\utils\SqlUtility::Lookup($record['orderindelv_id'], $this->db, 'trn_orderindelv', 'orderindelv_id', 'orderindelv_descr'),
 				'itemclass_name' => \FGTA4\utils\SqlUtility::Lookup($record['itemclass_id'], $this->db, 'mst_itemclass', 'itemclass_id', 'itemclass_name'),
+				'accbudget_name' => \FGTA4\utils\SqlUtility::Lookup($record['accbudget_id'], $this->db, 'mst_accbudget', 'accbudget_id', 'accbudget_name'),
 				'coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
 
 					'_createby' => \FGTA4\utils\SqlUtility::Lookup($record['_createby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),

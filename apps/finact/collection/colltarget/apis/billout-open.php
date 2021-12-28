@@ -24,7 +24,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 22/10/2021
+ * tanggal 26/12/2021
  */
 $API = new class extends colltargetBase {
 
@@ -44,7 +44,7 @@ $API = new class extends colltargetBase {
 			);
 
 			$sql = \FGTA4\utils\SqlUtility::Select('trn_colltargetbillout A', [
-				'colltargetbillout_id', 'partner_id', 'billout_id', 'colltargetbillout_datetarget', 'billout_datedue', 'billout_daystotarget', 'billout_idr', 'billout_ppn', 'billout_ppnval', 'billout_pph', 'billout_pphval', 'billout_idrnett', 'billout_isdiscvalue', 'billout_discp', 'billout_discval', 'billout_idrtotal', 'billout_idrtopay', 'billout_ppntopay', 'colltargetbillout_notes', 'colltarget_id', '_createby', '_createdate', '_modifyby', '_modifydate' 
+				'colltargetbillout_id', 'partner_id', 'billout_id', 'billout_isunreference', 'colltargetbillout_datetarget', 'colltargetbillout_notes', 'billout_idr', 'billout_isdiscvalue', 'billout_discp', 'billout_discval', 'billout_idrtopay', 'billout_ppntopay', 'billout_idrtotal', 'billout_datedue', 'billout_daystotarget', 'billout_totalitem', 'billout_totalqty', 'billout_salesgross', 'billout_discount', 'billout_subtotal', 'billout_pph', 'billout_nett', 'billout_ppn', 'billout_total', 'billout_totaladdcost', 'billout_dp', 'billout_payment', 'billout_paid', 'colltarget_id', '_createby', '_createdate', '_modifyby', '_modifydate' 
 			], $where->sql);
 
 			$stmt = $this->db->prepare($sql);
@@ -64,6 +64,7 @@ $API = new class extends colltargetBase {
 				// 'tambahan' => 'dta',
 				//'tanggal' => date("d/m/Y", strtotime($record['tanggal'])),
 				//'gendername' => $record['gender']
+
 				'partner_name' => \FGTA4\utils\SqlUtility::Lookup($record['partner_id'], $this->db, 'mst_partner', 'partner_id', 'partner_name'),
 				'billout_descr' => \FGTA4\utils\SqlUtility::Lookup($record['billout_id'], $this->db, 'trn_billout', 'billout_id', 'billout_descr'),
 				

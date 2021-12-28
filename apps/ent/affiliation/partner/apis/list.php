@@ -7,6 +7,11 @@ if (!defined('FGTA4')) {
 require_once __ROOT_DIR.'/core/sqlutil.php';
 require_once __DIR__ . '/xapi.base.php';
 
+if (is_file(__DIR__ .'/data-header-handler.php')) {
+	require_once __DIR__ .'/data-header-handler.php';
+}
+
+
 
 use \FGTA4\exceptions\WebException;
 
@@ -23,13 +28,25 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 29/11/2021
+ * tanggal 28/12/2021
  */
 $API = new class extends partnerBase {
 
 	public function execute($options) {
 
 		$userdata = $this->auth->session_get_user();
+
+		$handlerclassname = "\\FGTA4\\apis\\partner_headerHandler";
+		if (class_exists($handlerclassname)) {
+			$hnd = new partner_headerHandler($data, $options);
+			$hnd->caller = $this;
+			$hnd->db = $this->db;
+			$hnd->auth = $this->auth;
+			$hnd->reqinfo = $reqinfo->reqinfo;
+		} else {
+			$hnd = new \stdClass;
+		}
+
 
 		try {
 		
@@ -42,8 +59,7 @@ $API = new class extends partnerBase {
 			$where = \FGTA4\utils\SqlUtility::BuildCriteria(
 				$options->criteria,
 				[
-					"search" => " A.partner_id LIKE CONCAT('%', :search, '%') OR A.partner_name LIKE CONCAT('%', :search, '%') ",
-					"partnertype_id" => " A.partnertype_id = :partnertype_id "
+					"search" => " A.partner_id LIKE CONCAT('%', :search, '%') OR A.partner_name LIKE CONCAT('%', :search, '%') "
 				]
 			);
 
@@ -65,11 +81,24 @@ $API = new class extends partnerBase {
 			$stmt->execute($where->params);
 			$rows  = $stmt->fetchall(\PDO::FETCH_ASSOC);
 
+			$beforeloopdata = new \stdClass;
+			if (is_object($hnd)) {
+				if (method_exists(get_class($hnd), 'DataListBeforeLoop')) {
+					$beforeloopdata = $hnd->DataListBeforeLoop((object[]));
+				}
+			}
+
 			$records = [];
 			foreach ($rows as $row) {
 				$record = [];
 				foreach ($row as $key => $value) {
 					$record[$key] = $value;
+				}
+
+				if (is_object($hnd)) {
+					if (method_exists(get_class($hnd), 'DataListLooping')) {
+						$hnd->DataListLooping($record, $beforeloopdata);
+					}
 				}
 
 				array_push($records, array_merge($record, [
@@ -85,6 +114,10 @@ $API = new class extends partnerBase {
 					'col_empl_name' => \FGTA4\utils\SqlUtility::Lookup($record['col_empl_id'], $this->db, 'mst_empl', 'empl_id', 'empl_name'),
 					 
 				]));
+
+
+
+
 			}
 
 			// kembalikan hasilnya

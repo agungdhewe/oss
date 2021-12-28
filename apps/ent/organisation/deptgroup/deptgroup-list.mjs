@@ -163,14 +163,23 @@ function grd_list_rowrender(tr) {
 	})
 }
 
-function btn_reindex_click() {
-	// var apiurl = `${global.modulefullname}/billout-add`
-	// var args = {data: options.data, options: {}}
+async function btn_reindex_click() {
+	
+	var apiurl = `${global.modulefullname}/xtion-reindex`
+	var args = {options: {}}
 
-	// try {
-	// 	var result = await $ui.apicall(apiurl, args)
-	// 	console.log(result)
-	// } catch (err) {
-	// 	console.error(err)
-	// }
+	try {
+		$ui.mask('wait..');
+		let result = await $ui.apicall(apiurl, args)
+		if (result.success) {
+			btn_load_click();
+		}
+	} catch (err) {
+		console.error(err);
+		$ui.ShowMessage('[ERROR]' + err.message);
+	} finally {
+		$ui.unmask();
+	}
+	
+
 }

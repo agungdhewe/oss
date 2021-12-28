@@ -24,7 +24,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 22/12/2021
+ * tanggal 24/12/2021
  */
 $API = new class extends orderinBase {
 
@@ -57,7 +57,7 @@ $API = new class extends orderinBase {
 			$limit = " LIMIT $maxrow OFFSET $offset ";
 			$stmt = $this->db->prepare("
 				select 
-				A.orderinterm_id, A.orderinterm_descr, A.orderinterm_days, A.orderinterm_dtfrometa, A.orderinterm_dt, A.orderinterm_isdp, A.orderinterm_paymentpercent, A.orderinterm_payment, A.orderin_totalpayment, A.orderin_id, A._createby, A._createdate, A._modifyby, A._modifydate 
+				A.orderinterm_id, A.orderintermtype_id, A.orderinterm_descr, A.orderinterm_days, A.orderinterm_dtfrometa, A.orderinterm_dt, A.orderinterm_isdp, A.orderinterm_paymentpercent, A.orderinterm_payment, A.orderin_totalpayment, A.orderin_id, A._createby, A._createdate, A._modifyby, A._modifydate 
 				from trn_orderinterm A
 			" . $where->sql . $limit);
 			$stmt->execute($where->params);
@@ -75,6 +75,7 @@ $API = new class extends orderinBase {
 					//'tanggal' => date("d/m/y", strtotime($record['tanggal'])),
 				 	//'tambahan' => 'dta'
 
+					'orderintermtype_name' => \FGTA4\utils\SqlUtility::Lookup($record['orderintermtype_id'], $this->db, 'mst_orderintermtype', 'orderintermtype_id', 'orderintermtype_name'),
 					 
 				]));
 			}

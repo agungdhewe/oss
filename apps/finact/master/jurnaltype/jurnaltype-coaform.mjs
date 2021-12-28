@@ -3,6 +3,9 @@ var this_page_options;
 
 import {fgta4slideselect} from  '../../../../../index.php/asset/fgta/framework/fgta4libs/fgta4slideselect.mjs'
 
+const reload_header_modified = true;
+
+
 const txt_title = $('#pnl_editcoaform-title')
 const btn_edit = $('#pnl_editcoaform-btn_edit')
 const btn_save = $('#pnl_editcoaform-btn_save')
@@ -12,9 +15,7 @@ const btn_next = $('#pnl_editcoaform-btn_next')
 const btn_addnew = $('#pnl_editcoaform-btn_addnew')
 const chk_autoadd = $('#pnl_editcoaform-autoadd')
 
-const pnl_messagedebet = $('#pnl_editcoaform-messagedebet');
-const pnl_messagekredit = $('#pnl_editcoaform-messagekredit');
-const pnl_selector_dk = $('#pnl_editcoaform-selector_dk');
+
 const pnl_form = $('#pnl_editcoaform-form')
 const obj = {
 	txt_jurnaltypecoa_id: $('#pnl_editcoaform-txt_jurnaltypecoa_id'),
@@ -25,8 +26,8 @@ const obj = {
 }
 
 
-let form = {}
-let header_data = {}
+let form;
+let header_data;
 
 
 
@@ -72,26 +73,23 @@ export async function init(opt) {
 			{mapping: 'coa_id', text: 'coa_id'},
 			{mapping: 'coa_name', text: 'coa_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria, options) => {
+				
+		},
 		OnDataLoaded : (result, options) => {
 				
 		},
-		OnSelected: (value, display, record) => {}
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+			}			
+		}
 	})				
 			
 
 
-	btn_addnew.linkbutton({
-		onClick: () => { btn_addnew_click() }
-	})
-
-	btn_prev.linkbutton({
-		onClick: () => { btn_prev_click() }
-	})
-
-	btn_next.linkbutton({
-		onClick: () => { btn_next_click() }
-	})
+	btn_addnew.linkbutton({ onClick: () => { btn_addnew_click() }  })
+	btn_prev.linkbutton({ onClick: () => { btn_prev_click() } })
+	btn_next.linkbutton({ onClick: () => { btn_next_click() } })
 
 	document.addEventListener('keydown', (ev)=>{
 		if ($ui.getPages().getCurrentPage()==this_page_id) {
@@ -167,27 +165,45 @@ export function open(data, rowid, hdata) {
 	txt_title.html(hdata.jurnaltype_name)
 	header_data = hdata
 
+	var pOpt = form.getDefaultPrompt(false)
 	var fn_dataopening = async (options) => {
 		options.api = `${global.modulefullname}/coa-open`
 		options.criteria[form.primary.mapping] = data[form.primary.mapping]
 	}
 
 	var fn_dataopened = async (result, options) => {
-
+		var record = result.record;
 		updatefilebox(result.record);
+/*
 
-
-
+*/
+		for (var objid in obj) {
+			let o = obj[objid]
+			if (o.isCombo() && !o.isRequired()) {
+				var value =  result.record[o.getFieldValueName()];
+				if (value==null ) {
+					record[o.getFieldValueName()] = pOpt.value;
+					record[o.getFieldDisplayName()] = pOpt.text;
+				}
+			}
+		}
 		form.SuspendEvent(true);
 		form
-			.fill(result.record)
-			.setValue(obj.cbo_coa_id, result.record.coa_id, result.record.coa_name)
-			.commit()
+			.fill(record)
+			.setValue(obj.cbo_coa_id, record.coa_id, record.coa_name)
 			.setViewMode()
 			.rowid = rowid
 
-		format_form(result.record.jurnaltype_id);
 
+
+		/* tambahkan event atau behaviour saat form dibuka
+		   apabila ada rutin mengubah form dan tidak mau dijalankan pada saat opening,
+		   cek dengan form.isEventSuspended()
+		*/ 
+
+
+
+		form.commit()
 		form.SuspendEvent(false);
 
 
@@ -242,12 +258,13 @@ export function createnew(hdata) {
 	form.createnew(async (data, options)=>{
 		data.jurnaltype_id= hdata.jurnaltype_id
 		data.coa_value = 0
-		data.coa_id = '0'
-		data.coa_name = '-- PILIH --'
 
-		var param = format_form(data.jurnaltype_id);
-		data.jurnaltypecoa_isdebet = param.isdebet_value;
-		data.jurnaltypecoa_iskredit = param.iskredit_value;
+
+			data.coa_id = '0'
+			data.coa_name = '-- PILIH --'
+
+
+
 
 		form.rowid = null
 		options.OnCanceled = () => {
@@ -260,14 +277,39 @@ export function createnew(hdata) {
 async function form_datasaving(data, options) {
 	options.api = `${global.modulefullname}/coa-save`
 
+	// options.skipmappingresponse = [];
 	options.skipmappingresponse = [];
+	for (var objid in obj) {
+		var o = obj[objid]
+		if (o.isCombo() && !o.isRequired()) {
+			var id = o.getFieldValueName()
+			options.skipmappingresponse.push(id)
+			console.log(id)
+		}
+	}	
 }
 
 async function form_datasaved(result, options) {
 	var data = {}
 	Object.assign(data, form.getData(), result.dataresponse)
 
+	/*
 
+	*/
+
+	var pOpt = form.getDefaultPrompt(false)
+	for (var objid in obj) {
+		var o = obj[objid]
+		if (o.isCombo() && !o.isRequired()) {
+			var value =  result.dataresponse[o.getFieldValueName()];
+			var text = result.dataresponse[o.getFieldDisplayName()];
+			if (value==null ) {
+				value = pOpt.value;
+				text = pOpt.text;
+			}
+			form.setValue(o, value, text);
+		}
+	}
 	form.rowid = $ui.getPages().ITEMS['pnl_editcoagrid'].handler.updategrid(data, form.rowid)
 
 	var autoadd = chk_autoadd.prop("checked")
@@ -276,6 +318,14 @@ async function form_datasaved(result, options) {
 			btn_addnew_click()
 		}, 1000)
 	}
+
+	if (reload_header_modified) {
+		var currentRowdata =  $ui.getPages().ITEMS['pnl_edit'].handler.getCurrentRowdata();
+		$ui.getPages().ITEMS['pnl_edit'].handler.open(currentRowdata.data, currentRowdata.rowid, false, (err, data)=>{
+			$ui.getPages().ITEMS['pnl_list'].handler.updategrid(data, currentRowdata.rowid);
+		});	
+	}
+
 }
 
 async function form_deleting(data, options) {
@@ -286,7 +336,14 @@ async function form_deleted(result, options) {
 	options.suppressdialog = true
 	$ui.getPages().show('pnl_editcoagrid', ()=>{
 		$ui.getPages().ITEMS['pnl_editcoagrid'].handler.removerow(form.rowid)
-	})
+	});
+
+	if (reload_header_modified) {
+		var currentRowdata =  $ui.getPages().ITEMS['pnl_edit'].handler.getCurrentRowdata();
+		$ui.getPages().ITEMS['pnl_edit'].handler.open(currentRowdata.data, currentRowdata.rowid, false, (err, data)=>{
+			$ui.getPages().ITEMS['pnl_list'].handler.updategrid(data, currentRowdata.rowid);
+		});	
+	}
 	
 }
 
@@ -364,63 +421,4 @@ function btn_next_click() {
 	var record = $ui.getPages().ITEMS['pnl_editcoagrid'].handler.getGrid().DATA[dataid]
 
 	open(record, trid, header_data)
-}
-
-function format_form(jurnaltype_id, fn_callback) {
-	var param = {
-		isdebet_disable: false,
-		isdebet_value: false,
-		iskredit_disable: false,
-		iskredit_value: false,
-		message_debet: 'Filter Account berlaku pada bagian debet',
-		message_kredit: 'Filter Account berlaku pada bagian kredit',
-	}
-
-	var view_pnl_selector_dk = true;
-
-
-	switch (jurnaltype_id) {
-		case 'MAN-JV' :
-			console.log('manual');
-			view_pnl_selector_dk = false
-			break;
-
-
-		case 'AP-BILL':
-		case 'MAN-AP':
-			// Debet Only
-			param.isdebet_disable = true;
-			param.isdebet_value = true;
-			param.iskredit_disable = true;
-			param.iskredit_value = false;
-			param.message_kredit = 'Filter Account yang berlaku pada kredit sesuai dengan nilai dari <b>COA Model</b>';
-			break;
-
-		case 'PV-ADVPAYM':
-		case 'PV-APPAYM' :
-			param.isdebet_disable = true;
-			param.isdebet_value = false;
-			param.iskredit_disable = true;
-			param.iskredit_value = true;
-			param.message_debet = 'Filter Account yang berlaku pada debet sesuai dengan nilai dari <b>COA Model</b>'
-			break;
-	}
-
-	form.setDisable(obj.chk_jurnaltypecoa_isdebet, param.isdebet_disable);
-	form.setDisable(obj.chk_jurnaltypecoa_iskredit, param.iskredit_disable);
-
-	pnl_messagedebet.html(param.message_debet);
-	pnl_messagekredit.html(param.message_kredit);
-
-	if (view_pnl_selector_dk) {
-		pnl_selector_dk.show();
-	} else {
-		pnl_selector_dk.hide();
-	}
-
-	if (typeof fn_callback === 'function') {
-		fn_callback(param);
-	}
-
-	return param;
 }

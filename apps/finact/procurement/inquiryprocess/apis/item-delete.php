@@ -24,13 +24,13 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 27/10/2021
+ * tanggal 28/12/2021
  */
 $API = new class extends inquiryprocessBase {
 	
 	public function execute($data, $options) {
-		$tablename = 'trn_inquirydetil';
-		$primarykey = 'inquirydetil_id';
+		$tablename = 'trn_inquiryitem';
+		$primarykey = 'inquiryitem_id';
 
 		$userdata = $this->auth->session_get_user();
 

@@ -43,7 +43,9 @@ $API = new class extends orderinBase {
 				$options->criteria,
 				[
 					"search" => " A.orderin_id LIKE CONCAT('%', :search, '%') OR A.orderin_descr LIKE CONCAT('%', :search, '%') ",
-					"dept_id" => " A.dept_id = :dept_id "
+					"dept_id" => " A.dept_id = :dept_id ",
+					"partner_id" => " A.partner_id = :partner_id ",
+					"unit_id" => " A.unit_id = :unit_id "
 				]
 			);
 

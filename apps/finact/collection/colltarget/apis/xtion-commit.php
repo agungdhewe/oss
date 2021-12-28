@@ -30,7 +30,7 @@ use \FGTA4\StandartApproval;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 22/10/2021
+ * tanggal 26/12/2021
  */
 $API = new class extends colltargetBase {
 

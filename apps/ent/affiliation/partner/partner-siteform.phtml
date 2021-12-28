@@ -8,7 +8,7 @@
 
 	<form id="pnl_editsiteform-form">
 
-		<div class="form_row" >
+		<div class="form_row pnl_editsiteform_row txt_partnersite_id" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">ID</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editsiteform-txt_partnersite_id" class="easyui-textbox" mapping="partnersite_id" uppercase="true" maxlength="14"  style="width: 400px" data-options="multiline:false  ">
@@ -16,7 +16,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editsiteform_row cbo_site_id" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Site</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editsiteform-cbo_site_id" class="easyui-combo" style="width: 400px" mapping="site_id" display="site_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Site harus diisi', prompt: '-- PILIH --'"  validType="requiredcombo['pnl_editsiteform-cbo_site_id']" >
@@ -24,7 +24,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editsiteform_row txt_partner_id" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Partner</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editsiteform-txt_partner_id" class="easyui-textbox" mapping="partner_id" uppercase="true" maxlength="14"  style="width: 400px" data-options="multiline:false  , disabled: true">

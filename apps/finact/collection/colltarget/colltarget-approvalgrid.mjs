@@ -1,6 +1,7 @@
 var this_page_id;
 var this_page_options;
 
+
 const tbl_list = $('#pnl_editapprovalgrid-tbl_list');
 const txt_title = $('#pnl_editapprovalgrid-title');
 const pnl_control = $('#pnl_editapprovalgrid-control');
@@ -63,7 +64,10 @@ export async function init(opt) {
 				grd_list.nextpageload();
 			}			
 		}
-	});			
+	});	
+
+	
+
 }
 
 
@@ -163,14 +167,14 @@ function grd_list_cellclick(td, ev) {
 }
 
 function grd_list_cellrender(td) {
-
+	
 }
 
 function grd_list_rowrender(tr) {
 
 	var dataid = tr.getAttribute('dataid')
 	var record = grd_list.DATA[dataid]
-	console.log(record);
+	//console.log(record);
 	$(tr).find('td').each((i, td) => {
 		var mapping = td.getAttribute('mapping')
 		if (mapping=='docauth_descr') {

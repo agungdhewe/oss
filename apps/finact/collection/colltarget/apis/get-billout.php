@@ -67,7 +67,11 @@ $API = new class extends colltargetBase {
 			$limit = " LIMIT $maxrow OFFSET $offset ";
 			$sql = "
 				select 
-				  A.billout_id, A.dept_id, A.salesorder_id, A.billout_descr, A.billout_date, A.billout_datedue, A.partner_id, A.coa_id, A.curr_id, A.billout_valfrg, A.billout_valfrgrate, A.billout_validr
+				  A.billout_id, A.dept_id, A.orderin_id, A.billout_descr, A.billout_date, A.billout_datedue, A.partner_id
+				, 'IDR' as curr_id
+				, billout_payment as billout_valfrg
+				, 1 as billout_valfrgrate
+				, billout_payment as billout_validr
 				, A.billtype_id, A.trxmodel_id, A.doc_id, A.billout_version, A.billout_iscommit, A.billout_commitby, A.billout_commitdate, A.billout_ispost, A.billout_postby, A.billout_postdate
 				, A._createby, A._createdate, A._modifyby, A._modifydate
 				, datediff(NOW(), A.billout_datedue) as billout_age 

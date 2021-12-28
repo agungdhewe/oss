@@ -1,14 +1,11 @@
-import { fgta4slideselect } from '../../../../../index.php/asset/fgta/framework/fgta4libs/fgta4slideselect.mjs'
-import { fgta4ParallelProcess } from '../../../../../index.php/asset/fgta/framework/fgta4libs/fgta4parallel.mjs'
-
-
 var this_page_id;
 var this_page_options;
+
+import * as hnd from  './partner-list-hnd.mjs'
 
 const tbl_list = $('#pnl_list-tbl_list')
 
 const txt_search = $('#pnl_list-txt_search')
-const cbo_search_type = $('#pnl_list-cbo_search_type');
 const btn_load = $('#pnl_list-btn_load')
 const btn_new = $('#pnl_list-btn_new')
 
@@ -29,59 +26,26 @@ export async function init(opt) {
 		OnCellRender: (td) => { grd_list_cellrender(td) },
 		OnRowRender: (tr) => { grd_list_rowrender(tr) }
 	})
+	grd_list.doLoad = () => {
+		btn_load_click();
+	}
+
+	if (txt_search!=null) {
+		txt_search.textbox('textbox').bind('keypress', (evt)=>{
+			if (evt.key==='Enter') {
+				btn_load_click(self)
+			}
+		})
+	}
 
 
-	txt_search.textbox('textbox').bind('keypress', (evt)=>{
-		if (evt.key==='Enter') {
-			btn_load_click(self)
-		}
-	})
-	
-
-	btn_load.linkbutton({ onClick: () => { btn_load_click() } })
-	btn_new.linkbutton({ onClick: () => { btn_new_click() } })
-
-
-	var parallelProcess = fgta4ParallelProcess({
-		waitfor: {
-			cbo_search_type_created: 1
-		},
-		onFinished: () => {
-			btn_load_click();
-		}
+	btn_load.linkbutton({
+		onClick: () => { btn_load_click() }
 	})
 
-
-	cbo_search_type.name = 'pnl_list-cbo_search_type'	
-	new fgta4slideselect(cbo_search_type, {
-		title: 'Pilih Type',
-		returnpage: this_page_id,
-		api: $ui.apis.load_partnertype_id,
-
-		fieldValue: 'partnertype_id',
-		fieldValueMap: 'partnertype_id',
-		fieldDisplay: 'partnertype_name',
-		fields: [
-			{ mapping: 'partnertype_name', text: 'Partner Type' },
-		],
-		OnDataLoading: (criteria) => {
-			// console.log('loading...');
-		},
-		OnDataLoaded: (result, options) => {
-			result.records.unshift({ partnertype_id: 'ALL', partnertype_name: 'ALL' });
-		},
-		OnSelected: (value, display, record, options) => {
-			// console.log(record);
-			options.flashhighlight = false
-			btn_load_click();
-		},
-		OnCreated: () => {
-			cbo_search_type.combo('setValue', 'ALL');
-			cbo_search_type.combo('setText', 'ALL');
-			parallelProcess.setFinished('cbo_search_type_created');
-		}
-	});
-
+	btn_new.linkbutton({
+		onClick: () => { btn_new_click() }
+	})
 
 	document.addEventListener('OnSizeRecalculated', (ev) => {
 		OnSizeRecalculated(ev.detail.width, ev.detail.height)
@@ -96,8 +60,23 @@ export async function init(opt) {
 		}
 	})	
 	
-	//button state
-	// btn_load_click()
+
+
+
+	grd_list.autoload = true;
+	if (typeof hnd.init==='function') {
+			hnd.init({
+				grd_list: grd_list,
+				opt: opt,
+			}, ()=>{
+				if (grd_list.autoload) {
+					btn_load_click();
+				}
+			})
+		} else {
+			btn_load_click();
+	}
+
 }
 
 
@@ -137,10 +116,10 @@ function btn_load_click() {
 			options.criteria['search'] = search
 		}
 
-		var partnertye_id = cbo_search_type.combo('getValue')
-		if (partnertye_id!='ALL') {
-			options.criteria['partnertype_id'] = partnertye_id
+		if (typeof hnd.customsearch === 'function') {
+			hnd.customsearch(options);
 		}
+		
 		// switch (this_page_options.variancename) {
 		// 	case 'commit' :
 		//		break;
@@ -189,11 +168,9 @@ function grd_list_cellclick(td, ev) {
 }
 
 function grd_list_cellrender(td) {
-	// var text = td.innerHTML
-	// if (td.mapping == 'id') {
-	// 	// $(td).css('background-color', 'red')
-	// 	td.innerHTML = `<a href="javascript:void(0)">${text}</a>`
-	// }
+	if (typeof hnd.grd_list_cellrender === 'function') {
+		hnd.grd_list_cellrender({td:td, mapping:td.mapping, text:td.innerHTML});
+	}
 }
 
 function grd_list_rowrender(tr) {
@@ -201,16 +178,9 @@ function grd_list_rowrender(tr) {
 	var record = grd_list.DATA[dataid]
 
 	$(tr).find('td').each((i, td) => {
-		// var mapping = td.getAttribute('mapping')
-		// if (mapping=='id') {
-		// 	if (!record.disabled) {
-		// 		td.classList.add('fgtable-rowred')
-		// 	}
-		// }
-		if (record.disabled=="1" || record.disabled==true) {
-			td.classList.add('fgtable-row-disabled')
-		} else {
-			td.classList.remove('fgtable-row-disabled')
+		var mapping = td.getAttribute('mapping')
+		if (typeof hnd.grd_list_rowrender === 'function') {
+			hnd.grd_list_rowrender({tr:tr, td:td, record:record, mapping:mapping, dataid:dataid, i:i});
 		}
 	})
 }

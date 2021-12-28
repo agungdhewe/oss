@@ -1,7 +1,10 @@
 var this_page_id;
 var this_page_options;
 
-/*--__SLIDESELECTLIB__--*/
+/*--__SLIDESELECTLIB__--*//*--__HANDLERLIB__--*/
+
+const reload_header_modified = true;
+
 
 const txt_title = $('#<!--__PANELNAME__-->-title')
 const btn_edit = $('#<!--__PANELNAME__-->-btn_edit')
@@ -43,7 +46,10 @@ export async function init(opt) {
 		OnDataDeleted: async (result, options) => { await form_deleted(result, options) },
 		OnIdSetup : (options) => { form_idsetup(options) },
 		OnViewModeChanged : (viewonly) => { form_viewmodechanged(viewonly) }
-	})	
+	});
+	form.getHeaderData = () => {
+		return header_data;
+	}	
 
 	form.AllowAddRecord = <--__ALLOWADDRECORD__-->
 	form.AllowRemoveRecord = <--__ALLOWREMOVERECORD__-->
@@ -52,6 +58,7 @@ export async function init(opt) {
 	form.CreateLogPage(this_page_id)
 
 /*--__UPLOADEVENT__--*/
+/*--__OBJHANDLERASSIGNMENT__--*/
 
 /*--__SLIDESELECS__--*/
 
@@ -118,6 +125,9 @@ export async function init(opt) {
 			chk_autoadd.prop("checked", false);
 		}
 	})
+
+/*--__HANDLERASSIGNMENT__--*/
+
 }
 
 
@@ -168,7 +178,7 @@ export function open(data, rowid, hdata) {
 		   apabila ada rutin mengubah form dan tidak mau dijalankan pada saat opening,
 		   cek dengan form.isEventSuspended()
 		*/ 
-
+		/*--__FORMOPENEDHANDLER__--*/
 
 
 		form.commit()
@@ -229,7 +239,7 @@ export function createnew(hdata) {
 
 /*--__SETDEFAULTNOW__--*/
 /*--__SETDEFAULTCOMBO__--*/
-
+/*--__FORMNEWDATAHANDLER__--*/
 /*--__UPLOADCREATENEW__--*/
 
 		form.rowid = null
@@ -252,7 +262,9 @@ async function form_datasaving(data, options) {
 			options.skipmappingresponse.push(id)
 			console.log(id)
 		}
-	}	
+	}
+
+	/*--__FORMDATASAVINGHANDLER__--*/	
 }
 
 async function form_datasaved(result, options) {
@@ -284,17 +296,37 @@ async function form_datasaved(result, options) {
 			btn_addnew_click()
 		}, 1000)
 	}
+
+	if (reload_header_modified) {
+		var currentRowdata =  $ui.getPages().ITEMS['pnl_edit'].handler.getCurrentRowdata();
+		$ui.getPages().ITEMS['pnl_edit'].handler.open(currentRowdata.data, currentRowdata.rowid, false, (err, data)=>{
+			$ui.getPages().ITEMS['pnl_list'].handler.updategrid(data, currentRowdata.rowid);
+		});	
+	}
+
+	/*--__FORMDATASAVEDHANDLER__--*/
+
 }
 
 async function form_deleting(data, options) {
 	options.api = `${global.modulefullname}/<!--__DETILNAME__-->-delete`
+	/*--__FORMDELETINGHANDLER__--*/
 }
 
 async function form_deleted(result, options) {
 	options.suppressdialog = true
 	$ui.getPages().show('pnl_edit<!--__DETILNAME__-->grid', ()=>{
 		$ui.getPages().ITEMS['pnl_edit<!--__DETILNAME__-->grid'].handler.removerow(form.rowid)
-	})
+	});
+
+	if (reload_header_modified) {
+		var currentRowdata =  $ui.getPages().ITEMS['pnl_edit'].handler.getCurrentRowdata();
+		$ui.getPages().ITEMS['pnl_edit'].handler.open(currentRowdata.data, currentRowdata.rowid, false, (err, data)=>{
+			$ui.getPages().ITEMS['pnl_list'].handler.updategrid(data, currentRowdata.rowid);
+		});	
+	}
+
+	/*--__FORMDELETEDHANDLER__--*/
 	
 }
 

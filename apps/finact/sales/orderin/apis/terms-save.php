@@ -26,7 +26,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 22/12/2021
+ * tanggal 24/12/2021
  */
 $API = new class extends orderinBase {
 	
@@ -109,7 +109,7 @@ $API = new class extends orderinBase {
 				$where = \FGTA4\utils\SqlUtility::BuildCriteria((object)[$primarykey=>$obj->{$primarykey}], [$primarykey=>"$primarykey=:$primarykey"]);
 				$sql = \FGTA4\utils\SqlUtility::Select($tablename , [
 					$primarykey
-					, 'orderinterm_id', 'orderinterm_descr', 'orderinterm_days', 'orderinterm_dtfrometa', 'orderinterm_dt', 'orderinterm_isdp', 'orderinterm_paymentpercent', 'orderinterm_payment', 'orderin_totalpayment', 'orderin_id', '_createby', '_createdate', '_modifyby', '_modifydate', '_createby', '_createdate', '_modifyby', '_modifydate'
+					, 'orderinterm_id', 'orderintermtype_id', 'orderinterm_descr', 'orderinterm_days', 'orderinterm_dtfrometa', 'orderinterm_dt', 'orderinterm_isdp', 'orderinterm_paymentpercent', 'orderinterm_payment', 'orderin_totalpayment', 'orderin_id', '_createby', '_createdate', '_modifyby', '_modifydate', '_createby', '_createdate', '_modifyby', '_modifydate'
 				], $where->sql);
 				$stmt = $this->db->prepare($sql);
 				$stmt->execute($where->params);
@@ -121,6 +121,7 @@ $API = new class extends orderinBase {
 				}
 				$result->dataresponse = (object) array_merge($record, [
 					// untuk lookup atau modify response ditaruh disini
+				'orderintermtype_name' => \FGTA4\utils\SqlUtility::Lookup($record['orderintermtype_id'], $this->db, 'mst_orderintermtype', 'orderintermtype_id', 'orderintermtype_name'),
 				'orderinterm_dtfrometa' => date("d/m/Y", strtotime($row['orderinterm_dtfrometa'])),
 				'orderinterm_dt' => date("d/m/Y", strtotime($row['orderinterm_dt'])),
 

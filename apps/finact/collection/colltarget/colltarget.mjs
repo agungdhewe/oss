@@ -7,9 +7,9 @@ import * as pList from './colltarget-list.mjs'
 import * as pEdit from './colltarget-edit.mjs'
 import * as pEditBilloutgrid from './colltarget-billoutgrid.mjs'
 import * as pEditBilloutform from './colltarget-billoutform.mjs'
+import * as pEditMultiadd from './colltarget-multiadd.mjs'
 import * as pEditApprovalgrid from './colltarget-approvalgrid.mjs'
 import * as pEditApprovalform from './colltarget-approvalform.mjs'
-import * as pEditMultiadd from './colltarget-multiadd.mjs'
 
 
 
@@ -17,9 +17,9 @@ const pnl_list = $('#pnl_list')
 const pnl_edit = $('#pnl_edit')
 const pnl_editbilloutgrid = $('#pnl_editbilloutgrid')
 const pnl_editbilloutform = $('#pnl_editbilloutform')
+const pnl_editmultiadd = $('#pnl_editmultiadd')
 const pnl_editapprovalgrid = $('#pnl_editapprovalgrid')
 const pnl_editapprovalform = $('#pnl_editapprovalform')
-const pnl_editmultiadd = $('#pnl_editmultiadd')
 
 
 
@@ -47,9 +47,9 @@ export async function init(opt) {
 			{panel: pnl_edit, handler: pEdit},
 			{panel: pnl_editbilloutgrid, handler: pEditBilloutgrid},
 			{panel: pnl_editbilloutform, handler: pEditBilloutform},
+			{panel: pnl_editmultiadd, handler: pEditMultiadd},
 			{panel: pnl_editapprovalgrid, handler: pEditApprovalgrid},
-			{panel: pnl_editapprovalform, handler: pEditApprovalform},			
-			{panel: pnl_editmultiadd, handler: pEditMultiadd}			
+			{panel: pnl_editapprovalform, handler: pEditApprovalform}			
 		], opt)
 
 	$ui.setPages(pages)

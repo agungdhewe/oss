@@ -2,6 +2,10 @@ var this_page_id;
 var this_page_options;
 
 import {fgta4slideselect} from  '../../../../../index.php/asset/fgta/framework/fgta4libs/fgta4slideselect.mjs'
+import * as hnd from  './inquiryprocess-itemform-hnd.mjs'
+
+const reload_header_modified = true;
+
 
 const txt_title = $('#pnl_edititemform-title')
 const btn_edit = $('#pnl_edititemform-btn_edit')
@@ -15,25 +19,28 @@ const chk_autoadd = $('#pnl_edititemform-autoadd')
 
 const pnl_form = $('#pnl_edititemform-form')
 const obj = {
-	txt_inquirydetil_id: $('#pnl_edititemform-txt_inquirydetil_id'),
+	txt_inquiryitem_id: $('#pnl_edititemform-txt_inquiryitem_id'),
 	cbo_itemasset_id: $('#pnl_edititemform-cbo_itemasset_id'),
 	cbo_item_id: $('#pnl_edititemform-cbo_item_id'),
 	cbo_itemstock_id: $('#pnl_edititemform-cbo_itemstock_id'),
+	cbo_partner_id: $('#pnl_edititemform-cbo_partner_id'),
 	cbo_itemclass_id: $('#pnl_edititemform-cbo_itemclass_id'),
 	txt_inquirydetil_descr: $('#pnl_edititemform-txt_inquirydetil_descr'),
 	txt_inquirydetil_qty: $('#pnl_edititemform-txt_inquirydetil_qty'),
 	txt_inquirydetil_days: $('#pnl_edititemform-txt_inquirydetil_days'),
 	txt_inquirydetil_task: $('#pnl_edititemform-txt_inquirydetil_task'),
-	cbo_partner_id: $('#pnl_edititemform-cbo_partner_id'),
+	txt_inquirydetil_qty_proc: $('#pnl_edititemform-txt_inquirydetil_qty_proc'),
+	cbo_proc_trxmodel_id: $('#pnl_edititemform-cbo_proc_trxmodel_id'),
+	txt_inquirydetil_qty_outstd: $('#pnl_edititemform-txt_inquirydetil_qty_outstd'),
+	cbo_outstd_trxmodel_id: $('#pnl_edititemform-cbo_outstd_trxmodel_id'),
 	txt_inquirydetil_estrate: $('#pnl_edititemform-txt_inquirydetil_estrate'),
 	txt_inquirydetil_estvalue: $('#pnl_edititemform-txt_inquirydetil_estvalue'),
-	chk_inquirydetil_isadvproces: $('#pnl_edititemform-chk_inquirydetil_isadvproces'),
 	cbo_projbudgetdet_id: $('#pnl_edititemform-cbo_projbudgetdet_id'),
 	chk_inquirydetil_isunbudget: $('#pnl_edititemform-chk_inquirydetil_isunbudget'),
 	chk_inquirydetil_isallowoverbudget: $('#pnl_edititemform-chk_inquirydetil_isallowoverbudget'),
-	txt_inquirydetil_qtyavailable: $('#pnl_edititemform-txt_inquirydetil_qtyavailable'),
 	txt_accbudget_id: $('#pnl_edititemform-txt_accbudget_id'),
 	txt_coa_id: $('#pnl_edititemform-txt_coa_id'),
+	txt_inquirydetil_id: $('#pnl_edititemform-txt_inquirydetil_id'),
 	txt_inquiry_id: $('#pnl_edititemform-txt_inquiry_id')
 }
 
@@ -49,9 +56,9 @@ export async function init(opt) {
 
 	
 	form = new global.fgta4form(pnl_form, {
-		primary: obj.txt_inquirydetil_id,
+		primary: obj.txt_inquiryitem_id,
 		autoid: true,
-		logview: 'trn_inquirydetil',
+		logview: 'trn_inquiryitem',
 		btn_edit: btn_edit,
 		btn_save: btn_save,
 		btn_delete: btn_delete,		
@@ -62,13 +69,17 @@ export async function init(opt) {
 		OnDataDeleted: async (result, options) => { await form_deleted(result, options) },
 		OnIdSetup : (options) => { form_idsetup(options) },
 		OnViewModeChanged : (viewonly) => { form_viewmodechanged(viewonly) }
-	})	
+	});
+	form.getHeaderData = () => {
+		return header_data;
+	}	
 
 	form.AllowAddRecord = true
 	form.AllowRemoveRecord = true
 	form.AllowEditRecord = true
 	form.CreateRecordStatusPage(this_page_id)
 	form.CreateLogPage(this_page_id)
+
 
 
 
@@ -85,12 +96,23 @@ export async function init(opt) {
 			{mapping: 'itemasset_id', text: 'itemasset_id'},
 			{mapping: 'itemasset_name', text: 'itemasset_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria, options) => {
+				
+			if (typeof hnd.cbo_itemasset_id_dataloading === 'function') {
+				hnd.cbo_itemasset_id_dataloading(criteria);
+			}
+		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({itemasset_id:'--NULL--', itemasset_name:'NONE'});	
+			if (typeof hnd.cbo_itemasset_id_dataloaded === 'function') {
+				hnd.cbo_itemasset_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
 			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_itemasset_id_selected === 'function') {
+					hnd.cbo_itemasset_id_selected(value, display, record, args);
+				}
 			}			
 		}
 	})				
@@ -107,12 +129,23 @@ export async function init(opt) {
 			{mapping: 'item_id', text: 'item_id'},
 			{mapping: 'item_name', text: 'item_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria, options) => {
+				
+			if (typeof hnd.cbo_item_id_dataloading === 'function') {
+				hnd.cbo_item_id_dataloading(criteria);
+			}
+		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({item_id:'--NULL--', item_name:'NONE'});	
+			if (typeof hnd.cbo_item_id_dataloaded === 'function') {
+				hnd.cbo_item_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
 			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_item_id_selected === 'function') {
+					hnd.cbo_item_id_selected(value, display, record, args);
+				}
 			}			
 		}
 	})				
@@ -129,34 +162,23 @@ export async function init(opt) {
 			{mapping: 'itemstock_id', text: 'itemstock_id'},
 			{mapping: 'itemstock_name', text: 'itemstock_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria, options) => {
+				
+			if (typeof hnd.cbo_itemstock_id_dataloading === 'function') {
+				hnd.cbo_itemstock_id_dataloading(criteria);
+			}
+		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({itemstock_id:'--NULL--', itemstock_name:'NONE'});	
+			if (typeof hnd.cbo_itemstock_id_dataloaded === 'function') {
+				hnd.cbo_itemstock_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
 			if (value!=args.PreviousValue ) {
-			}			
-		}
-	})				
-			
-	obj.cbo_itemclass_id.name = 'pnl_edititemform-cbo_itemclass_id'		
-	new fgta4slideselect(obj.cbo_itemclass_id, {
-		title: 'Pilih itemclass_id',
-		returnpage: this_page_id,
-		api: $ui.apis.load_itemclass_id,
-		fieldValue: 'itemclass_id',
-		fieldValueMap: 'itemclass_id',
-		fieldDisplay: 'itemclass_name',
-		fields: [
-			{mapping: 'itemclass_id', text: 'itemclass_id'},
-			{mapping: 'itemclass_name', text: 'itemclass_name'},
-		],
-		OnDataLoading: (criteria) => {},
-		OnDataLoaded : (result, options) => {
-				
-		},
-		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_itemstock_id_selected === 'function') {
+					hnd.cbo_itemstock_id_selected(value, display, record, args);
+				}
 			}			
 		}
 	})				
@@ -173,12 +195,122 @@ export async function init(opt) {
 			{mapping: 'partner_id', text: 'partner_id'},
 			{mapping: 'partner_name', text: 'partner_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria, options) => {
+				
+			if (typeof hnd.cbo_partner_id_dataloading === 'function') {
+				hnd.cbo_partner_id_dataloading(criteria);
+			}
+		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({partner_id:'--NULL--', partner_name:'NONE'});	
+			if (typeof hnd.cbo_partner_id_dataloaded === 'function') {
+				hnd.cbo_partner_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
 			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_partner_id_selected === 'function') {
+					hnd.cbo_partner_id_selected(value, display, record, args);
+				}
+			}			
+		}
+	})				
+			
+	obj.cbo_itemclass_id.name = 'pnl_edititemform-cbo_itemclass_id'		
+	new fgta4slideselect(obj.cbo_itemclass_id, {
+		title: 'Pilih itemclass_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_itemclass_id,
+		fieldValue: 'itemclass_id',
+		fieldValueMap: 'itemclass_id',
+		fieldDisplay: 'itemclass_name',
+		fields: [
+			{mapping: 'itemclass_id', text: 'itemclass_id'},
+			{mapping: 'itemclass_name', text: 'itemclass_name'},
+		],
+		OnDataLoading: (criteria, options) => {
+				
+			if (typeof hnd.cbo_itemclass_id_dataloading === 'function') {
+				hnd.cbo_itemclass_id_dataloading(criteria);
+			}
+		},
+		OnDataLoaded : (result, options) => {
+				
+			if (typeof hnd.cbo_itemclass_id_dataloaded === 'function') {
+				hnd.cbo_itemclass_id_dataloaded(result, options);
+			}
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_itemclass_id_selected === 'function') {
+					hnd.cbo_itemclass_id_selected(value, display, record, args);
+				}
+			}			
+		}
+	})				
+			
+	obj.cbo_proc_trxmodel_id.name = 'pnl_edititemform-cbo_proc_trxmodel_id'		
+	new fgta4slideselect(obj.cbo_proc_trxmodel_id, {
+		title: 'Pilih proc_trxmodel_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_proc_trxmodel_id,
+		fieldValue: 'proc_trxmodel_id',
+		fieldValueMap: 'trxmodel_id',
+		fieldDisplay: 'trxmodel_name',
+		fields: [
+			{mapping: 'trxmodel_id', text: 'trxmodel_id'},
+			{mapping: 'trxmodel_name', text: 'trxmodel_name'},
+		],
+		OnDataLoading: (criteria, options) => {
+				
+			if (typeof hnd.cbo_proc_trxmodel_id_dataloading === 'function') {
+				hnd.cbo_proc_trxmodel_id_dataloading(criteria);
+			}
+		},
+		OnDataLoaded : (result, options) => {
+				
+			if (typeof hnd.cbo_proc_trxmodel_id_dataloaded === 'function') {
+				hnd.cbo_proc_trxmodel_id_dataloaded(result, options);
+			}
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_proc_trxmodel_id_selected === 'function') {
+					hnd.cbo_proc_trxmodel_id_selected(value, display, record, args);
+				}
+			}			
+		}
+	})				
+			
+	obj.cbo_outstd_trxmodel_id.name = 'pnl_edititemform-cbo_outstd_trxmodel_id'		
+	new fgta4slideselect(obj.cbo_outstd_trxmodel_id, {
+		title: 'Pilih outstd_trxmodel_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_outstd_trxmodel_id,
+		fieldValue: 'outstd_trxmodel_id',
+		fieldValueMap: 'trxmodel_id',
+		fieldDisplay: 'trxmodel_name',
+		fields: [
+			{mapping: 'trxmodel_id', text: 'trxmodel_id'},
+			{mapping: 'trxmodel_name', text: 'trxmodel_name'},
+		],
+		OnDataLoading: (criteria, options) => {
+				
+			if (typeof hnd.cbo_outstd_trxmodel_id_dataloading === 'function') {
+				hnd.cbo_outstd_trxmodel_id_dataloading(criteria);
+			}
+		},
+		OnDataLoaded : (result, options) => {
+				
+			if (typeof hnd.cbo_outstd_trxmodel_id_dataloaded === 'function') {
+				hnd.cbo_outstd_trxmodel_id_dataloaded(result, options);
+			}
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_outstd_trxmodel_id_selected === 'function') {
+					hnd.cbo_outstd_trxmodel_id_selected(value, display, record, args);
+				}
 			}			
 		}
 	})				
@@ -195,12 +327,23 @@ export async function init(opt) {
 			{mapping: 'projbudgetdet_id', text: 'projbudgetdet_id'},
 			{mapping: 'projbudgetdet_descr', text: 'projbudgetdet_descr'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria, options) => {
+				
+			if (typeof hnd.cbo_projbudgetdet_id_dataloading === 'function') {
+				hnd.cbo_projbudgetdet_id_dataloading(criteria);
+			}
+		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({projbudgetdet_id:'--NULL--', projbudgetdet_descr:'NONE'});	
+			if (typeof hnd.cbo_projbudgetdet_id_dataloaded === 'function') {
+				hnd.cbo_projbudgetdet_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
 			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_projbudgetdet_id_selected === 'function') {
+					hnd.cbo_projbudgetdet_id_selected(value, display, record, args);
+				}
 			}			
 		}
 	})				
@@ -269,6 +412,15 @@ export async function init(opt) {
 			chk_autoadd.prop("checked", false);
 		}
 	})
+
+	if (typeof hnd.init==='function') {
+		hnd.init({
+			form: form,
+			obj: obj,
+			opt: opt
+		})
+	}
+
 }
 
 
@@ -318,8 +470,10 @@ export function open(data, rowid, hdata) {
 			.setValue(obj.cbo_itemasset_id, record.itemasset_id, record.itemasset_name)
 			.setValue(obj.cbo_item_id, record.item_id, record.item_name)
 			.setValue(obj.cbo_itemstock_id, record.itemstock_id, record.itemstock_name)
-			.setValue(obj.cbo_itemclass_id, record.itemclass_id, record.itemclass_name)
 			.setValue(obj.cbo_partner_id, record.partner_id, record.partner_name)
+			.setValue(obj.cbo_itemclass_id, record.itemclass_id, record.itemclass_name)
+			.setValue(obj.cbo_proc_trxmodel_id, record.proc_trxmodel_id, record.proc_trxmodel_name)
+			.setValue(obj.cbo_outstd_trxmodel_id, record.outstd_trxmodel_id, record.outstd_trxmodel_name)
 			.setValue(obj.cbo_projbudgetdet_id, record.projbudgetdet_id, record.projbudgetdet_descr)
 			.setViewMode()
 			.rowid = rowid
@@ -330,7 +484,9 @@ export function open(data, rowid, hdata) {
 		   apabila ada rutin mengubah form dan tidak mau dijalankan pada saat opening,
 		   cek dengan form.isEventSuspended()
 		*/ 
-
+		if (typeof hnd.form_dataopened == 'function') {
+			hnd.form_dataopened(result, options);
+		}
 
 
 		form.commit()
@@ -392,24 +548,31 @@ export function createnew(hdata) {
 		data.inquirydetil_qty = 0
 		data.inquirydetil_days = 0
 		data.inquirydetil_task = 0
+		data.inquirydetil_qty_proc = 0
+		data.inquirydetil_qty_outstd = 0
 		data.inquirydetil_estrate = 0
 		data.inquirydetil_estvalue = 0
-		data.inquirydetil_qtyavailable = 0
 
-			data.itemasset_id = '--NULL--'
-			data.itemasset_name = 'NONE'
-			data.item_id = '--NULL--'
-			data.item_name = 'NONE'
-			data.itemstock_id = '--NULL--'
-			data.itemstock_name = 'NONE'
-			data.itemclass_id = '0'
-			data.itemclass_name = '-- PILIH --'
-			data.partner_id = '--NULL--'
-			data.partner_name = 'NONE'
-			data.projbudgetdet_id = '--NULL--'
-			data.projbudgetdet_descr = 'NONE'
+		data.itemasset_id = '--NULL--'
+		data.itemasset_name = 'NONE'
+		data.item_id = '--NULL--'
+		data.item_name = 'NONE'
+		data.itemstock_id = '--NULL--'
+		data.itemstock_name = 'NONE'
+		data.partner_id = '--NULL--'
+		data.partner_name = 'NONE'
+		data.itemclass_id = '0'
+		data.itemclass_name = '-- PILIH --'
+		data.proc_trxmodel_id = '0'
+		data.proc_trxmodel_name = '-- PILIH --'
+		data.outstd_trxmodel_id = '0'
+		data.outstd_trxmodel_name = '-- PILIH --'
+		data.projbudgetdet_id = '--NULL--'
+		data.projbudgetdet_descr = 'NONE'
 
-
+		if (typeof hnd.form_newdata == 'function') {
+			hnd.form_newdata(data, options);
+		}
 
 
 		form.rowid = null
@@ -432,6 +595,10 @@ async function form_datasaving(data, options) {
 			options.skipmappingresponse.push(id)
 			console.log(id)
 		}
+	}
+
+	if (typeof hnd.form_datasaving == 'function') {
+		hnd.form_datasaving(data, options);
 	}	
 }
 
@@ -469,17 +636,43 @@ async function form_datasaved(result, options) {
 			btn_addnew_click()
 		}, 1000)
 	}
+
+	if (reload_header_modified) {
+		var currentRowdata =  $ui.getPages().ITEMS['pnl_edit'].handler.getCurrentRowdata();
+		$ui.getPages().ITEMS['pnl_edit'].handler.open(currentRowdata.data, currentRowdata.rowid, false, (err, data)=>{
+			$ui.getPages().ITEMS['pnl_list'].handler.updategrid(data, currentRowdata.rowid);
+		});	
+	}
+
+	if (typeof hnd.form_datasaved == 'function') {
+		hnd.form_datasaved(result, rowdata, options);
+	}
+
 }
 
 async function form_deleting(data, options) {
 	options.api = `${global.modulefullname}/item-delete`
+	if (typeof hnd.form_deleting == 'function') {
+		hnd.form_deleting(data);
+	}
 }
 
 async function form_deleted(result, options) {
 	options.suppressdialog = true
 	$ui.getPages().show('pnl_edititemgrid', ()=>{
 		$ui.getPages().ITEMS['pnl_edititemgrid'].handler.removerow(form.rowid)
-	})
+	});
+
+	if (reload_header_modified) {
+		var currentRowdata =  $ui.getPages().ITEMS['pnl_edit'].handler.getCurrentRowdata();
+		$ui.getPages().ITEMS['pnl_edit'].handler.open(currentRowdata.data, currentRowdata.rowid, false, (err, data)=>{
+			$ui.getPages().ITEMS['pnl_list'].handler.updategrid(data, currentRowdata.rowid);
+		});	
+	}
+
+	if (typeof hnd.form_deleted == 'function') {
+		hnd.form_deleted(result, options);
+	}
 	
 }
 
@@ -506,7 +699,7 @@ function form_viewmodechanged(viewonly) {
 
 
 function form_idsetup(options) {
-	var objid = obj.txt_inquirydetil_id
+	var objid = obj.txt_inquiryitem_id
 	switch (options.action) {
 		case 'fill' :
 			objid.textbox('disable') 

@@ -1,7 +1,8 @@
 var this_page_id;
 var this_page_options;
 
-/*--__SLIDESELECTLIB__--*/
+/*--__SLIDESELECTLIB__--*//*--__HANDLERLIB__--*/
+
 
 const btn_edit = $('#pnl_edit-btn_edit')
 const btn_save = $('#pnl_edit-btn_save')
@@ -9,6 +10,7 @@ const btn_delete = $('#pnl_edit-btn_delete')
 /*--__PRINTBUTTON__--*/
 /*--__COMMITBUTTON__--*/
 /*--__APPROVEBUTTON__--*/
+/*--__XTIONSBUTTONS__--*/
 /*--__UPLOADCONST__--*/
 
 const pnl_form = $('#pnl_edit-form')
@@ -20,6 +22,7 @@ const obj = {
 
 
 let form;
+let rowdata;
 
 export async function init(opt) {
 	this_page_id = opt.id;
@@ -55,15 +58,23 @@ export async function init(opt) {
 		OnRecordStatusCreated: () => {
 			/*--__STATUSCREATED__--*/			
 		}		
-	})
+	});
+	form.getHeaderData = () => {
+		return getHeaderData();
+	}
 
 /*--__PRINTHANDLERASSIGNMENT__--*/
 /*--__COMMITHANDLERASSIGNMENT__--*/
 /*--__APPROVEHANDLERASSIGNMENT__--*/
+/*--__XTIONSHANDLERASSIGNMENT__--*/
+/*--__OBJHANDLERASSIGNMENT__--*/
 
 /*--__UPLOADEVENT__--*/
 
 /*--__SLIDESELECS__--*/
+
+
+
 
 	document.addEventListener('keydown', (ev)=>{
 		if ($ui.getPages().getCurrentPage()==this_page_id) {
@@ -111,6 +122,7 @@ export async function init(opt) {
 	})
 
 /*--__BUTTONSTATE__--*/
+/*--__HANDLERASSIGNMENT__--*/
 
 }
 
@@ -121,8 +133,16 @@ export function getForm() {
 	return form
 }
 
+export function getCurrentRowdata() {
+	return rowdata;
+}
 
 export function open(data, rowid, viewmode=true, fn_callback) {
+
+	rowdata = {
+		data: data,
+		rowid: rowid
+	}
 
 	var pOpt = form.getDefaultPrompt(false)
 	var fn_dataopening = async (options) => {
@@ -160,7 +180,7 @@ export function open(data, rowid, viewmode=true, fn_callback) {
 		   apabila ada rutin mengubah form dan tidak mau dijalankan pada saat opening,
 		   cek dengan form.isEventSuspended()
 		*/   
-
+		/*--__FORMOPENEDHANDLER__--*/
 
 
 		/* commit form */
@@ -168,8 +188,19 @@ export function open(data, rowid, viewmode=true, fn_callback) {
 		form.SuspendEvent(false); 
 		updatebuttonstate(record)
 
+
+		/* update rowdata */
+		for (var nv in rowdata.data) {
+			if (record[nv]!=undefined) {
+				rowdata.data[nv] = record[nv];
+			}
+		}
+
 		// tampilkan form untuk data editor
-		fn_callback()
+		if (typeof fn_callback==='function') {
+			fn_callback(null, rowdata.data);
+		}
+		
 	}
 
 	var fn_dataopenerror = (err) => {
@@ -190,13 +221,10 @@ export function createnew() {
 		// set nilai-nilai default untuk form
 /*--__SETDEFAULTNOW__--*/
 /*--__SETDEFAULTCOMBO__--*/
+/*--__FORMNEWDATAHANDLER__--*/
 /*--__RECORDSTATUSNEW__--*/
-
 /*--__UPLOADCREATENEW__--*/
-
 /*--__ACTIONBUTTONINITSTATE__--*/
-
-
 
 		options.OnCanceled = () => {
 			$ui.getPages().show('pnl_list')
@@ -208,6 +236,14 @@ export function createnew() {
 }
 
 
+export function getHeaderData() {
+	var header_data = form.getData();
+	if (typeof hnd.form_getHeaderData == 'function') {
+		hnd.form_getHeaderData(header_data);
+	}
+	return header_data;
+}
+
 export function detil_open(pnlname) {
 	if (form.isDataChanged()) {
 		$ui.ShowMessage('Simpan dulu perubahan datanya.')
@@ -215,9 +251,23 @@ export function detil_open(pnlname) {
 	}
 
 	//$ui.getPages().show(pnlname)
-	$ui.getPages().show(pnlname, () => {
-		$ui.getPages().ITEMS[pnlname].handler.OpenDetil(form.getData())
-	})	
+	let header_data = getHeaderData();
+	if (typeof hnd.form_detil_opening == 'function') {
+		hnd.form_detil_opening(pnlname, (cancel)=>{
+			if (cancel===true) {
+				return;
+			}
+			$ui.getPages().show(pnlname, () => {
+				$ui.getPages().ITEMS[pnlname].handler.OpenDetil(header_data)
+			})
+		});
+	} else {
+		$ui.getPages().show(pnlname, () => {
+			$ui.getPages().ITEMS[pnlname].handler.OpenDetil(header_data)
+		})
+	}
+
+	
 }
 
 
@@ -289,6 +339,8 @@ async function form_datasaving(data, options) {
 		}
 	}
 
+	/*--__FORMDATASAVINGHANDLER__--*/
+
 }
 
 async function form_datasaveerror(err, options) {
@@ -333,17 +385,25 @@ async function form_datasaved(result, options) {
 		}
 	}
 	form.rowid = $ui.getPages().ITEMS['pnl_list'].handler.updategrid(data, form.rowid)
+	rowdata = {
+		data: data,
+		rowid: form.rowid
+	}
+
+	/*--__FORMDATASAVEDHANDLER__--*/
 }
 
 
 
 async function form_deleting(data) {
+	/*--__FORMDELETINGHANDLER__--*/
 }
 
 async function form_deleted(result, options) {
 	$ui.getPages().show('pnl_list')
 	$ui.getPages().ITEMS['pnl_list'].handler.removerow(form.rowid)
 
+	/*--__FORMDELETEDHANDLER__--*/
 }
 
 /*--__PRINTFUNCTION__--*/

@@ -17,7 +17,7 @@ module.exports = {
 				jurnaltype_isdisabled: { text: 'Disabled', type: dbtype.boolean, null: false, default: '0' },
 				jurnaltype_descr: { text: 'Descr', type: dbtype.varchar(90), suppresslist: true },
 				jurnalmodel_id: {
-					text: 'Type', type: dbtype.varchar(10), null: false, uppercase: true, suppresslist: true,
+					text: 'Model', type: dbtype.varchar(10), null: false, uppercase: true, suppresslist: true,
 					options: { required: true, invalidMessage: 'Model Jurnal harus diisi' },
 					comp: comp.Combo({
 						table: 'mst_jurnalmodel',

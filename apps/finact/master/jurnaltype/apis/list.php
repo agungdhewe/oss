@@ -23,7 +23,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 05/06/2021
+ * tanggal 25/12/2021
  */
 $API = new class extends jurnaltypeBase {
 
@@ -38,7 +38,7 @@ $API = new class extends jurnaltypeBase {
 				throw new \Exception('your group authority is not allowed to do this action.');
 			}
 
-
+			// \FGTA4\utils\SqlUtility::setDefaultCriteria($options->criteria, '--fieldscriteria--', '--value--');
 			$where = \FGTA4\utils\SqlUtility::BuildCriteria(
 				$options->criteria,
 				[
@@ -58,7 +58,7 @@ $API = new class extends jurnaltypeBase {
 			$limit = " LIMIT $maxrow OFFSET $offset ";
 			$stmt = $this->db->prepare("
 				select 
-				jurnaltype_id, jurnaltype_name, jurnaltype_isdisabled, jurnaltype_descr, jurnalmodel_id, _createby, _createdate, _modifyby, _modifydate 
+				A.jurnaltype_id, A.jurnaltype_name, A.jurnaltype_isdisabled, A.jurnaltype_descr, A.jurnalmodel_id, A._createby, A._createdate, A._modifyby, A._modifydate 
 				from mst_jurnaltype A
 			" . $where->sql . $limit);
 			$stmt->execute($where->params);

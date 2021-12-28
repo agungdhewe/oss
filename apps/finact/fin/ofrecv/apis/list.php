@@ -16,14 +16,14 @@ use \FGTA4\exceptions\WebException;
  * ========
  * DataList
  * ========
- * Menampilkan data-data pada tabel header ofrecv (trn_jurnal)
+ * Menampilkan data-data pada tabel header ofrecv (trn_tjurnalor)
  * sesuai dengan parameter yang dikirimkan melalui variable $option->criteria
  *
  * Agung Nugroho <agung@fgta.net> http://www.fgta.net
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 08/06/2021
+ * tanggal 25/12/2021
  */
 $API = new class extends ofrecvBase {
 
@@ -38,7 +38,7 @@ $API = new class extends ofrecvBase {
 				throw new \Exception('your group authority is not allowed to do this action.');
 			}
 
-
+			// \FGTA4\utils\SqlUtility::setDefaultCriteria($options->criteria, '--fieldscriteria--', '--value--');
 			$where = \FGTA4\utils\SqlUtility::BuildCriteria(
 				$options->criteria,
 				[
@@ -50,7 +50,7 @@ $API = new class extends ofrecvBase {
 			$maxrow = 30;
 			$offset = (property_exists($options, 'offset')) ? $options->offset : 0;
 
-			$stmt = $this->db->prepare("select count(*) as n from view_jurnalor A" . $where->sql);
+			$stmt = $this->db->prepare("select count(*) as n from trn_tjurnalor A" . $where->sql);
 			$stmt->execute($where->params);
 			$row  = $stmt->fetch(\PDO::FETCH_ASSOC);
 			$total = (float) $row['n'];
@@ -58,8 +58,8 @@ $API = new class extends ofrecvBase {
 			$limit = " LIMIT $maxrow OFFSET $offset ";
 			$stmt = $this->db->prepare("
 				select 
-				jurnal_id, jurnaltype_id, jurnal_ref, periodemo_id, jurnal_date, partner_id, temprecv_id, ar_jurnaldetil_id, jurnal_descr, paymtype_id, bankrekening_id, paym_gironum, paym_girodate, accfin_id, jurnal_valfrg, curr_id, jurnal_valfrgrate, jurnal_validr, coa_id, dept_id, jurnalsource_id, jurnal_version, jurnal_iscommit, jurnal_commitby, jurnal_commitdate, jurnal_ispost, jurnal_postby, jurnal_postdate, jurnal_isclose, jurnal_isagingclose, _createby, _createdate, _modifyby, _modifydate 
-				from view_jurnalor A
+				A.jurnal_id, A.jurnaltype_id, A.periodemo_id, A.jurnal_date, A.jurnal_ref, A.partner_id, A.temprecv_id, A.billout_id, A.jurnal_descr, A.jurnal_valfrg, A.curr_id, A.jurnal_valfrgrate, A.jurnal_validr, A.paymtype_id, A.bankrekening_id, A.paym_gironum, A.paym_girodate, A.coa_id, A.accfin_id, A.ar_jurnal_id, A.ar_jurnaldetil_id, A.dept_id, A.jurnalsource_id, A.tjurnalor_version, A.tjurnalor_iscommit, A.tjurnalor_commitby, A.tjurnalor_commitdate, A.tjurnalor_ispost, A.tjurnalor_postby, A.tjurnalor_postdate, A._createby, A._createdate, A._modifyby, A._modifydate 
+				from trn_tjurnalor A
 			" . $where->sql . $limit);
 			$stmt->execute($where->params);
 			$rows  = $stmt->fetchall(\PDO::FETCH_ASSOC);
@@ -79,16 +79,18 @@ $API = new class extends ofrecvBase {
 					'periodemo_name' => \FGTA4\utils\SqlUtility::Lookup($record['periodemo_id'], $this->db, 'mst_periodemo', 'periodemo_id', 'periodemo_name'),
 					'partner_name' => \FGTA4\utils\SqlUtility::Lookup($record['partner_id'], $this->db, 'mst_partner', 'partner_id', 'partner_name'),
 					'temprecv_descr' => \FGTA4\utils\SqlUtility::Lookup($record['temprecv_id'], $this->db, 'trn_temprecv', 'temprecv_id', 'temprecv_descr'),
-					'jurnaldetil_descr' => \FGTA4\utils\SqlUtility::Lookup($record['ar_jurnaldetil_id'], $this->db, 'trn_jurnaldetil', 'jurnaldetil_id', 'jurnaldetil_descr'),
+					'billout_descr' => \FGTA4\utils\SqlUtility::Lookup($record['billout_id'], $this->db, 'trn_billout', 'billout_id', 'billout_descr'),
+					'curr_name' => \FGTA4\utils\SqlUtility::Lookup($record['curr_id'], $this->db, 'mst_curr', 'curr_id', 'curr_name'),
 					'paymtype_name' => \FGTA4\utils\SqlUtility::Lookup($record['paymtype_id'], $this->db, 'mst_paymtype', 'paymtype_id', 'paymtype_name'),
 					'bankrekening_name' => \FGTA4\utils\SqlUtility::Lookup($record['bankrekening_id'], $this->db, 'mst_bankrekening', 'bankrekening_id', 'bankrekening_name'),
-					'accfin_name' => \FGTA4\utils\SqlUtility::Lookup($record['accfin_id'], $this->db, 'mst_accfin', 'accfin_id', 'accfin_name'),
-					'curr_name' => \FGTA4\utils\SqlUtility::Lookup($record['curr_id'], $this->db, 'mst_curr', 'curr_id', 'curr_name'),
 					'coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
+					'accfin_name' => \FGTA4\utils\SqlUtility::Lookup($record['accfin_id'], $this->db, 'mst_accfin', 'accfin_id', 'accfin_name'),
+					'jurnaldetil_descr' => \FGTA4\utils\SqlUtility::Lookup($record['ar_jurnal_id'], $this->db, 'trn_jurnaldetil', 'jurnaldetil_id', 'jurnaldetil_descr'),
+					'jurnaldetil_descr' => \FGTA4\utils\SqlUtility::Lookup($record['ar_jurnaldetil_id'], $this->db, 'trn_jurnaldetil', 'jurnaldetil_id', 'jurnaldetil_descr'),
 					'dept_name' => \FGTA4\utils\SqlUtility::Lookup($record['dept_id'], $this->db, 'mst_dept', 'dept_id', 'dept_name'),
 					'jurnalsource_name' => \FGTA4\utils\SqlUtility::Lookup($record['jurnalsource_id'], $this->db, 'mst_jurnalsource', 'jurnalsource_id', 'jurnalsource_name'),
-				'jurnal_commitby' => \FGTA4\utils\SqlUtility::Lookup($record['jurnal_commitby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
-				'jurnal_postby' => \FGTA4\utils\SqlUtility::Lookup($record['jurnal_postby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+					'tjurnalor_commitby' => \FGTA4\utils\SqlUtility::Lookup($record['tjurnalor_commitby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+					'tjurnalor_postby' => \FGTA4\utils\SqlUtility::Lookup($record['tjurnalor_postby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
 					 
 				]));
 			}

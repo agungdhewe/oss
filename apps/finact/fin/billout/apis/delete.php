@@ -25,7 +25,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 22/12/2021
+ * tanggal 24/12/2021
  */
 $API = new class extends billoutBase {
 	

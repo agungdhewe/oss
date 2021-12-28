@@ -27,7 +27,7 @@ class PrintForm extends WebModule {
 		$id = $_GET['id'];
 
 
-		$tablename = 'trn_jurnal';
+		$tablename = 'trn_tjurnalor';
 		$primarykey = 'jurnal_id';
 
 		try {
@@ -54,7 +54,7 @@ class PrintForm extends WebModule {
 			select 
 			A.*,
 			(select empl_name from mst_empl where empl_id =(select empl_id from mst_empluser where user_id = A._createby )) as empl_name
-			from trn_jurnal A where jurnal_id = :jurnal_id
+			from trn_tjurnalor A where jurnal_id = :jurnal_id
 		";
 	}	
 

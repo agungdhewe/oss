@@ -14,7 +14,7 @@
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 22/10/2021
+ * tanggal 26/12/2021
  */
 $MODULE = new class extends WebModule {
 
@@ -24,16 +24,15 @@ $MODULE = new class extends WebModule {
 
 		try {
 
+			
+
+
 			// parameter=parameter yang bisa diakses langsung dari javascript module
 			// dengan memanggil variable global.setup.<namavariable>
 			$this->setup = (object)array(
 				'print_to_new_window' => false,
 				'username' => $userdata->username,
-				'dept_id' => '12112000',
-				'dept_name' => 'Finance & Collection',
-				'empl_id' => $userdata->empl_id,
-				'empl_name' => $userdata->empl_name,
-				'doc_id' => 'INQUIRY',
+			'doc_id' => 'COLTARGET',
 			);
 
 			$variancename = $_GET['variancename'];

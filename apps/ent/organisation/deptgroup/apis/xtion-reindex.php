@@ -11,51 +11,59 @@ require_once __DIR__ . '/xapi.base.php';
 
 use \FGTA4\exceptions\WebException;
 
-use \FGTA4\StandartApproval;
 
 
-
-
+/**
+ * finact/fin/billout/apis/xtion-commit.php
+ *
+ * =======
+ * Post
+ * =======
+ * Post dokumen, masukkan data bill ke jurnal. 
+ *
+ * Agung Nugroho <agung@fgta.net> http://www.fgta.net
+ * Tangerang, 19 April 2021
+ */
 $API = new class extends deptgroupBase {
 
-	public function execute() {
+	public function execute($options) {
 		$userdata = $this->auth->session_get_user();
 
 		try {
 			$currentdata = (object)[
-				'header' => $this->get_header_row($id),
 				'user' => $userdata
 			];
 
-	
 			$this->db->setAttribute(\PDO::ATTR_AUTOCOMMIT,0);
 			$this->db->beginTransaction();
 
 			try {
 
-	
+				$sql = "
+					set @coagroup_skip_trigger = 1;
+					set max_sp_recursion_depth = 10;
+					call deptgroup_reindex();
+					set max_sp_recursion_depth = 0;
+					set @coagroup_skip_trigger = null;
+				";
+				$this->db->query($sql);
+
+
+				
 				$this->db->commit();
 				return (object)[
 					'success' => true,
-					'version' => $currentdata->header->{$this->main_field_version},
-					'dataresponse' => $dataresponse
 				];
-
-				
 			} catch (\Exception $ex) {
 				$this->db->rollBack();
 				throw $ex;
 			} finally {
 				$this->db->setAttribute(\PDO::ATTR_AUTOCOMMIT,1);
 			}
-
-
 		} catch (\Exception $ex) {
 			throw $ex;
 		}
 	}
-
-
 
 };
 

@@ -3,6 +3,9 @@ var this_page_options;
 
 import {fgta4slideselect} from  '../../../../../index.php/asset/fgta/framework/fgta4libs/fgta4slideselect.mjs'
 
+const reload_header_modified = true;
+
+
 const txt_title = $('#pnl_editfilesform-title')
 const btn_edit = $('#pnl_editfilesform-btn_edit')
 const btn_save = $('#pnl_editfilesform-btn_save')
@@ -51,7 +54,10 @@ export async function init(opt) {
 		OnDataDeleted: async (result, options) => { await form_deleted(result, options) },
 		OnIdSetup : (options) => { form_idsetup(options) },
 		OnViewModeChanged : (viewonly) => { form_viewmodechanged(viewonly) }
-	})	
+	});
+	form.getHeaderData = () => {
+		return header_data;
+	}	
 
 	form.AllowAddRecord = true
 	form.AllowRemoveRecord = true
@@ -87,6 +93,7 @@ export async function init(opt) {
 			
 
 
+
 	obj.cbo_doctype_id.name = 'pnl_editfilesform-cbo_doctype_id'		
 	new fgta4slideselect(obj.cbo_doctype_id, {
 		title: 'Pilih doctype_id',
@@ -99,12 +106,23 @@ export async function init(opt) {
 			{mapping: 'doctype_id', text: 'doctype_id'},
 			{mapping: 'doctype_name', text: 'doctype_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria, options) => {
+				
+			if (typeof hnd.cbo_doctype_id_dataloading === 'function') {
+				hnd.cbo_doctype_id_dataloading(criteria);
+			}
+		},
 		OnDataLoaded : (result, options) => {
 				
+			if (typeof hnd.cbo_doctype_id_dataloaded === 'function') {
+				hnd.cbo_doctype_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
 			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_doctype_id_selected === 'function') {
+					hnd.cbo_doctype_id_selected(value, display, record, args);
+				}
 			}			
 		}
 	})				
@@ -173,6 +191,9 @@ export async function init(opt) {
 			chk_autoadd.prop("checked", false);
 		}
 	})
+
+
+
 }
 
 
@@ -224,7 +245,7 @@ export function open(data, rowid, hdata) {
 		   apabila ada rutin mengubah form dan tidak mau dijalankan pada saat opening,
 		   cek dengan form.isEventSuspended()
 		*/ 
-
+		
 
 
 		form.commit()
@@ -285,8 +306,8 @@ export function createnew(hdata) {
 
 		data.inquiryfiles_order = 0
 
-			data.doctype_id = '0'
-			data.doctype_name = '-- PILIH --'
+		data.doctype_id = '0'
+		data.doctype_name = '-- PILIH --'
 
 
 
@@ -315,7 +336,9 @@ async function form_datasaving(data, options) {
 			options.skipmappingresponse.push(id)
 			console.log(id)
 		}
-	}	
+	}
+
+		
 }
 
 async function form_datasaved(result, options) {
@@ -347,17 +370,37 @@ async function form_datasaved(result, options) {
 			btn_addnew_click()
 		}, 1000)
 	}
+
+	if (reload_header_modified) {
+		var currentRowdata =  $ui.getPages().ITEMS['pnl_edit'].handler.getCurrentRowdata();
+		$ui.getPages().ITEMS['pnl_edit'].handler.open(currentRowdata.data, currentRowdata.rowid, false, (err, data)=>{
+			$ui.getPages().ITEMS['pnl_list'].handler.updategrid(data, currentRowdata.rowid);
+		});	
+	}
+
+	
+
 }
 
 async function form_deleting(data, options) {
 	options.api = `${global.modulefullname}/files-delete`
+	
 }
 
 async function form_deleted(result, options) {
 	options.suppressdialog = true
 	$ui.getPages().show('pnl_editfilesgrid', ()=>{
 		$ui.getPages().ITEMS['pnl_editfilesgrid'].handler.removerow(form.rowid)
-	})
+	});
+
+	if (reload_header_modified) {
+		var currentRowdata =  $ui.getPages().ITEMS['pnl_edit'].handler.getCurrentRowdata();
+		$ui.getPages().ITEMS['pnl_edit'].handler.open(currentRowdata.data, currentRowdata.rowid, false, (err, data)=>{
+			$ui.getPages().ITEMS['pnl_list'].handler.updategrid(data, currentRowdata.rowid);
+		});	
+	}
+
+	
 	
 }
 

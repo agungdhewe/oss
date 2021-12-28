@@ -24,7 +24,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 05/06/2021
+ * tanggal 25/12/2021
  */
 $API = new class extends jurnaltypeBase {
 	
@@ -51,7 +51,6 @@ $API = new class extends jurnaltypeBase {
 
 			$sql = \FGTA4\utils\SqlUtility::Select('mst_jurnaltype A', [
 				'jurnaltype_id', 'jurnaltype_name', 'jurnaltype_isdisabled', 'jurnaltype_descr', 'jurnalmodel_id', '_createby', '_createdate', '_modifyby', '_modifydate'
-				, '_createby', '_createdate', '_modifyby', '_modifydate' 
 			], $where->sql);
 
 			$stmt = $this->db->prepare($sql);

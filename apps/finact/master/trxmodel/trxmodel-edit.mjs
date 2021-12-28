@@ -2,10 +2,13 @@ var this_page_id;
 var this_page_options;
 
 import {fgta4slideselect} from  '../../../../../index.php/asset/fgta/framework/fgta4libs/fgta4slideselect.mjs'
+import * as hnd from  './trxmodel-edit-hnd.mjs'
+
 
 const btn_edit = $('#pnl_edit-btn_edit')
 const btn_save = $('#pnl_edit-btn_save')
 const btn_delete = $('#pnl_edit-btn_delete')
+
 
 
 
@@ -21,13 +24,16 @@ const obj = {
 	cbo_pph_taxtype_id: $('#pnl_edit-cbo_pph_taxtype_id'),
 	chk_trxmodel_isuseqty: $('#pnl_edit-chk_trxmodel_isuseqty'),
 	chk_trxmodel_isusedays: $('#pnl_edit-chk_trxmodel_isusedays'),
-	chk_trxmodel_isusetask: $('#pnl_edit-chk_trxmodel_isusetask')
+	chk_trxmodel_isusetask: $('#pnl_edit-chk_trxmodel_isusetask'),
+	chk_trxmodel_isassetminta: $('#pnl_edit-chk_trxmodel_isassetminta'),
+	chk_trxmodel_isassetpinjam: $('#pnl_edit-chk_trxmodel_isassetpinjam')
 }
 
 
 
 
 let form;
+let rowdata;
 
 export async function init(opt) {
 	this_page_id = opt.id;
@@ -63,7 +69,12 @@ export async function init(opt) {
 		OnRecordStatusCreated: () => {
 			undefined			
 		}		
-	})
+	});
+	form.getHeaderData = () => {
+		return getHeaderData();
+	}
+
+
 
 
 
@@ -83,12 +94,23 @@ export async function init(opt) {
 			{mapping: 'taxtype_id', text: 'taxtype_id'},
 			{mapping: 'taxtype_name', text: 'taxtype_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+			
+			if (typeof hnd.cbo_ppn_taxtype_id_dataloading === 'function') {
+				hnd.cbo_ppn_taxtype_id_dataloading(criteria);
+			}	
+		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({taxtype_id:'--NULL--', taxtype_name:'NONE'});	
+			if (typeof hnd.cbo_ppn_taxtype_id_dataloaded === 'function') {
+				hnd.cbo_ppn_taxtype_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_ppn_taxtype_id_selected === 'function') {
+					hnd.cbo_ppn_taxtype_id_selected(value, display, record, args);
+				}
 			}
 		}
 	})				
@@ -104,16 +126,30 @@ export async function init(opt) {
 			{mapping: 'taxtype_id', text: 'taxtype_id'},
 			{mapping: 'taxtype_name', text: 'taxtype_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+			
+			if (typeof hnd.cbo_pph_taxtype_id_dataloading === 'function') {
+				hnd.cbo_pph_taxtype_id_dataloading(criteria);
+			}	
+		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({taxtype_id:'--NULL--', taxtype_name:'NONE'});	
+			if (typeof hnd.cbo_pph_taxtype_id_dataloaded === 'function') {
+				hnd.cbo_pph_taxtype_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_pph_taxtype_id_selected === 'function') {
+					hnd.cbo_pph_taxtype_id_selected(value, display, record, args);
+				}
 			}
 		}
 	})				
 				
+
+
+
 
 	document.addEventListener('keydown', (ev)=>{
 		if ($ui.getPages().getCurrentPage()==this_page_id) {
@@ -161,6 +197,13 @@ export async function init(opt) {
 	})
 
 	//button state
+	if (typeof hnd.init==='function') {
+		hnd.init({
+			form: form,
+			obj: obj,
+			opt: opt,
+		})
+	}
 
 }
 
@@ -171,8 +214,16 @@ export function getForm() {
 	return form
 }
 
+export function getCurrentRowdata() {
+	return rowdata;
+}
 
 export function open(data, rowid, viewmode=true, fn_callback) {
+
+	rowdata = {
+		data: data,
+		rowid: rowid
+	}
 
 	var pOpt = form.getDefaultPrompt(false)
 	var fn_dataopening = async (options) => {
@@ -214,7 +265,9 @@ export function open(data, rowid, viewmode=true, fn_callback) {
 		   apabila ada rutin mengubah form dan tidak mau dijalankan pada saat opening,
 		   cek dengan form.isEventSuspended()
 		*/   
-
+		if (typeof hnd.form_dataopened == 'function') {
+			hnd.form_dataopened(result, options);
+		}
 
 
 		/* commit form */
@@ -222,8 +275,19 @@ export function open(data, rowid, viewmode=true, fn_callback) {
 		form.SuspendEvent(false); 
 		updatebuttonstate(record)
 
+
+		/* update rowdata */
+		for (var nv in rowdata.data) {
+			if (record[nv]!=undefined) {
+				rowdata.data[nv] = record[nv];
+			}
+		}
+
 		// tampilkan form untuk data editor
-		fn_callback()
+		if (typeof fn_callback==='function') {
+			fn_callback(null, rowdata.data);
+		}
+		
 	}
 
 	var fn_dataopenerror = (err) => {
@@ -245,16 +309,17 @@ export function createnew() {
 		data.trxmodel_isuseqty = '0'
 		data.trxmodel_isusedays = '0'
 		data.trxmodel_isusetask = '0'
+		data.trxmodel_isassetminta = '0'
+		data.trxmodel_isassetpinjam = '0'
 
 		data.ppn_taxtype_id = '--NULL--'
 		data.ppn_taxtype_name = 'NONE'
 		data.pph_taxtype_id = '--NULL--'
 		data.pph_taxtype_name = 'NONE'
 
-
-
-
-
+		if (typeof hnd.form_newdata == 'function') {
+			hnd.form_newdata(data, options);
+		}
 
 
 
@@ -269,6 +334,14 @@ export function createnew() {
 }
 
 
+export function getHeaderData() {
+	var header_data = form.getData();
+	if (typeof hnd.form_getHeaderData == 'function') {
+		hnd.form_getHeaderData(header_data);
+	}
+	return header_data;
+}
+
 export function detil_open(pnlname) {
 	if (form.isDataChanged()) {
 		$ui.ShowMessage('Simpan dulu perubahan datanya.')
@@ -276,9 +349,23 @@ export function detil_open(pnlname) {
 	}
 
 	//$ui.getPages().show(pnlname)
-	$ui.getPages().show(pnlname, () => {
-		$ui.getPages().ITEMS[pnlname].handler.OpenDetil(form.getData())
-	})	
+	let header_data = getHeaderData();
+	if (typeof hnd.form_detil_opening == 'function') {
+		hnd.form_detil_opening(pnlname, (cancel)=>{
+			if (cancel===true) {
+				return;
+			}
+			$ui.getPages().show(pnlname, () => {
+				$ui.getPages().ITEMS[pnlname].handler.OpenDetil(header_data)
+			})
+		});
+	} else {
+		$ui.getPages().show(pnlname, () => {
+			$ui.getPages().ITEMS[pnlname].handler.OpenDetil(header_data)
+		})
+	}
+
+	
 }
 
 
@@ -350,6 +437,10 @@ async function form_datasaving(data, options) {
 		}
 	}
 
+	if (typeof hnd.form_datasaving == 'function') {
+		hnd.form_datasaving(data, options);
+	}
+
 }
 
 async function form_datasaveerror(err, options) {
@@ -396,17 +487,31 @@ async function form_datasaved(result, options) {
 		}
 	}
 	form.rowid = $ui.getPages().ITEMS['pnl_list'].handler.updategrid(data, form.rowid)
+	rowdata = {
+		data: data,
+		rowid: form.rowid
+	}
+
+	if (typeof hnd.form_datasaved == 'function') {
+		hnd.form_datasaved(result, rowdata, options);
+	}
 }
 
 
 
 async function form_deleting(data) {
+	if (typeof hnd.form_deleting == 'function') {
+		hnd.form_deleting(data);
+	}
 }
 
 async function form_deleted(result, options) {
 	$ui.getPages().show('pnl_list')
 	$ui.getPages().ITEMS['pnl_list'].handler.removerow(form.rowid)
 
+	if (typeof hnd.form_deleted == 'function') {
+		hnd.form_deleted(result, options);
+	}
 }
 
 

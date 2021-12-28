@@ -34,6 +34,9 @@ module.exports = {
 				trxmodel_isuseqty: { text: 'Use Qty', type: dbtype.boolean, null: false, default: '0', suppresslist: true },
 				trxmodel_isusedays: { text: 'Use Days', type: dbtype.boolean, null: false, default: '0', suppresslist: true },
 				trxmodel_isusetask: { text: 'Use Task', type: dbtype.boolean, null: false, default: '0' , suppresslist: true},
+
+				trxmodel_isassetminta: { text: 'Followup Minta Asset', type: dbtype.boolean, null: false, default: '0', suppresslist: true, options:{labelWidth:'300px'} },
+				trxmodel_isassetpinjam: { text: 'Followup Pinjam Asset', type: dbtype.boolean, null: false, default: '0', suppresslist: true, options:{labelWidth:'300px'} }
 			},
 
 			uniques: {

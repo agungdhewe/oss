@@ -2,12 +2,14 @@ var this_page_id;
 var this_page_options;
 
 import {fgta4slideselect} from  '../../../../../index.php/asset/fgta/framework/fgta4libs/fgta4slideselect.mjs'
+import * as hnd from  './colltarget-edit-hnd.mjs'
+
 
 const btn_edit = $('#pnl_edit-btn_edit')
 const btn_save = $('#pnl_edit-btn_save')
 const btn_delete = $('#pnl_edit-btn_delete')
 
-const btn_print = $('#pnl_edit-btn_print')
+
 const btn_commit = $('#pnl_edit-btn_commit')
 const btn_uncommit = $('#pnl_edit-btn_uncommit')
 			
@@ -15,6 +17,7 @@ const btn_uncommit = $('#pnl_edit-btn_uncommit')
 const btn_approve = $('#pnl_edit-btn_approve')
 const btn_decline = $('#pnl_edit-btn_decline')			
 				
+
 
 
 const pnl_form = $('#pnl_edit-form')
@@ -26,7 +29,6 @@ const obj = {
 	txt_colltarget_discprop: $('#pnl_edit-txt_colltarget_discprop'),
 	txt_colltarget_idr: $('#pnl_edit-txt_colltarget_idr'),
 	txt_colltarget_discval: $('#pnl_edit-txt_colltarget_discval'),
-	txt_colltarget_idrtotal: $('#pnl_edit-txt_colltarget_idrtotal'),
 	txt_colltarget_idrtopay: $('#pnl_edit-txt_colltarget_idrtopay'),
 	cbo_doc_id: $('#pnl_edit-cbo_doc_id'),
 	txt_colltarget_version: $('#pnl_edit-txt_colltarget_version'),
@@ -54,6 +56,7 @@ const rec_declinedate = $('#pnl_edit_record-declinedate');
 
 
 let form;
+let rowdata;
 
 export async function init(opt) {
 	this_page_id = opt.id;
@@ -92,10 +95,13 @@ export async function init(opt) {
 		$('#pnl_edit_record_custom').show();		
 					
 		}		
-	})
+	});
+	form.getHeaderData = () => {
+		return getHeaderData();
+	}
 
 
-	btn_print.linkbutton({ onClick: () => { btn_print_click(); } });	
+
 	btn_commit.linkbutton({ onClick: () => { btn_action_click({ action: 'commit' }); } });
 	btn_uncommit.linkbutton({ onClick: () => { btn_action_click({ action: 'uncommit' }); } });			
 			
@@ -135,7 +141,7 @@ export async function init(opt) {
 
 
 
-	
+
 
 
 	new fgta4slideselect(obj.cbo_periodemo_id, {
@@ -149,12 +155,23 @@ export async function init(opt) {
 			{mapping: 'periodemo_id', text: 'periodemo_id'},
 			{mapping: 'periodemo_name', text: 'periodemo_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+			
+			if (typeof hnd.cbo_periodemo_id_dataloading === 'function') {
+				hnd.cbo_periodemo_id_dataloading(criteria);
+			}	
+		},
 		OnDataLoaded : (result, options) => {
 				
+			if (typeof hnd.cbo_periodemo_id_dataloaded === 'function') {
+				hnd.cbo_periodemo_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_periodemo_id_selected === 'function') {
+					hnd.cbo_periodemo_id_selected(value, display, record, args);
+				}
 			}
 		}
 	})				
@@ -170,12 +187,23 @@ export async function init(opt) {
 			{mapping: 'empl_id', text: 'empl_id'},
 			{mapping: 'empl_name', text: 'empl_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+			
+			if (typeof hnd.cbo_empl_id_dataloading === 'function') {
+				hnd.cbo_empl_id_dataloading(criteria);
+			}	
+		},
 		OnDataLoaded : (result, options) => {
 				
+			if (typeof hnd.cbo_empl_id_dataloaded === 'function') {
+				hnd.cbo_empl_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_empl_id_selected === 'function') {
+					hnd.cbo_empl_id_selected(value, display, record, args);
+				}
 			}
 		}
 	})				
@@ -191,12 +219,23 @@ export async function init(opt) {
 			{mapping: 'dept_id', text: 'dept_id'},
 			{mapping: 'dept_name', text: 'dept_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+			
+			if (typeof hnd.cbo_dept_id_dataloading === 'function') {
+				hnd.cbo_dept_id_dataloading(criteria);
+			}	
+		},
 		OnDataLoaded : (result, options) => {
 				
+			if (typeof hnd.cbo_dept_id_dataloaded === 'function') {
+				hnd.cbo_dept_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_dept_id_selected === 'function') {
+					hnd.cbo_dept_id_selected(value, display, record, args);
+				}
 			}
 		}
 	})				
@@ -212,16 +251,30 @@ export async function init(opt) {
 			{mapping: 'doc_id', text: 'doc_id'},
 			{mapping: 'doc_name', text: 'doc_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+			
+			if (typeof hnd.cbo_doc_id_dataloading === 'function') {
+				hnd.cbo_doc_id_dataloading(criteria);
+			}	
+		},
 		OnDataLoaded : (result, options) => {
 				
+			if (typeof hnd.cbo_doc_id_dataloaded === 'function') {
+				hnd.cbo_doc_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_doc_id_selected === 'function') {
+					hnd.cbo_doc_id_selected(value, display, record, args);
+				}
 			}
 		}
 	})				
 				
+
+
+
 
 	document.addEventListener('keydown', (ev)=>{
 		if ($ui.getPages().getCurrentPage()==this_page_id) {
@@ -269,6 +322,13 @@ export async function init(opt) {
 	})
 
 	//button state
+	if (typeof hnd.init==='function') {
+		hnd.init({
+			form: form,
+			obj: obj,
+			opt: opt,
+		})
+	}
 
 }
 
@@ -279,8 +339,16 @@ export function getForm() {
 	return form
 }
 
+export function getCurrentRowdata() {
+	return rowdata;
+}
 
 export function open(data, rowid, viewmode=true, fn_callback) {
+
+	rowdata = {
+		data: data,
+		rowid: rowid
+	}
 
 	var pOpt = form.getDefaultPrompt(false)
 	var fn_dataopening = async (options) => {
@@ -322,7 +390,9 @@ export function open(data, rowid, viewmode=true, fn_callback) {
 		   apabila ada rutin mengubah form dan tidak mau dijalankan pada saat opening,
 		   cek dengan form.isEventSuspended()
 		*/   
-
+		if (typeof hnd.form_dataopened == 'function') {
+			hnd.form_dataopened(result, options);
+		}
 
 
 		/* commit form */
@@ -330,8 +400,19 @@ export function open(data, rowid, viewmode=true, fn_callback) {
 		form.SuspendEvent(false); 
 		updatebuttonstate(record)
 
+
+		/* update rowdata */
+		for (var nv in rowdata.data) {
+			if (record[nv]!=undefined) {
+				rowdata.data[nv] = record[nv];
+			}
+		}
+
 		// tampilkan form untuk data editor
-		fn_callback()
+		if (typeof fn_callback==='function') {
+			fn_callback(null, rowdata.data);
+		}
+		
 	}
 
 	var fn_dataopenerror = (err) => {
@@ -353,7 +434,6 @@ export function createnew() {
 		data.colltarget_discprop = 0
 		data.colltarget_idr = 0
 		data.colltarget_discval = 0
-		data.colltarget_idrtotal = 0
 		data.colltarget_idrtopay = 0
 		data.colltarget_version = 0
 		data.colltarget_iscommit = '0'
@@ -363,13 +443,16 @@ export function createnew() {
 
 		data.periodemo_id = '0'
 		data.periodemo_name = '-- PILIH --'
-		data.empl_id = global.setup.empl_id
-		data.empl_name = global.setup.empl_name
-		data.dept_id = global.setup.dept_id
-		data.dept_name = global.setup.dept_name
+		data.empl_id = '0'
+		data.empl_name = '-- PILIH --'
+		data.dept_id = '0'
+		data.dept_name = '-- PILIH --'
 		data.doc_id = global.setup.doc_id
 		data.doc_name = global.setup.doc_id
 
+		if (typeof hnd.form_newdata == 'function') {
+			hnd.form_newdata(data, options);
+		}
 
 		rec_commitby.html('');
 		rec_commitdate.html('');
@@ -381,8 +464,6 @@ export function createnew() {
 		
 
 
-
-
 		var button_commit_on = true;
 		var button_uncommit_on = false;
 		var button_approve_on = false;
@@ -392,8 +473,6 @@ export function createnew() {
 		btn_approve.linkbutton(button_approve_on ? 'enable' : 'disable');
 		btn_decline.linkbutton(button_decline_on ? 'enable' : 'disable');
 			
-
-
 
 		options.OnCanceled = () => {
 			$ui.getPages().show('pnl_list')
@@ -407,6 +486,14 @@ export function createnew() {
 }
 
 
+export function getHeaderData() {
+	var header_data = form.getData();
+	if (typeof hnd.form_getHeaderData == 'function') {
+		hnd.form_getHeaderData(header_data);
+	}
+	return header_data;
+}
+
 export function detil_open(pnlname) {
 	if (form.isDataChanged()) {
 		$ui.ShowMessage('Simpan dulu perubahan datanya.')
@@ -414,9 +501,23 @@ export function detil_open(pnlname) {
 	}
 
 	//$ui.getPages().show(pnlname)
-	$ui.getPages().show(pnlname, () => {
-		$ui.getPages().ITEMS[pnlname].handler.OpenDetil(form.getData())
-	})	
+	let header_data = getHeaderData();
+	if (typeof hnd.form_detil_opening == 'function') {
+		hnd.form_detil_opening(pnlname, (cancel)=>{
+			if (cancel===true) {
+				return;
+			}
+			$ui.getPages().show(pnlname, () => {
+				$ui.getPages().ITEMS[pnlname].handler.OpenDetil(header_data)
+			})
+		});
+	} else {
+		$ui.getPages().show(pnlname, () => {
+			$ui.getPages().ITEMS[pnlname].handler.OpenDetil(header_data)
+		})
+	}
+
+	
 }
 
 
@@ -562,6 +663,10 @@ async function form_datasaving(data, options) {
 		}
 	}
 
+	if (typeof hnd.form_datasaving == 'function') {
+		hnd.form_datasaving(data, options);
+	}
+
 }
 
 async function form_datasaveerror(err, options) {
@@ -606,17 +711,31 @@ async function form_datasaved(result, options) {
 		}
 	}
 	form.rowid = $ui.getPages().ITEMS['pnl_list'].handler.updategrid(data, form.rowid)
+	rowdata = {
+		data: data,
+		rowid: form.rowid
+	}
+
+	if (typeof hnd.form_datasaved == 'function') {
+		hnd.form_datasaved(result, rowdata, options);
+	}
 }
 
 
 
 async function form_deleting(data) {
+	if (typeof hnd.form_deleting == 'function') {
+		hnd.form_deleting(data);
+	}
 }
 
 async function form_deleted(result, options) {
 	$ui.getPages().show('pnl_list')
 	$ui.getPages().ITEMS['pnl_list'].handler.removerow(form.rowid)
 
+	if (typeof hnd.form_deleted == 'function') {
+		hnd.form_deleted(result, options);
+	}
 }
 
 
@@ -653,7 +772,7 @@ async function btn_action_click(args) {
 
 	switch (args.action) {
 		case 'commit' :
-			args.act_url = `${global.modulefullname}/xtion-${args.action}`;
+			args.act_url = `${global.modulefullname}/xtion-commit`;
 			args.act_msg_quest = `Apakah anda yakin akan <b>${args.action}</b> ${docname} no ${args.id} ?`;
 			args.act_msg_result = `${docname} no ${args.id} telah di ${args.action}.`;
 			args.act_do = (result) => {
@@ -666,7 +785,7 @@ async function btn_action_click(args) {
 			break;
 
 		case 'uncommit' :
-			args.act_url = `${global.modulefullname}/xtion-${args.action}`;
+			args.act_url = `${global.modulefullname}/xtion-uncommit`;
 			args.act_msg_quest = `Apakah anda yakin akan <b>${args.action}</b> ${docname} no ${args.id} ?`;
 			args.act_msg_result = `${docname} no ${args.id} telah di ${args.action}.`;
 			args.act_do = (result) => {
@@ -717,7 +836,11 @@ async function btn_action_click(args) {
 				form.commit();
 			}
 			break;		
-			
+		
+
+	
+		
+
 	}
 
 
@@ -728,10 +851,13 @@ async function btn_action_click(args) {
 			if (err) {
 				$ui.ShowMessage('[WARNING]' + err.message);	
 			} else {
-				updaterecordstatus(result.dataresponse);
+				if (result.dataresponse!=undefined) { updaterecordstatus(result.dataresponse) };
 				args.act_do(result);
-				updatebuttonstate(result.dataresponse);
-				updategridstate(result.dataresponse);
+
+				if (result.dataresponse!=undefined) {
+					updatebuttonstate(result.dataresponse);
+					updategridstate(result.dataresponse);
+				}
 				if (args.act_msg_result!=='') $ui.ShowMessage('[INFO]' + args.act_msg_result);	
 			}
 		});
@@ -744,57 +870,3 @@ async function btn_action_click(args) {
 }	
 	
 	
-
-
-
-function btn_print_click() {
-
-	if (form.isDataChanged() || !form.isInViewMode()) {
-		$ui.ShowMessage('Simpan dulu perubahan datanya.');
-		return;
-	}
-
-	var id = obj.txt_colltarget_id.textbox('getValue');
-	var printurl = 'index.php/printout/' + window.global.modulefullname + '/colltarget.xprint?id=' + id;
-
-	var print_to_new_window = global.setup.print_to_new_window;
-	var debug = false;
-	var debug = false;
-	if (debug || print_to_new_window) {
-		var w = window.open(printurl);
-		w.onload = () => {
-			window.onreadytoprint(() => {
-				iframe.contentWindow.print();
-			});
-		}
-	} else {
-		$ui.mask('wait...');
-		var iframe_id = 'fgta_printelement';
-		var iframe = document.getElementById(iframe_id);
-		if (iframe) {
-			iframe.parentNode.removeChild(iframe);
-			iframe = null;
-		}
-
-		if (!iframe) {
-			iframe = document.createElement('iframe');
-			iframe.id = iframe_id;
-			iframe.style.visibility = 'hidden';
-			iframe.style.height = '10px';
-			iframe.style.widows = '10px';
-			document.body.appendChild(iframe);
-
-			iframe.onload = () => {
-				$ui.unmask();
-				iframe.contentWindow.OnPrintCommand(() => {
-					console.log('start print');
-					iframe.contentWindow.print();
-				});
-				iframe.contentWindow.preparemodule();
-			}
-		}
-		iframe.src = printurl + '&iframe=1';
-
-	}
-
-}	

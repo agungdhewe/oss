@@ -1,6 +1,9 @@
 var this_page_id;
 var this_page_options;
 
+import {fgta4slideselect} from  '../../../../../index.php/asset/fgta/framework/fgta4libs/fgta4slideselect.mjs'
+
+const reload_header_modified = true;
 
 
 const txt_title = $('#pnl_edittermsform-title')
@@ -16,6 +19,7 @@ const chk_autoadd = $('#pnl_edittermsform-autoadd')
 const pnl_form = $('#pnl_edittermsform-form')
 const obj = {
 	txt_orderinterm_id: $('#pnl_edittermsform-txt_orderinterm_id'),
+	cbo_orderintermtype_id: $('#pnl_edittermsform-cbo_orderintermtype_id'),
 	txt_orderinterm_descr: $('#pnl_edittermsform-txt_orderinterm_descr'),
 	txt_orderinterm_days: $('#pnl_edittermsform-txt_orderinterm_days'),
 	dt_orderinterm_dtfrometa: $('#pnl_edittermsform-dt_orderinterm_dtfrometa'),
@@ -63,6 +67,32 @@ export async function init(opt) {
 
 
 
+	obj.cbo_orderintermtype_id.name = 'pnl_edittermsform-cbo_orderintermtype_id'		
+	new fgta4slideselect(obj.cbo_orderintermtype_id, {
+		title: 'Pilih orderintermtype_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_orderintermtype_id,
+		fieldValue: 'orderintermtype_id',
+		fieldValueMap: 'orderintermtype_id',
+		fieldDisplay: 'orderintermtype_name',
+		fields: [
+			{mapping: 'orderintermtype_id', text: 'orderintermtype_id'},
+			{mapping: 'orderintermtype_name', text: 'orderintermtype_name'},
+		],
+		OnDataLoading: (criteria, options) => {
+				
+		},
+		OnDataLoaded : (result, options) => {
+				
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+				form.setValue(obj.chk_merchorderinterm_isdp, record.orderintermtype_isdp)		
+						
+			}			
+		}
+	})				
+			
 
 
 	btn_addnew.linkbutton({ onClick: () => { btn_addnew_click() }  })
@@ -168,6 +198,7 @@ export function open(data, rowid, hdata) {
 		form.SuspendEvent(true);
 		form
 			.fill(record)
+			.setValue(obj.cbo_orderintermtype_id, record.orderintermtype_id, record.orderintermtype_name)
 			.setViewMode()
 			.rowid = rowid
 
@@ -243,6 +274,8 @@ export function createnew(hdata) {
 		data.orderinterm_payment = 0
 		data.orderin_totalpayment = 0
 
+			data.orderintermtype_id = '0'
+			data.orderintermtype_name = '-- PILIH --'
 
 
 
@@ -299,6 +332,14 @@ async function form_datasaved(result, options) {
 			btn_addnew_click()
 		}, 1000)
 	}
+
+	if (reload_header_modified) {
+		var currentRowdata =  $ui.getPages().ITEMS['pnl_edit'].handler.getCurrentRowdata();
+		$ui.getPages().ITEMS['pnl_edit'].handler.open(currentRowdata.data, currentRowdata.rowid, false, (err, data)=>{
+			$ui.getPages().ITEMS['pnl_list'].handler.updategrid(data, currentRowdata.rowid);
+		});	
+	}
+
 }
 
 async function form_deleting(data, options) {
@@ -309,7 +350,14 @@ async function form_deleted(result, options) {
 	options.suppressdialog = true
 	$ui.getPages().show('pnl_edittermsgrid', ()=>{
 		$ui.getPages().ITEMS['pnl_edittermsgrid'].handler.removerow(form.rowid)
-	})
+	});
+
+	if (reload_header_modified) {
+		var currentRowdata =  $ui.getPages().ITEMS['pnl_edit'].handler.getCurrentRowdata();
+		$ui.getPages().ITEMS['pnl_edit'].handler.open(currentRowdata.data, currentRowdata.rowid, false, (err, data)=>{
+			$ui.getPages().ITEMS['pnl_list'].handler.updategrid(data, currentRowdata.rowid);
+		});	
+	}
 	
 }
 

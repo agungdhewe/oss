@@ -26,7 +26,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 18/09/2021
+ * tanggal 28/12/2021
  */
 class inquirymodelBase extends WebAPI {
 

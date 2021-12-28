@@ -8,7 +8,7 @@
 
 	<form id="pnl_editbankform-form">
 
-		<div class="form_row" >
+		<div class="form_row pnl_editbankform_row txt_partnerbank_id" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">ID</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editbankform-txt_partnerbank_id" class="easyui-textbox" mapping="partnerbank_id" uppercase="true" maxlength="14"  style="width: 400px" data-options="multiline:false  ">
@@ -16,7 +16,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editbankform_row txt_partnerbank_accnum" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Account Number</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editbankform-txt_partnerbank_accnum" class="easyui-textbox" mapping="partnerbank_accnum" uppercase="true" maxlength="30"  style="width: 400px" data-options="multiline:false  ">
@@ -24,7 +24,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editbankform_row txt_partnerbank_accname" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Account Name</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editbankform-txt_partnerbank_accname" class="easyui-textbox" mapping="partnerbank_accname" uppercase="true" maxlength="90"  style="width: 400px" data-options="multiline:false  ">
@@ -32,14 +32,14 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editbankform_row chk_partnerbank_isdisabled" >
 			<div class="form_label_col"></div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editbankform-chk_partnerbank_isdisabled" class="easyui-checkbox c1" mapping="partnerbank_isdisabled" data-options="label: 'Disabled', labelPosition: 'after', checked: false ">
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editbankform_row cbo_bank_id" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Bank</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editbankform-cbo_bank_id" class="easyui-combo" style="width: 400px" mapping="bank_id" display="bank_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Bank harus diisi'"  validType="requiredcombo['pnl_editbankform-cbo_bank_id']" >
@@ -47,7 +47,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editbankform_row txt_partner_id" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Partner</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editbankform-txt_partner_id" class="easyui-textbox" mapping="partner_id" uppercase="true" maxlength="14"  style="width: 400px" data-options="multiline:false  , disabled: true">

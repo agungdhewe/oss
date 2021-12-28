@@ -7,6 +7,9 @@ if (!defined('FGTA4')) {
 require_once __ROOT_DIR.'/core/sqlutil.php';
 require_once __DIR__ . '/xapi.base.php';
 
+if (is_file(__DIR__ .'/data-approval-handler.php')) {
+	require_once __DIR__ .'/data-approval-handler.php';
+}
 
 use \FGTA4\exceptions\WebException;
 
@@ -24,13 +27,25 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 27/10/2021
+ * tanggal 28/12/2021
  */
 $API = new class extends inquiryprocessBase {
 
 	public function execute($options) {
 		$userdata = $this->auth->session_get_user();
 		
+		$handlerclassname = "\\FGTA4\\apis\\inquiryprocess_approvalHandler";
+		if (class_exists($handlerclassname)) {
+			$hnd = new inquiryprocess_approvalHandler($data, $options);
+			$hnd->caller = $this;
+			$hnd->db = $this->db;
+			$hnd->auth = $this->auth;
+			$hnd->reqinfo = $reqinfo->reqinfo;
+		} else {
+			$hnd = new \stdClass;
+		}
+
+
 		try {
 
 			// \FGTA4\utils\SqlUtility::setDefaultCriteria($options->criteria, '--fieldscriteria--', '--value--');

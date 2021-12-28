@@ -3,9 +3,11 @@ var this_page_options;
 
 import {fgta4slideselect} from  '../../../../../index.php/asset/fgta/framework/fgta4libs/fgta4slideselect.mjs'
 
+
 const btn_edit = $('#pnl_edit-btn_edit')
 const btn_save = $('#pnl_edit-btn_save')
 const btn_delete = $('#pnl_edit-btn_delete')
+
 
 
 
@@ -23,7 +25,8 @@ const obj = {
 
 
 
-let form = {}
+let form;
+let rowdata;
 
 export async function init(opt) {
 	this_page_id = opt.id;
@@ -63,8 +66,13 @@ export async function init(opt) {
 
 
 
-	// obj.chk_jurnaltype_isdisabled.checkbox('disable');
 
+
+
+// handle object
+xxx
+
+// upload
 
 
 
@@ -79,13 +87,24 @@ export async function init(opt) {
 			{mapping: 'jurnalmodel_id', text: 'jurnalmodel_id'},
 			{mapping: 'jurnalmodel_name', text: 'jurnalmodel_name'},
 		],
-		OnDataLoading: (criteria) => {},
-		OnDataLoaded : (result, options) => {
+		OnDataLoading: (criteria) => {
+			
 				
 		},
-		OnSelected: (value, display, record) => {}
+		OnDataLoaded : (result, options) => {
+				
+			
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+				
+			}
+		}
 	})				
 				
+
+
+
 
 	document.addEventListener('keydown', (ev)=>{
 		if ($ui.getPages().getCurrentPage()==this_page_id) {
@@ -134,59 +153,85 @@ export async function init(opt) {
 
 	//button state
 
-}
 
+}
 
 export function OnSizeRecalculated(width, height) {
 }
 
+export function getForm() {
+	return form
+}
 
-
+export function getCurrentRowdata() {
+	return rowdata;
+}
 
 export function open(data, rowid, viewmode=true, fn_callback) {
 
+	rowdata = {
+		data: data,
+		rowid: rowid
+	}
 
+	var pOpt = form.getDefaultPrompt(false)
 	var fn_dataopening = async (options) => {
 		options.criteria[form.primary.mapping] = data[form.primary.mapping]
 	}
 
 	var fn_dataopened = async (result, options) => {
+		var record = result.record;
+		updatefilebox(record);
 
-		updatefilebox(result.record);
+		/*
 
-
-  		updaterecordstatus(result.record)
+		*/
+		for (var objid in obj) {
+			let o = obj[objid]
+			if (o.isCombo() && !o.isRequired()) {
+				var value =  result.record[o.getFieldValueName()];
+				if (value==null ) {
+					record[o.getFieldValueName()] = pOpt.value;
+					record[o.getFieldDisplayName()] = pOpt.text;
+				}
+			}
+		}
+  		updaterecordstatus(record)
 
 		form.SuspendEvent(true);
 		form
-			.fill(result.record)
-			.setValue(obj.cbo_jurnalmodel_id, result.record.jurnalmodel_id, result.record.jurnalmodel_name)
-			.commit()
+			.fill(record)
+			.setValue(obj.cbo_jurnalmodel_id, record.jurnalmodel_id, record.jurnalmodel_name)
 			.setViewMode(viewmode)
 			.lock(false)
 			.rowid = rowid
 
-		// tampilkan form untuk data editor
-		fn_callback()
-	
-		form.SuspendEvent(false);
 
-		updatebuttonstate(result.record)
+		/* tambahkan event atau behaviour saat form dibuka
+		   apabila ada rutin mengubah form dan tidak mau dijalankan pada saat opening,
+		   cek dengan form.isEventSuspended()
+		*/   
 		
 
 
-		// fill data, bisa dilakukan secara manual dengan cara berikut:	
-		// form
-			// .setValue(obj.txt_id, result.record.id)
-			// .setValue(obj.txt_nama, result.record.nama)
-			// .setValue(obj.cbo_prov, result.record.prov_id, result.record.prov_nama)
-			// .setValue(obj.chk_isdisabled, result.record.disabled)
-			// .setValue(obj.txt_alamat, result.record.alamat)
-			// ....... dst dst
-			// .commit()
-			// .setViewMode()
-			// ....... dst dst
+		/* commit form */
+		form.commit()
+		form.SuspendEvent(false); 
+		updatebuttonstate(record)
 
+
+		/* update rowdata */
+		for (var nv in rowdata.data) {
+			if (record[nv]!=undefined) {
+				rowdata.data[nv] = record[nv];
+			}
+		}
+
+		// tampilkan form untuk data editor
+		if (typeof fn_callback==='function') {
+			fn_callback(null, rowdata.data);
+		}
+		
 	}
 
 	var fn_dataopenerror = (err) => {
@@ -209,9 +254,6 @@ export function createnew() {
 
 		data.jurnalmodel_id = '0'
 		data.jurnalmodel_name = '-- PILIH --'
-
-
-
 
 
 
@@ -299,7 +341,19 @@ async function form_datasaving(data, options) {
 	//    options.cancel = true
 
 	// Modifikasi object data, apabila ingin menambahkan variabel yang akan dikirim ke server
+	// options.skipmappingresponse = [];
 	options.skipmappingresponse = [];
+	for (var objid in obj) {
+		var o = obj[objid]
+		if (o.isCombo() && !o.isRequired()) {
+			var id = o.getFieldValueName()
+			options.skipmappingresponse.push(id)
+			console.log(id)
+		}
+	}
+
+	
+
 }
 
 async function form_datasaveerror(err, options) {
@@ -326,20 +380,43 @@ async function form_datasaved(result, options) {
 
 	var data = {}
 	Object.assign(data, form.getData(), result.dataresponse)
+	/*
 
+	*/
 
+	var pOpt = form.getDefaultPrompt(false)
+	for (var objid in obj) {
+		var o = obj[objid]
+		if (o.isCombo() && !o.isRequired()) {
+			var value =  result.dataresponse[o.getFieldValueName()];
+			var text = result.dataresponse[o.getFieldDisplayName()];
+			if (value==null ) {
+				value = pOpt.value;
+				text = pOpt.text;
+			}
+			form.setValue(o, value, text);
+		}
+	}
 	form.rowid = $ui.getPages().ITEMS['pnl_list'].handler.updategrid(data, form.rowid)
+	rowdata = {
+		data: data,
+		rowid: form.rowid
+	}
+
+	
 }
 
 
 
 async function form_deleting(data) {
+	
 }
 
 async function form_deleted(result, options) {
 	$ui.getPages().show('pnl_list')
 	$ui.getPages().ITEMS['pnl_list'].handler.removerow(form.rowid)
 
+	
 }
 
 

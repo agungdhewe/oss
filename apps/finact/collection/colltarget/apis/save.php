@@ -8,6 +8,10 @@ require_once __ROOT_DIR.'/core/sqlutil.php';
 // require_once __ROOT_DIR . "/core/sequencer.php";
 require_once __DIR__ . '/xapi.base.php';
 
+if (is_file(__DIR__ .'/data-header-handler.php')) {
+	require_once __DIR__ .'/data-header-handler.php';
+}
+
 
 use \FGTA4\exceptions\WebException;
 // use \FGTA4\utils\Sequencer;
@@ -27,7 +31,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 22/10/2021
+ * tanggal 26/12/2021
  */
 $API = new class extends colltargetBase {
 	
@@ -38,6 +42,17 @@ $API = new class extends colltargetBase {
 		$datastate = $data->_state;
 
 		$userdata = $this->auth->session_get_user();
+
+		if (class_exists('colltarget_headerHandler')) {
+			$hnd = new colltarget_headerHandler($data, $options);
+			$hnd->caller = $this;
+			$hnd->db = $this->db;
+			$hnd->auth = $this->auth;
+			$hnd->reqinfo = $reqinfo->reqinfo;
+		} else {
+			$hnd = new \stdClass;
+		}
+
 
 		try {
 
@@ -68,7 +83,6 @@ $API = new class extends colltargetBase {
 
 			unset($obj->colltarget_idr);
 			unset($obj->colltarget_discval);
-			unset($obj->colltarget_idrtotal);
 			unset($obj->colltarget_idrtopay);
 			unset($obj->colltarget_iscommit);
 			unset($obj->colltarget_commitby);
@@ -115,8 +129,8 @@ $API = new class extends colltargetBase {
 				// result
 				$where = \FGTA4\utils\SqlUtility::BuildCriteria((object)[$primarykey=>$obj->{$primarykey}], [$primarykey=>"$primarykey=:$primarykey"]);
 				$sql = \FGTA4\utils\SqlUtility::Select($tablename , [
-					$primarykey
-					, 'colltarget_id', 'periodemo_id', 'empl_id', 'dept_id', 'colltarget_discprop', 'colltarget_idr', 'colltarget_discval', 'colltarget_idrtotal', 'colltarget_idrtopay', 'doc_id', 'colltarget_version', 'colltarget_iscommit', 'colltarget_commitby', 'colltarget_commitdate', 'colltarget_isapprovalprogress', 'colltarget_isapproved', 'colltarget_approveby', 'colltarget_approvedate', 'colltarget_isdeclined', 'colltarget_declineby', 'colltarget_declinedate', '_createby', '_createdate', '_modifyby', '_modifydate', '_createby', '_createdate', '_modifyby', '_modifydate'
+					  $primarykey
+					, 'colltarget_id', 'periodemo_id', 'empl_id', 'dept_id', 'colltarget_discprop', 'colltarget_idr', 'colltarget_discval', 'colltarget_idrtopay', 'doc_id', 'colltarget_version', 'colltarget_iscommit', 'colltarget_commitby', 'colltarget_commitdate', 'colltarget_isapprovalprogress', 'colltarget_isapproved', 'colltarget_approveby', 'colltarget_approvedate', 'colltarget_isdeclined', 'colltarget_declineby', 'colltarget_declinedate', '_createby', '_createdate', '_modifyby', '_modifydate'
 				], $where->sql);
 				$stmt = $this->db->prepare($sql);
 				$stmt->execute($where->params);
@@ -128,19 +142,23 @@ $API = new class extends colltargetBase {
 				}
 				$result->dataresponse = (object) array_merge($record, [
 					//  untuk lookup atau modify response ditaruh disini
-				'periodemo_name' => \FGTA4\utils\SqlUtility::Lookup($record['periodemo_id'], $this->db, 'mst_periodemo', 'periodemo_id', 'periodemo_name'),
-				'empl_name' => \FGTA4\utils\SqlUtility::Lookup($record['empl_id'], $this->db, 'mst_empl', 'empl_id', 'empl_name'),
-				'dept_name' => \FGTA4\utils\SqlUtility::Lookup($record['dept_id'], $this->db, 'mst_dept', 'dept_id', 'dept_name'),
-				'doc_name' => \FGTA4\utils\SqlUtility::Lookup($record['doc_id'], $this->db, 'mst_doc', 'doc_id', 'doc_name'),
-				'colltarget_commitby' => \FGTA4\utils\SqlUtility::Lookup($record['colltarget_commitby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
-				'colltarget_approveby' => \FGTA4\utils\SqlUtility::Lookup($record['colltarget_approveby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
-				'colltarget_declineby' => \FGTA4\utils\SqlUtility::Lookup($record['colltarget_declineby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+					'periodemo_name' => \FGTA4\utils\SqlUtility::Lookup($record['periodemo_id'], $this->db, 'mst_periodemo', 'periodemo_id', 'periodemo_name'),
+					'empl_name' => \FGTA4\utils\SqlUtility::Lookup($record['empl_id'], $this->db, 'mst_empl', 'empl_id', 'empl_name'),
+					'dept_name' => \FGTA4\utils\SqlUtility::Lookup($record['dept_id'], $this->db, 'mst_dept', 'dept_id', 'dept_name'),
+					'doc_name' => \FGTA4\utils\SqlUtility::Lookup($record['doc_id'], $this->db, 'mst_doc', 'doc_id', 'doc_name'),
+					'colltarget_commitby' => \FGTA4\utils\SqlUtility::Lookup($record['colltarget_commitby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+					'colltarget_approveby' => \FGTA4\utils\SqlUtility::Lookup($record['colltarget_approveby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+					'colltarget_declineby' => \FGTA4\utils\SqlUtility::Lookup($record['colltarget_declineby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
 
 					'_createby' => \FGTA4\utils\SqlUtility::Lookup($record['_createby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
 					'_modifyby' => \FGTA4\utils\SqlUtility::Lookup($record['_modifyby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
 				]);
 
-
+				if (is_object($hnd)) {
+					if (method_exists(get_class($hnd), 'DataSavedSuccess')) {
+						$hnd->DataSavedSuccess($result);
+					}
+				}
 
 				$this->db->commit();
 				return $result;

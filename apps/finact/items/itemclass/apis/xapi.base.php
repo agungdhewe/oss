@@ -26,7 +26,7 @@ use \FGTA4\CouchDbClient;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 21/12/2021
+ * tanggal 27/12/2021
  */
 class itemclassBase extends WebAPI {
 

@@ -8,6 +8,13 @@ require_once __ROOT_DIR.'/core/sqlutil.php';
 require_once __DIR__ . '/xapi.base.php';
 //require_once __ROOT_DIR . "/core/sequencer.php";
 
+
+if (is_file(__DIR__ .'/data-account-handler.php')) {
+	require_once __DIR__ .'/data-account-handler.php';
+}
+
+
+
 use \FGTA4\exceptions\WebException;
 //use \FGTA4\utils\Sequencer;
 
@@ -26,7 +33,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 21/12/2021
+ * tanggal 27/12/2021
  */
 $API = new class extends itemclassBase {
 	
@@ -37,6 +44,16 @@ $API = new class extends itemclassBase {
 		$datastate = $data->_state;
 
 		$userdata = $this->auth->session_get_user();
+
+		if (class_exists('itemclass_headerHandler')) {
+			$hnd = new itemclass_accountHandler($data, $options);
+			$hnd->caller = $this;
+			$hnd->db = $this->db;
+			$hnd->auth = $this->auth;
+			$hnd->reqinfo = $reqinfo->reqinfo;
+		} else {
+			$hnd = new \stdClass;
+		}
 
 		try {
 			$result = new \stdClass; 
@@ -118,16 +135,22 @@ $API = new class extends itemclassBase {
 				}
 				$result->dataresponse = (object) array_merge($record, [
 					// untuk lookup atau modify response ditaruh disini
-				'projectmodel_name' => \FGTA4\utils\SqlUtility::Lookup($record['projectmodel_id'], $this->db, 'mst_projectmodel', 'projectmodel_id', 'projectmodel_name'),
-				'inquiry_accbudget_name' => \FGTA4\utils\SqlUtility::Lookup($record['inquiry_accbudget_id'], $this->db, 'mst_accbudget', 'accbudget_id', 'accbudget_name'),
-				'settl_coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['settl_coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
+					'projectmodel_name' => \FGTA4\utils\SqlUtility::Lookup($record['projectmodel_id'], $this->db, 'mst_projectmodel', 'projectmodel_id', 'projectmodel_name'),
+					'inquiry_accbudget_name' => \FGTA4\utils\SqlUtility::Lookup($record['inquiry_accbudget_id'], $this->db, 'mst_accbudget', 'accbudget_id', 'accbudget_name'),
+					'settl_coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['settl_coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
 
 					'_createby' => \FGTA4\utils\SqlUtility::Lookup($record['_createby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
 					'_modifyby' => \FGTA4\utils\SqlUtility::Lookup($record['_modifyby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
 				]);
 
-				$this->db->commit();
 
+				if (is_object($hnd)) {
+					if (method_exists(get_class($hnd), 'DataSavedSuccess')) {
+						$hnd->DataSavedSuccess($result);
+					}
+				}
+
+				$this->db->commit();
 				return $result;
 			} catch (\Exception $ex) {
 				$this->db->rollBack();

@@ -1,6 +1,7 @@
 var this_page_id;
 var this_page_options;
 
+
 const tbl_list = $('#pnl_editbankgrid-tbl_list');
 const txt_title = $('#pnl_editbankgrid-title');
 const pnl_control = $('#pnl_editbankgrid-control');
@@ -63,7 +64,10 @@ export async function init(opt) {
 				grd_list.nextpageload();
 			}			
 		}
-	});			
+	});	
+
+	
+
 }
 
 
@@ -163,11 +167,18 @@ function grd_list_cellclick(td, ev) {
 }
 
 function grd_list_cellrender(td) {
-
+	
 }
 
 function grd_list_rowrender(tr) {
 
+	var dataid = tr.getAttribute('dataid')
+	var record = grd_list.DATA[dataid]
+	$(tr).find('td').each((i, td) => {
+		var mapping = td.getAttribute('mapping')
+		
+	});
+		
 }
 
 

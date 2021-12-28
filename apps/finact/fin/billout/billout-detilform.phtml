@@ -19,55 +19,15 @@
 		<div class="form_row" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Row Type</div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editdetilform-cbo_billrowtype_id" class="easyui-combo" style="width: 400px" mapping="billrowtype_id" display="billrowtype_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Row Type'"  validType="requiredcombo['pnl_editdetilform-cbo_billrowtype_id']" >
+				<input id="pnl_editdetilform-cbo_billoutrowtype_id" class="easyui-combo" style="width: 400px" mapping="billoutrowtype_id" display="billoutrowtype_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Row Type'"  validType="requiredcombo['pnl_editdetilform-cbo_billoutrowtype_id']" >
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>
 
 		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Tax</div>
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Deliver</div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editdetilform-cbo_taxtype_id" class="easyui-combo" style="width: 400px" mapping="taxtype_id" display="taxtype_name" data-options="editable:false, valueField:'id', textField:'text' , prompt: 'NONE'" >
-				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
-			</div>
-		</div>
-
-		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Descr</div>
-			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editdetilform-txt_billoutdetil_descr" class="easyui-textbox" mapping="billoutdetil_descr" uppercase="true" maxlength="255"  style="width: 400px" data-options="multiline:false , required: true, invalidMessage: 'Descr harus diisi' ">
-				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
-			</div>
-		</div>
-
-		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Currency</div>
-			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editdetilform-cbo_curr_id" class="easyui-combo" style="width: 400px" mapping="curr_id" display="curr_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Currency harus diisi', prompt: '-- PILIH --'"  validType="requiredcombo['pnl_editdetilform-cbo_curr_id']" >
-				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
-			</div>
-		</div>
-
-		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Valas</div>
-			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editdetilform-txt_billoutdetil_valfrg" class="easyui-numberbox" mapping="billoutdetil_valfrg" style="width: 400px; text-align:right" data-options="precision: 2, decimalSeparator:'.', groupSeparator:','  , required: true">
-				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
-			</div>
-		</div>
-
-		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Rate</div>
-			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editdetilform-txt_billoutdetil_valfrgrate" class="easyui-numberbox" mapping="billoutdetil_valfrgrate" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  , required: true">
-				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
-			</div>
-		</div>
-
-		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">IDR</div>
-			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editdetilform-txt_billoutdetil_validr" class="easyui-numberbox" mapping="billoutdetil_validr" style="width: 400px; text-align:right" data-options="precision: 2, decimalSeparator:'.', groupSeparator:','  , required: true">
+				<input id="pnl_editdetilform-cbo_orderindelv_id" class="easyui-combo" style="width: 400px" mapping="orderindelv_id" display="orderindelv_descr" data-options="editable:false, valueField:'id', textField:'text' , prompt: 'NONE'" >
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>
@@ -75,23 +35,140 @@
 		<div class="form_row" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Class</div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editdetilform-cbo_itemclass_id" class="easyui-combo" style="width: 400px" mapping="itemclass_id" display="itemclass_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Class harus diisi'"  validType="requiredcombo['pnl_editdetilform-cbo_itemclass_id']" >
+				<input id="pnl_editdetilform-cbo_itemclass_id" class="easyui-combo" style="width: 400px" mapping="itemclass_id" display="itemclass_name" data-options="editable:false, valueField:'id', textField:'text' , prompt: 'NONE'" >
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>
 
 		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Akun Pembayaran</div>
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Descr</div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editdetilform-cbo_coa_id" class="easyui-combo" style="width: 400px" mapping="coa_id" display="coa_name" data-options="editable:false, valueField:'id', textField:'text' , prompt: 'NONE'" >
+				<input id="pnl_editdetilform-txt_billoutdetil_descr" class="easyui-textbox" mapping="billoutdetil_descr"  maxlength="255"  style="width: 400px" data-options="multiline:false , required: true, invalidMessage: 'Descr harus diisi' ">
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>
 
 		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Total Item</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editdetilform-txt_billoutdetil_totalitem" class="easyui-numberbox" mapping="billoutdetil_totalitem" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  ">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Total Qty</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editdetilform-txt_billoutdetil_totalqty" class="easyui-numberbox" mapping="billoutdetil_totalqty" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  ">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Gross Sales</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editdetilform-txt_billoutdetil_salesgross" class="easyui-numberbox" mapping="billoutdetil_salesgross" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  ">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Dicount</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editdetilform-txt_billoutdetil_discount" class="easyui-numberbox" mapping="billoutdetil_discount" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  ">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Sub Total</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editdetilform-txt_billoutdetil_subtotal" class="easyui-numberbox" mapping="billoutdetil_subtotal" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  ">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">PPh</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editdetilform-txt_billoutdetil_pph" class="easyui-numberbox" mapping="billoutdetil_pph" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  ">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Sales Nett</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editdetilform-txt_billoutdetil_nett" class="easyui-numberbox" mapping="billoutdetil_nett" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  ">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">PPN</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editdetilform-txt_billoutdetil_ppn" class="easyui-numberbox" mapping="billoutdetil_ppn" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  ">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Total</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editdetilform-txt_billoutdetil_total" class="easyui-numberbox" mapping="billoutdetil_total" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  ">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Additional Cost</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editdetilform-txt_billoutdetil_totaladdcost" class="easyui-numberbox" mapping="billoutdetil_totaladdcost" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  ">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Paid</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editdetilform-txt_billoutdetil_dp" class="easyui-numberbox" mapping="billoutdetil_dp" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  ">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Payment Outstanding</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editdetilform-txt_billoutdetil_payment" class="easyui-numberbox" mapping="billoutdetil_payment" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  ">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<?=$this->Section('Item Accounts', true, true)?>
+		<div class="fgta_section_collapsible " style="display: none">
+					
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Budget Account</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editdetilform-cbo_accbudget_id" class="easyui-combo" style="width: 400px" mapping="accbudget_id" display="accbudget_name" data-options="editable:false, valueField:'id', textField:'text' , prompt: 'NONE', disabled: true" >
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Item COA</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_editdetilform-cbo_coa_id" class="easyui-combo" style="width: 400px" mapping="coa_id" display="coa_name" data-options="editable:false, valueField:'id', textField:'text' , prompt: 'NONE', disabled: true" >
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		</div>
+					
+		<div class="form_row" style="display: none">
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Bill ID</div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editdetilform-txt_billout_id" class="easyui-textbox" mapping="billout_id"  maxlength="14"  style="width: 400px" data-options="multiline:false  , disabled: true">
+				<input id="pnl_editdetilform-txt_billout_id" class="easyui-textbox" mapping="billout_id"  maxlength="30"  style="width: 400px" data-options="multiline:false  , disabled: true">
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>

@@ -21,6 +21,8 @@ CREATE TABLE IF NOT EXISTS `trn_orderin` (
 	`ae_empl_id` varchar(14)  , 
 	`trxmodel_id` varchar(10)  , 
 	`project_id` varchar(30)  , 
+	`orderin_ishasdp` tinyint(1) NOT NULL DEFAULT 0, 
+	`orderin_dpvalue` decimal(4, 2) NOT NULL DEFAULT 0, 
 	`ppn_taxtype_id` varchar(10)  , 
 	`ppn_taxvalue` decimal(4, 2) NOT NULL DEFAULT 0, 
 	`ppn_include` tinyint(1) NOT NULL DEFAULT 0, 
@@ -85,7 +87,9 @@ ALTER TABLE `trn_orderin` ADD COLUMN IF NOT EXISTS  `dept_id` varchar(30) NOT NU
 ALTER TABLE `trn_orderin` ADD COLUMN IF NOT EXISTS  `ae_empl_id` varchar(14)   AFTER `dept_id`;
 ALTER TABLE `trn_orderin` ADD COLUMN IF NOT EXISTS  `trxmodel_id` varchar(10)   AFTER `ae_empl_id`;
 ALTER TABLE `trn_orderin` ADD COLUMN IF NOT EXISTS  `project_id` varchar(30)   AFTER `trxmodel_id`;
-ALTER TABLE `trn_orderin` ADD COLUMN IF NOT EXISTS  `ppn_taxtype_id` varchar(10)   AFTER `project_id`;
+ALTER TABLE `trn_orderin` ADD COLUMN IF NOT EXISTS  `orderin_ishasdp` tinyint(1) NOT NULL DEFAULT 0 AFTER `project_id`;
+ALTER TABLE `trn_orderin` ADD COLUMN IF NOT EXISTS  `orderin_dpvalue` decimal(4, 2) NOT NULL DEFAULT 0 AFTER `orderin_ishasdp`;
+ALTER TABLE `trn_orderin` ADD COLUMN IF NOT EXISTS  `ppn_taxtype_id` varchar(10)   AFTER `orderin_dpvalue`;
 ALTER TABLE `trn_orderin` ADD COLUMN IF NOT EXISTS  `ppn_taxvalue` decimal(4, 2) NOT NULL DEFAULT 0 AFTER `ppn_taxtype_id`;
 ALTER TABLE `trn_orderin` ADD COLUMN IF NOT EXISTS  `ppn_include` tinyint(1) NOT NULL DEFAULT 0 AFTER `ppn_taxvalue`;
 ALTER TABLE `trn_orderin` ADD COLUMN IF NOT EXISTS  `pph_taxtype_id` varchar(10)   AFTER `ppn_include`;
@@ -141,7 +145,9 @@ ALTER TABLE `trn_orderin` MODIFY COLUMN IF EXISTS  `dept_id` varchar(30) NOT NUL
 ALTER TABLE `trn_orderin` MODIFY COLUMN IF EXISTS  `ae_empl_id` varchar(14)   AFTER `dept_id`;
 ALTER TABLE `trn_orderin` MODIFY COLUMN IF EXISTS  `trxmodel_id` varchar(10)   AFTER `ae_empl_id`;
 ALTER TABLE `trn_orderin` MODIFY COLUMN IF EXISTS  `project_id` varchar(30)   AFTER `trxmodel_id`;
-ALTER TABLE `trn_orderin` MODIFY COLUMN IF EXISTS  `ppn_taxtype_id` varchar(10)   AFTER `project_id`;
+ALTER TABLE `trn_orderin` MODIFY COLUMN IF EXISTS  `orderin_ishasdp` tinyint(1) NOT NULL DEFAULT 0 AFTER `project_id`;
+ALTER TABLE `trn_orderin` MODIFY COLUMN IF EXISTS  `orderin_dpvalue` decimal(4, 2) NOT NULL DEFAULT 0 AFTER `orderin_ishasdp`;
+ALTER TABLE `trn_orderin` MODIFY COLUMN IF EXISTS  `ppn_taxtype_id` varchar(10)   AFTER `orderin_dpvalue`;
 ALTER TABLE `trn_orderin` MODIFY COLUMN IF EXISTS  `ppn_taxvalue` decimal(4, 2) NOT NULL DEFAULT 0 AFTER `ppn_taxtype_id`;
 ALTER TABLE `trn_orderin` MODIFY COLUMN IF EXISTS  `ppn_include` tinyint(1) NOT NULL DEFAULT 0 AFTER `ppn_taxvalue`;
 ALTER TABLE `trn_orderin` MODIFY COLUMN IF EXISTS  `pph_taxtype_id` varchar(10)   AFTER `ppn_include`;
@@ -292,6 +298,7 @@ ALTER TABLE `trn_orderinitem` ADD CONSTRAINT `fk_trn_orderinitem_trn_orderin` FO
 
 CREATE TABLE IF NOT EXISTS `trn_orderinterm` (
 	`orderinterm_id` varchar(14) NOT NULL , 
+	`orderintermtype_id` varchar(17)  , 
 	`orderinterm_descr` varchar(255)  , 
 	`orderinterm_days` int(4) NOT NULL DEFAULT 0, 
 	`orderinterm_dtfrometa` date NOT NULL , 
@@ -311,7 +318,8 @@ ENGINE=InnoDB
 COMMENT='Term permbayaran orderin';
 
 
-ALTER TABLE `trn_orderinterm` ADD COLUMN IF NOT EXISTS  `orderinterm_descr` varchar(255)   AFTER `orderinterm_id`;
+ALTER TABLE `trn_orderinterm` ADD COLUMN IF NOT EXISTS  `orderintermtype_id` varchar(17)   AFTER `orderinterm_id`;
+ALTER TABLE `trn_orderinterm` ADD COLUMN IF NOT EXISTS  `orderinterm_descr` varchar(255)   AFTER `orderintermtype_id`;
 ALTER TABLE `trn_orderinterm` ADD COLUMN IF NOT EXISTS  `orderinterm_days` int(4) NOT NULL DEFAULT 0 AFTER `orderinterm_descr`;
 ALTER TABLE `trn_orderinterm` ADD COLUMN IF NOT EXISTS  `orderinterm_dtfrometa` date NOT NULL  AFTER `orderinterm_days`;
 ALTER TABLE `trn_orderinterm` ADD COLUMN IF NOT EXISTS  `orderinterm_dt` date NOT NULL  AFTER `orderinterm_dtfrometa`;
@@ -322,7 +330,8 @@ ALTER TABLE `trn_orderinterm` ADD COLUMN IF NOT EXISTS  `orderin_totalpayment` d
 ALTER TABLE `trn_orderinterm` ADD COLUMN IF NOT EXISTS  `orderin_id` varchar(30) NOT NULL  AFTER `orderin_totalpayment`;
 
 
-ALTER TABLE `trn_orderinterm` MODIFY COLUMN IF EXISTS  `orderinterm_descr` varchar(255)   AFTER `orderinterm_id`;
+ALTER TABLE `trn_orderinterm` MODIFY COLUMN IF EXISTS  `orderintermtype_id` varchar(17)   AFTER `orderinterm_id`;
+ALTER TABLE `trn_orderinterm` MODIFY COLUMN IF EXISTS  `orderinterm_descr` varchar(255)   AFTER `orderintermtype_id`;
 ALTER TABLE `trn_orderinterm` MODIFY COLUMN IF EXISTS  `orderinterm_days` int(4) NOT NULL DEFAULT 0 AFTER `orderinterm_descr`;
 ALTER TABLE `trn_orderinterm` MODIFY COLUMN IF EXISTS  `orderinterm_dtfrometa` date NOT NULL  AFTER `orderinterm_days`;
 ALTER TABLE `trn_orderinterm` MODIFY COLUMN IF EXISTS  `orderinterm_dt` date NOT NULL  AFTER `orderinterm_dtfrometa`;
@@ -334,8 +343,10 @@ ALTER TABLE `trn_orderinterm` MODIFY COLUMN IF EXISTS  `orderin_id` varchar(30) 
 
 
 
+ALTER TABLE `trn_orderinterm` ADD KEY IF NOT EXISTS `orderintermtype_id` (`orderintermtype_id`);
 ALTER TABLE `trn_orderinterm` ADD KEY IF NOT EXISTS `orderin_id` (`orderin_id`);
 
+ALTER TABLE `trn_orderinterm` ADD CONSTRAINT `fk_trn_orderinterm_mst_orderintermtype` FOREIGN KEY IF NOT EXISTS  (`orderintermtype_id`) REFERENCES `mst_orderintermtype` (`orderintermtype_id`);
 ALTER TABLE `trn_orderinterm` ADD CONSTRAINT `fk_trn_orderinterm_trn_orderin` FOREIGN KEY IF NOT EXISTS (`orderin_id`) REFERENCES `trn_orderin` (`orderin_id`);
 
 

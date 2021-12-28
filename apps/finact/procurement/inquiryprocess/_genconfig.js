@@ -8,12 +8,12 @@ module.exports = {
 	autoid: true,
 	idprefix: 'NQ', 
 	printing: true,	
-	// icon : "icon-inquiry-white.svg",
-	// backcolor: "#812640",
-	// committer: true,
-	// approval: true,
-	// dept_id_field: 'user_dept_id',
-	// doc_id: 'INQUIRY',
+	icon : "icon-inquiry-white.svg",
+	backcolor: "#812640",
+	committer: true,
+	approval: true,
+	dept_id_field: 'user_dept_id',
+	doc_id: 'INQUIRY',
 
 	persistent: {
 		'trn_inquiry': {
@@ -21,9 +21,10 @@ module.exports = {
 			primarykeys: ['inquiry_id'],
 			data: {
 				inquiry_id: { text: 'ID', type: dbtype.varchar(30), null: false },
+
 				inquirytype_id: {
-					text: 'Inquiry Type', type: dbtype.varchar(14), null: false, 
-					options: { required: true, invalidMessage: 'type inquiry harus diisi', disabled: true },
+					text: 'Inquiry Type', type: dbtype.varchar(14), null: false, suppresslist: true,
+					options: { required: true, invalidMessage: 'type inquiry harus diisi' },
 					comp: comp.Combo({
 						table: 'mst_inquirytype',
 						field_value: 'inquirytype_id', field_display: 'inquirytype_name',
@@ -32,7 +33,9 @@ module.exports = {
 					
 
 				},
+
 				inquiry_descr: { text: 'Descr', type: dbtype.varchar(255), options: { required: true, invalidMessage: 'Descr harus diisi' } },
+
 				inquiry_dtstart: {text:'Date Start', type: dbtype.date, null:false},
 				inquiry_dtend: {text:'Date End', type: dbtype.date, null:false, suppresslist: true},
 
@@ -58,7 +61,6 @@ module.exports = {
 				inquiry_isadvance: { text: 'Request Advance Payment', type: dbtype.boolean, null: false, default: '0', suppresslist: true, options: {labelWidth: '300px'} },
 
 				project_id: {
-					section: section.Begin('Budget'),  // , 'defbottomborder'
 					text: 'Project', type: dbtype.varchar(30), null: false,
 					options: { required: true, invalidMessage: 'Project harus diisi', prompt: '-- PILIH --' },
 					comp: comp.Combo({
@@ -67,6 +69,7 @@ module.exports = {
 						api: 'finact/master/project/list'
 					})
 				},
+
 
 				projecttask_id: {
 					text: 'Project Task', type: dbtype.varchar(14), null: true, suppresslist: true,
@@ -77,8 +80,6 @@ module.exports = {
 						api: 'finact/master/projecttask/list-byproject'
 					})
 				},
-
-				inquiry_isunbudgetted: { text: 'UnBudgetted', type: dbtype.boolean, null: false, default: '0', suppresslist: true, options: {labelWidth: '300px'} },
 
 				projbudget_id: {
 					text: 'Budget', type: dbtype.varchar(30), null:true,  suppresslist: true,
@@ -91,7 +92,6 @@ module.exports = {
 				},
 
 				projbudgettask_id: {
-					section: section.End(),
 					text: 'Budget Task', type: dbtype.varchar(14), null:true,  suppresslist: true,
 					options: { prompt: 'NONE' },
 					comp: comp.Combo({
@@ -101,9 +101,9 @@ module.exports = {
 					})
 				},
 
+				inquiry_isunbudgetted: { text: 'UnBudgetted', type: dbtype.boolean, null: false, default: '0', suppresslist: true, options: {labelWidth: '300px'} },
 
 				site_id: {
-					section: section.Begin('Deliver'),  // , 'defbottomborder'
 					text:'Deliver To', type: dbtype.varchar(30), null:false, suppresslist: true,
 					options:{required:true,invalidMessage:'Site harus diisi', prompt:'-- PILIH --'},
 					comp: comp.Combo({
@@ -114,14 +114,11 @@ module.exports = {
 				deliver_siteaddress: {text:'To Address', type: dbtype.varchar(250), null:true, suppresslist: true, uppercase: false},
 				deliver_city: {text:'To City', type: dbtype.varchar(60), null:true, uppercase: true, suppresslist: true},
 				deliver_upname: {text:'To UP Name', type: dbtype.varchar(60), null:true, uppercase: true, suppresslist: true},
-				deliver_uptelp: {
-					section: section.End(),
-					text:'To UP Telp', type: dbtype.varchar(60), null:true, uppercase: true, suppresslist: true
-				},
+				deliver_uptelp: {text:'To UP Telp', type: dbtype.varchar(60), null:true, uppercase: true, suppresslist: true},
 
 
 				inquirymodel_id: { 
-					section: section.Begin('Information'),  // , 'defbottomborder'
+					section: section.Begin('Information'),
 					text: 'Inquiry Model', type: dbtype.varchar(1),  null: false, suppresslist: true, 
 					reference: {table: 'mst_inquirymodel', field_value: 'inquirymodel_id', field_display:'inquirymodel_name',  field_display_name:'inquirymodel_name'}, 
 					options: { required: true, invalidMessage: 'Inquiry Model harus diisi', disabled: true } 
@@ -180,10 +177,10 @@ module.exports = {
 					options: { required: true, invalidMessage: 'Item Manage Model harus diisi', disabled: true } 
 				},
 
+
 				inquiry_rejectnotes: { text: 'Reject Notes', type: dbtype.varchar(255), null: true,  unset:true, suppresslist: true, options:{disabled: true} },
 
 				doc_id: {
-					
 					text:'Doc', type: dbtype.varchar(30), null:false, suppresslist: true,
 					options: {required:true, invalidMessage:'ID harus diisi' },
 					comp: comp.Combo({
@@ -192,34 +189,20 @@ module.exports = {
 						api: 'ent/organisation/docs/list'
 					})				
 				},
-				
-				partner_id: {
-					text:'Partner', type: dbtype.varchar(30), null:true, suppresslist: true,
-					options: { prompt: 'NONE', disabled: true } ,
-					comp: comp.Combo({
-						table: 'mst_partner', 
-						field_value: 'partner_id', field_display: 'partner_name',  field_display_name: 'partner_name',
-						api: 'ent/affiliation/partner/list-approved'})
-				},
 
-				inquiry_isemplaspartner: { text: 'Responsible Empl reg as partner', type: dbtype.boolean, null: false, default: '0',suppresslist: true,  options: { labelWidth: '300px' } },
-				inquiry_isautogenerated: { text: 'Auto Generated', type: dbtype.boolean, null: false, default: '0', unset:true, suppresslist: true, options: { labelWidth: '300px', disabled: true } },
-				inquiry_isitemdeptuser: { text: 'Item Related to User Dept', type: dbtype.boolean, null: false, default: '0',  suppresslist: true,options: { labelWidth: '300px' , disabled: true } },
-				inquiry_isitemdeptowner: { text: 'Item Related to Owner Dept', type: dbtype.boolean, null: false, default: '0', suppresslist: true, options: { labelWidth: '300px',  disabled: true } },
-				inquiry_istoberequest: { text: 'Mark As To be Request', type: dbtype.boolean, null: false, default: '0',  suppresslist: true,options: { labelWidth: '300px',  disabled: true } },
 				inquiry_selectfield: {text:'Doc Version', type: dbtype.varchar(6), null:false, default:'000000', suppresslist: true, options:{disabled:true}},
 				inquiry_version: {text:'Doc Version', type: dbtype.int(4), null:false, default:'0', suppresslist: true, options:{disabled:true}},
+				inquiry_isdateinterval: { text: 'Date Interval', type: dbtype.boolean, null: false, default: '0', suppresslist: true, hidden: true, options: {disabled: true} },
 				inquiry_maxadvancevalue: { text: 'Max Advance Value', type: dbtype.decimal(12,0), null: false, default: '0', suppresslist: true, options:{disabled:true} },
-				inquiry_isallowadvance: { text: 'Allow using Advance Request', type: dbtype.boolean, null: false, default: '0',suppresslist: true,  options: { labelWidth: '300px', disabled:true } },
-				inquiry_isdateinterval: { 
+				inquiry_isallowadvance: { 
 					section: section.End(),
-					text: 'Date Interval', type: dbtype.boolean, null: false, default: '0', suppresslist: true, options: {disabled: true} 
+					text: 'Allow using Advance Request', type: dbtype.boolean, null: false, default: '0',suppresslist: true,  options: { labelWidth: '300px', disabled:true } 
 				},
-				
-				
-				
+
+
+
 				inquiry_iscommit: {
-					section: section.Begin('Status'),  // , 'defbottomborder'
+					section: section.Begin('Status'),
 					text:'Commit', type: dbtype.boolean, null:false, default:'0', unset:true, suppresslist: true, options:{disabled:true}},
 				inquiry_commitby: {text:'CommitBy', type: dbtype.varchar(14), suppresslist: true, unset:true, options:{disabled:true}, hidden: true, lookup:'user'},
 				inquiry_commitdate: {text:'CommitDate', type: dbtype.datetime, suppresslist: true, unset:true, comp:comp.Textbox(), options:{disabled:true}, hidden: true},	
@@ -240,31 +223,34 @@ module.exports = {
 				inquiry_iscomplete: {text:'Complete', type: dbtype.boolean, null:false, default:'0', unset:true, options:{disabled:true}},
 				inquiry_isclose: { text: 'Close', type: dbtype.boolean, null: false, default: '0', unset:true, suppresslist: true, options: { disabled: true } },
 				inquiry_closeby: { text: 'Close By', type: dbtype.varchar(14), suppresslist: true, unset:true, options: { disabled: true }, hidden: true, lookup:'user'},
-				inquiry_closedate: { 
-					section: section.End(),
-					text: 'Close Date', type: dbtype.datetime, suppresslist: true, unset:true, comp: comp.Textbox(), options: { disabled: true } , hidden: true
+				inquiry_closedate: { text: 'Close Date', type: dbtype.datetime, suppresslist: true, unset:true, comp: comp.Textbox(), options: { disabled: true } , hidden: true},
+				inquiry_isautogenerated: { text: 'Auto Generated', type: dbtype.boolean, null: false, default: '0', unset:true, suppresslist: true, options: { labelWidth: '300px', disabled: true } },
+				inquiry_isitemdeptuser: { text: 'Item Related to User Dept', type: dbtype.boolean, null: false, default: '0',  suppresslist: true,options: { labelWidth: '300px' , disabled: true } },
+				inquiry_isitemdeptowner: { text: 'Item Related to Owner Dept', type: dbtype.boolean, null: false, default: '0', suppresslist: true, options: { labelWidth: '300px',  disabled: true } },
+				inquiry_istoberequest: { 
+					section: section.End(),	
+					text: 'Mark As To be Request', type: dbtype.boolean, null: false, default: '0',  suppresslist: true,options: { labelWidth: '300px',  disabled: true } 
 				},
-		
-		
 			},
 
 			defaultsearch: ['inquiry_id', 'inquiry_descr'],
-			// additionalsearch: {
-			// 	'owner_dept_id' : "A.owner_dept_id = :owner_dept_id",
-			// 	'inquiry_istoberequest' : "A.inquiry_istoberequest = '1'",
-			// }
+			additionalsearch: {
+				'owner_dept_id' : "A.owner_dept_id = :owner_dept_id",
+				'inquiry_istoberequest' : "A.inquiry_istoberequest = '1'",
+			}
 
 		},
 
-		'trn_inquirydetil' : {
-			comment: 'Itemclass yang akan di-inquiry',
-			primarykeys: ['inquirydetil_id'],		
+
+		'trn_inquiryitem' : {
+			comment: 'Breakdown Item yang diinquiry',
+			primarykeys: ['inquiryitem_id'],		
 			data: {
-				inquirydetil_id: {text:'ID', type: dbtype.varchar(14), null:false, suppresslist: true},
+				inquiryitem_id: {text:'ID', type: dbtype.varchar(14), null:false, suppresslist: true},
 
 				itemasset_id: {
 					text:'Asset', type: dbtype.varchar(14), null:true, suppresslist: true,
-					options: { prompt: 'NONE', disabled: true } ,
+					options: { prompt: 'NONE' } ,
 					comp: comp.Combo({
 						table: 'mst_itemasset', 
 						field_value: 'itemasset_id', field_display: 'itemasset_name', field_display_name: 'itemasset_name', 
@@ -273,7 +259,7 @@ module.exports = {
 
 				item_id: {
 					text:'Item', type: dbtype.varchar(14), null:true, suppresslist: true,
-					options: { prompt: 'NONE', disabled: true } ,
+					options: { prompt: 'NONE' , disabled: true} ,
 					comp: comp.Combo({
 						table: 'mst_item', 
 						field_value: 'item_id', field_display: 'item_name', field_display_name: 'item_name', 
@@ -289,6 +275,15 @@ module.exports = {
 						api: 'finact/items/itemstock/list'})					
 				},
 				
+				partner_id: {
+					text:'Partner', type: dbtype.varchar(30), null:true, suppresslist: true,
+					options: { prompt: 'NONE' , disabled: true} ,
+					comp: comp.Combo({
+						table: 'mst_partner', 
+						field_value: 'partner_id', field_display: 'partner_name',  field_display_name: 'partner_name',
+						api: 'ent/affiliation/partner/list-approved'})
+				},
+
 				itemclass_id: {
 					text:'Class', type: dbtype.varchar(14), null:false,
 					options: { required: true, invalidMessage: 'Class harus diisi', disabled: true } ,
@@ -298,12 +293,103 @@ module.exports = {
 						api: 'finact/items/itemclass/list'})					
 				},
 
-				inquirydetil_descr: { text: 'Descr', type: dbtype.varchar(255), null:true, suppresslist: true, options:{disabled: true}},
+				inquirydetil_descr: { text: 'Descr', type: dbtype.varchar(255), null:true, suppresslist: true, options: {disabled: true}},
 
-				inquirydetil_qty: { text: 'Qty', type: dbtype.int(4), null:false, default:0, options:{disabled: true}},
-				inquirydetil_days: { text: 'Days', type: dbtype.int(4), null:false, default:0, options:{disabled: true}},
-				inquirydetil_task: { text: 'Task', type: dbtype.int(4), null:false, default:0, options:{disabled: true}},
+				inquirydetil_qty: { text: 'Qty', type: dbtype.int(4), null:false, default:0, options: {disabled: true}},
+				inquirydetil_days: { text: 'Days', type: dbtype.int(4), null:false, default:0, options: {disabled: true}},
+				inquirydetil_task: { text: 'Task', type: dbtype.int(4), null:false, default:0, options: {disabled: true}},
 
+
+				inquirydetil_qty_proc: { text: 'Qty Process', type: dbtype.int(4), null:false, default:0},
+				proc_trxmodel_id: { 
+					text: 'Process Followup', type: dbtype.varchar(10), null: false, suppresslist: true,
+					options: { required: true, invalidMessage: 'Model Trx harus diisi' }, 
+					comp: comp.Combo({
+						table: 'mst_trxmodel',
+						field_value: 'trxmodel_id', field_display: 'trxmodel_name', field_display_name: 'proc_trxmodel_name',
+						api: 'finact/master/trxmodel/list-selector'
+					})				
+				},
+
+
+
+
+				inquirydetil_qty_outstd: { text: 'Qty Outstanding', type: dbtype.int(4), null:false, default:0},
+				outstd_trxmodel_id: { 
+					text: 'Outstanding Followup', type: dbtype.varchar(10), null: false, suppresslist: true,
+					options: { required: true, invalidMessage: 'Model Trx harus diisi' }, 
+					comp: comp.Combo({
+						table: 'mst_trxmodel',
+						field_value: 'trxmodel_id', field_display: 'trxmodel_name', field_display_name: 'outstd_trxmodel_name',
+						api: 'finact/master/trxmodel/list-selector'
+					})				
+				},
+
+
+				inquirydetil_estrate: { text: 'Est.Rate', type: dbtype.decimal(12,0), null:false, default:0},
+				inquirydetil_estvalue: { text: 'Est.Value', type: dbtype.int(14,0), null:false, default:0},
+
+
+				projbudgetdet_id: {
+					text: 'Budget Account', type: dbtype.varchar(30), null: true, suppresslist: true,
+					options: { prompt: 'NONE', disabled: true } ,
+					comp: comp.Combo({
+						table: 'mst_projbudgetdet',
+						field_value: 'projbudgetdet_id', field_display: 'projbudgetdet_descr',
+						api: 'finact/budget/projbudget/list-accbudget-byitemclass'
+					})
+				},
+
+				inquirydetil_isunbudget: { text: 'UnBudgettetd', type: dbtype.boolean, null: false, default: '0', suppresslist: true, options: {labelWidth:'200px', disabled: true} },
+				inquirydetil_isallowoverbudget: { text: 'Over Budget', type: dbtype.boolean, null: false, default: '0', suppresslist: true, options: {labelWidth:'200px', disabled: true} },
+
+				accbudget_id: { text: 'Acc Budget', type: dbtype.varchar(20),  null: true, suppresslist: true, reference: {table: 'mst_accbudget', field_value: 'accbudget_id'}, options: {disabled: true}},
+				coa_id: { text: 'COA', type: dbtype.varchar(17),  null: true, suppresslist: true, reference: {table: 'mst_coa', field_value: 'coa_id'}, options: {disabled: true}},
+
+				inquirydetil_id: { 
+					text: 'Inquiry Detil', type: dbtype.varchar(14),  null: false, suppresslist: true, hidden: true,
+					reference: {table: 'trn_inquirydetil', field_value: 'inquirydetil_id', field_display:'inquirydetil_descr',  field_display_name:'inquirydetil_descr'}, 
+					options: { required: true, invalidMessage: 'Inquiry Detil harus diisi', disabled: true } 
+				},
+
+				inquiry_id: {text:'Inquiry', type: dbtype.varchar(14), null:false, hidden: true},		
+			}
+		},
+
+
+		'trn_inquirydetil' : {
+			comment: 'Itemclass yang akan di-inquiry',
+			primarykeys: ['inquirydetil_id'],		
+			data: {
+				inquirydetil_id: {text:'ID', type: dbtype.varchar(14), null:false, suppresslist: true},
+
+				itemasset_id: {
+					text:'Asset', type: dbtype.varchar(14), null:true, suppresslist: true,
+					options: { prompt: 'NONE' } ,
+					comp: comp.Combo({
+						table: 'mst_itemasset', 
+						field_value: 'itemasset_id', field_display: 'itemasset_name', field_display_name: 'itemasset_name', 
+						api: 'finact/items/itemasset/list'})					
+				},
+
+				item_id: {
+					text:'Item', type: dbtype.varchar(14), null:true, suppresslist: true,
+					options: { prompt: 'NONE' } ,
+					comp: comp.Combo({
+						table: 'mst_item', 
+						field_value: 'item_id', field_display: 'item_name', field_display_name: 'item_name', 
+						api: 'finact/items/item/list'})					
+				},
+
+				itemstock_id: {
+					text:'Item Stock', type: dbtype.varchar(14), null:true, suppresslist: true,
+					options: { prompt: 'NONE' } ,
+					comp: comp.Combo({
+						table: 'mst_itemstock', 
+						field_value: 'itemstock_id', field_display: 'itemstock_name', field_display_name: 'itemstock_name', 
+						api: 'finact/items/itemstock/list'})					
+				},
+				
 				partner_id: {
 					text:'Partner', type: dbtype.varchar(30), null:true, suppresslist: true,
 					options: { prompt: 'NONE' } ,
@@ -313,12 +399,24 @@ module.exports = {
 						api: 'ent/affiliation/partner/list-approved'})
 				},
 
+				itemclass_id: {
+					text:'Class', type: dbtype.varchar(14), null:false,
+					options: { required: true, invalidMessage: 'Class harus diisi' } ,
+					comp: comp.Combo({
+						table: 'mst_itemclass', 
+						field_value: 'itemclass_id', field_display: 'itemclass_name', field_display_name: 'itemclass_name', 
+						api: 'finact/items/itemclass/list'})					
+				},
+
+				inquirydetil_descr: { text: 'Descr', type: dbtype.varchar(255), null:true, suppresslist: true},
+
+				inquirydetil_qty: { text: 'Qty', type: dbtype.int(4), null:false, default:0},
+				inquirydetil_days: { text: 'Days', type: dbtype.int(4), null:false, default:0},
+				inquirydetil_task: { text: 'Task', type: dbtype.int(4), null:false, default:0},
 				inquirydetil_estrate: { text: 'Est.Rate', type: dbtype.decimal(12,0), null:false, default:0},
 				inquirydetil_estvalue: { text: 'Est.Value', type: dbtype.int(14,0), null:false, default:0},
-				inquirydetil_isadvproces: { text: 'Process as Advance', type: dbtype.boolean, null: false, default: '0', options: {labelWidth:'200px', disabled: true} },
 
 				projbudgetdet_id: {
-					section: section.Begin('Budget'),  // , 'defbottomborder'
 					text: 'Budget Account', type: dbtype.varchar(30), null: true, suppresslist: true,
 					options: { prompt: 'NONE' } ,
 					comp: comp.Combo({
@@ -328,17 +426,14 @@ module.exports = {
 					})
 				},
 
-				inquirydetil_isunbudget: { text: 'UnBudgettetd', type: dbtype.boolean, null: false, default: '0', options: {labelWidth:'200px'} },
-				inquirydetil_isallowoverbudget: { text: 'Over Budget', type: dbtype.boolean, null: false, default: '0', options: {labelWidth:'200px'} },
+				inquirydetil_isunbudget: { text: 'UnBudgettetd', type: dbtype.boolean, null: false, default: '0', suppresslist: true, options: {labelWidth:'200px'} },
+				inquirydetil_isallowoverbudget: { text: 'Over Budget', type: dbtype.boolean, null: false, default: '0', suppresslist: true, options: {labelWidth:'200px'} },
 
 				inquirydetil_qtyavailable: { text: 'Qty Available', type: dbtype.int(4), null:false, default:0, suppresslist: true, options: {disabled: true}},
 				accbudget_id: { text: 'Acc Budget', type: dbtype.varchar(20),  null: true, suppresslist: true, reference: {table: 'mst_accbudget', field_value: 'accbudget_id'}, options: {disabled: true}},
-				coa_id: { 
-					section: section.End(),
-					text: 'COA', type: dbtype.varchar(17),  null: true, suppresslist: true, reference: {table: 'mst_coa', field_value: 'coa_id'}, options: {disabled: true}
-				},
+				coa_id: { text: 'COA', type: dbtype.varchar(17),  null: true, suppresslist: true, reference: {table: 'mst_coa', field_value: 'coa_id'}, options: {disabled: true}},
 
-				inquiry_id: {text:'Inquiry', type: dbtype.varchar(14), null:false, hidden: true},		
+				inquiry_id: {text:'Inquiry', type: dbtype.varchar(14), null:false},		
 			}
 		},
 
@@ -372,7 +467,12 @@ module.exports = {
 	schema: {
 		header: 'trn_inquiry',
 		detils: {
-			'item': {title: 'Item', table: 'trn_inquirydetil', form: true, headerview: 'inquiry_descr' },
+			'item': {
+				title: 'Item', table: 'trn_inquiryitem', form: true, headerview: 'inquiry_descr',
+				editorHandler: 'inquiryprocess-itemform-hnd.mjs',
+				listHandler: 'inquiryprocess-itemgrid-hnd.mjs',
+			},
+			'detil': {title: 'Detil', table: 'trn_inquirydetil', form: true, headerview: 'inquiry_descr' },
 			'files': {title: 'Files', table: 'trn_inquiryfiles', form: true, headerview: 'inquiry_descr' }
 		}
 	}

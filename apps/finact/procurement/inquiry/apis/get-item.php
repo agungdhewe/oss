@@ -31,11 +31,12 @@ $API = new class extends inquiryBase {
 				[
 					"search" => " A.item_id LIKE CONCAT('%', :search, '%') OR A.item_name LIKE CONCAT('%', :search, '%') ",
 					"item_isdisabled" => " A.item_isdisabled = :item_isdisabled  " ,
-					"dept_id" => " A.dept_id ",
+					"dept_id" => " A.dept_id = :dept_id ",
 					"inquirytype_id" => null
 				]
 			);
 
+			$this->log($options->criteria);
 
 			$inquirytype_id = $options->criteria->inquirytype_id;
 			$this->db->query("

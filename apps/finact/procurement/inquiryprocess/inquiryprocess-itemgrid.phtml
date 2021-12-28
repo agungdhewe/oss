@@ -19,17 +19,21 @@
 	<div style="margin-top: 10px; margin-bottom: 15px">
 		<table id="pnl_edititemgrid-tbl_list" paging="true" cellspacing="0" width="100%" class="deftable">
 			<thead>
+				<?php
+				$customview = __DIR__.'/inquiryprocess-itemgrid-customview.phtml'; 
+				if (is_file($customview)) {
+					include $customview;
+				} else { ?>
 				<tr>
 <th type="check">chk</th>					
 					<th mapping="itemclass_name">itemclass_name</th>
 					<th mapping="inquirydetil_qty" style="text-align: right" formatter="row_format_number">inquirydetil_qty</th>
 					<th mapping="inquirydetil_days" style="text-align: right" formatter="row_format_number">inquirydetil_days</th>
 					<th mapping="inquirydetil_task" style="text-align: right" formatter="row_format_number">inquirydetil_task</th>
+					<th mapping="inquirydetil_qty_proc" style="text-align: right" formatter="row_format_number">inquirydetil_qty_proc</th>
+					<th mapping="inquirydetil_qty_outstd" style="text-align: right" formatter="row_format_number">inquirydetil_qty_outstd</th>
 					<th mapping="inquirydetil_estrate" style="text-align: right" formatter="row_format_number">inquirydetil_estrate</th>
 					<th mapping="inquirydetil_estvalue" style="text-align: right" formatter="row_format_number">inquirydetil_estvalue</th>
-					<th mapping="inquirydetil_isadvproces" type="checkbox">inquirydetil_isadvproces</th>
-					<th mapping="inquirydetil_isunbudget" type="checkbox">inquirydetil_isunbudget</th>
-					<th mapping="inquirydetil_isallowoverbudget" type="checkbox">inquirydetil_isallowoverbudget</th>
 
 					<th mapping=""></th>
 				</tr>
@@ -39,14 +43,14 @@
 					<td class="fgtable-head" style="width: 100px; text-align: right; border-bottom: 1px solid #000000">Qty</td>
 					<td class="fgtable-head" style="width: 100px; text-align: right; border-bottom: 1px solid #000000">Days</td>
 					<td class="fgtable-head" style="width: 100px; text-align: right; border-bottom: 1px solid #000000">Task</td>
+					<td class="fgtable-head" style="width: 100px; text-align: right; border-bottom: 1px solid #000000">Qty Process</td>
+					<td class="fgtable-head" style="width: 100px; text-align: right; border-bottom: 1px solid #000000">Qty Outstanding</td>
 					<td class="fgtable-head" style="width: 100px; text-align: right; border-bottom: 1px solid #000000">Est.Rate</td>
 					<td class="fgtable-head" style="width: 100px; text-align: right; border-bottom: 1px solid #000000">Est.Value</td>
-					<td class="fgtable-head" style="width: 100px; border-bottom: 1px solid #000000; text-align: center">Process as Advance</td>
-					<td class="fgtable-head" style="width: 100px; border-bottom: 1px solid #000000; text-align: center">UnBudgettetd</td>
-					<td class="fgtable-head" style="width: 100px; border-bottom: 1px solid #000000; text-align: center">Over Budget</td>
 
 					<td class="fgtable-head" style="border-bottom: 1px solid #000000; text-align: center">&nbsp;</td>
 				</tr>
+				<?php } ?>
 			</thead>
 		</table>
 	</div>

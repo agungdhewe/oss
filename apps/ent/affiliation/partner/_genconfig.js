@@ -157,10 +157,8 @@ module.exports = {
 				partnercontact_mobilephone: {text:'HP', type: dbtype.varchar(30), null:false, uppercase: true, options:{required:true,invalidMessage:'HP harus diisi'}},
 				partnercontact_email: {text:'Email', type: dbtype.varchar(150), null:false, uppercase: true, options:{required:true,validType: ['email'],invalidMessage:'Email harus diisi'}},
 				partnecontact_isdisabled: {text:'Disabled', type: dbtype.boolean, null:false, default:'0'},
-				partnecontact_iscontract: {text:'PIC - Contract', type: dbtype.boolean, null:false, default:'0'},
-				partnecontact_isinvoice: {text:'PIC - Invoice', type: dbtype.boolean, null:false, default:'0'},
-				partnecontact_isdisabled: {text:'Disabled', type: dbtype.boolean, null:false, default:'0'},
-
+				partnecontact_iscontract: {text:'PIC - Contract', type: dbtype.boolean, null:false, default:'0', options:{lablWidth:'300px'}},
+				partnecontact_isinvoice: {text:'PIC - Invoice', type: dbtype.boolean, null:false, default:'0', options:{lablWidth:'300px'}},
 				partner_id: {text:'Partner', type: dbtype.varchar(14), null:false, uppercase: true},
 			},
 			uniques: {

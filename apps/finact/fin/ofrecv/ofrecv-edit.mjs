@@ -2,6 +2,8 @@ var this_page_id;
 var this_page_options;
 
 import {fgta4slideselect} from  '../../../../../index.php/asset/fgta/framework/fgta4libs/fgta4slideselect.mjs'
+import * as hnd from  './ofrecv-edit-hnd.mjs'
+
 
 const btn_edit = $('#pnl_edit-btn_edit')
 const btn_save = $('#pnl_edit-btn_save')
@@ -12,40 +14,42 @@ const btn_commit = $('#pnl_edit-btn_commit')
 const btn_uncommit = $('#pnl_edit-btn_uncommit')
 			
 
+const btn_post = $('#pnl_edit-btn_post')
+
 
 
 const pnl_form = $('#pnl_edit-form')
 const obj = {
 	txt_jurnal_id: $('#pnl_edit-txt_jurnal_id'),
 	cbo_jurnaltype_id: $('#pnl_edit-cbo_jurnaltype_id'),
-	txt_jurnal_ref: $('#pnl_edit-txt_jurnal_ref'),
 	cbo_periodemo_id: $('#pnl_edit-cbo_periodemo_id'),
 	dt_jurnal_date: $('#pnl_edit-dt_jurnal_date'),
+	txt_jurnal_ref: $('#pnl_edit-txt_jurnal_ref'),
 	cbo_partner_id: $('#pnl_edit-cbo_partner_id'),
 	cbo_temprecv_id: $('#pnl_edit-cbo_temprecv_id'),
-	cbo_ar_jurnaldetil_id: $('#pnl_edit-cbo_ar_jurnaldetil_id'),
+	cbo_billout_id: $('#pnl_edit-cbo_billout_id'),
 	txt_jurnal_descr: $('#pnl_edit-txt_jurnal_descr'),
-	cbo_paymtype_id: $('#pnl_edit-cbo_paymtype_id'),
-	cbo_bankrekening_id: $('#pnl_edit-cbo_bankrekening_id'),
-	txt_paym_gironum: $('#pnl_edit-txt_paym_gironum'),
-	dt_paym_girodate: $('#pnl_edit-dt_paym_girodate'),
-	cbo_accfin_id: $('#pnl_edit-cbo_accfin_id'),
 	txt_jurnal_valfrg: $('#pnl_edit-txt_jurnal_valfrg'),
 	cbo_curr_id: $('#pnl_edit-cbo_curr_id'),
 	txt_jurnal_valfrgrate: $('#pnl_edit-txt_jurnal_valfrgrate'),
 	txt_jurnal_validr: $('#pnl_edit-txt_jurnal_validr'),
+	cbo_paymtype_id: $('#pnl_edit-cbo_paymtype_id'),
+	cbo_bankrekening_id: $('#pnl_edit-cbo_bankrekening_id'),
+	txt_paym_gironum: $('#pnl_edit-txt_paym_gironum'),
+	dt_paym_girodate: $('#pnl_edit-dt_paym_girodate'),
 	cbo_coa_id: $('#pnl_edit-cbo_coa_id'),
+	cbo_accfin_id: $('#pnl_edit-cbo_accfin_id'),
+	cbo_ar_jurnal_id: $('#pnl_edit-cbo_ar_jurnal_id'),
+	cbo_ar_jurnaldetil_id: $('#pnl_edit-cbo_ar_jurnaldetil_id'),
 	cbo_dept_id: $('#pnl_edit-cbo_dept_id'),
 	cbo_jurnalsource_id: $('#pnl_edit-cbo_jurnalsource_id'),
-	txt_jurnal_version: $('#pnl_edit-txt_jurnal_version'),
-	chk_jurnal_iscommit: $('#pnl_edit-chk_jurnal_iscommit'),
-	txt_jurnal_commitby: $('#pnl_edit-txt_jurnal_commitby'),
-	txt_jurnal_commitdate: $('#pnl_edit-txt_jurnal_commitdate'),
-	chk_jurnal_ispost: $('#pnl_edit-chk_jurnal_ispost'),
-	txt_jurnal_postby: $('#pnl_edit-txt_jurnal_postby'),
-	txt_jurnal_postdate: $('#pnl_edit-txt_jurnal_postdate'),
-	chk_jurnal_isclose: $('#pnl_edit-chk_jurnal_isclose'),
-	chk_jurnal_isagingclose: $('#pnl_edit-chk_jurnal_isagingclose')
+	txt_tjurnalor_version: $('#pnl_edit-txt_tjurnalor_version'),
+	chk_tjurnalor_iscommit: $('#pnl_edit-chk_tjurnalor_iscommit'),
+	txt_tjurnalor_commitby: $('#pnl_edit-txt_tjurnalor_commitby'),
+	txt_tjurnalor_commitdate: $('#pnl_edit-txt_tjurnalor_commitdate'),
+	chk_tjurnalor_ispost: $('#pnl_edit-chk_tjurnalor_ispost'),
+	txt_tjurnalor_postby: $('#pnl_edit-txt_tjurnalor_postby'),
+	txt_tjurnalor_postdate: $('#pnl_edit-txt_tjurnalor_postdate')
 }
 
 
@@ -54,7 +58,8 @@ const rec_commitdate = $('#pnl_edit_record-commitdate');
 		
 
 
-let form = {}
+let form;
+let rowdata;
 
 export async function init(opt) {
 	this_page_id = opt.id;
@@ -75,7 +80,7 @@ export async function init(opt) {
 	form = new global.fgta4form(pnl_form, {
 		primary: obj.txt_jurnal_id,
 		autoid: true,
-		logview: 'trn_jurnal',
+		logview: 'trn_tjurnalor',
 		btn_edit: disableedit==true? $('<a>edit</a>') : btn_edit,
 		btn_save: disableedit==true? $('<a>save</a>') : btn_save,
 		btn_delete: disableedit==true? $('<a>delete</a>') : btn_delete,		
@@ -96,19 +101,24 @@ export async function init(opt) {
 	})
 
 
-
-	btn_print.linkbutton({
-		onClick: () => {
-			btn_print_click();
-		}
-	});	
-	
+	btn_print.linkbutton({ onClick: () => { btn_print_click(); } });	
 	
 
 	btn_commit.linkbutton({ onClick: () => { btn_action_click({ action: 'commit' }); } });
 	btn_uncommit.linkbutton({ onClick: () => { btn_action_click({ action: 'uncommit' }); } });			
 			
 
+	btn_post.linkbutton({ onClick: () => { btn_action_click({ action: 'post' }); } });
+
+
+	obj.txt_jurnal_valfrg.numberbox({onChange: (newvalue, oldvalue) => { 
+		if (typeof hnd.form_value_recalculate==='function') {hnd.form_value_recalculate(newvalue, oldvalue)} 
+	}});
+	
+	obj.txt_jurnal_valfrgrate.numberbox({onChange: (newvalue, oldvalue) => { 
+		if (typeof hnd.form_value_recalculate==='function') {hnd.form_value_recalculate(newvalue, oldvalue)} 
+	}});
+	
 
 
 
@@ -124,11 +134,25 @@ export async function init(opt) {
 			{mapping: 'jurnaltype_id', text: 'jurnaltype_id'},
 			{mapping: 'jurnaltype_name', text: 'jurnaltype_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+			criteria.jurnalmodel_id = 'OR';
+			if (typeof hnd.cbo_jurnaltype_id_dataloading === 'function') {
+				hnd.cbo_jurnaltype_id_dataloading(criteria);
+			}	
+		},
 		OnDataLoaded : (result, options) => {
 				
+			if (typeof hnd.cbo_jurnaltype_id_dataloaded === 'function') {
+				hnd.cbo_jurnaltype_id_dataloaded(result, options);
+			}
 		},
-		OnSelected: (value, display, record) => {}
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_jurnaltype_id_selected === 'function') {
+					hnd.cbo_jurnaltype_id_selected(value, display, record, args);
+				}
+			}
+		}
 	})				
 				
 	new fgta4slideselect(obj.cbo_periodemo_id, {
@@ -142,11 +166,25 @@ export async function init(opt) {
 			{mapping: 'periodemo_id', text: 'periodemo_id'},
 			{mapping: 'periodemo_name', text: 'periodemo_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+			
+			if (typeof hnd.cbo_periodemo_id_dataloading === 'function') {
+				hnd.cbo_periodemo_id_dataloading(criteria);
+			}	
+		},
 		OnDataLoaded : (result, options) => {
 				
+			if (typeof hnd.cbo_periodemo_id_dataloaded === 'function') {
+				hnd.cbo_periodemo_id_dataloaded(result, options);
+			}
 		},
-		OnSelected: (value, display, record) => {}
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_periodemo_id_selected === 'function') {
+					hnd.cbo_periodemo_id_selected(value, display, record, args);
+				}
+			}
+		}
 	})				
 				
 	new fgta4slideselect(obj.cbo_partner_id, {
@@ -160,11 +198,25 @@ export async function init(opt) {
 			{mapping: 'partner_id', text: 'partner_id'},
 			{mapping: 'partner_name', text: 'partner_name'},
 		],
-		OnDataLoading: (criteria) => {},
-		OnDataLoaded : (result, options) => {
-			result.records.unshift({partner_id:'--NULL--', partner_name:'NONE'});	
+		OnDataLoading: (criteria) => {
+			
+			if (typeof hnd.cbo_partner_id_dataloading === 'function') {
+				hnd.cbo_partner_id_dataloading(criteria);
+			}	
 		},
-		OnSelected: (value, display, record) => {}
+		OnDataLoaded : (result, options) => {
+				
+			if (typeof hnd.cbo_partner_id_dataloaded === 'function') {
+				hnd.cbo_partner_id_dataloaded(result, options);
+			}
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_partner_id_selected === 'function') {
+					hnd.cbo_partner_id_selected(value, display, record, args);
+				}
+			}
+		}
 	})				
 				
 	new fgta4slideselect(obj.cbo_temprecv_id, {
@@ -178,83 +230,65 @@ export async function init(opt) {
 			{mapping: 'temprecv_id', text: 'temprecv_id'},
 			{mapping: 'temprecv_descr', text: 'temprecv_descr'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+			
+			if (typeof hnd.cbo_temprecv_id_dataloading === 'function') {
+				hnd.cbo_temprecv_id_dataloading(criteria);
+			}	
+		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({temprecv_id:'--NULL--', temprecv_descr:'NONE'});	
+			if (typeof hnd.cbo_temprecv_id_dataloaded === 'function') {
+				hnd.cbo_temprecv_id_dataloaded(result, options);
+			}
 		},
-		OnSelected: (value, display, record) => {}
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_temprecv_id_selected === 'function') {
+					hnd.cbo_temprecv_id_selected(value, display, record, args);
+				}
+			}
+		}
 	})				
 				
-	new fgta4slideselect(obj.cbo_ar_jurnaldetil_id, {
-		title: 'Pilih ar_jurnaldetil_id',
+	new fgta4slideselect(obj.cbo_billout_id, {
+		title: 'Pilih billout_id',
 		returnpage: this_page_id,
-		api: $ui.apis.load_ar_jurnaldetil_id,
-		fieldValue: 'ar_jurnaldetil_id',
-		fieldValueMap: 'jurnaldetil_id',
-		fieldDisplay: 'jurnaldetil_descr',
+		api: $ui.apis.load_billout_id,
+		fieldValue: 'billout_id',
+		fieldValueMap: 'billout_id',
+		fieldDisplay: 'billout_descr',
 		fields: [
-			{mapping: 'jurnaldetil_id', text: 'jurnaldetil_id'},
-			{mapping: 'jurnaldetil_descr', text: 'jurnaldetil_descr'},
+			{mapping: 'billout_id', text: 'billout_id'},
+			{mapping: 'billout_descr', text: 'billout_descr'},
 		],
-		OnDataLoading: (criteria) => {},
-		OnDataLoaded : (result, options) => {
-			result.records.unshift({jurnaldetil_id:'--NULL--', jurnaldetil_descr:'NONE'});	
+		OnDataLoading: (criteria) => {
+			criteria.partner_id = form.getValue(obj.cbo_partner_id);
+			if (typeof hnd.cbo_billout_id_dataloading === 'function') {
+				hnd.cbo_billout_id_dataloading(criteria);
+			}	
 		},
-		OnSelected: (value, display, record) => {}
-	})				
-				
-	new fgta4slideselect(obj.cbo_paymtype_id, {
-		title: 'Pilih paymtype_id',
-		returnpage: this_page_id,
-		api: $ui.apis.load_paymtype_id,
-		fieldValue: 'paymtype_id',
-		fieldValueMap: 'paymtype_id',
-		fieldDisplay: 'paymtype_name',
-		fields: [
-			{mapping: 'paymtype_id', text: 'paymtype_id'},
-			{mapping: 'paymtype_name', text: 'paymtype_name'},
-		],
-		OnDataLoading: (criteria) => {},
 		OnDataLoaded : (result, options) => {
-				
+			result.records.unshift({billout_id:'--NULL--', billout_descr:'NONE'});	
+			if (typeof hnd.cbo_billout_id_dataloaded === 'function') {
+				hnd.cbo_billout_id_dataloaded(result, options);
+			}
 		},
-		OnSelected: (value, display, record) => {}
-	})				
-				
-	new fgta4slideselect(obj.cbo_bankrekening_id, {
-		title: 'Pilih bankrekening_id',
-		returnpage: this_page_id,
-		api: $ui.apis.load_bankrekening_id,
-		fieldValue: 'bankrekening_id',
-		fieldValueMap: 'bankrekening_id',
-		fieldDisplay: 'bankrekening_name',
-		fields: [
-			{mapping: 'bankrekening_id', text: 'bankrekening_id'},
-			{mapping: 'bankrekening_name', text: 'bankrekening_name'},
-		],
-		OnDataLoading: (criteria) => {},
-		OnDataLoaded : (result, options) => {
-			result.records.unshift({bankrekening_id:'--NULL--', bankrekening_name:'NONE'});	
-		},
-		OnSelected: (value, display, record) => {}
-	})				
-				
-	new fgta4slideselect(obj.cbo_accfin_id, {
-		title: 'Pilih accfin_id',
-		returnpage: this_page_id,
-		api: $ui.apis.load_accfin_id,
-		fieldValue: 'accfin_id',
-		fieldValueMap: 'accfin_id',
-		fieldDisplay: 'accfin_name',
-		fields: [
-			{mapping: 'accfin_id', text: 'accfin_id'},
-			{mapping: 'accfin_name', text: 'accfin_name'},
-		],
-		OnDataLoading: (criteria) => {},
-		OnDataLoaded : (result, options) => {
-				
-		},
-		OnSelected: (value, display, record) => {}
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+				console.log(record);
+				form.setValue(obj.txt_jurnal_descr, record.billout_descr)
+				form.setValue(obj.txt_jurnal_valfrg, record.billout_payment)
+				form.setValue(obj.cbo_curr_id, 'IDR', 'IDR')
+				form.setValue(obj.txt_jurnal_valfrgrate, 1)
+				form.setValue(obj.txt_jurnal_validr, record.billout_payment)
+
+						
+				if (typeof hnd.cbo_billout_id_selected === 'function') {
+					hnd.cbo_billout_id_selected(value, display, record, args);
+				}
+			}
+		}
 	})				
 				
 	new fgta4slideselect(obj.cbo_curr_id, {
@@ -268,11 +302,89 @@ export async function init(opt) {
 			{mapping: 'curr_id', text: 'curr_id'},
 			{mapping: 'curr_name', text: 'curr_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+			
+			if (typeof hnd.cbo_curr_id_dataloading === 'function') {
+				hnd.cbo_curr_id_dataloading(criteria);
+			}	
+		},
 		OnDataLoaded : (result, options) => {
 				
+			if (typeof hnd.cbo_curr_id_dataloaded === 'function') {
+				hnd.cbo_curr_id_dataloaded(result, options);
+			}
 		},
-		OnSelected: (value, display, record) => {}
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_curr_id_selected === 'function') {
+					hnd.cbo_curr_id_selected(value, display, record, args);
+				}
+			}
+		}
+	})				
+				
+	new fgta4slideselect(obj.cbo_paymtype_id, {
+		title: 'Pilih paymtype_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_paymtype_id,
+		fieldValue: 'paymtype_id',
+		fieldValueMap: 'paymtype_id',
+		fieldDisplay: 'paymtype_name',
+		fields: [
+			{mapping: 'paymtype_id', text: 'paymtype_id'},
+			{mapping: 'paymtype_name', text: 'paymtype_name'},
+		],
+		OnDataLoading: (criteria) => {
+			
+			if (typeof hnd.cbo_paymtype_id_dataloading === 'function') {
+				hnd.cbo_paymtype_id_dataloading(criteria);
+			}	
+		},
+		OnDataLoaded : (result, options) => {
+				
+			if (typeof hnd.cbo_paymtype_id_dataloaded === 'function') {
+				hnd.cbo_paymtype_id_dataloaded(result, options);
+			}
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_paymtype_id_selected === 'function') {
+					hnd.cbo_paymtype_id_selected(value, display, record, args);
+				}
+			}
+		}
+	})				
+				
+	new fgta4slideselect(obj.cbo_bankrekening_id, {
+		title: 'Pilih bankrekening_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_bankrekening_id,
+		fieldValue: 'bankrekening_id',
+		fieldValueMap: 'bankrekening_id',
+		fieldDisplay: 'bankrekening_name',
+		fields: [
+			{mapping: 'bankrekening_id', text: 'bankrekening_id'},
+			{mapping: 'bankrekening_name', text: 'bankrekening_name'},
+		],
+		OnDataLoading: (criteria) => {
+			criteria.curr_id = form.getValue(obj.cbo_curr_id);
+			if (typeof hnd.cbo_bankrekening_id_dataloading === 'function') {
+				hnd.cbo_bankrekening_id_dataloading(criteria);
+			}	
+		},
+		OnDataLoaded : (result, options) => {
+			result.records.unshift({bankrekening_id:'--NULL--', bankrekening_name:'NONE'});	
+			if (typeof hnd.cbo_bankrekening_id_dataloaded === 'function') {
+				hnd.cbo_bankrekening_id_dataloaded(result, options);
+			}
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_bankrekening_id_selected === 'function') {
+					hnd.cbo_bankrekening_id_selected(value, display, record, args);
+				}
+			}
+		}
 	})				
 				
 	new fgta4slideselect(obj.cbo_coa_id, {
@@ -286,11 +398,121 @@ export async function init(opt) {
 			{mapping: 'coa_id', text: 'coa_id'},
 			{mapping: 'coa_name', text: 'coa_name'},
 		],
-		OnDataLoading: (criteria) => {},
-		OnDataLoaded : (result, options) => {
-			result.records.unshift({coa_id:'--NULL--', coa_name:'NONE'});	
+		OnDataLoading: (criteria) => {
+			
+			if (typeof hnd.cbo_coa_id_dataloading === 'function') {
+				hnd.cbo_coa_id_dataloading(criteria);
+			}	
 		},
-		OnSelected: (value, display, record) => {}
+		OnDataLoaded : (result, options) => {
+				
+			if (typeof hnd.cbo_coa_id_dataloaded === 'function') {
+				hnd.cbo_coa_id_dataloaded(result, options);
+			}
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_coa_id_selected === 'function') {
+					hnd.cbo_coa_id_selected(value, display, record, args);
+				}
+			}
+		}
+	})				
+				
+	new fgta4slideselect(obj.cbo_accfin_id, {
+		title: 'Pilih accfin_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_accfin_id,
+		fieldValue: 'accfin_id',
+		fieldValueMap: 'accfin_id',
+		fieldDisplay: 'accfin_name',
+		fields: [
+			{mapping: 'accfin_id', text: 'accfin_id'},
+			{mapping: 'accfin_name', text: 'accfin_name'},
+		],
+		OnDataLoading: (criteria) => {
+			
+			if (typeof hnd.cbo_accfin_id_dataloading === 'function') {
+				hnd.cbo_accfin_id_dataloading(criteria);
+			}	
+		},
+		OnDataLoaded : (result, options) => {
+				
+			if (typeof hnd.cbo_accfin_id_dataloaded === 'function') {
+				hnd.cbo_accfin_id_dataloaded(result, options);
+			}
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_accfin_id_selected === 'function') {
+					hnd.cbo_accfin_id_selected(value, display, record, args);
+				}
+			}
+		}
+	})				
+				
+	new fgta4slideselect(obj.cbo_ar_jurnal_id, {
+		title: 'Pilih ar_jurnal_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_ar_jurnal_id,
+		fieldValue: 'ar_jurnal_id',
+		fieldValueMap: 'jurnaldetil_id',
+		fieldDisplay: 'jurnaldetil_descr',
+		fields: [
+			{mapping: 'jurnaldetil_id', text: 'jurnaldetil_id'},
+			{mapping: 'jurnaldetil_descr', text: 'jurnaldetil_descr'},
+		],
+		OnDataLoading: (criteria) => {
+			
+			if (typeof hnd.cbo_ar_jurnal_id_dataloading === 'function') {
+				hnd.cbo_ar_jurnal_id_dataloading(criteria);
+			}	
+		},
+		OnDataLoaded : (result, options) => {
+			result.records.unshift({jurnaldetil_id:'--NULL--', jurnaldetil_descr:'NONE'});	
+			if (typeof hnd.cbo_ar_jurnal_id_dataloaded === 'function') {
+				hnd.cbo_ar_jurnal_id_dataloaded(result, options);
+			}
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_ar_jurnal_id_selected === 'function') {
+					hnd.cbo_ar_jurnal_id_selected(value, display, record, args);
+				}
+			}
+		}
+	})				
+				
+	new fgta4slideselect(obj.cbo_ar_jurnaldetil_id, {
+		title: 'Pilih ar_jurnaldetil_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_ar_jurnaldetil_id,
+		fieldValue: 'ar_jurnaldetil_id',
+		fieldValueMap: 'jurnaldetil_id',
+		fieldDisplay: 'jurnaldetil_descr',
+		fields: [
+			{mapping: 'jurnaldetil_id', text: 'jurnaldetil_id'},
+			{mapping: 'jurnaldetil_descr', text: 'jurnaldetil_descr'},
+		],
+		OnDataLoading: (criteria) => {
+			
+			if (typeof hnd.cbo_ar_jurnaldetil_id_dataloading === 'function') {
+				hnd.cbo_ar_jurnaldetil_id_dataloading(criteria);
+			}	
+		},
+		OnDataLoaded : (result, options) => {
+			result.records.unshift({jurnaldetil_id:'--NULL--', jurnaldetil_descr:'NONE'});	
+			if (typeof hnd.cbo_ar_jurnaldetil_id_dataloaded === 'function') {
+				hnd.cbo_ar_jurnaldetil_id_dataloaded(result, options);
+			}
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_ar_jurnaldetil_id_selected === 'function') {
+					hnd.cbo_ar_jurnaldetil_id_selected(value, display, record, args);
+				}
+			}
+		}
 	})				
 				
 	new fgta4slideselect(obj.cbo_dept_id, {
@@ -304,11 +526,25 @@ export async function init(opt) {
 			{mapping: 'dept_id', text: 'dept_id'},
 			{mapping: 'dept_name', text: 'dept_name'},
 		],
-		OnDataLoading: (criteria) => {},
-		OnDataLoaded : (result, options) => {
-			result.records.unshift({dept_id:'--NULL--', dept_name:'NONE'});	
+		OnDataLoading: (criteria) => {
+			
+			if (typeof hnd.cbo_dept_id_dataloading === 'function') {
+				hnd.cbo_dept_id_dataloading(criteria);
+			}	
 		},
-		OnSelected: (value, display, record) => {}
+		OnDataLoaded : (result, options) => {
+				
+			if (typeof hnd.cbo_dept_id_dataloaded === 'function') {
+				hnd.cbo_dept_id_dataloaded(result, options);
+			}
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_dept_id_selected === 'function') {
+					hnd.cbo_dept_id_selected(value, display, record, args);
+				}
+			}
+		}
 	})				
 				
 	new fgta4slideselect(obj.cbo_jurnalsource_id, {
@@ -322,13 +558,30 @@ export async function init(opt) {
 			{mapping: 'jurnalsource_id', text: 'jurnalsource_id'},
 			{mapping: 'jurnalsource_name', text: 'jurnalsource_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+			
+			if (typeof hnd.cbo_jurnalsource_id_dataloading === 'function') {
+				hnd.cbo_jurnalsource_id_dataloading(criteria);
+			}	
+		},
 		OnDataLoaded : (result, options) => {
 				
+			if (typeof hnd.cbo_jurnalsource_id_dataloaded === 'function') {
+				hnd.cbo_jurnalsource_id_dataloaded(result, options);
+			}
 		},
-		OnSelected: (value, display, record) => {}
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_jurnalsource_id_selected === 'function') {
+					hnd.cbo_jurnalsource_id_selected(value, display, record, args);
+				}
+			}
+		}
 	})				
 				
+
+
+
 
 	document.addEventListener('keydown', (ev)=>{
 		if ($ui.getPages().getCurrentPage()==this_page_id) {
@@ -376,76 +629,112 @@ export async function init(opt) {
 	})
 
 	//button state
+	if (typeof hnd.init==='function') {
+		hnd.init({
+			form: form,
+			obj: obj,
+			opt: opt,
+		})
+	}
 
 }
-
 
 export function OnSizeRecalculated(width, height) {
 }
 
+export function getForm() {
+	return form
+}
 
-
+export function getCurrentRowdata() {
+	return rowdata;
+}
 
 export function open(data, rowid, viewmode=true, fn_callback) {
 
+	rowdata = {
+		data: data,
+		rowid: rowid
+	}
 
+	var pOpt = form.getDefaultPrompt(false)
 	var fn_dataopening = async (options) => {
 		options.criteria[form.primary.mapping] = data[form.primary.mapping]
 	}
 
 	var fn_dataopened = async (result, options) => {
+		var record = result.record;
+		updatefilebox(record);
 
-		updatefilebox(result.record);
-
-		if (result.record.partner_id==null) { result.record.partner_id='--NULL--'; result.record.partner_name='NONE'; }
+		/*
 		if (result.record.temprecv_id==null) { result.record.temprecv_id='--NULL--'; result.record.temprecv_descr='NONE'; }
-		if (result.record.ar_jurnaldetil_id==null) { result.record.ar_jurnaldetil_id='--NULL--'; result.record.jurnaldetil_descr='NONE'; }
+		if (result.record.billout_id==null) { result.record.billout_id='--NULL--'; result.record.billout_descr='NONE'; }
 		if (result.record.bankrekening_id==null) { result.record.bankrekening_id='--NULL--'; result.record.bankrekening_name='NONE'; }
-		if (result.record.coa_id==null) { result.record.coa_id='--NULL--'; result.record.coa_name='NONE'; }
-		if (result.record.dept_id==null) { result.record.dept_id='--NULL--'; result.record.dept_name='NONE'; }
+		if (result.record.ar_jurnal_id==null) { result.record.ar_jurnal_id='--NULL--'; result.record.jurnaldetil_descr='NONE'; }
+		if (result.record.ar_jurnaldetil_id==null) { result.record.ar_jurnaldetil_id='--NULL--'; result.record.jurnaldetil_descr='NONE'; }
 
-  		updaterecordstatus(result.record)
+		*/
+		for (var objid in obj) {
+			let o = obj[objid]
+			if (o.isCombo() && !o.isRequired()) {
+				var value =  result.record[o.getFieldValueName()];
+				if (value==null ) {
+					record[o.getFieldValueName()] = pOpt.value;
+					record[o.getFieldDisplayName()] = pOpt.text;
+				}
+			}
+		}
+  		updaterecordstatus(record)
 
 		form.SuspendEvent(true);
 		form
-			.fill(result.record)
-			.setValue(obj.cbo_jurnaltype_id, result.record.jurnaltype_id, result.record.jurnaltype_name)
-			.setValue(obj.cbo_periodemo_id, result.record.periodemo_id, result.record.periodemo_name)
-			.setValue(obj.cbo_partner_id, result.record.partner_id, result.record.partner_name)
-			.setValue(obj.cbo_temprecv_id, result.record.temprecv_id, result.record.temprecv_descr)
-			.setValue(obj.cbo_ar_jurnaldetil_id, result.record.ar_jurnaldetil_id, result.record.jurnaldetil_descr)
-			.setValue(obj.cbo_paymtype_id, result.record.paymtype_id, result.record.paymtype_name)
-			.setValue(obj.cbo_bankrekening_id, result.record.bankrekening_id, result.record.bankrekening_name)
-			.setValue(obj.cbo_accfin_id, result.record.accfin_id, result.record.accfin_name)
-			.setValue(obj.cbo_curr_id, result.record.curr_id, result.record.curr_name)
-			.setValue(obj.cbo_coa_id, result.record.coa_id, result.record.coa_name)
-			.setValue(obj.cbo_dept_id, result.record.dept_id, result.record.dept_name)
-			.setValue(obj.cbo_jurnalsource_id, result.record.jurnalsource_id, result.record.jurnalsource_name)
-			.commit()
+			.fill(record)
+			.setValue(obj.cbo_jurnaltype_id, record.jurnaltype_id, record.jurnaltype_name)
+			.setValue(obj.cbo_periodemo_id, record.periodemo_id, record.periodemo_name)
+			.setValue(obj.cbo_partner_id, record.partner_id, record.partner_name)
+			.setValue(obj.cbo_temprecv_id, record.temprecv_id, record.temprecv_descr)
+			.setValue(obj.cbo_billout_id, record.billout_id, record.billout_descr)
+			.setValue(obj.cbo_curr_id, record.curr_id, record.curr_name)
+			.setValue(obj.cbo_paymtype_id, record.paymtype_id, record.paymtype_name)
+			.setValue(obj.cbo_bankrekening_id, record.bankrekening_id, record.bankrekening_name)
+			.setValue(obj.cbo_coa_id, record.coa_id, record.coa_name)
+			.setValue(obj.cbo_accfin_id, record.accfin_id, record.accfin_name)
+			.setValue(obj.cbo_ar_jurnal_id, record.ar_jurnal_id, record.jurnaldetil_descr)
+			.setValue(obj.cbo_ar_jurnaldetil_id, record.ar_jurnaldetil_id, record.jurnaldetil_descr)
+			.setValue(obj.cbo_dept_id, record.dept_id, record.dept_name)
+			.setValue(obj.cbo_jurnalsource_id, record.jurnalsource_id, record.jurnalsource_name)
 			.setViewMode(viewmode)
 			.lock(false)
 			.rowid = rowid
 
+
+		/* tambahkan event atau behaviour saat form dibuka
+		   apabila ada rutin mengubah form dan tidak mau dijalankan pada saat opening,
+		   cek dengan form.isEventSuspended()
+		*/   
+		if (typeof hnd.form_dataopened == 'function') {
+			hnd.form_dataopened(result, options);
+		}
+
+
+		/* commit form */
+		form.commit()
+		form.SuspendEvent(false); 
+		updatebuttonstate(record)
+
+
+		/* update rowdata */
+		for (var nv in rowdata.data) {
+			if (record[nv]!=undefined) {
+				rowdata.data[nv] = record[nv];
+			}
+		}
+
 		// tampilkan form untuk data editor
-		fn_callback()
-		form.SuspendEvent(false);
-
-		updatebuttonstate(result.record)
+		if (typeof fn_callback==='function') {
+			fn_callback(null, rowdata.data);
+		}
 		
-
-
-		// fill data, bisa dilakukan secara manual dengan cara berikut:	
-		// form
-			// .setValue(obj.txt_id, result.record.id)
-			// .setValue(obj.txt_nama, result.record.nama)
-			// .setValue(obj.cbo_prov, result.record.prov_id, result.record.prov_nama)
-			// .setValue(obj.chk_isdisabled, result.record.disabled)
-			// .setValue(obj.txt_alamat, result.record.alamat)
-			// ....... dst dst
-			// .commit()
-			// .setViewMode()
-			// ....... dst dst
-
 	}
 
 	var fn_dataopenerror = (err) => {
@@ -465,65 +754,63 @@ export function createnew() {
 
 		// set nilai-nilai default untuk form
 		data.jurnal_date = global.now()
-		data.paym_girodate = global.now()
 		data.jurnal_valfrg = 0
 		data.jurnal_valfrgrate = 0
 		data.jurnal_validr = 0
-		data.jurnal_version = 0
-		data.jurnal_iscommit = '0'
-		data.jurnal_ispost = '0'
-		data.jurnal_isclose = '0'
-		data.jurnal_isagingclose = '0'
+		data.paym_girodate = global.now()
+		data.tjurnalor_version = 0
+		data.tjurnalor_iscommit = '0'
+		data.tjurnalor_ispost = '0'
 
 		data.jurnaltype_id = '0'
 		data.jurnaltype_name = '-- PILIH --'
 		data.periodemo_id = '0'
 		data.periodemo_name = '-- PILIH --'
-		data.partner_id = '--NULL--'
-		data.partner_name = 'NONE'
+		data.partner_id = '0'
+		data.partner_name = '-- PILIH --'
 		data.temprecv_id = '--NULL--'
 		data.temprecv_descr = 'NONE'
-		data.ar_jurnaldetil_id = '--NULL--'
-		data.jurnaldetil_descr = 'NONE'
+		data.billout_id = '--NULL--'
+		data.billout_descr = 'NONE'
+		data.curr_id = 'IDR'
+		data.curr_name = 'IDR'
 		data.paymtype_id = '0'
 		data.paymtype_name = '-- PILIH --'
 		data.bankrekening_id = '--NULL--'
 		data.bankrekening_name = 'NONE'
+		data.coa_id = '0'
+		data.coa_name = '-- PILIH --'
 		data.accfin_id = '0'
 		data.accfin_name = '-- PILIH --'
-		data.curr_id = '0'
-		data.curr_name = '-- PILIH --'
-		data.coa_id = '--NULL--'
-		data.coa_name = 'NONE'
-		data.dept_id = '--NULL--'
-		data.dept_name = 'NONE'
-		data.jurnalsource_id = '0'
-		data.jurnalsource_name = '-- PILIH --'
+		data.ar_jurnal_id = '--NULL--'
+		data.jurnaldetil_descr = 'NONE'
+		data.ar_jurnaldetil_id = '--NULL--'
+		data.jurnaldetil_descr = 'NONE'
+		data.dept_id = global.setup.dept_id
+		data.dept_name = global.setup.dept_name
+		data.jurnalsource_id = 'OFRECV'
+		data.jurnalsource_name = 'OFFICIAL RECEIPT'
 
+		if (typeof hnd.form_newdata == 'function') {
+			hnd.form_newdata(data, options);
+		}
 
 		rec_commitby.html('');
 		rec_commitdate.html('');
 		
 
 
-
-
-	var button_commit_on = true;
-	var button_uncommit_on = false;
-	btn_commit.linkbutton(button_commit_on ? 'enable' : 'disable');
-	btn_uncommit.linkbutton(button_uncommit_on ? 'enable' : 'disable');
+		var button_commit_on = true;
+		var button_uncommit_on = false;
+		btn_commit.linkbutton(button_commit_on ? 'enable' : 'disable');
+		btn_uncommit.linkbutton(button_uncommit_on ? 'enable' : 'disable');
 		
-
-
 
 		options.OnCanceled = () => {
 			$ui.getPages().show('pnl_list')
 		}
 
 		$ui.getPages().ITEMS['pnl_editdetilgrid'].handler.createnew(data, options)
-		$ui.getPages().ITEMS['pnl_editrecvgrid'].handler.createnew(data, options)
-		$ui.getPages().ITEMS['pnl_editreferencegrid'].handler.createnew(data, options)
-		$ui.getPages().ITEMS['pnl_editresponsegrid'].handler.createnew(data, options)
 
 
 	})
@@ -551,8 +838,8 @@ function updatefilebox(record) {
 function updaterecordstatus(record) {
 	// apabila ada keperluan untuk update status record di sini
 
-		rec_commitby.html(record.jurnal_commitby);
-		rec_commitdate.html(record.jurnal_commitdate);
+		rec_commitby.html(record.tjurnalor_commitby);
+		rec_commitdate.html(record.tjurnalor_commitdate);
 		
 }
 
@@ -563,7 +850,7 @@ function updatebuttonstate(record) {
 		var button_commit_on = false;
 		var button_uncommit_on = false;	
 		
-		if (record.jurnal_iscommit=="1") {
+		if (record.tjurnalor_iscommit=="1") {
 			button_commit_on = false;
 			button_uncommit_on = true;
 			form.lock(true);		
@@ -584,8 +871,8 @@ function updategridstate(record) {
 
 	var updategriddata = {}
 
-	var col_commit = 'jurnal_iscommit';
-	updategriddata[col_commit] = record.jurnal_iscommit;	
+	var col_commit = 'tjurnalor_iscommit';
+	updategriddata[col_commit] = record.tjurnalor_iscommit;	
 	
 	$ui.getPages().ITEMS['pnl_list'].handler.updategrid(updategriddata, form.rowid);
 			
@@ -628,7 +915,21 @@ async function form_datasaving(data, options) {
 	//    options.cancel = true
 
 	// Modifikasi object data, apabila ingin menambahkan variabel yang akan dikirim ke server
-	options.skipmappingresponse = ['partner_id', 'temprecv_id', 'ar_jurnaldetil_id', 'bankrekening_id', 'coa_id, dept_id' ];
+	// options.skipmappingresponse = ['temprecv_id', 'billout_id', 'bankrekening_id', 'ar_jurnal_id', 'ar_jurnaldetil_id', ];
+	options.skipmappingresponse = [];
+	for (var objid in obj) {
+		var o = obj[objid]
+		if (o.isCombo() && !o.isRequired()) {
+			var id = o.getFieldValueName()
+			options.skipmappingresponse.push(id)
+			console.log(id)
+		}
+	}
+
+	if (typeof hnd.form_datasaving == 'function') {
+		hnd.form_datasaving(data, options);
+	}
+
 }
 
 async function form_datasaveerror(err, options) {
@@ -655,26 +956,54 @@ async function form_datasaved(result, options) {
 
 	var data = {}
 	Object.assign(data, form.getData(), result.dataresponse)
-
-	form.setValue(obj.cbo_partner_id, result.dataresponse.partner_name!=='--NULL--' ? result.dataresponse.partner_id : '--NULL--', result.dataresponse.partner_name!=='--NULL--'?result.dataresponse.partner_name:'NONE')
+	/*
 	form.setValue(obj.cbo_temprecv_id, result.dataresponse.temprecv_descr!=='--NULL--' ? result.dataresponse.temprecv_id : '--NULL--', result.dataresponse.temprecv_descr!=='--NULL--'?result.dataresponse.temprecv_descr:'NONE')
-	form.setValue(obj.cbo_ar_jurnaldetil_id, result.dataresponse.jurnaldetil_descr!=='--NULL--' ? result.dataresponse.ar_jurnaldetil_id : '--NULL--', result.dataresponse.jurnaldetil_descr!=='--NULL--'?result.dataresponse.jurnaldetil_descr:'NONE')
+	form.setValue(obj.cbo_billout_id, result.dataresponse.billout_descr!=='--NULL--' ? result.dataresponse.billout_id : '--NULL--', result.dataresponse.billout_descr!=='--NULL--'?result.dataresponse.billout_descr:'NONE')
 	form.setValue(obj.cbo_bankrekening_id, result.dataresponse.bankrekening_name!=='--NULL--' ? result.dataresponse.bankrekening_id : '--NULL--', result.dataresponse.bankrekening_name!=='--NULL--'?result.dataresponse.bankrekening_name:'NONE')
-	form.setValue(obj.cbo_coa_id, result.dataresponse.coa_name!=='--NULL--' ? result.dataresponse.coa_id : '--NULL--', result.dataresponse.coa_name!=='--NULL--'?result.dataresponse.coa_name:'NONE')
-	form.setValue(obj.cbo_dept_id, result.dataresponse.dept_name!=='--NULL--' ? result.dataresponse.dept_id : '--NULL--', result.dataresponse.dept_name!=='--NULL--'?result.dataresponse.dept_name:'NONE')
+	form.setValue(obj.cbo_ar_jurnal_id, result.dataresponse.jurnaldetil_descr!=='--NULL--' ? result.dataresponse.ar_jurnal_id : '--NULL--', result.dataresponse.jurnaldetil_descr!=='--NULL--'?result.dataresponse.jurnaldetil_descr:'NONE')
+	form.setValue(obj.cbo_ar_jurnaldetil_id, result.dataresponse.jurnaldetil_descr!=='--NULL--' ? result.dataresponse.ar_jurnaldetil_id : '--NULL--', result.dataresponse.jurnaldetil_descr!=='--NULL--'?result.dataresponse.jurnaldetil_descr:'NONE')
 
+	*/
+
+	var pOpt = form.getDefaultPrompt(false)
+	for (var objid in obj) {
+		var o = obj[objid]
+		if (o.isCombo() && !o.isRequired()) {
+			var value =  result.dataresponse[o.getFieldValueName()];
+			var text = result.dataresponse[o.getFieldDisplayName()];
+			if (value==null ) {
+				value = pOpt.value;
+				text = pOpt.text;
+			}
+			form.setValue(o, value, text);
+		}
+	}
 	form.rowid = $ui.getPages().ITEMS['pnl_list'].handler.updategrid(data, form.rowid)
+	rowdata = {
+		data: data,
+		rowid: form.rowid
+	}
+
+	if (typeof hnd.form_datasaved == 'function') {
+		hnd.form_datasaved(result, rowdata, options);
+	}
 }
 
 
 
 async function form_deleting(data) {
+	if (typeof hnd.form_deleting == 'function') {
+		hnd.form_deleting(data);
+	}
 }
 
 async function form_deleted(result, options) {
 	$ui.getPages().show('pnl_list')
 	$ui.getPages().ITEMS['pnl_list'].handler.removerow(form.rowid)
 
+	if (typeof hnd.form_deleted == 'function') {
+		hnd.form_deleted(result, options);
+	}
 }
 
 
@@ -743,9 +1072,9 @@ async function btn_action_click(args) {
 	}
 
 
-	var docname = 'undefined'
-	var txt_version = obj.txt_jurnal_version;
-	var chk_iscommit = obj.chk_jurnal_iscommit;
+	var docname = 'Penerimaan'
+	var txt_version = obj.txt_tjurnalor_version;
+	var chk_iscommit = obj.chk_tjurnalor_iscommit;
 	
 	
 	var id = form.getCurrentId();
@@ -762,7 +1091,7 @@ async function btn_action_click(args) {
 
 	switch (args.action) {
 		case 'commit' :
-			args.act_url = `${global.modulefullname}/xtion-${args.action}`;
+			args.act_url = `${global.modulefullname}/xtion-commit`;
 			args.act_msg_quest = `Apakah anda yakin akan <b>${args.action}</b> ${docname} no ${args.id} ?`;
 			args.act_msg_result = `${docname} no ${args.id} telah di ${args.action}.`;
 			args.act_do = (result) => {
@@ -773,7 +1102,7 @@ async function btn_action_click(args) {
 			break;
 
 		case 'uncommit' :
-			args.act_url = `${global.modulefullname}/xtion-${args.action}`;
+			args.act_url = `${global.modulefullname}/xtion-uncommit`;
 			args.act_msg_quest = `Apakah anda yakin akan <b>${args.action}</b> ${docname} no ${args.id} ?`;
 			args.act_msg_result = `${docname} no ${args.id} telah di ${args.action}.`;
 			args.act_do = (result) => {
@@ -784,7 +1113,22 @@ async function btn_action_click(args) {
 			}
 			break;
 
+		
+
+		case 'post' :
+			args.act_url = `${global.modulefullname}/xtion-post`;
+			args.act_msg_quest = `Apakah anda yakin akan <b>${args.action}</b> ${docname} no ${args.id} ?`;
+			args.act_msg_result = `${docname} no ${args.id} telah di ${args.action}.`;
+			args.param = {}
+			args.act_do = (result) => {
+				if (typeof hnd.xtion_post_success === 'function') {
+					hnd.xtion_post_success(result);
+				}
+			}
+			break;		
 			
+		
+
 	}
 
 
@@ -795,10 +1139,13 @@ async function btn_action_click(args) {
 			if (err) {
 				$ui.ShowMessage('[WARNING]' + err.message);	
 			} else {
-				updaterecordstatus(result.dataresponse);
+				if (result.dataresponse!=undefined) { updaterecordstatus(result.dataresponse) };
 				args.act_do(result);
-				updatebuttonstate(result.dataresponse);
-				updategridstate(result.dataresponse);
+
+				if (result.dataresponse!=undefined) {
+					updatebuttonstate(result.dataresponse);
+					updategridstate(result.dataresponse);
+				}
 				if (args.act_msg_result!=='') $ui.ShowMessage('[INFO]' + args.act_msg_result);	
 			}
 		});

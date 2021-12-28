@@ -7,8 +7,12 @@ import * as pList from './inquiryprocess-list.mjs'
 import * as pEdit from './inquiryprocess-edit.mjs'
 import * as pEditItemgrid from './inquiryprocess-itemgrid.mjs'
 import * as pEditItemform from './inquiryprocess-itemform.mjs'
+import * as pEditDetilgrid from './inquiryprocess-detilgrid.mjs'
+import * as pEditDetilform from './inquiryprocess-detilform.mjs'
 import * as pEditFilesgrid from './inquiryprocess-filesgrid.mjs'
 import * as pEditFilesform from './inquiryprocess-filesform.mjs'
+import * as pEditApprovalgrid from './inquiryprocess-approvalgrid.mjs'
+import * as pEditApprovalform from './inquiryprocess-approvalform.mjs'
 
 
 
@@ -16,8 +20,12 @@ const pnl_list = $('#pnl_list')
 const pnl_edit = $('#pnl_edit')
 const pnl_edititemgrid = $('#pnl_edititemgrid')
 const pnl_edititemform = $('#pnl_edititemform')
+const pnl_editdetilgrid = $('#pnl_editdetilgrid')
+const pnl_editdetilform = $('#pnl_editdetilform')
 const pnl_editfilesgrid = $('#pnl_editfilesgrid')
 const pnl_editfilesform = $('#pnl_editfilesform')
+const pnl_editapprovalgrid = $('#pnl_editapprovalgrid')
+const pnl_editapprovalform = $('#pnl_editapprovalform')
 
 
 
@@ -45,8 +53,12 @@ export async function init(opt) {
 			{panel: pnl_edit, handler: pEdit},
 			{panel: pnl_edititemgrid, handler: pEditItemgrid},
 			{panel: pnl_edititemform, handler: pEditItemform},
+			{panel: pnl_editdetilgrid, handler: pEditDetilgrid},
+			{panel: pnl_editdetilform, handler: pEditDetilform},
 			{panel: pnl_editfilesgrid, handler: pEditFilesgrid},
-			{panel: pnl_editfilesform, handler: pEditFilesform}			
+			{panel: pnl_editfilesform, handler: pEditFilesform},
+			{panel: pnl_editapprovalgrid, handler: pEditApprovalgrid},
+			{panel: pnl_editapprovalform, handler: pEditApprovalform}			
 		], opt)
 
 	$ui.setPages(pages)

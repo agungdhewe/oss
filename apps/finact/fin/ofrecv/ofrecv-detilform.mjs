@@ -2,6 +2,10 @@ var this_page_id;
 var this_page_options;
 
 import {fgta4slideselect} from  '../../../../../index.php/asset/fgta/framework/fgta4libs/fgta4slideselect.mjs'
+import * as hnd from  './ofrecv-detilform-hnd.mjs'
+
+const reload_header_modified = true;
+
 
 const txt_title = $('#pnl_editdetilform-title')
 const btn_edit = $('#pnl_editdetilform-btn_edit')
@@ -17,7 +21,6 @@ const pnl_form = $('#pnl_editdetilform-form')
 const obj = {
 	txt_jurnaldetil_id: $('#pnl_editdetilform-txt_jurnaldetil_id'),
 	cbo_partner_id: $('#pnl_editdetilform-cbo_partner_id'),
-	cbo_jurnaldetil_id_ref: $('#pnl_editdetilform-cbo_jurnaldetil_id_ref'),
 	txt_jurnaldetil_descr: $('#pnl_editdetilform-txt_jurnaldetil_descr'),
 	txt_jurnaldetil_valfrg: $('#pnl_editdetilform-txt_jurnaldetil_valfrg'),
 	cbo_curr_id: $('#pnl_editdetilform-cbo_curr_id'),
@@ -25,12 +28,13 @@ const obj = {
 	txt_jurnaldetil_validr: $('#pnl_editdetilform-txt_jurnaldetil_validr'),
 	cbo_coa_id: $('#pnl_editdetilform-cbo_coa_id'),
 	cbo_dept_id: $('#pnl_editdetilform-cbo_dept_id'),
+	cbo_jurnaldetil_id_ref: $('#pnl_editdetilform-cbo_jurnaldetil_id_ref'),
 	txt_jurnal_id: $('#pnl_editdetilform-txt_jurnal_id')
 }
 
 
-let form = {}
-let header_data = {}
+let form;
+let header_data;
 
 
 
@@ -42,7 +46,7 @@ export async function init(opt) {
 	form = new global.fgta4form(pnl_form, {
 		primary: obj.txt_jurnaldetil_id,
 		autoid: true,
-		logview: 'trn_jurnaldetil',
+		logview: 'trn_tjurnalordetil',
 		btn_edit: btn_edit,
 		btn_save: btn_save,
 		btn_delete: btn_delete,		
@@ -63,6 +67,15 @@ export async function init(opt) {
 
 
 
+	obj.txt_jurnaldetil_valfrg.numberbox({onChange: (newvalue, oldvalue) => { 
+		if (typeof hnd.undefined==='function') {hnd.undefined(newvalue, oldvalue)} 
+	}});
+	
+	obj.txt_jurnaldetil_valfrgrate.numberbox({onChange: (newvalue, oldvalue) => { 
+		if (typeof hnd.form_value_recalculate==='function') {hnd.form_value_recalculate(newvalue, oldvalue)} 
+	}});
+	
+
 
 	obj.cbo_partner_id.name = 'pnl_editdetilform-cbo_partner_id'		
 	new fgta4slideselect(obj.cbo_partner_id, {
@@ -76,30 +89,16 @@ export async function init(opt) {
 			{mapping: 'partner_id', text: 'partner_id'},
 			{mapping: 'partner_name', text: 'partner_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria, options) => {
+				
+		},
 		OnDataLoaded : (result, options) => {
 				
 		},
-		OnSelected: (value, display, record) => {}
-	})				
-			
-	obj.cbo_jurnaldetil_id_ref.name = 'pnl_editdetilform-cbo_jurnaldetil_id_ref'		
-	new fgta4slideselect(obj.cbo_jurnaldetil_id_ref, {
-		title: 'Pilih jurnaldetil_id_ref',
-		returnpage: this_page_id,
-		api: $ui.apis.load_jurnaldetil_id_ref,
-		fieldValue: 'jurnaldetil_id_ref',
-		fieldValueMap: 'jurnaldetil_id',
-		fieldDisplay: 'jurnaldetil_descr',
-		fields: [
-			{mapping: 'jurnaldetil_id', text: 'jurnaldetil_id'},
-			{mapping: 'jurnaldetil_descr', text: 'jurnaldetil_descr'},
-		],
-		OnDataLoading: (criteria) => {},
-		OnDataLoaded : (result, options) => {
-			result.records.unshift({jurnaldetil_id:'--NULL--', jurnaldetil_descr:'NONE'});	
-		},
-		OnSelected: (value, display, record) => {}
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+			}			
+		}
 	})				
 			
 	obj.cbo_curr_id.name = 'pnl_editdetilform-cbo_curr_id'		
@@ -114,11 +113,16 @@ export async function init(opt) {
 			{mapping: 'curr_id', text: 'curr_id'},
 			{mapping: 'curr_name', text: 'curr_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria, options) => {
+				
+		},
 		OnDataLoaded : (result, options) => {
 				
 		},
-		OnSelected: (value, display, record) => {}
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+			}			
+		}
 	})				
 			
 	obj.cbo_coa_id.name = 'pnl_editdetilform-cbo_coa_id'		
@@ -133,11 +137,16 @@ export async function init(opt) {
 			{mapping: 'coa_id', text: 'coa_id'},
 			{mapping: 'coa_name', text: 'coa_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria, options) => {
+				
+		},
 		OnDataLoaded : (result, options) => {
 				
 		},
-		OnSelected: (value, display, record) => {}
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+			}			
+		}
 	})				
 			
 	obj.cbo_dept_id.name = 'pnl_editdetilform-cbo_dept_id'		
@@ -152,26 +161,47 @@ export async function init(opt) {
 			{mapping: 'dept_id', text: 'dept_id'},
 			{mapping: 'dept_name', text: 'dept_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria, options) => {
+				
+		},
 		OnDataLoaded : (result, options) => {
 				
 		},
-		OnSelected: (value, display, record) => {}
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+			}			
+		}
+	})				
+			
+	obj.cbo_jurnaldetil_id_ref.name = 'pnl_editdetilform-cbo_jurnaldetil_id_ref'		
+	new fgta4slideselect(obj.cbo_jurnaldetil_id_ref, {
+		title: 'Pilih jurnaldetil_id_ref',
+		returnpage: this_page_id,
+		api: $ui.apis.load_jurnaldetil_id_ref,
+		fieldValue: 'jurnaldetil_id_ref',
+		fieldValueMap: 'jurnaldetil_id',
+		fieldDisplay: 'jurnaldetil_descr',
+		fields: [
+			{mapping: 'jurnaldetil_id', text: 'jurnaldetil_id'},
+			{mapping: 'jurnaldetil_descr', text: 'jurnaldetil_descr'},
+		],
+		OnDataLoading: (criteria, options) => {
+				
+		},
+		OnDataLoaded : (result, options) => {
+			result.records.unshift({jurnaldetil_id:'--NULL--', jurnaldetil_descr:'NONE'});	
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+			}			
+		}
 	})				
 			
 
 
-	btn_addnew.linkbutton({
-		onClick: () => { btn_addnew_click() }
-	})
-
-	btn_prev.linkbutton({
-		onClick: () => { btn_prev_click() }
-	})
-
-	btn_next.linkbutton({
-		onClick: () => { btn_next_click() }
-	})
+	btn_addnew.linkbutton({ onClick: () => { btn_addnew_click() }  })
+	btn_prev.linkbutton({ onClick: () => { btn_prev_click() } })
+	btn_next.linkbutton({ onClick: () => { btn_next_click() } })
 
 	document.addEventListener('keydown', (ev)=>{
 		if ($ui.getPages().getCurrentPage()==this_page_id) {
@@ -231,6 +261,16 @@ export async function init(opt) {
 			chk_autoadd.prop("checked", false);
 		}
 	})
+
+	if (typeof hnd.init==='function') {
+		hnd.init({
+			form: form,
+			obj: obj,
+			opt: opt,
+			header_data: header_data
+		})
+	}
+
 }
 
 
@@ -247,30 +287,52 @@ export function open(data, rowid, hdata) {
 	txt_title.html(hdata.jurnal_descr)
 	header_data = hdata
 
+	var pOpt = form.getDefaultPrompt(false)
 	var fn_dataopening = async (options) => {
 		options.api = `${global.modulefullname}/detil-open`
 		options.criteria[form.primary.mapping] = data[form.primary.mapping]
 	}
 
 	var fn_dataopened = async (result, options) => {
-
+		var record = result.record;
 		updatefilebox(result.record);
+/*
+		if (record.jurnaldetil_id_ref==null) { record.jurnaldetil_id_ref='--NULL--'; record.jurnaldetil_descr='NONE'; }
 
-		if (result.record.jurnaldetil_id_ref==null) { result.record.jurnaldetil_id_ref='--NULL--'; result.record.jurnaldetil_descr='NONE'; }
-
-
+*/
+		for (var objid in obj) {
+			let o = obj[objid]
+			if (o.isCombo() && !o.isRequired()) {
+				var value =  result.record[o.getFieldValueName()];
+				if (value==null ) {
+					record[o.getFieldValueName()] = pOpt.value;
+					record[o.getFieldDisplayName()] = pOpt.text;
+				}
+			}
+		}
 		form.SuspendEvent(true);
 		form
-			.fill(result.record)
-			.setValue(obj.cbo_partner_id, result.record.partner_id, result.record.partner_name)
-			.setValue(obj.cbo_jurnaldetil_id_ref, result.record.jurnaldetil_id_ref, result.record.jurnaldetil_descr)
-			.setValue(obj.cbo_curr_id, result.record.curr_id, result.record.curr_name)
-			.setValue(obj.cbo_coa_id, result.record.coa_id, result.record.coa_name)
-			.setValue(obj.cbo_dept_id, result.record.dept_id, result.record.dept_name)
-			.commit()
+			.fill(record)
+			.setValue(obj.cbo_partner_id, record.partner_id, record.partner_name)
+			.setValue(obj.cbo_curr_id, record.curr_id, record.curr_name)
+			.setValue(obj.cbo_coa_id, record.coa_id, record.coa_name)
+			.setValue(obj.cbo_dept_id, record.dept_id, record.dept_name)
+			.setValue(obj.cbo_jurnaldetil_id_ref, record.jurnaldetil_id_ref, record.jurnaldetil_descr)
 			.setViewMode()
 			.rowid = rowid
 
+
+
+		/* tambahkan event atau behaviour saat form dibuka
+		   apabila ada rutin mengubah form dan tidak mau dijalankan pada saat opening,
+		   cek dengan form.isEventSuspended()
+		*/ 
+		if (typeof hnd.form_dataopened == 'function') {
+			hnd.form_dataopened(result, options);
+		}
+
+
+		form.commit()
 		form.SuspendEvent(false);
 
 
@@ -330,18 +392,20 @@ export function createnew(hdata) {
 		data.jurnaldetil_valfrgrate = 0
 		data.jurnaldetil_validr = 0
 
-			data.partner_id = '0'
-			data.partner_name = '-- PILIH --'
-			data.jurnaldetil_id_ref = '--NULL--'
-			data.jurnaldetil_descr = 'NONE'
-			data.curr_id = '0'
-			data.curr_name = '-- PILIH --'
-			data.coa_id = '0'
-			data.coa_name = '-- PILIH --'
-			data.dept_id = '0'
-			data.dept_name = '-- PILIH --'
+		data.partner_id = '0'
+		data.partner_name = '-- PILIH --'
+		data.curr_id = '0'
+		data.curr_name = '-- PILIH --'
+		data.coa_id = '0'
+		data.coa_name = '-- PILIH --'
+		data.dept_id = '0'
+		data.dept_name = '-- PILIH --'
+		data.jurnaldetil_id_ref = '--NULL--'
+		data.jurnaldetil_descr = 'NONE'
 
-
+		if (typeof hnd.form_newdata == 'function') {
+			hnd.form_newdata(data, options);
+		}
 
 
 		form.rowid = null
@@ -355,15 +419,44 @@ export function createnew(hdata) {
 async function form_datasaving(data, options) {
 	options.api = `${global.modulefullname}/detil-save`
 
-	options.skipmappingresponse = [jurnaldetil_id_ref, ];
+	// options.skipmappingresponse = ['jurnaldetil_id_ref', ];
+	options.skipmappingresponse = [];
+	for (var objid in obj) {
+		var o = obj[objid]
+		if (o.isCombo() && !o.isRequired()) {
+			var id = o.getFieldValueName()
+			options.skipmappingresponse.push(id)
+			console.log(id)
+		}
+	}
+
+	if (typeof hnd.form_datasaving == 'function') {
+		hnd.form_datasaving(data, options);
+	}	
 }
 
 async function form_datasaved(result, options) {
 	var data = {}
 	Object.assign(data, form.getData(), result.dataresponse)
 
+	/*
 	form.setValue(obj.cbo_jurnaldetil_id_ref, result.dataresponse.jurnaldetil_descr!=='--NULL--' ? result.dataresponse.jurnaldetil_id_ref : '--NULL--', result.dataresponse.jurnaldetil_descr!=='--NULL--'?result.dataresponse.jurnaldetil_descr:'NONE')
 
+	*/
+
+	var pOpt = form.getDefaultPrompt(false)
+	for (var objid in obj) {
+		var o = obj[objid]
+		if (o.isCombo() && !o.isRequired()) {
+			var value =  result.dataresponse[o.getFieldValueName()];
+			var text = result.dataresponse[o.getFieldDisplayName()];
+			if (value==null ) {
+				value = pOpt.value;
+				text = pOpt.text;
+			}
+			form.setValue(o, value, text);
+		}
+	}
 	form.rowid = $ui.getPages().ITEMS['pnl_editdetilgrid'].handler.updategrid(data, form.rowid)
 
 	var autoadd = chk_autoadd.prop("checked")
@@ -372,17 +465,43 @@ async function form_datasaved(result, options) {
 			btn_addnew_click()
 		}, 1000)
 	}
+
+	if (reload_header_modified) {
+		var currentRowdata =  $ui.getPages().ITEMS['pnl_edit'].handler.getCurrentRowdata();
+		$ui.getPages().ITEMS['pnl_edit'].handler.open(currentRowdata.data, currentRowdata.rowid, false, (err, data)=>{
+			$ui.getPages().ITEMS['pnl_list'].handler.updategrid(data, currentRowdata.rowid);
+		});	
+	}
+
+	if (typeof hnd.form_datasaved == 'function') {
+		hnd.form_datasaved(result, rowdata, options);
+	}
+
 }
 
 async function form_deleting(data, options) {
 	options.api = `${global.modulefullname}/detil-delete`
+	if (typeof hnd.form_deleting == 'function') {
+		hnd.form_deleting(data);
+	}
 }
 
 async function form_deleted(result, options) {
 	options.suppressdialog = true
 	$ui.getPages().show('pnl_editdetilgrid', ()=>{
 		$ui.getPages().ITEMS['pnl_editdetilgrid'].handler.removerow(form.rowid)
-	})
+	});
+
+	if (reload_header_modified) {
+		var currentRowdata =  $ui.getPages().ITEMS['pnl_edit'].handler.getCurrentRowdata();
+		$ui.getPages().ITEMS['pnl_edit'].handler.open(currentRowdata.data, currentRowdata.rowid, false, (err, data)=>{
+			$ui.getPages().ITEMS['pnl_list'].handler.updategrid(data, currentRowdata.rowid);
+		});	
+	}
+
+	if (typeof hnd.form_deleted == 'function') {
+		hnd.form_deleted(result, options);
+	}
 	
 }
 

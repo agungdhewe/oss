@@ -23,7 +23,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 22/10/2021
+ * tanggal 26/12/2021
  */
 $API = new class extends colltargetBase {
 
@@ -58,7 +58,7 @@ $API = new class extends colltargetBase {
 			$limit = " LIMIT $maxrow OFFSET $offset ";
 			$stmt = $this->db->prepare("
 				select 
-				A.colltarget_id, A.periodemo_id, A.empl_id, A.dept_id, A.colltarget_discprop, A.colltarget_idr, A.colltarget_discval, A.colltarget_idrtotal, A.colltarget_idrtopay, A.doc_id, A.colltarget_version, A.colltarget_iscommit, A.colltarget_commitby, A.colltarget_commitdate, A.colltarget_isapprovalprogress, A.colltarget_isapproved, A.colltarget_approveby, A.colltarget_approvedate, A.colltarget_isdeclined, A.colltarget_declineby, A.colltarget_declinedate, A._createby, A._createdate, A._modifyby, A._modifydate 
+				A.colltarget_id, A.periodemo_id, A.empl_id, A.dept_id, A.colltarget_discprop, A.colltarget_idr, A.colltarget_discval, A.colltarget_idrtopay, A.doc_id, A.colltarget_version, A.colltarget_iscommit, A.colltarget_commitby, A.colltarget_commitdate, A.colltarget_isapprovalprogress, A.colltarget_isapproved, A.colltarget_approveby, A.colltarget_approvedate, A.colltarget_isdeclined, A.colltarget_declineby, A.colltarget_declinedate, A._createby, A._createdate, A._modifyby, A._modifydate 
 				from trn_colltarget A
 			" . $where->sql . $limit);
 			$stmt->execute($where->params);

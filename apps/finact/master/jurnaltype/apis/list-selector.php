@@ -39,6 +39,7 @@ $API = new class extends jurnaltypeBase {
 			}
 
 
+			\FGTA4\utils\SqlUtility::setDefaultCriteria($options->criteria, 'jurnaltype_isdisabled', '0');
 			$where = \FGTA4\utils\SqlUtility::BuildCriteria(
 				$options->criteria,
 				[

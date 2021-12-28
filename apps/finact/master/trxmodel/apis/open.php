@@ -7,6 +7,10 @@ if (!defined('FGTA4')) {
 require_once __ROOT_DIR.'/core/sqlutil.php';
 require_once __DIR__ . '/xapi.base.php';
 
+if (is_file(__DIR__ .'/data-header-handler.php')) {
+	require_once __DIR__ .'/data-header-handler.php';
+}
+
 
 use \FGTA4\exceptions\WebException;
 
@@ -24,7 +28,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 18/09/2021
+ * tanggal 27/12/2021
  */
 $API = new class extends trxmodelBase {
 	
@@ -32,6 +36,18 @@ $API = new class extends trxmodelBase {
 		$tablename = 'mst_trxmodel';
 		$primarykey = 'trxmodel_id';
 		$userdata = $this->auth->session_get_user();
+
+		$handlerclassname = "\\FGTA4\\apis\\trxmodel_headerHandler";
+		if (class_exists($handlerclassname)) {
+			$hnd = new trxmodel_headerHandler($data, $options);
+			$hnd->caller = $this;
+			$hnd->db = $this->db;
+			$hnd->auth = $this->auth;
+			$hnd->reqinfo = $reqinfo->reqinfo;
+		} else {
+			$hnd = new \stdClass;
+		}
+
 
 		try {
 
@@ -50,7 +66,7 @@ $API = new class extends trxmodelBase {
 			);
 
 			$sql = \FGTA4\utils\SqlUtility::Select('mst_trxmodel A', [
-				'trxmodel_id', 'trxmodel_name', 'trxmodel_descr', 'trxmodel_direction', 'ppn_taxtype_id', 'pph_taxtype_id', 'trxmodel_isuseqty', 'trxmodel_isusedays', 'trxmodel_isusetask', '_createby', '_createdate', '_modifyby', '_modifydate'
+				'trxmodel_id', 'trxmodel_name', 'trxmodel_descr', 'trxmodel_direction', 'ppn_taxtype_id', 'pph_taxtype_id', 'trxmodel_isuseqty', 'trxmodel_isusedays', 'trxmodel_isusetask', 'trxmodel_isassetminta', 'trxmodel_isassetpinjam', '_createby', '_createdate', '_modifyby', '_modifydate'
 			], $where->sql);
 
 			$stmt = $this->db->prepare($sql);
@@ -79,6 +95,13 @@ $API = new class extends trxmodelBase {
 				'_modifyby' => \FGTA4\utils\SqlUtility::Lookup($record['_modifyby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
 
 			]);
+
+			if (is_object($hnd)) {
+				if (method_exists(get_class($hnd), 'DataOpen')) {
+					$hnd->DataOpen($result->record);
+				}
+			}
+
 
 			// $date = DateTime::createFromFormat('d/m/Y', "24/04/2012");
 			// echo $date->format('Y-m-d');

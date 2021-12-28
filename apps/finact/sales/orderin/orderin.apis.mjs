@@ -32,5 +32,6 @@ export const load_doc_id = 'ent/organisation/docs/list'
 export const load_itemclass_id = 'local: list-get-itemclass'
 export const load_accbudget_id = 'finact/master/accbudget/list'
 export const load_coa_id = 'finact/master/accbudget/list'
+export const load_orderintermtype_id = 'finact/sales/orderintermtype/list'
 
 

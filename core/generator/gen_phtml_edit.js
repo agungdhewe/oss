@@ -117,7 +117,7 @@ module.exports = async (fsd, genconfig) => {
 			if (compclass=='easyui-checkbox') {
 
 				formcomp_script += `
-		<div class="form_row" ${formrowstyle}>
+		<div class="form_row pnl_edit_row ${prefix}${fieldname}" ${formrowstyle}>
 			<div class="form_label_col">${caption}</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_edit-${prefix}${fieldname}" class="easyui-checkbox c1" mapping="${fieldname}" data-options="label: '${labeltext}', labelPosition: 'after', checked: false ${stroptions}">
@@ -144,7 +144,7 @@ module.exports = async (fsd, genconfig) => {
 				}
 
 				formcomp_script += `
-		<div class="form_row" ${formrowstyle}>
+		<div class="form_row pnl_edit_row ${prefix}${fieldname}" ${formrowstyle}>
 			<div class="form_label_col${labeltipsclass}" ${tipshidden} style="border: 0px solid black; vertical-align: top; margin-top: 7px;">${labeltext}</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_edit-${prefix}${fieldname}" class="easyui-combo" style="width: 400px" mapping="${fieldname}" display="${combodisplay}" data-options="editable:false, valueField:'id', textField:'text' ${stroptions}"  ${validType}>
@@ -155,7 +155,7 @@ module.exports = async (fsd, genconfig) => {
 
 			} else if (compclass=='easyui-combobox') {	
 				formcomp_script += `
-		<div class="form_row" ${formrowstyle}>
+		<div class="form_row pnl_edit_row ${prefix}${fieldname}" ${formrowstyle}>
 			<div class="form_label_col${labeltipsclass}" ${tipshidden} style="border: 0px solid black; vertical-align: top; margin-top: 7px;">${labeltext}</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_edit-${prefix}${fieldname}" class="easyui-combobox" style="width: 400px" mapping="${fieldname}" display="${fieldname}" data-options="editable:false, valueField:'id', textField:'text' ${stroptions}">
@@ -166,7 +166,7 @@ module.exports = async (fsd, genconfig) => {
 
 			} else if (compclass=='easyui-datebox') {
 				formcomp_script += `
-		<div class="form_row" ${formrowstyle}>
+		<div class="form_row pnl_edit_row ${prefix}${fieldname}" ${formrowstyle}>
 			<div class="form_label_col${labeltipsclass}" ${tipshidden} style="border: 0px solid black; vertical-align: top; margin-top: 7px;">${labeltext}</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_edit-${prefix}${fieldname}" class="easyui-datebox" style="width: 400px" mapping="${fieldname}" data-options="editable:false ${stroptions}">
@@ -183,7 +183,7 @@ module.exports = async (fsd, genconfig) => {
 
 
 				formcomp_script += `
-		<div class="form_row" ${formrowstyle}>
+		<div class="form_row pnl_edit_row ${prefix}${fieldname}" ${formrowstyle}>
 			<div class="form_label_col${labeltipsclass}" ${tipshidden} style="border: 0px solid black; vertical-align: top; margin-top: 7px;">${labeltext}</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_edit-${prefix}${fieldname}" class="${compclass}" mapping="${fieldname}" ${settouppercase} ${$maxlengdcr} style="width: 400px" data-options="multiline: false ${stroptions} ">
@@ -194,7 +194,7 @@ module.exports = async (fsd, genconfig) => {
 			} else if (compclass=='easyui-numberbox') {
 						
 				formcomp_script += `
-		<div class="form_row" ${formrowstyle}>
+		<div class="form_row pnl_edit_row ${prefix}${fieldname}" ${formrowstyle}>
 			<div class="form_label_col${labeltipsclass}" ${tipshidden} style="border: 0px solid black; vertical-align: top; margin-top: 7px;">${labeltext}</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_edit-${prefix}${fieldname}" class="${compclass}" mapping="${fieldname}" style="width: 400px; text-align:right" data-options="precision: ${type.precision}, decimalSeparator:'.', groupSeparator:','  ${stroptions}">
@@ -207,7 +207,7 @@ module.exports = async (fsd, genconfig) => {
 			} else if (compclass=='easyui-filebox') {
 				formcomp_script += `
 
-		<div class="form_row" ${formrowstyle}>
+		<div class="form_row pnl_edit_row ${prefix}${fieldname}" ${formrowstyle}>
 			<div class="form_label_col${labeltipsclass}" ${tipshidden} style="border: 0px solid black; vertical-align: top; margin-top: 7px;">${labeltext}</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_edit-${prefix}${fieldname}" class="${compclass}" mapping="${fieldname}" style="width: 400px" data-options="multiline: false ${stroptions} ">
@@ -222,7 +222,7 @@ module.exports = async (fsd, genconfig) => {
 
 			} else {
 				formcomp_script += `
-		<div class="form_row" ${formrowstyle}>
+		<div class="form_row pnl_edit_row ${prefix}${fieldname}" ${formrowstyle}>
 			<div class="form_label_col${labeltipsclass}" ${tipshidden} style="border: 0px solid black; vertical-align: top; margin-top: 7px;">${labeltext}</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_edit-${prefix}${fieldname}" class="${compclass}" mapping="${fieldname}" style="width: 400px" data-options="multiline: false ${stroptions} ">
@@ -250,16 +250,28 @@ module.exports = async (fsd, genconfig) => {
 		var detilpanel_script = ''
 		if (Object.keys(genconfig.schema.detils).length>0) {
 			var detilrow = ''
+
 			for (var detilname in genconfig.schema.detils) {
 				var detil = genconfig.schema.detils[detilname]
 				var detiltitle = detil.title!=null ? detil.title : detilname;
+				var tabvisible = detil.tabvisible===false ? false : true;
+
+
+
+				var styles=[]
+				if (!tabvisible) {
+					styles.push('display:none')
+				}
+				var style = styles.join('; ');
+
+
 				if (detil.form===true) {
-					detilrow += `\t\t\t\t<div class="fgtable-head-drow" style="height: 25px; padding: 5px 5px 0px 5px" onclick="$ui.getPages().ITEMS['pnl_edit'].handler.detil_open('pnl_edit${detilname}grid')">\r\n`;
+					detilrow += `\t\t\t\t<div class="fgtable-head-drow" style="height: 25px; padding: 5px 5px 0px 5px; ${style}" onclick="$ui.getPages().ITEMS['pnl_edit'].handler.detil_open('pnl_edit${detilname}grid')">\r\n`;
 					detilrow += `\t\t\t\t\t<div id="pnl_edit-txt_${detilname}_title" class="detilgrid-text">${detiltitle}</div>\r\n`;
 					detilrow += `\t\t\t\t\t<div id="pnl_edit-txt_${detilname}_value" class="detilgrid-value">&nbsp;</div>\r\n`;
 					detilrow += `\t\t\t\t</div>\r\n`;
 				} else {
-					detilrow += `\t\t\t\t<div class="fgtable-head-drow" style="height: 25px; padding: 5px 5px 0px 5px" onclick="$ui.getPages().ITEMS['pnl_edit'].handler.detil_open('pnl_edit${detilname}')">\r\n`;
+					detilrow += `\t\t\t\t<div class="fgtable-head-drow" style="height: 25px; padding: 5px 5px 0px 5px; ; ${style}" onclick="$ui.getPages().ITEMS['pnl_edit'].handler.detil_open('pnl_edit${detilname}')">\r\n`;
 					detilrow += `\t\t\t\t\t<div id="pnl_edit-txt_${detilname}_title" class="detilgrid-text">${detiltitle}</div>\r\n`;
 					detilrow += `\t\t\t\t\t<div id="pnl_edit-txt_${detilname}_value" class="detilgrid-value">&nbsp;</div>\r\n`;
 					detilrow += `\t\t\t\t</div>\r\n`;
@@ -310,17 +322,26 @@ ${detilrow}
 				<a id="pnl_edit-btn_decline" href="javascript:void(0)" class="easyui-linkbutton c8" style="margin-left:10px; margin-bottom: 10px;" data-options="plain:true,iconCls:'fgta-icon-unposting'">Decline</a>
 				`;
 			}
-		}		
+		}
+		
+		var xtionbuttons = '';
+		for (var xtionname in genconfig.schema.xtions) {
+			var xtion = genconfig.schema.xtions[xtionname]
+			xtionbuttons += `\t\t\t\t<a id="pnl_edit-${xtion.buttonname}" href="javascript:void(0)" class="easyui-linkbutton c8" style="width: 80px; margin-left:10px; margin-bottom: 10px;" data-options="plain:true">${xtion.buttontext}</a>\r\n`
+		}
+
 
 		var phtmltpl = path.join(genconfig.GENLIBDIR, 'tpl', 'edit_phtml.tpl')
 		var tplscript = fs.readFileSync(phtmltpl).toString()
 		tplscript = tplscript.replace('<!--__FORMCOMP__-->', formcomp_script)
 		tplscript = tplscript.replace('<!--__DETILPANEL__-->', detilpanel_script)
 		tplscript = tplscript.replace('<!--__PAGETITLE__-->', pagetitle)
-		tplscript = tplscript.replace('	<!--__PRINTBUTTON__-->', printbutton)
-		tplscript = tplscript.replace('	<!--__COMMITBUTTON__-->', commitbutton)
-		tplscript = tplscript.replace('	<!--__APPROVEBUTTON__-->', approvebutton)
+		tplscript = tplscript.replace('<!--__PRINTBUTTON__-->', printbutton)
+		tplscript = tplscript.replace('<!--__COMMITBUTTON__-->', commitbutton)
+		tplscript = tplscript.replace('<!--__APPROVEBUTTON__-->', approvebutton)
+		tplscript = tplscript.replace('<!--__XTIONBUTTONS__-->', xtionbuttons)
 
+		
 
 		fsd.script = tplscript		
 

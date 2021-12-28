@@ -6,6 +6,7 @@ const tbl_list = $('#pnl_list-tbl_list')
 const txt_search = $('#pnl_list-txt_search')
 const btn_load = $('#pnl_list-btn_load')
 const btn_new = $('#pnl_list-btn_new')
+const btn_reindex = $('#pnl_list-btn_reindex');
 
 
 let grd_list = {}
@@ -40,6 +41,12 @@ export async function init(opt) {
 	btn_new.linkbutton({
 		onClick: () => { btn_new_click() }
 	})
+	
+	btn_reindex.linkbutton({
+		onClick: () => { btn_reindex_click() }
+	})
+
+
 
 	document.addEventListener('OnSizeRecalculated', (ev) => {
 		OnSizeRecalculated(ev.detail.width, ev.detail.height)
@@ -166,5 +173,29 @@ function grd_list_rowrender(tr) {
 			}
 		}
 	})
+}
+
+
+
+
+async function btn_reindex_click() {
+	
+	var apiurl = `${global.modulefullname}/xtion-reindex`
+	var args = {options: {}}
+
+	try {
+		$ui.mask('wait..');
+		let result = await $ui.apicall(apiurl, args)
+		if (result.success) {
+			btn_load_click();
+		}
+	} catch (err) {
+		console.error(err);
+		$ui.ShowMessage('[ERROR]' + err.message);
+	} finally {
+		$ui.unmask();
+	}
+	
+
 }
 

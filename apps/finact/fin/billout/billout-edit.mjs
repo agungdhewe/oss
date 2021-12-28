@@ -3,6 +3,7 @@ var this_page_options;
 
 import {fgta4slideselect} from  '../../../../../index.php/asset/fgta/framework/fgta4libs/fgta4slideselect.mjs'
 
+
 const btn_edit = $('#pnl_edit-btn_edit')
 const btn_save = $('#pnl_edit-btn_save')
 const btn_delete = $('#pnl_edit-btn_delete')
@@ -18,12 +19,16 @@ const pnl_form = $('#pnl_edit-form')
 const obj = {
 	txt_billout_id: $('#pnl_edit-txt_billout_id'),
 	cbo_billtype_id: $('#pnl_edit-cbo_billtype_id'),
-	cbo_sales_dept_id: $('#pnl_edit-cbo_sales_dept_id'),
+	cbo_dept_id: $('#pnl_edit-cbo_dept_id'),
+	chk_billout_isunreferenced: $('#pnl_edit-chk_billout_isunreferenced'),
 	cbo_orderin_id: $('#pnl_edit-cbo_orderin_id'),
+	cbo_orderinterm_id: $('#pnl_edit-cbo_orderinterm_id'),
+	chk_billout_isdp: $('#pnl_edit-chk_billout_isdp'),
 	txt_billout_descr: $('#pnl_edit-txt_billout_descr'),
 	dt_billout_date: $('#pnl_edit-dt_billout_date'),
 	dt_billout_datedue: $('#pnl_edit-dt_billout_datedue'),
 	cbo_partner_id: $('#pnl_edit-cbo_partner_id'),
+	txt_billout_payment: $('#pnl_edit-txt_billout_payment'),
 	cbo_ppn_taxtype_id: $('#pnl_edit-cbo_ppn_taxtype_id'),
 	txt_ppn_taxvalue: $('#pnl_edit-txt_ppn_taxvalue'),
 	chk_ppn_include: $('#pnl_edit-chk_ppn_include'),
@@ -47,9 +52,10 @@ const obj = {
 	txt_billout_ppn: $('#pnl_edit-txt_billout_ppn'),
 	txt_billout_total: $('#pnl_edit-txt_billout_total'),
 	txt_billout_totaladdcost: $('#pnl_edit-txt_billout_totaladdcost'),
-	txt_billout_payment: $('#pnl_edit-txt_billout_payment'),
+	txt_billout_dp: $('#pnl_edit-txt_billout_dp'),
+	cbo_unit_id: $('#pnl_edit-cbo_unit_id'),
+	cbo_owner_dept_id: $('#pnl_edit-cbo_owner_dept_id'),
 	cbo_trxmodel_id: $('#pnl_edit-cbo_trxmodel_id'),
-	cbo_dept_id: $('#pnl_edit-cbo_dept_id'),
 	cbo_doc_id: $('#pnl_edit-cbo_doc_id'),
 	txt_billout_version: $('#pnl_edit-txt_billout_version'),
 	chk_billout_iscommit: $('#pnl_edit-chk_billout_iscommit'),
@@ -67,6 +73,7 @@ const rec_commitdate = $('#pnl_edit_record-commitdate');
 
 
 let form;
+let rowdata;
 
 export async function init(opt) {
 	this_page_id = opt.id;
@@ -148,11 +155,11 @@ export async function init(opt) {
 		}
 	})				
 				
-	new fgta4slideselect(obj.cbo_sales_dept_id, {
-		title: 'Pilih sales_dept_id',
+	new fgta4slideselect(obj.cbo_dept_id, {
+		title: 'Pilih dept_id',
 		returnpage: this_page_id,
-		api: $ui.apis.load_sales_dept_id,
-		fieldValue: 'sales_dept_id',
+		api: $ui.apis.load_dept_id,
+		fieldValue: 'dept_id',
 		fieldValueMap: 'dept_id',
 		fieldDisplay: 'dept_name',
 		fields: [
@@ -183,13 +190,68 @@ export async function init(opt) {
 			{mapping: 'orderin_descr', text: 'orderin_descr'},
 		],
 		OnDataLoading: (criteria) => {
-			criteria.dept_id = form.getValue(obj.cbo_sales_dept_id);			
+			criteria.dept_id = form.getValue(obj.cbo_dept_id);			
 		},
 		OnDataLoaded : (result, options) => {
-			result.records.unshift({orderin_id:'--NULL--', orderin_descr:'NONE'});	
+				
 		},
 		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
+			if (value!=args.PreviousValue ) {
+				console.log(record);
+				form.setValue(obj.txt_billout_descr, record.orderin_descr);
+				form.setValue(obj.cbo_partner_id, record.partner_id, record.partner_name);
+
+				form.setValue(obj.cbo_ppn_taxtype_id, record.ppn_taxtype_id==null?'--NULL--':record.ppn_taxtype_id, record.ppn_taxtype_name);
+				form.setValue(obj.txt_ppn_taxvalue, record.ppn_taxvalue);
+				form.setValue(obj.chk_ppn_include, record.ppn_include);
+				form.setValue(obj.cbo_pph_taxtype_id, record.pph_taxtype_id==null?'--NULL--':record.pph_taxtype_id, record.pph_taxtype_name);
+				form.setValue(obj.txt_pph_taxvalue, record.pph_taxvalue);
+
+				form.setValue(obj.cbo_arunbill_coa_id, record.arunbill_coa_id==null?'--NULL--':record.arunbill_coa_id, record.arunbill_coa_name);
+				form.setValue(obj.cbo_ar_coa_id, record.ar_coa_id==null?'--NULL--':record.ar_coa_id, record.ar_coa_name);
+				form.setValue(obj.cbo_dp_coa_id, record.dp_coa_id==null?'--NULL--':record.dp_coa_id, record.dp_coa_name);
+				form.setValue(obj.cbo_sales_coa_id, record.sales_coa_id==null?'--NULL--':record.sales_coa_id, record.sales_coa_name);
+				form.setValue(obj.cbo_salesdisc_coa_id, record.salesdisc_coa_id==null?'--NULL--':record.salesdisc_coa_id, record.salesdisc_coa_name);
+				form.setValue(obj.cbo_ppn_coa_id, record.ppn_coa_id==null?'--NULL--':record.ppn_coa_id, record.ppn_coa_name);
+				form.setValue(obj.cbo_ppnsubsidi_coa_id, record.ppnsubsidi_coa_id==null?'--NULL--':record.ppnsubsidi_coa_id, record.ppnsubsidi_coa_name);
+				form.setValue(obj.cbo_pph_coa_id, record.pph_coa_id==null?'--NULL--':record.pph_coa_id, record.pph_coa_name);
+
+
+				form.setValue(obj.cbo_unit_id, record.unit_id, record.unit_name);
+				form.setValue(obj.cbo_owner_dept_id, record.dept_id, record.dept_name);
+				form.setValue(obj.cbo_trxmodel_id, record.trxmodel_id, record.trxmodel_name);
+
+
+
+
+										
+			}
+		}
+	})				
+				
+	new fgta4slideselect(obj.cbo_orderinterm_id, {
+		title: 'Pilih orderinterm_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_orderinterm_id,
+		fieldValue: 'orderinterm_id',
+		fieldValueMap: 'orderinterm_id',
+		fieldDisplay: 'orderinterm_descr',
+		fields: [
+			{mapping: 'orderinterm_id', text: 'orderinterm_id'},
+			{mapping: 'orderinterm_descr', text: 'orderinterm_descr'},
+		],
+		OnDataLoading: (criteria) => {
+			criteria.id = form.getValue(obj.cbo_orderin_id);			
+		},
+		OnDataLoaded : (result, options) => {
+				
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+				console.log(record);
+				form.setValue(obj.chk_billout_isdp, record.orderinterm_isdp=='1' ? true : false);
+
+										
 			}
 		}
 	})				
@@ -447,16 +509,39 @@ export async function init(opt) {
 		}
 	})				
 				
-	new fgta4slideselect(obj.cbo_trxmodel_id, {
-		title: 'Pilih trxmodel_id',
+	new fgta4slideselect(obj.cbo_unit_id, {
+		title: 'Pilih unit_id',
 		returnpage: this_page_id,
-		api: $ui.apis.load_trxmodel_id,
-		fieldValue: 'trxmodel_id',
-		fieldValueMap: 'trxmodel_id',
-		fieldDisplay: 'trxmodel_name',
+		api: $ui.apis.load_unit_id,
+		fieldValue: 'unit_id',
+		fieldValueMap: 'unit_id',
+		fieldDisplay: 'unit_name',
 		fields: [
-			{mapping: 'trxmodel_id', text: 'trxmodel_id'},
-			{mapping: 'trxmodel_name', text: 'trxmodel_name'},
+			{mapping: 'unit_id', text: 'unit_id'},
+			{mapping: 'unit_name', text: 'unit_name'},
+		],
+		OnDataLoading: (criteria) => {
+						
+		},
+		OnDataLoaded : (result, options) => {
+			result.records.unshift({unit_id:'--NULL--', unit_name:'NONE'});	
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {				
+			}
+		}
+	})				
+				
+	new fgta4slideselect(obj.cbo_owner_dept_id, {
+		title: 'Pilih owner_dept_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_owner_dept_id,
+		fieldValue: 'owner_dept_id',
+		fieldValueMap: 'dept_id',
+		fieldDisplay: 'dept_name',
+		fields: [
+			{mapping: 'dept_id', text: 'dept_id'},
+			{mapping: 'dept_name', text: 'dept_name'},
 		],
 		OnDataLoading: (criteria) => {
 						
@@ -470,16 +555,16 @@ export async function init(opt) {
 		}
 	})				
 				
-	new fgta4slideselect(obj.cbo_dept_id, {
-		title: 'Pilih dept_id',
+	new fgta4slideselect(obj.cbo_trxmodel_id, {
+		title: 'Pilih trxmodel_id',
 		returnpage: this_page_id,
-		api: $ui.apis.load_dept_id,
-		fieldValue: 'dept_id',
-		fieldValueMap: 'dept_id',
-		fieldDisplay: 'dept_name',
+		api: $ui.apis.load_trxmodel_id,
+		fieldValue: 'trxmodel_id',
+		fieldValueMap: 'trxmodel_id',
+		fieldDisplay: 'trxmodel_name',
 		fields: [
-			{mapping: 'dept_id', text: 'dept_id'},
-			{mapping: 'dept_name', text: 'dept_name'},
+			{mapping: 'trxmodel_id', text: 'trxmodel_id'},
+			{mapping: 'trxmodel_name', text: 'trxmodel_name'},
 		],
 		OnDataLoading: (criteria) => {
 						
@@ -573,8 +658,16 @@ export function getForm() {
 	return form
 }
 
+export function getCurrentRowdata() {
+	return rowdata;
+}
 
 export function open(data, rowid, viewmode=true, fn_callback) {
+
+	rowdata = {
+		data: data,
+		rowid: rowid
+	}
 
 	var pOpt = form.getDefaultPrompt(false)
 	var fn_dataopening = async (options) => {
@@ -586,13 +679,13 @@ export function open(data, rowid, viewmode=true, fn_callback) {
 		updatefilebox(record);
 
 		/*
-		if (result.record.orderin_id==null) { result.record.orderin_id='--NULL--'; result.record.orderin_descr='NONE'; }
 		if (result.record.ppn_taxtype_id==null) { result.record.ppn_taxtype_id='--NULL--'; result.record.ppn_taxtype_name='NONE'; }
 		if (result.record.pph_taxtype_id==null) { result.record.pph_taxtype_id='--NULL--'; result.record.pph_taxtype_name='NONE'; }
 		if (result.record.salesdisc_coa_id==null) { result.record.salesdisc_coa_id='--NULL--'; result.record.salesdisc_coa_name='NONE'; }
 		if (result.record.ppn_coa_id==null) { result.record.ppn_coa_id='--NULL--'; result.record.ppn_coa_name='NONE'; }
 		if (result.record.ppnsubsidi_coa_id==null) { result.record.ppnsubsidi_coa_id='--NULL--'; result.record.ppnsubsidi_coa_name='NONE'; }
 		if (result.record.pph_coa_id==null) { result.record.pph_coa_id='--NULL--'; result.record.pph_coa_name='NONE'; }
+		if (result.record.unit_id==null) { result.record.unit_id='--NULL--'; result.record.unit_name='NONE'; }
 
 		*/
 		for (var objid in obj) {
@@ -611,8 +704,9 @@ export function open(data, rowid, viewmode=true, fn_callback) {
 		form
 			.fill(record)
 			.setValue(obj.cbo_billtype_id, record.billtype_id, record.billtype_name)
-			.setValue(obj.cbo_sales_dept_id, record.sales_dept_id, record.sales_dept_name)
+			.setValue(obj.cbo_dept_id, record.dept_id, record.dept_name)
 			.setValue(obj.cbo_orderin_id, record.orderin_id, record.orderin_descr)
+			.setValue(obj.cbo_orderinterm_id, record.orderinterm_id, record.orderinterm_descr)
 			.setValue(obj.cbo_partner_id, record.partner_id, record.partner_name)
 			.setValue(obj.cbo_ppn_taxtype_id, record.ppn_taxtype_id, record.ppn_taxtype_name)
 			.setValue(obj.cbo_pph_taxtype_id, record.pph_taxtype_id, record.pph_taxtype_name)
@@ -624,8 +718,9 @@ export function open(data, rowid, viewmode=true, fn_callback) {
 			.setValue(obj.cbo_ppn_coa_id, record.ppn_coa_id, record.ppn_coa_name)
 			.setValue(obj.cbo_ppnsubsidi_coa_id, record.ppnsubsidi_coa_id, record.ppnsubsidi_coa_name)
 			.setValue(obj.cbo_pph_coa_id, record.pph_coa_id, record.pph_coa_name)
+			.setValue(obj.cbo_unit_id, record.unit_id, record.unit_name)
+			.setValue(obj.cbo_owner_dept_id, record.owner_dept_id, record.sales_dept_name)
 			.setValue(obj.cbo_trxmodel_id, record.trxmodel_id, record.trxmodel_name)
-			.setValue(obj.cbo_dept_id, record.dept_id, record.dept_name)
 			.setValue(obj.cbo_doc_id, record.doc_id, record.doc_name)
 			.setViewMode(viewmode)
 			.lock(false)
@@ -644,8 +739,19 @@ export function open(data, rowid, viewmode=true, fn_callback) {
 		form.SuspendEvent(false); 
 		updatebuttonstate(record)
 
+
+		/* update rowdata */
+		for (var nv in rowdata.data) {
+			if (record[nv]!=undefined) {
+				rowdata.data[nv] = record[nv];
+			}
+		}
+
 		// tampilkan form untuk data editor
-		fn_callback()
+		if (typeof fn_callback==='function') {
+			fn_callback(null, rowdata.data);
+		}
+		
 	}
 
 	var fn_dataopenerror = (err) => {
@@ -664,8 +770,11 @@ export function createnew() {
 		form.rowid = null
 
 		// set nilai-nilai default untuk form
+		data.billout_isunreferenced = '0'
+		data.billout_isdp = '0'
 		data.billout_date = global.now()
 		data.billout_datedue = global.now()
+		data.billout_payment = 0
 		data.ppn_taxvalue = 0
 		data.ppn_include = '0'
 		data.pph_taxvalue = 0
@@ -679,17 +788,19 @@ export function createnew() {
 		data.billout_ppn = 0
 		data.billout_total = 0
 		data.billout_totaladdcost = 0
-		data.billout_payment = 0
+		data.billout_dp = 0
 		data.billout_version = 0
 		data.billout_iscommit = '0'
 		data.billout_ispost = '0'
 
-		data.billtype_id = '0'
-		data.billtype_name = '-- PILIH --'
-		data.sales_dept_id = '0'
-		data.sales_dept_name = '-- PILIH --'
-		data.orderin_id = '--NULL--'
-		data.orderin_descr = 'NONE'
+		data.billtype_id = 'BIL'
+		data.billtype_name = 'BILL'
+		data.dept_id = '0'
+		data.dept_name = '-- PILIH --'
+		data.orderin_id = '0'
+		data.orderin_descr = '-- PILIH --'
+		data.orderinterm_id = '0'
+		data.orderinterm_descr = '-- PILIH --'
 		data.partner_id = '0'
 		data.partner_name = '-- PILIH --'
 		data.ppn_taxtype_id = '--NULL--'
@@ -712,12 +823,14 @@ export function createnew() {
 		data.ppnsubsidi_coa_name = 'NONE'
 		data.pph_coa_id = '--NULL--'
 		data.pph_coa_name = 'NONE'
+		data.unit_id = '--NULL--'
+		data.unit_name = 'NONE'
+		data.owner_dept_id = '0'
+		data.sales_dept_name = '-- PILIH --'
 		data.trxmodel_id = '0'
 		data.trxmodel_name = '-- PILIH --'
-		data.dept_id = '0'
-		data.dept_name = '-- PILIH --'
-		data.doc_id = BILLOUT
-		data.doc_name = undefined
+		data.doc_id = 'BILLOUT'
+		data.doc_name = 'BILLOUT'
 
 
 		rec_commitby.html('');
@@ -844,7 +957,7 @@ async function form_datasaving(data, options) {
 	//    options.cancel = true
 
 	// Modifikasi object data, apabila ingin menambahkan variabel yang akan dikirim ke server
-	// options.skipmappingresponse = ['orderin_id', 'ppn_taxtype_id', 'pph_taxtype_id', 'salesdisc_coa_id', 'ppn_coa_id', 'ppnsubsidi_coa_id', 'pph_coa_id', ];
+	// options.skipmappingresponse = ['ppn_taxtype_id', 'pph_taxtype_id', 'salesdisc_coa_id', 'ppn_coa_id', 'ppnsubsidi_coa_id', 'pph_coa_id', 'unit_id', ];
 	options.skipmappingresponse = [];
 	for (var objid in obj) {
 		var o = obj[objid]
@@ -882,13 +995,13 @@ async function form_datasaved(result, options) {
 	var data = {}
 	Object.assign(data, form.getData(), result.dataresponse)
 	/*
-	form.setValue(obj.cbo_orderin_id, result.dataresponse.orderin_descr!=='--NULL--' ? result.dataresponse.orderin_id : '--NULL--', result.dataresponse.orderin_descr!=='--NULL--'?result.dataresponse.orderin_descr:'NONE')
 	form.setValue(obj.cbo_ppn_taxtype_id, result.dataresponse.ppn_taxtype_name!=='--NULL--' ? result.dataresponse.ppn_taxtype_id : '--NULL--', result.dataresponse.ppn_taxtype_name!=='--NULL--'?result.dataresponse.ppn_taxtype_name:'NONE')
 	form.setValue(obj.cbo_pph_taxtype_id, result.dataresponse.pph_taxtype_name!=='--NULL--' ? result.dataresponse.pph_taxtype_id : '--NULL--', result.dataresponse.pph_taxtype_name!=='--NULL--'?result.dataresponse.pph_taxtype_name:'NONE')
 	form.setValue(obj.cbo_salesdisc_coa_id, result.dataresponse.salesdisc_coa_name!=='--NULL--' ? result.dataresponse.salesdisc_coa_id : '--NULL--', result.dataresponse.salesdisc_coa_name!=='--NULL--'?result.dataresponse.salesdisc_coa_name:'NONE')
 	form.setValue(obj.cbo_ppn_coa_id, result.dataresponse.ppn_coa_name!=='--NULL--' ? result.dataresponse.ppn_coa_id : '--NULL--', result.dataresponse.ppn_coa_name!=='--NULL--'?result.dataresponse.ppn_coa_name:'NONE')
 	form.setValue(obj.cbo_ppnsubsidi_coa_id, result.dataresponse.ppnsubsidi_coa_name!=='--NULL--' ? result.dataresponse.ppnsubsidi_coa_id : '--NULL--', result.dataresponse.ppnsubsidi_coa_name!=='--NULL--'?result.dataresponse.ppnsubsidi_coa_name:'NONE')
 	form.setValue(obj.cbo_pph_coa_id, result.dataresponse.pph_coa_name!=='--NULL--' ? result.dataresponse.pph_coa_id : '--NULL--', result.dataresponse.pph_coa_name!=='--NULL--'?result.dataresponse.pph_coa_name:'NONE')
+	form.setValue(obj.cbo_unit_id, result.dataresponse.unit_name!=='--NULL--' ? result.dataresponse.unit_id : '--NULL--', result.dataresponse.unit_name!=='--NULL--'?result.dataresponse.unit_name:'NONE')
 
 	*/
 
@@ -906,6 +1019,10 @@ async function form_datasaved(result, options) {
 		}
 	}
 	form.rowid = $ui.getPages().ITEMS['pnl_list'].handler.updategrid(data, form.rowid)
+	rowdata = {
+		data: data,
+		rowid: form.rowid
+	}
 }
 
 
@@ -985,7 +1102,7 @@ async function btn_action_click(args) {
 	}
 
 
-	var docname = 'undefined'
+	var docname = 'Tagihan Keluar'
 	var txt_version = obj.txt_billout_version;
 	var chk_iscommit = obj.chk_billout_iscommit;
 	
@@ -1004,7 +1121,7 @@ async function btn_action_click(args) {
 
 	switch (args.action) {
 		case 'commit' :
-			args.act_url = `${global.modulefullname}/xtion-${args.action}`;
+			args.act_url = `${global.modulefullname}/xtion-commit`;
 			args.act_msg_quest = `Apakah anda yakin akan <b>${args.action}</b> ${docname} no ${args.id} ?`;
 			args.act_msg_result = `${docname} no ${args.id} telah di ${args.action}.`;
 			args.act_do = (result) => {
@@ -1015,7 +1132,7 @@ async function btn_action_click(args) {
 			break;
 
 		case 'uncommit' :
-			args.act_url = `${global.modulefullname}/xtion-${args.action}`;
+			args.act_url = `${global.modulefullname}/xtion-uncommit`;
 			args.act_msg_quest = `Apakah anda yakin akan <b>${args.action}</b> ${docname} no ${args.id} ?`;
 			args.act_msg_result = `${docname} no ${args.id} telah di ${args.action}.`;
 			args.act_do = (result) => {

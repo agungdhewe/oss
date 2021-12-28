@@ -24,7 +24,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 22/12/2021
+ * tanggal 24/12/2021
  */
 $API = new class extends billoutBase {
 
@@ -57,7 +57,7 @@ $API = new class extends billoutBase {
 			$limit = " LIMIT $maxrow OFFSET $offset ";
 			$stmt = $this->db->prepare("
 				select 
-				A.billoutdetil_id, A.billrowtype_id, A.taxtype_id, A.billoutdetil_descr, A.curr_id, A.billoutdetil_valfrg, A.billoutdetil_valfrgrate, A.billoutdetil_validr, A.itemclass_id, A.coa_id, A.billout_id, A._createby, A._createdate, A._modifyby, A._modifydate 
+				A.billoutdetil_id, A.billoutrowtype_id, A.orderindelv_id, A.itemclass_id, A.billoutdetil_descr, A.billoutdetil_totalitem, A.billoutdetil_totalqty, A.billoutdetil_salesgross, A.billoutdetil_discount, A.billoutdetil_subtotal, A.billoutdetil_pph, A.billoutdetil_nett, A.billoutdetil_ppn, A.billoutdetil_total, A.billoutdetil_totaladdcost, A.billoutdetil_dp, A.billoutdetil_payment, A.accbudget_id, A.coa_id, A.billout_id, A._createby, A._createdate, A._modifyby, A._modifydate 
 				from trn_billoutdetil A
 			" . $where->sql . $limit);
 			$stmt->execute($where->params);
@@ -75,10 +75,10 @@ $API = new class extends billoutBase {
 					//'tanggal' => date("d/m/y", strtotime($record['tanggal'])),
 				 	//'tambahan' => 'dta'
 
-					'billrowtype_name' => \FGTA4\utils\SqlUtility::Lookup($record['billrowtype_id'], $this->db, 'mst_billrowtype', 'billrowtype_id', 'billrowtype_name'),
-					'taxtype_name' => \FGTA4\utils\SqlUtility::Lookup($record['taxtype_id'], $this->db, 'mst_taxtype', 'taxtype_id', 'taxtype_name'),
-					'curr_name' => \FGTA4\utils\SqlUtility::Lookup($record['curr_id'], $this->db, 'mst_curr', 'curr_id', 'curr_name'),
+					'billoutrowtype_name' => \FGTA4\utils\SqlUtility::Lookup($record['billoutrowtype_id'], $this->db, 'mst_billoutrowtype', 'billoutrowtype_id', 'billoutrowtype_name'),
+					'orderindelv_descr' => \FGTA4\utils\SqlUtility::Lookup($record['orderindelv_id'], $this->db, 'trn_orderindelv', 'orderindelv_id', 'orderindelv_descr'),
 					'itemclass_name' => \FGTA4\utils\SqlUtility::Lookup($record['itemclass_id'], $this->db, 'mst_itemclass', 'itemclass_id', 'itemclass_name'),
+					'accbudget_name' => \FGTA4\utils\SqlUtility::Lookup($record['accbudget_id'], $this->db, 'mst_accbudget', 'accbudget_id', 'accbudget_name'),
 					'coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
 					 
 				]));

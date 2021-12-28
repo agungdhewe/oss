@@ -2,6 +2,10 @@ var this_page_id;
 var this_page_options;
 
 import {fgta4slideselect} from  '../../../../../index.php/asset/fgta/framework/fgta4libs/fgta4slideselect.mjs'
+import * as hnd from  './colltarget-billoutform-hnd.mjs'
+
+const reload_header_modified = true;
+
 
 const txt_title = $('#pnl_editbilloutform-title')
 const btn_edit = $('#pnl_editbilloutform-btn_edit')
@@ -18,22 +22,31 @@ const obj = {
 	txt_colltargetbillout_id: $('#pnl_editbilloutform-txt_colltargetbillout_id'),
 	cbo_partner_id: $('#pnl_editbilloutform-cbo_partner_id'),
 	cbo_billout_id: $('#pnl_editbilloutform-cbo_billout_id'),
+	chk_billout_isunreference: $('#pnl_editbilloutform-chk_billout_isunreference'),
 	dt_colltargetbillout_datetarget: $('#pnl_editbilloutform-dt_colltargetbillout_datetarget'),
-	dt_billout_datedue: $('#pnl_editbilloutform-dt_billout_datedue'),
-	txt_billout_daystotarget: $('#pnl_editbilloutform-txt_billout_daystotarget'),
+	txt_colltargetbillout_notes: $('#pnl_editbilloutform-txt_colltargetbillout_notes'),
 	txt_billout_idr: $('#pnl_editbilloutform-txt_billout_idr'),
-	txt_billout_ppn: $('#pnl_editbilloutform-txt_billout_ppn'),
-	txt_billout_ppnval: $('#pnl_editbilloutform-txt_billout_ppnval'),
-	txt_billout_pph: $('#pnl_editbilloutform-txt_billout_pph'),
-	txt_billout_pphval: $('#pnl_editbilloutform-txt_billout_pphval'),
-	txt_billout_idrnett: $('#pnl_editbilloutform-txt_billout_idrnett'),
 	chk_billout_isdiscvalue: $('#pnl_editbilloutform-chk_billout_isdiscvalue'),
 	txt_billout_discp: $('#pnl_editbilloutform-txt_billout_discp'),
 	txt_billout_discval: $('#pnl_editbilloutform-txt_billout_discval'),
-	txt_billout_idrtotal: $('#pnl_editbilloutform-txt_billout_idrtotal'),
 	txt_billout_idrtopay: $('#pnl_editbilloutform-txt_billout_idrtopay'),
 	txt_billout_ppntopay: $('#pnl_editbilloutform-txt_billout_ppntopay'),
-	txt_colltargetbillout_notes: $('#pnl_editbilloutform-txt_colltargetbillout_notes'),
+	txt_billout_idrtotal: $('#pnl_editbilloutform-txt_billout_idrtotal'),
+	dt_billout_datedue: $('#pnl_editbilloutform-dt_billout_datedue'),
+	txt_billout_daystotarget: $('#pnl_editbilloutform-txt_billout_daystotarget'),
+	txt_billout_totalitem: $('#pnl_editbilloutform-txt_billout_totalitem'),
+	txt_billout_totalqty: $('#pnl_editbilloutform-txt_billout_totalqty'),
+	txt_billout_salesgross: $('#pnl_editbilloutform-txt_billout_salesgross'),
+	txt_billout_discount: $('#pnl_editbilloutform-txt_billout_discount'),
+	txt_billout_subtotal: $('#pnl_editbilloutform-txt_billout_subtotal'),
+	txt_billout_pph: $('#pnl_editbilloutform-txt_billout_pph'),
+	txt_billout_nett: $('#pnl_editbilloutform-txt_billout_nett'),
+	txt_billout_ppn: $('#pnl_editbilloutform-txt_billout_ppn'),
+	txt_billout_total: $('#pnl_editbilloutform-txt_billout_total'),
+	txt_billout_totaladdcost: $('#pnl_editbilloutform-txt_billout_totaladdcost'),
+	txt_billout_dp: $('#pnl_editbilloutform-txt_billout_dp'),
+	txt_billout_payment: $('#pnl_editbilloutform-txt_billout_payment'),
+	txt_billout_paid: $('#pnl_editbilloutform-txt_billout_paid'),
 	txt_colltarget_id: $('#pnl_editbilloutform-txt_colltarget_id')
 }
 
@@ -62,7 +75,10 @@ export async function init(opt) {
 		OnDataDeleted: async (result, options) => { await form_deleted(result, options) },
 		OnIdSetup : (options) => { form_idsetup(options) },
 		OnViewModeChanged : (viewonly) => { form_viewmodechanged(viewonly) }
-	})	
+	});
+	form.getHeaderData = () => {
+		return header_data;
+	}	
 
 	form.AllowAddRecord = true
 	form.AllowRemoveRecord = true
@@ -72,10 +88,31 @@ export async function init(opt) {
 
 
 
+	obj.chk_billout_isunreference.checkbox({onChange: (checked) => { 
+		if (typeof hnd.billout_isunreference_changed==='function') {hnd.billout_isunreference_changed(checked)} 
+	}});
+	
+	obj.dt_colltargetbillout_datetarget.datebox({onChange: (newvalue, oldvalue) => { 
+		if (typeof hnd.colltargetbillout_datetarget_changed==='function') {hnd.colltargetbillout_datetarget_changed(newvalue, oldvalue)} 
+	}});
+	
+	obj.chk_billout_isdiscvalue.checkbox({onChange: (checked) => { 
+		if (typeof hnd.billout_isdiscvalue_changed==='function') {hnd.billout_isdiscvalue_changed(checked)} 
+	}});
+	
+	obj.txt_billout_discp.numberbox({onChange: (newvalue, oldvalue) => { 
+		if (typeof hnd.billout_discp_changed==='function') {hnd.billout_discp_changed(newvalue, oldvalue)} 
+	}});
+	
+	obj.txt_billout_discval.numberbox({onChange: (newvalue, oldvalue) => { 
+		if (typeof hnd.billout_discval_changed==='function') {hnd.billout_discval_changed(newvalue, oldvalue)} 
+	}});
+	
+
 
 	obj.cbo_partner_id.name = 'pnl_editbilloutform-cbo_partner_id'		
 	new fgta4slideselect(obj.cbo_partner_id, {
-		title: 'Pilih Partner',
+		title: 'Pilih partner_id',
 		returnpage: this_page_id,
 		api: $ui.apis.load_partner_id,
 		fieldValue: 'partner_id',
@@ -85,20 +122,27 @@ export async function init(opt) {
 			{mapping: 'partner_id', text: 'partner_id'},
 			{mapping: 'partner_name', text: 'partner_name'},
 		],
-		OnDataLoading: (criteria) => {
-			console.log(header_data);
-			criteria.col_empl_id = header_data.empl_id
+		OnDataLoading: (criteria, options) => {
+				
+			if (typeof hnd.cbo_partner_id_dataloading === 'function') {
+				hnd.cbo_partner_id_dataloading(criteria);
+			}
 		},
 		OnDataLoaded : (result, options) => {
+				
+			if (typeof hnd.cbo_partner_id_dataloaded === 'function') {
+				hnd.cbo_partner_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
 			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_partner_id_selected === 'function') {
+					hnd.cbo_partner_id_selected(value, display, record, args);
+				}
 			}			
 		}
-	})	
-
-
-
+	})				
+			
 	obj.cbo_billout_id.name = 'pnl_editbilloutform-cbo_billout_id'		
 	new fgta4slideselect(obj.cbo_billout_id, {
 		title: 'Pilih billout_id',
@@ -110,49 +154,27 @@ export async function init(opt) {
 		fields: [
 			{mapping: 'billout_id', text: 'billout_id'},
 			{mapping: 'billout_descr', text: 'billout_descr'},
+			{mapping: 'billout_payment', text: 'Outstanding', formatter: 'row_format_number', style: 'width: 100px; text-align: right'},
+
 		],
-		OnDataLoading: (criteria) => {
-			var partner_id = form.getValue(obj.cbo_partner_id);
-			criteria.partner_id = partner_id;
+		OnDataLoading: (criteria, options) => {
+			criteria.partner_id = form.getValue(obj.cbo_partner_id)	
+			if (typeof hnd.cbo_billout_id_dataloading === 'function') {
+				hnd.cbo_billout_id_dataloading(criteria);
+			}
 		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({billout_id:'--NULL--', billout_descr:'NONE'});	
+			if (typeof hnd.cbo_billout_id_dataloaded === 'function') {
+				hnd.cbo_billout_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
 			if (value!=args.PreviousValue ) {
-				// console.log(record);
-				// console.log(header_data);
-				
-
-				var colltarget_estdisc = Number(header_data.colltarget_discprop);
-				var billout_ppn = 0;
-				var billout_ppnval = 0;
-				var billout_pph = 0;
-				var billout_pphval = 0;
-				var billout_validr	= Number(record.billout_validr);
-				var billout_idrnett = billout_validr - billout_pphval;
-				var billout_discval = billout_validr * (colltarget_estdisc/100)
-				var billout_idrtotal = billout_validr - billout_discval;
-
-
-		
-				form.SuspendEvent(true);
-
-				form.setValue(obj.txt_billout_idr, record.billout_validr);
-				form.setValue(obj.txt_billout_ppn, billout_ppn);
-				form.setValue(obj.txt_billout_ppnval, billout_ppnval);
-				form.setValue(obj.txt_billout_pph, billout_pph);
-				form.setValue(obj.txt_billout_pphval, billout_pphval);
-				form.setValue(obj.txt_billout_idrnett, billout_idrnett);
-				form.setValue(obj.txt_billout_discp, colltarget_estdisc);
-				form.setValue(obj.txt_billout_discval, billout_discval);
-				form.setValue(obj.txt_billout_idrtotal, billout_idrtotal);
-				form.setValue(obj.txt_billout_idrtopay, billout_idrtotal);
-				form.setValue(obj.txt_billout_ppntopay, billout_ppnval);
-				form.setValue(obj.txt_billout_daystotarget, 0);		
-
-				form.SuspendEvent(false);
 						
+				if (typeof hnd.cbo_billout_id_selected === 'function') {
+					hnd.cbo_billout_id_selected(value, display, record, args);
+				}
 			}			
 		}
 	})				
@@ -162,13 +184,6 @@ export async function init(opt) {
 	btn_addnew.linkbutton({ onClick: () => { btn_addnew_click() }  })
 	btn_prev.linkbutton({ onClick: () => { btn_prev_click() } })
 	btn_next.linkbutton({ onClick: () => { btn_next_click() } })
-
-
-	obj.chk_billout_isdiscvalue.checkbox({ onChange: (checked) => { chk_billout_isdiscvalue_checked(checked) }})
-	obj.txt_billout_discp.numberbox({  onChange: () => { txt_billout_discp_change() } })
-	obj.txt_billout_discval.numberbox({ onChange: () => { txt_billout_discval_change() } })
-
-
 
 	document.addEventListener('keydown', (ev)=>{
 		if ($ui.getPages().getCurrentPage()==this_page_id) {
@@ -195,9 +210,7 @@ export async function init(opt) {
 			} else {
 				$ui.getPages().show('pnl_editbilloutgrid', ()=>{
 					form.setViewMode()
-					$ui.getPages().ITEMS['pnl_editbilloutgrid'].handler.OpenDetil(header_data, ()=>{
-						$ui.getPages().ITEMS['pnl_editbilloutgrid'].handler.scrolllast()
-					});
+					$ui.getPages().ITEMS['pnl_editbilloutgrid'].handler.scrolllast()
 				})
 			}
 		
@@ -230,6 +243,15 @@ export async function init(opt) {
 			chk_autoadd.prop("checked", false);
 		}
 	})
+
+	if (typeof hnd.init==='function') {
+		hnd.init({
+			form: form,
+			obj: obj,
+			opt: opt
+		})
+	}
+
 }
 
 
@@ -283,7 +305,9 @@ export function open(data, rowid, hdata) {
 		   apabila ada rutin mengubah form dan tidak mau dijalankan pada saat opening,
 		   cek dengan form.isEventSuspended()
 		*/ 
-
+		if (typeof hnd.form_dataopened == 'function') {
+			hnd.form_dataopened(result, options);
+		}
 
 
 		form.commit()
@@ -343,29 +367,36 @@ export function createnew(hdata) {
 		data.billout_value = 0
 
 		data.colltargetbillout_datetarget = global.now()
-		data.billout_datedue = global.now()
-		data.billout_daystotarget = 0
 		data.billout_idr = 0
-		data.billout_ppn = 0
-		data.billout_ppnval = 0
-		data.billout_pph = 0
-		data.billout_pphval = 0
-		data.billout_idrnett = 0
 		data.billout_discp = 0
 		data.billout_discval = 0
-		data.billout_idrtotal = 0
 		data.billout_idrtopay = 0
 		data.billout_ppntopay = 0
-		data.billout_isdiscvalue = 1
+		data.billout_idrtotal = 0
+		data.billout_datedue = global.now()
+		data.billout_daystotarget = 0
+		data.billout_totalitem = 0
+		data.billout_totalqty = 0
+		data.billout_salesgross = 0
+		data.billout_discount = 0
+		data.billout_subtotal = 0
+		data.billout_pph = 0
+		data.billout_nett = 0
+		data.billout_ppn = 0
+		data.billout_total = 0
+		data.billout_totaladdcost = 0
+		data.billout_dp = 0
+		data.billout_payment = 0
+		data.billout_paid = 0
 
+		data.partner_id = '0'
+		data.partner_name = '-- PILIH --'
 		data.billout_id = '--NULL--'
 		data.billout_descr = 'NONE'
-		data.partner_id = '0'
-		data.partner_descr = '-- PILIH --'
 
-
-
-		chk_billout_isdiscvalue_checked(false) 
+		if (typeof hnd.form_newdata == 'function') {
+			hnd.form_newdata(data, options);
+		}
 
 
 		form.rowid = null
@@ -377,30 +408,6 @@ export function createnew(hdata) {
 
 
 async function form_datasaving(data, options) {
-	
-	try {
-
-
-		//Cek Tanggal Target
-		var datetarget = form.getValue(obj.dt_colltargetbillout_datetarget);
-		var periodemo_id = header_data.periodemo_id;
-		var periodemo_year = periodemo_id.substring(0, 4);
-		var periodemo_month = periodemo_id.substring(4, 6);
-		var datetarget_year = datetarget.substring(6,10);
-		var datetarget_month = datetarget.substring(3, 5);
-	
-		if (periodemo_year!=datetarget_year || periodemo_month!=datetarget_month) {
-			options.cancel = true;
-			throw new Error('Tanggal tidak sesuai dengan periode');
-		}
-
-	} catch (err) {
-		options.cancel = true;
-		$ui.ShowMessage('[WARNING]' + err.message);
-		return;
-	}
-	
-	
 	options.api = `${global.modulefullname}/billout-save`
 
 	// options.skipmappingresponse = ['billout_id', ];
@@ -412,6 +419,10 @@ async function form_datasaving(data, options) {
 			options.skipmappingresponse.push(id)
 			console.log(id)
 		}
+	}
+
+	if (typeof hnd.form_datasaving == 'function') {
+		hnd.form_datasaving(data, options);
 	}	
 }
 
@@ -419,7 +430,10 @@ async function form_datasaved(result, options) {
 	var data = {}
 	Object.assign(data, form.getData(), result.dataresponse)
 
+	/*
+	form.setValue(obj.cbo_billout_id, result.dataresponse.billout_descr!=='--NULL--' ? result.dataresponse.billout_id : '--NULL--', result.dataresponse.billout_descr!=='--NULL--'?result.dataresponse.billout_descr:'NONE')
 
+	*/
 
 	var pOpt = form.getDefaultPrompt(false)
 	for (var objid in obj) {
@@ -442,17 +456,43 @@ async function form_datasaved(result, options) {
 			btn_addnew_click()
 		}, 1000)
 	}
+
+	if (reload_header_modified) {
+		var currentRowdata =  $ui.getPages().ITEMS['pnl_edit'].handler.getCurrentRowdata();
+		$ui.getPages().ITEMS['pnl_edit'].handler.open(currentRowdata.data, currentRowdata.rowid, false, (err, data)=>{
+			$ui.getPages().ITEMS['pnl_list'].handler.updategrid(data, currentRowdata.rowid);
+		});	
+	}
+
+	if (typeof hnd.form_datasaved == 'function') {
+		hnd.form_datasaved(result, rowdata, options);
+	}
+
 }
 
 async function form_deleting(data, options) {
 	options.api = `${global.modulefullname}/billout-delete`
+	if (typeof hnd.form_deleting == 'function') {
+		hnd.form_deleting(data);
+	}
 }
 
 async function form_deleted(result, options) {
 	options.suppressdialog = true
 	$ui.getPages().show('pnl_editbilloutgrid', ()=>{
 		$ui.getPages().ITEMS['pnl_editbilloutgrid'].handler.removerow(form.rowid)
-	})
+	});
+
+	if (reload_header_modified) {
+		var currentRowdata =  $ui.getPages().ITEMS['pnl_edit'].handler.getCurrentRowdata();
+		$ui.getPages().ITEMS['pnl_edit'].handler.open(currentRowdata.data, currentRowdata.rowid, false, (err, data)=>{
+			$ui.getPages().ITEMS['pnl_list'].handler.updategrid(data, currentRowdata.rowid);
+		});	
+	}
+
+	if (typeof hnd.form_deleted == 'function') {
+		hnd.form_deleted(result, options);
+	}
 	
 }
 
@@ -531,62 +571,3 @@ function btn_next_click() {
 
 	open(record, trid, header_data)
 }
-
-
-
-function  chk_billout_isdiscvalue_checked(checked) {
-	if (checked) {
-		// by value
-		form.setDisable(obj.txt_billout_discp, true);
-		form.setDisable(obj.txt_billout_discval, false);
-	} else {
-		// by percentage
-		form.setDisable(obj.txt_billout_discp, false);
-		form.setDisable(obj.txt_billout_discval, true);
-	}
-
-}
-
-
-function txt_billout_discp_change() {
-	txt_billout_recalculate()
-}
-
-function txt_billout_discval_change() {
-	txt_billout_recalculate()
-}
-
-
-function txt_billout_recalculate() {
-
-	if (form.isEventSuspended()) {
-		return;
-	}
-
-	var isdiscvalue = form.getValue(obj.chk_billout_isdiscvalue)
-	var total = form.getValue(obj.txt_billout_idrtotal)
-	
-	if (total>0) {
-		if (isdiscvalue) {
-			// hitung persent
-			var val = form.getValue(obj.txt_billout_discval )
-			var percent = 100 * (val/total);
-			form.setValue(obj.txt_billout_discp, percent)
-		} else {
-			// hitung value
-			var percent = form.getValue(obj.txt_billout_discp )
-			var val = total * (percent/100);
-			form.setValue(obj.txt_billout_discval, val)
-		}
-
-		var discval = Number(form.getValue(obj.txt_billout_discval ))
-		var topay = total - discval
-		form.setValue(obj.txt_billout_idrtotal, topay)
-		form.setValue(obj.txt_billout_idrtopay, topay)
-	}
-
-
-}
-
-
-

@@ -7,7 +7,7 @@
 
 	<form id="pnl_edit-form">
 
-		<div class="form_row" >
+		<div class="form_row pnl_edit_row txt_inquirymodel_id" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">ID</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_edit-txt_inquirymodel_id" class="easyui-textbox" mapping="inquirymodel_id" uppercase="true" maxlength="1" style="width: 400px" data-options="multiline: false , required: true, invalidMessage: 'ID harus diisi' ">
@@ -15,7 +15,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_edit_row txt_inquirymodel_name" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Model</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_edit-txt_inquirymodel_name" class="easyui-textbox" mapping="inquirymodel_name" uppercase="true" maxlength="30" style="width: 400px" data-options="multiline: false , required: true, invalidMessage: 'Nama Model Pajak harus diisi' ">
@@ -23,7 +23,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_edit_row txt_inquirymodel_descr" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Descr</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_edit-txt_inquirymodel_descr" class="easyui-textbox" mapping="inquirymodel_descr"  maxlength="90" style="width: 400px" data-options="multiline: false  ">
@@ -31,14 +31,22 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_edit_row cbo_trxmodel_id" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Transaksi Default</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edit-cbo_trxmodel_id" class="easyui-combo" style="width: 400px" mapping="trxmodel_id" display="trxmodel_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Default Model Transaksi harus diisi'"   validType="requiredcombo['pnl_edit-cbo_trxmodel_id']" >
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;">Default Followup Transaksi yang akan dilakukan, apabila diperlukan</div>
+			</div>
+		</div>
+
+		<div class="form_row pnl_edit_row chk_inquirymodel_isqtybreakdown" >
 			<div class="form_label_col"></div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_edit-chk_inquirymodel_isqtybreakdown" class="easyui-checkbox c1" mapping="inquirymodel_isqtybreakdown" data-options="label: 'Quantity Breakdown', labelPosition: 'after', checked: false , labelWidth: '300px'">
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_edit_row chk_inquirymodel_isdateinterval" >
 			<div class="form_label_col"></div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_edit-chk_inquirymodel_isdateinterval" class="easyui-checkbox c1" mapping="inquirymodel_isdateinterval" data-options="label: 'Date Interval', labelPosition: 'after', checked: false ">
@@ -62,9 +70,10 @@
 	<div style="margin-top: 30px; margin-left:-5px; margin-right: -5px; background-color: #cccccc; display: flex; justify-content: space-between; padding: 10px 2px 2px 2px ">
 		<div>
 			<!-- letakkan tombol yang lin disini -->
-		
-		
-		
+			
+			
+			
+			
 		</div>
 		<div>
 			<a id="pnl_edit-btn_delete" class="easyui-linkbutton c5" style="margin-bottom: 10px; margin-right: 10px">Hapus</a>

@@ -8,6 +8,10 @@ require_once __ROOT_DIR.'/core/sqlutil.php';
 // require_once __ROOT_DIR . "/core/sequencer.php";
 require_once __DIR__ . '/xapi.base.php';
 
+if (is_file(__DIR__ .'/data-header-handler.php')) {
+	require_once __DIR__ .'/data-header-handler.php';
+}
+
 
 use \FGTA4\exceptions\WebException;
 // use \FGTA4\utils\Sequencer;
@@ -27,7 +31,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 29/11/2021
+ * tanggal 28/12/2021
  */
 $API = new class extends partnerBase {
 	
@@ -38,6 +42,18 @@ $API = new class extends partnerBase {
 		$datastate = $data->_state;
 
 		$userdata = $this->auth->session_get_user();
+
+		$handlerclassname = "\\FGTA4\\apis\\partner_headerHandler";
+		if (class_exists($handlerclassname)) {
+			$hnd = new partner_headerHandler($data, $options);
+			$hnd->caller = $this;
+			$hnd->db = $this->db;
+			$hnd->auth = $this->auth;
+			$hnd->reqinfo = $reqinfo->reqinfo;
+		} else {
+			$hnd = new \stdClass;
+		}
+
 
 		try {
 
@@ -64,6 +80,9 @@ $API = new class extends partnerBase {
 			$obj->partner_city = strtoupper($obj->partner_city);
 			$obj->partner_country = strtoupper($obj->partner_country);
 			$obj->partner_email = strtolower($obj->partner_email);
+
+
+
 
 
 
@@ -95,12 +114,13 @@ $API = new class extends partnerBase {
 				\FGTA4\utils\SqlUtility::WriteLog($this->db, $this->reqinfo->modulefullname, $tablename, $obj->{$primarykey}, $action, $userdata->username, (object)[]);
 
 
+
+
 				// result
 				$where = \FGTA4\utils\SqlUtility::BuildCriteria((object)[$primarykey=>$obj->{$primarykey}], [$primarykey=>"$primarykey=:$primarykey"]);
-				$sql = \FGTA4\utils\SqlUtility::Select("$tablename A", [
-					$primarykey
-					, 'partner_id', 'partner_name', 'partner_addressline1', 'partner_addressline2', 'partner_postcode', 'partner_city', 'partner_country', 'partner_phone', 'partner_mobilephone', 'partner_email', 'partner_isdisabled', 'partner_isparent', 'partner_parent', 'partnertype_id', 'partnerorg_id', 'partner_npwp', 'partner_isnonnpwp', 'empl_id', 'ae_empl_id', 'col_empl_id', '_createby', '_createdate', '_modifyby', '_modifydate', '_createby', '_createdate', '_modifyby', '_modifydate'
-					, ['(select partnertype_isempl from mst_partnertype where partnertype_id=A.partnertype_id) as partnertype_isempl']
+				$sql = \FGTA4\utils\SqlUtility::Select($tablename , [
+					  $primarykey
+					, 'partner_id', 'partner_name', 'partner_addressline1', 'partner_addressline2', 'partner_postcode', 'partner_city', 'partner_country', 'partner_phone', 'partner_mobilephone', 'partner_email', 'partner_isdisabled', 'partner_isparent', 'partner_parent', 'partnertype_id', 'partnerorg_id', 'partner_npwp', 'partner_isnonnpwp', 'empl_id', 'ae_empl_id', 'col_empl_id', '_createby', '_createdate', '_modifyby', '_modifydate'
 				], $where->sql);
 				$stmt = $this->db->prepare($sql);
 				$stmt->execute($where->params);
@@ -119,52 +139,16 @@ $API = new class extends partnerBase {
 					'empl_name' => \FGTA4\utils\SqlUtility::Lookup($record['empl_id'], $this->db, 'mst_empl', 'empl_id', 'empl_name'),
 					'ae_empl_name' => \FGTA4\utils\SqlUtility::Lookup($record['ae_empl_id'], $this->db, 'mst_empl', 'empl_id', 'empl_name'),
 					'col_empl_name' => \FGTA4\utils\SqlUtility::Lookup($record['col_empl_id'], $this->db, 'mst_empl', 'empl_id', 'empl_name'),
+
 					'_createby' => \FGTA4\utils\SqlUtility::Lookup($record['_createby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
 					'_modifyby' => \FGTA4\utils\SqlUtility::Lookup($record['_modifyby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
 				]);
 
-
-				// Jika Karyawan, tambahkan 1 baris untuk contact
-				if ($result->dataresponse->partnertype_isempl=='1') {
-					$sql = "
-						select * from mst_partnercontact where partner_id = :partner_id
-					";
-					$stmt = $this->db->prepare($sql);
-					$stmt->execute(['partner_id'=>$result->dataresponse->partner_id]);
-					$rows  = $stmt->fetchall(\PDO::FETCH_ASSOC);
-
-					if (count($rows)==0) {
-						$sql = "
-							select 
-							A.empl_name,
-							(select hrjob_name from mst_hrjob where hrjob_id=A.hrjob_id) as hrjob_name
-							from mst_empl A 
-							where empl_id = :empl_id
-						";
-						$stmt = $this->db->prepare($sql);
-						$stmt->execute(['empl_id' => $result->dataresponse->empl_id]);
-						$row  = $stmt->fetch(\PDO::FETCH_ASSOC);	
-						$hrjob_name = $row['hrjob_name'];
-
-						$obj = new \stdClass;
-						$obj->partnercontact_id = \uniqid();
-						$obj->partnercontact_name = $result->dataresponse->partner_name;
-						$obj->partnercontact_position = $hrjob_name;
-						$obj->partnercontact_mobilephone = $result->dataresponse->partner_mobilephone;
-						$obj->partnercontact_email = $result->dataresponse->partner_email;
-						$obj->partner_id = $result->dataresponse->partner_id;
-						$obj->_createby = $userdata->username;
-						$obj->_createdate = date("Y-m-d H:i:s");
-						
-						$cmd = \FGTA4\utils\SqlUtility::CreateSQLInsert("mst_partnercontact", $obj);
-						$stmt = $this->db->prepare($cmd->sql);
-						$stmt->execute($cmd->params);
-
+				if (is_object($hnd)) {
+					if (method_exists(get_class($hnd), 'DataSavedSuccess')) {
+						$hnd->DataSavedSuccess($result);
 					}
-
 				}
-
-
 
 				$this->db->commit();
 				return $result;

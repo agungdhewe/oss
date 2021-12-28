@@ -1,8 +1,6 @@
 {
 	"title": "home",
 	"modules": [
-		
-
 
 		{
 			"title" : "Account",
@@ -33,12 +31,10 @@
 				{"program": "finact/budget/projbudget", "variancename":"approval"},
 				"finact/budget/projbudget",
 
-
 				{"program": "finact/budget/projbudgetrev", "variancename":"view"},
 				{"program": "finact/budget/projbudgetrev", "variancename":"propose"},
 				{"program": "finact/budget/projbudgetrev", "variancename":"approval"},
 				"finact/budget/projbudgetrev",
-			
 
 				{
 					"title" : "Budget Setup",
@@ -61,10 +57,11 @@
 			]
 		},
 
-
 		{
 			"title" : "Items",
 			"modules" : [
+				
+				"finact/items/itemmodel",
 				"finact/items/itemclass",
 				"finact/items/item",
 				"finact/items/itemstock",
@@ -85,10 +82,22 @@
 
 
 		{
+			"title" : "Collection",
+			"modules" : [
+				"finact/collection/colltarget"
+			]
+		},
+
+		{
 			"title" : "Expenditure",
 			"modules" : [
+
+				"finact/master/trxmodel",
+
+				"finact/procurement/inquirymodel",
 				"finact/procurement/inquirytype",
 				"finact/procurement/inquiry",
+				"finact/procurement/inquiryprocess",
 				"finact/procurement/request",
 				"finact/procurement/orderout",
 				"finact/procurement/recv"
@@ -99,9 +108,6 @@
 			"title": "Setup",
 			"modules": [
 
-
-				"finact/sales/orderintype",
-				"finact/items/itemclass",
 
 				{
 					"title" : "General Setup",

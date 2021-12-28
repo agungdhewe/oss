@@ -38,6 +38,14 @@ async function PrepareFs(genconfig) {
 		throw 'Program sudah di lock, tidak bisa digenerate.\r\n' + genlockfilecontent;
 	}
 
+
+	// Inject Handler
+	genconfig.schema.editorHandler = `${basename}-edit-hnd.mjs`;
+	genconfig.schema.listHandler = `${basename}-list-hnd.mjs`;
+
+
+
+
 	if (genconfig.approval===true) {
 		var tbl_header = genconfig.schema.header;
 		var tbl_approval = genconfig.schema.header + 'appr';
@@ -142,10 +150,44 @@ async function PrepareFs(genconfig) {
 			if (fd.type==='dir') {
 				await PrepareDir(programpath, fd)
 			} else {
-				await PrepareFile(programpath, fd)
+				await PrepareFile(programpath, fd, fd.overwrite)
 			}
 			fd.basename = basename
 		}
+
+		// Handler
+		var handlermod = ['editorHandler', 'listHandler']
+		var handlers = [];
+
+		handlers.push({name: 'apis/data-header-handler.php', program:'gen_api_handler', identity:'header'})
+		for (var hndname of handlermod) {
+			if (genconfig.schema[hndname] != undefined) {
+				handlers.push({name:genconfig.schema[hndname], program:'gen_blank'});
+			}
+		}
+
+		for (var detilname in genconfig.schema.detils) {
+			var detil = genconfig.schema.detils[detilname];
+			if (detilname!='approval') { 
+				handlers.push({name:`apis/data-${detilname}-handler.php`, program:'gen_api_handler', identity:detilname})
+			}
+			for (var hndname of handlermod) {
+				if (detil[hndname]!=undefined) {
+					handlers.push({name:detil[hndname], program:'gen_blank'});
+				}
+			}
+		}
+
+		for (var hnd of handlers) {
+			let fdhnd = {
+				name: hnd.name,
+				program: hnd.program,
+				identity: hnd.identity
+			}
+			fsdata.push(fdhnd)
+			await PrepareFile(programpath, fdhnd, false)
+		}
+
 
 		return fsdata
 	} catch (err) {
@@ -228,16 +270,15 @@ async function PrepareDir(programpath, fd) {
 	}
 }
 
-async function PrepareFile(programpath, fd) {
+async function PrepareFile(programpath, fd, overwrite=true) {
 	try {
 		fd.programpath = programpath
 		fd.write = async () => {
 			var fspath = path.join(fd.programpath, fd.name)
-			process.stdout.write(`Cek file ${fspath}... `);
+			// process.stdout.write(`Cek file ${fspath}... `);
 			try {
 				var fspath_dirname = path.dirname(fspath)
 				var fspath_filename = path.basename(fspath)
-				
 				
 				//------------------------------
 				// disable disini apabila mau testing, tidak bikin file backup
@@ -249,10 +290,26 @@ async function PrepareFile(programpath, fd) {
 				// console.log('OK.')
 				//------------------------------
 
-				process.stdout.write(`Writing script file `);
-				fs.writeFileSync(fspath, fd.script)
-				console.log('OK.')
-		
+				process.stdout.write(`Writing ${fd.name}... `);
+
+				var dowrite = false;
+				if (fs.existsSync(fspath)) {
+					if (overwrite) {
+						dowrite = true;
+					}
+				} else {
+					dowrite = true;
+				}
+
+				// dowrite = true;
+				if (dowrite) {
+					// process.stdout.write(`Writing script file `);
+					fs.writeFileSync(fspath, fd.script)
+					console.log('OK.')
+				} else {
+					console.log('SKIP.')
+				}
+	
 			} catch (err) {
 				throw err
 			}			
@@ -276,14 +333,43 @@ function InitDetilPages(genconfig) {
 
 	for (var detilname in  genconfig.schema.detils) {
 		var detil = genconfig.schema.detils[detilname]
+
+		var overwrite = detil.overwrite===undefined || detil.overwrite===null ? {} : detil.overwrite;
+		var overwrite_mjs_list =  overwrite.mjs_list === false ? false : true;
+		var overwrite_phtml_list = overwrite.phtml_list === false ? false : true;
+		var overwrite_mjs_form = overwrite.mjs_form === false ? false : true;
+		var overwrite_phtml_form = overwrite.phtml_form === false ? false : true;
+		var overwrite_api = overwrite.api === false ? false : true;
+
+
 		if (detil.form===true) {
+			
 			genconfig.pages[`${detilname}grid`] = {
-				mjs: {program: 'gen_mjs_detilgrid', panel: `pnl_edit${detilname}grid`,handler: `pEdit${CapFL(detilname)}grid`, filename: `${genconfig.basename}-${detilname}grid.mjs`, detilname: detilname},
-				phtml: {program: 'gen_phtml_detilgrid', panel: `pnl_edit${detilname}grid`, filename: `${genconfig.basename}-${detilname}grid.phtml`, detilname: detilname}
+				mjs: {
+					program: 'gen_mjs_detilgrid', panel: `pnl_edit${detilname}grid`,handler: `pEdit${CapFL(detilname)}grid`, filename: `${genconfig.basename}-${detilname}grid.mjs`, 
+					detilname: detilname,
+					overwrite: overwrite_mjs_list
+				},
+				
+				phtml: {
+					program: 'gen_phtml_detilgrid', panel: `pnl_edit${detilname}grid`, filename: `${genconfig.basename}-${detilname}grid.phtml`, 
+					detilname: detilname,
+					overwrite: overwrite_phtml_list
+				}
 			}
+
 			genconfig.pages[`${detilname}form`] = {
-				mjs: {program: 'gen_mjs_detilform', panel: `pnl_edit${detilname}form`, handler: `pEdit${CapFL(detilname)}form`, filename: `${genconfig.basename}-${detilname}form.mjs`, detilname: detilname},
-				phtml: {program: 'gen_phtml_detilform',  panel: `pnl_edit${detilname}form`, filename: `${genconfig.basename}-${detilname}form.phtml`, detilname: detilname}
+				mjs: {
+					program: 'gen_mjs_detilform', panel: `pnl_edit${detilname}form`, handler: `pEdit${CapFL(detilname)}form`, filename: `${genconfig.basename}-${detilname}form.mjs`, 
+					detilname: detilname,
+					overwrite: overwrite_mjs_form
+				},
+
+				phtml: {
+					program: 'gen_phtml_detilform',  panel: `pnl_edit${detilname}form`, filename: `${genconfig.basename}-${detilname}form.phtml`, 
+					detilname: detilname,
+					overwrite: overwrite_phtml_form
+				}
 			}
 
 			var apis = ['list', 'open', 'save', 'delete']
@@ -292,14 +378,24 @@ function InitDetilPages(genconfig) {
 					api: true,
 					program: gen_api[api],
 					name: path.join('apis', `${detilname}-${api}.php`),
-					detilname: detilname
+					detilname: detilname,
+					overwrite: overwrite_api
 				}
 			}
 
 		} else {
 			genconfig.pages[detilname] = {
-				mjs: {program: 'gen_mjs_blank', panel: `pnl_edit${detilname}`, handler: `pEdit${CapFL(detilname)}`, filename: `${genconfig.basename}-${detilname}.mjs`, detilname: detilname},
-				phtml: {program: 'gen_phtml_blank', panel: `pnl_edit${detilname}`, filename: `${genconfig.basename}-${detilname}.phtml`, detilname: detilname}					
+				mjs: {
+					program: 'gen_mjs_blank', panel: `pnl_edit${detilname}`, handler: `pEdit${CapFL(detilname)}`, filename: `${genconfig.basename}-${detilname}.mjs`, 
+					detilname: detilname,
+					overwrite: overwrite_mjs_list
+				},
+				
+				phtml: {
+					program: 'gen_phtml_blank', panel: `pnl_edit${detilname}`, filename: `${genconfig.basename}-${detilname}.phtml`, 
+					detilname: detilname,
+					overwrite: overwrite_phtml_list
+				}					
 			}
 		}
 
