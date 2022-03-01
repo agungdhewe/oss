@@ -2,6 +2,7 @@ var this_page_id;
 var this_page_options;
 
 import {fgta4slideselect} from  '../../../../../index.php/asset/fgta/framework/fgta4libs/fgta4slideselect.mjs'
+import * as hnd from  './partner-typeform-hnd.mjs'
 
 const reload_header_modified = true;
 
@@ -161,7 +162,13 @@ export async function init(opt) {
 		}
 	})
 
-
+	if (typeof hnd.init==='function') {
+		hnd.init({
+			form: form,
+			obj: obj,
+			opt: opt
+		})
+	}
 
 }
 
@@ -214,7 +221,9 @@ export function open(data, rowid, hdata) {
 		   apabila ada rutin mengubah form dan tidak mau dijalankan pada saat opening,
 		   cek dengan form.isEventSuspended()
 		*/ 
-		
+		if (typeof hnd.form_dataopened == 'function') {
+			hnd.form_dataopened(result, options);
+		}
 
 
 		form.commit()
@@ -277,7 +286,9 @@ export function createnew(hdata) {
 		data.partnertype_id = '0'
 		data.partnertype_name = '-- PILIH --'
 
-
+		if (typeof hnd.form_newdata == 'function') {
+			hnd.form_newdata(data, options);
+		}
 
 
 		form.rowid = null
@@ -302,7 +313,9 @@ async function form_datasaving(data, options) {
 		}
 	}
 
-		
+	if (typeof hnd.form_datasaving == 'function') {
+		hnd.form_datasaving(data, options);
+	}	
 }
 
 async function form_datasaved(result, options) {
@@ -342,13 +355,17 @@ async function form_datasaved(result, options) {
 		});	
 	}
 
-	
+	if (typeof hnd.form_datasaved == 'function') {
+		hnd.form_datasaved(result, rowdata, options);
+	}
 
 }
 
 async function form_deleting(data, options) {
 	options.api = `${global.modulefullname}/type-delete`
-	
+	if (typeof hnd.form_deleting == 'function') {
+		hnd.form_deleting(data);
+	}
 }
 
 async function form_deleted(result, options) {
@@ -364,7 +381,9 @@ async function form_deleted(result, options) {
 		});	
 	}
 
-	
+	if (typeof hnd.form_deleted == 'function') {
+		hnd.form_deleted(result, options);
+	}
 	
 }
 

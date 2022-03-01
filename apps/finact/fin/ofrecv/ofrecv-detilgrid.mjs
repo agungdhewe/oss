@@ -25,6 +25,11 @@ export async function init(opt) {
 		OnCellRender: (td) => { grd_list_cellrender(td) },
 		OnRowRender: (tr) => { grd_list_rowrender(tr) }
 	});	
+	grd_list.doLoad = () => {
+		btn_load_click();
+	}
+
+
 
 	btn_removechecked.linkbutton({
 		onClick: () => { btn_removechecked_click() }
@@ -72,7 +77,7 @@ export async function init(opt) {
 			grd_list: grd_list,
 			opt: opt,
 			header_data: header_data
-		})
+		}, ()=>{})
 	}	
 
 }

@@ -1,14 +1,14 @@
 <?php
 
 	$doc_iso_reg = "<yout form iso number>";
-	$report_title['id'] = "JUDUL FORM";
-	$report_title['en'] = "FORM TITLE";
+	$report_title['id'] = "TAGIHAN";
+	$report_title['en'] = "INVOICE";
 
 	$report_printid = strtoupper(uniqid());
 	$report_printdate = date('d/m/Y');
 
 	$doc_id = $this->billout_id;
-	$doc_descr = 'change this descriptions from data';
+	$doc_descr = $this->billout_descr;
 ?>
 
 
@@ -83,6 +83,10 @@
 					<td class="rhead-tcol-label-1">Descr</td>
 					<td class="rhead-tcol-value-1" colspan="3"><?=$doc_descr?></td>
 				</tr>
+				<tr>
+					<td class="rhead-tcol-label-1">Client</td>
+					<td class="rhead-tcol-value-1" colspan="3"><?=$this->partner_name?></td>
+				</tr>
 			</table>
 		</div>
 		<div id="reporthead-col-qrcode" style="text-align: right; margin-left: 4mm">
@@ -100,20 +104,38 @@
 				<tr>
 					<th class="rowhead rptdata-col-no">No</th>
 					<th class="rowhead rptdata-col-descr">Descr</th>
+					<th class="rowhead rptdata-col-qty">Qty</th>
+					<th class="rowhead rptdata-col-subtotal">Subtotal</th>
 				</tr>
 			</thead>
 			<tbody>
 				<!-- 45 -->
-				<?php for ($i=1; $i<=70; $i++) { ?>
+				<?php 
+				$i = 0;
+				foreach ($this->itemrows as $row) { 
+					$i++;	
+				?>
+				<?php
+					$TOTAL_QTY = 0;
+					$TOTAL_PAYMENT = 0;	
+				?>
 				<tr>
 					<td class="row rptdata-col-no"><?=$i?></td>
-					<td class="row rptdata-col-descr">&nbsp;</td>
+					<td class="row rptdata-col-descr"><?=$row['billoutdetil_descr']?></td>
+					<td class="row rptdata-col-qty"><?=$row['billoutdetil_totalqty']?></td>
+					<td class="row rptdata-col-subtotal"><?=number_format($row['billoutdetil_payment'])?></td>
 				</tr>
+				<?php
+					//total				
+					$TOTAL_QTY += $row['billoutdetil_totalqty'];
+					$TOTAL_PAYMENT += $row['billoutdetil_payment'];	
+				?>
 				<?php } ?>
 
 				<tr>
-					<td class="rowfoot">TOTAL</td>
-					<td class="rowfoot">&nbsp;</td>
+					<td class="rowfoot" colspan="2">TOTAL</td>
+					<td class="rowfoot rptdata-col-qty"><?=$TOTAL_QTY?></td>
+					<td class="rowfoot rptdata-col-subtotal"><?=number_format($TOTAL_PAYMENT)?></td>
 				</tr>				
 			</tbody>
 			<tfoot>
@@ -132,7 +154,7 @@
 			<div style="height: 20mm">&nbsp;</div>
 			<div style="height: 7mm; border-top: 1px dotted #000"><?=$this->empl_name?></div>		
 		</div>
-		<div style="flex: 1">
+		<!-- <div style="flex: 1">
 			<div style="height: 10mm; font-weight: bold; margin-left: 10mm">Disetujui Oleh</div>		
 			<div style="display: flex; justify-content: space-between; margin-left: 10mm">
 
@@ -143,6 +165,6 @@
 				</div>
 	
 			</div>
-		</div>
+		</div> -->
 	<div>				
 </div>

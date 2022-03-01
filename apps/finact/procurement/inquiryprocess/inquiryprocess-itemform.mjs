@@ -35,6 +35,7 @@ const obj = {
 	cbo_outstd_trxmodel_id: $('#pnl_edititemform-cbo_outstd_trxmodel_id'),
 	txt_inquirydetil_estrate: $('#pnl_edititemform-txt_inquirydetil_estrate'),
 	txt_inquirydetil_estvalue: $('#pnl_edititemform-txt_inquirydetil_estvalue'),
+	chk_inquiryitem_isconfirm: $('#pnl_edititemform-chk_inquiryitem_isconfirm'),
 	cbo_projbudgetdet_id: $('#pnl_edititemform-cbo_projbudgetdet_id'),
 	chk_inquirydetil_isunbudget: $('#pnl_edititemform-chk_inquirydetil_isunbudget'),
 	chk_inquirydetil_isallowoverbudget: $('#pnl_edititemform-chk_inquirydetil_isallowoverbudget'),
@@ -98,20 +99,26 @@ export async function init(opt) {
 		],
 		OnDataLoading: (criteria, options) => {
 				
-			if (typeof hnd.cbo_itemasset_id_dataloading === 'function') {
-				hnd.cbo_itemasset_id_dataloading(criteria);
+			if (typeof hnd!=='undefined') { 
+				if (typeof hnd.cbo_itemasset_id_dataloading === 'function') {
+					hnd.cbo_itemasset_id_dataloading(criteria, options);
+				}
 			}
 		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({itemasset_id:'--NULL--', itemasset_name:'NONE'});	
-			if (typeof hnd.cbo_itemasset_id_dataloaded === 'function') {
-				hnd.cbo_itemasset_id_dataloaded(result, options);
+			if (typeof hnd!=='undefined') { 
+				if (typeof hnd.cbo_itemasset_id_dataloaded === 'function') {
+					hnd.cbo_itemasset_id_dataloaded(result, options);
+				}
 			}
 		},
 		OnSelected: (value, display, record, args) => {
 			if (value!=args.PreviousValue ) {
-				if (typeof hnd.cbo_itemasset_id_selected === 'function') {
-					hnd.cbo_itemasset_id_selected(value, display, record, args);
+				if (typeof hnd!=='undefined') {  
+					if (typeof hnd.cbo_itemasset_id_selected === 'function') {
+						hnd.cbo_itemasset_id_selected(value, display, record, args);
+					}
 				}
 			}			
 		}
@@ -131,20 +138,26 @@ export async function init(opt) {
 		],
 		OnDataLoading: (criteria, options) => {
 				
-			if (typeof hnd.cbo_item_id_dataloading === 'function') {
-				hnd.cbo_item_id_dataloading(criteria);
+			if (typeof hnd!=='undefined') { 
+				if (typeof hnd.cbo_item_id_dataloading === 'function') {
+					hnd.cbo_item_id_dataloading(criteria, options);
+				}
 			}
 		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({item_id:'--NULL--', item_name:'NONE'});	
-			if (typeof hnd.cbo_item_id_dataloaded === 'function') {
-				hnd.cbo_item_id_dataloaded(result, options);
+			if (typeof hnd!=='undefined') { 
+				if (typeof hnd.cbo_item_id_dataloaded === 'function') {
+					hnd.cbo_item_id_dataloaded(result, options);
+				}
 			}
 		},
 		OnSelected: (value, display, record, args) => {
 			if (value!=args.PreviousValue ) {
-				if (typeof hnd.cbo_item_id_selected === 'function') {
-					hnd.cbo_item_id_selected(value, display, record, args);
+				if (typeof hnd!=='undefined') {  
+					if (typeof hnd.cbo_item_id_selected === 'function') {
+						hnd.cbo_item_id_selected(value, display, record, args);
+					}
 				}
 			}			
 		}
@@ -164,20 +177,26 @@ export async function init(opt) {
 		],
 		OnDataLoading: (criteria, options) => {
 				
-			if (typeof hnd.cbo_itemstock_id_dataloading === 'function') {
-				hnd.cbo_itemstock_id_dataloading(criteria);
+			if (typeof hnd!=='undefined') { 
+				if (typeof hnd.cbo_itemstock_id_dataloading === 'function') {
+					hnd.cbo_itemstock_id_dataloading(criteria, options);
+				}
 			}
 		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({itemstock_id:'--NULL--', itemstock_name:'NONE'});	
-			if (typeof hnd.cbo_itemstock_id_dataloaded === 'function') {
-				hnd.cbo_itemstock_id_dataloaded(result, options);
+			if (typeof hnd!=='undefined') { 
+				if (typeof hnd.cbo_itemstock_id_dataloaded === 'function') {
+					hnd.cbo_itemstock_id_dataloaded(result, options);
+				}
 			}
 		},
 		OnSelected: (value, display, record, args) => {
 			if (value!=args.PreviousValue ) {
-				if (typeof hnd.cbo_itemstock_id_selected === 'function') {
-					hnd.cbo_itemstock_id_selected(value, display, record, args);
+				if (typeof hnd!=='undefined') {  
+					if (typeof hnd.cbo_itemstock_id_selected === 'function') {
+						hnd.cbo_itemstock_id_selected(value, display, record, args);
+					}
 				}
 			}			
 		}
@@ -197,20 +216,26 @@ export async function init(opt) {
 		],
 		OnDataLoading: (criteria, options) => {
 				
-			if (typeof hnd.cbo_partner_id_dataloading === 'function') {
-				hnd.cbo_partner_id_dataloading(criteria);
+			if (typeof hnd!=='undefined') { 
+				if (typeof hnd.cbo_partner_id_dataloading === 'function') {
+					hnd.cbo_partner_id_dataloading(criteria, options);
+				}
 			}
 		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({partner_id:'--NULL--', partner_name:'NONE'});	
-			if (typeof hnd.cbo_partner_id_dataloaded === 'function') {
-				hnd.cbo_partner_id_dataloaded(result, options);
+			if (typeof hnd!=='undefined') { 
+				if (typeof hnd.cbo_partner_id_dataloaded === 'function') {
+					hnd.cbo_partner_id_dataloaded(result, options);
+				}
 			}
 		},
 		OnSelected: (value, display, record, args) => {
 			if (value!=args.PreviousValue ) {
-				if (typeof hnd.cbo_partner_id_selected === 'function') {
-					hnd.cbo_partner_id_selected(value, display, record, args);
+				if (typeof hnd!=='undefined') {  
+					if (typeof hnd.cbo_partner_id_selected === 'function') {
+						hnd.cbo_partner_id_selected(value, display, record, args);
+					}
 				}
 			}			
 		}
@@ -230,20 +255,26 @@ export async function init(opt) {
 		],
 		OnDataLoading: (criteria, options) => {
 				
-			if (typeof hnd.cbo_itemclass_id_dataloading === 'function') {
-				hnd.cbo_itemclass_id_dataloading(criteria);
+			if (typeof hnd!=='undefined') { 
+				if (typeof hnd.cbo_itemclass_id_dataloading === 'function') {
+					hnd.cbo_itemclass_id_dataloading(criteria, options);
+				}
 			}
 		},
 		OnDataLoaded : (result, options) => {
 				
-			if (typeof hnd.cbo_itemclass_id_dataloaded === 'function') {
-				hnd.cbo_itemclass_id_dataloaded(result, options);
+			if (typeof hnd!=='undefined') { 
+				if (typeof hnd.cbo_itemclass_id_dataloaded === 'function') {
+					hnd.cbo_itemclass_id_dataloaded(result, options);
+				}
 			}
 		},
 		OnSelected: (value, display, record, args) => {
 			if (value!=args.PreviousValue ) {
-				if (typeof hnd.cbo_itemclass_id_selected === 'function') {
-					hnd.cbo_itemclass_id_selected(value, display, record, args);
+				if (typeof hnd!=='undefined') {  
+					if (typeof hnd.cbo_itemclass_id_selected === 'function') {
+						hnd.cbo_itemclass_id_selected(value, display, record, args);
+					}
 				}
 			}			
 		}
@@ -263,20 +294,26 @@ export async function init(opt) {
 		],
 		OnDataLoading: (criteria, options) => {
 				
-			if (typeof hnd.cbo_proc_trxmodel_id_dataloading === 'function') {
-				hnd.cbo_proc_trxmodel_id_dataloading(criteria);
+			if (typeof hnd!=='undefined') { 
+				if (typeof hnd.cbo_proc_trxmodel_id_dataloading === 'function') {
+					hnd.cbo_proc_trxmodel_id_dataloading(criteria, options);
+				}
 			}
 		},
 		OnDataLoaded : (result, options) => {
 				
-			if (typeof hnd.cbo_proc_trxmodel_id_dataloaded === 'function') {
-				hnd.cbo_proc_trxmodel_id_dataloaded(result, options);
+			if (typeof hnd!=='undefined') { 
+				if (typeof hnd.cbo_proc_trxmodel_id_dataloaded === 'function') {
+					hnd.cbo_proc_trxmodel_id_dataloaded(result, options);
+				}
 			}
 		},
 		OnSelected: (value, display, record, args) => {
 			if (value!=args.PreviousValue ) {
-				if (typeof hnd.cbo_proc_trxmodel_id_selected === 'function') {
-					hnd.cbo_proc_trxmodel_id_selected(value, display, record, args);
+				if (typeof hnd!=='undefined') {  
+					if (typeof hnd.cbo_proc_trxmodel_id_selected === 'function') {
+						hnd.cbo_proc_trxmodel_id_selected(value, display, record, args);
+					}
 				}
 			}			
 		}
@@ -296,20 +333,26 @@ export async function init(opt) {
 		],
 		OnDataLoading: (criteria, options) => {
 				
-			if (typeof hnd.cbo_outstd_trxmodel_id_dataloading === 'function') {
-				hnd.cbo_outstd_trxmodel_id_dataloading(criteria);
+			if (typeof hnd!=='undefined') { 
+				if (typeof hnd.cbo_outstd_trxmodel_id_dataloading === 'function') {
+					hnd.cbo_outstd_trxmodel_id_dataloading(criteria, options);
+				}
 			}
 		},
 		OnDataLoaded : (result, options) => {
 				
-			if (typeof hnd.cbo_outstd_trxmodel_id_dataloaded === 'function') {
-				hnd.cbo_outstd_trxmodel_id_dataloaded(result, options);
+			if (typeof hnd!=='undefined') { 
+				if (typeof hnd.cbo_outstd_trxmodel_id_dataloaded === 'function') {
+					hnd.cbo_outstd_trxmodel_id_dataloaded(result, options);
+				}
 			}
 		},
 		OnSelected: (value, display, record, args) => {
 			if (value!=args.PreviousValue ) {
-				if (typeof hnd.cbo_outstd_trxmodel_id_selected === 'function') {
-					hnd.cbo_outstd_trxmodel_id_selected(value, display, record, args);
+				if (typeof hnd!=='undefined') {  
+					if (typeof hnd.cbo_outstd_trxmodel_id_selected === 'function') {
+						hnd.cbo_outstd_trxmodel_id_selected(value, display, record, args);
+					}
 				}
 			}			
 		}
@@ -329,20 +372,26 @@ export async function init(opt) {
 		],
 		OnDataLoading: (criteria, options) => {
 				
-			if (typeof hnd.cbo_projbudgetdet_id_dataloading === 'function') {
-				hnd.cbo_projbudgetdet_id_dataloading(criteria);
+			if (typeof hnd!=='undefined') { 
+				if (typeof hnd.cbo_projbudgetdet_id_dataloading === 'function') {
+					hnd.cbo_projbudgetdet_id_dataloading(criteria, options);
+				}
 			}
 		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({projbudgetdet_id:'--NULL--', projbudgetdet_descr:'NONE'});	
-			if (typeof hnd.cbo_projbudgetdet_id_dataloaded === 'function') {
-				hnd.cbo_projbudgetdet_id_dataloaded(result, options);
+			if (typeof hnd!=='undefined') { 
+				if (typeof hnd.cbo_projbudgetdet_id_dataloaded === 'function') {
+					hnd.cbo_projbudgetdet_id_dataloaded(result, options);
+				}
 			}
 		},
 		OnSelected: (value, display, record, args) => {
 			if (value!=args.PreviousValue ) {
-				if (typeof hnd.cbo_projbudgetdet_id_selected === 'function') {
-					hnd.cbo_projbudgetdet_id_selected(value, display, record, args);
+				if (typeof hnd!=='undefined') {  
+					if (typeof hnd.cbo_projbudgetdet_id_selected === 'function') {
+						hnd.cbo_projbudgetdet_id_selected(value, display, record, args);
+					}
 				}
 			}			
 		}
@@ -736,7 +785,17 @@ function btn_prev_click() {
 	var dataid = prevode.attr('dataid')
 	var record = $ui.getPages().ITEMS['pnl_edititemgrid'].handler.getGrid().DATA[dataid]
 
-	open(record, trid, header_data)
+	if (form.isDataChanged()) {
+		var datachangemessage = form.getDataChangeMessage();
+		$ui.ShowMessage(datachangemessage, {
+			"Ya" : () => {
+				open(record, trid, header_data);
+			},
+			"Tidak" : () => {}
+		})
+	} else {
+		open(record, trid, header_data);
+	}
 }
 
 function btn_next_click() {
@@ -749,5 +808,15 @@ function btn_next_click() {
 	var dataid = nextode.attr('dataid')
 	var record = $ui.getPages().ITEMS['pnl_edititemgrid'].handler.getGrid().DATA[dataid]
 
-	open(record, trid, header_data)
+	if (form.isDataChanged()) {
+		var datachangemessage = form.getDataChangeMessage();
+		$ui.ShowMessage(datachangemessage, {
+			"Ya" : () => {
+				open(record, trid, header_data);
+			},
+			"Tidak" : () => {}
+		})
+	} else {
+		open(record, trid, header_data);
+	}
 }

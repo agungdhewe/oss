@@ -105,6 +105,7 @@ function btn_load_click() {
 		// console.log(result)
 	}
 
+	console.log('test');
 	grd_list.listload(fn_listloading, fn_listloaded)
 }
 
@@ -151,7 +152,9 @@ function grd_list_cellrender(td) {
 
 function grd_list_rowrender(tr) {
 	var dataid = tr.getAttribute('dataid')
-	var record = grd_list.DATA[dataid]
+	var record = grd_list.DATA[dataid];
+
+	console.log('test');
 
 	$(tr).find('td').each((i, td) => {
 		var mapping = td.getAttribute('mapping')

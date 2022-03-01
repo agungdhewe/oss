@@ -260,7 +260,7 @@ module.exports = {
 		title: 'Partner',
 		header: 'mst_partner',
 		detils: {
-			'type' : {title: 'Type', table:'mst_partnerastype', form: true, headerview:'partner_name'},
+			'type' : {title: 'Type', table:'mst_partnerastype', form: true, headerview:'partner_name', editorHandler: true, listHandler: true},
 			'bank' : {title: 'Bank', table:'mst_partnerbank', form: true, headerview:'partner_name'},
 			'contact' : {title: 'Contact', table:'mst_partnercontact', form: true, headerview:'partner_name'},
 			'site' : {title: 'Site', table:'mst_partnersite', form: true, headerview:'partner_name'},

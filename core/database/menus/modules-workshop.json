@@ -1,4 +1,5 @@
 {
+
 	"title": "home",
 	"modules": [
 
@@ -65,7 +66,10 @@
 				"finact/items/itemclass",
 				"finact/items/item",
 				"finact/items/itemstock",
-				"finact/items/itemasset"
+				"finact/items/itemasset",
+				"finact/items/itemassetmovemodel",
+				"finact/items/itemassetmovetype",
+				"finact/items/itemassetmove"
 			]
 		},
 
@@ -79,7 +83,6 @@
 				"finact/fin/billout"
 			]
 		},
-
 
 		{
 			"title" : "Collection",
@@ -125,7 +128,8 @@
 						"ent/affiliation/partner",
 						"ent/affiliation/brandtype",
 						"ent/affiliation/brand",
-						{"program":"ent/affiliation/brand", "variancename":"manual-id-input"}
+						{"program":"ent/affiliation/brand", "variancename":"manual-id-input"},
+						"ent/general/interface"
 					]
 				},
 		
@@ -172,7 +176,46 @@
 				"fgta/framework/fguser",
 				"hrms/master/empluser"
 			]
+		},
+
+
+		{
+			"title" : "Wholesale",
+			"modules" : [
+
+
+				"finact/sales/orderintype",
+
+				"ent/affiliation/brand",
+
+				"retail/master/merchseagroup",
+				"retail/master/merchsea",
+				
+				"retail/master/merchitemgro",
+				"retail/master/merchitemctg",
+
+				"retail/master/merchitem",
+				"retail/sales/merchquotout",
+				"retail/sales/merchorderin",
+
+				"finact/sales/orderindelv",
+
+				"finact/fin/billout"
+			]
+		},
+		
+
+		{
+			"title" : "CRM",
+			"modules" : [
+				"crm/master/cust",
+				"crm/master/broadcastmodel",
+				"crm/master/broadcasttype",
+				"crm/master/broadcastquota",
+				"crm/engage/broadcastmsg"
+			]
 		}
+		
 
 
 	],
@@ -181,6 +224,31 @@
 	
 	"archieve": [
 		
+		{
+			"title" : "Wholesale",
+			"modules" : [
+
+
+				"finact/sales/orderintype",
+
+				"ent/affiliation/brand",
+
+				"retail/master/merchseagroup",
+				"retail/master/merchsea",
+				
+				"retail/master/merchitemgro",
+				"retail/master/merchitemctg",
+
+				"retail/master/merchitem",
+				"retail/sales/merchquotout",
+				"retail/sales/merchorderin",
+
+				"finact/sales/orderindelv",
+
+				"finact/fin/billout"
+			]
+		},
+
 		"finact/master/periode",
 
 		"media/sales/mediaorder",

@@ -18,6 +18,18 @@
 	</div>	
 	//-->
 
+
+	<div class="pnl_editdetilgrid-control" style="display: flex; justify-content: space-between; margin-top: 20px; margin-top: 20px">
+		<div></div>
+		<div></div>
+
+		<div>
+			<span>Copy Budget From Year</span>
+			<input id="pnl_editdetilgrid-txt_copy_year" class="easyui-numberbox" mapping="deptbudget_year"  maxlength="4" style="width: 80px; text-align:right" data-options="precision: 0, decimalSeparator:'.'">
+			<a id="pnl_editdetilgrid-btn_copyyear" href="javascript:void(0)" class="easyui-linkbutton c8">Copy</a>
+		</div>
+	</div>
+
 	<div style="margin-top: 10px; margin-bottom: 15px">
 		<table id="pnl_editdetilgrid-tbl_list" paging="true" cellspacing="0" width="100%" class="deftable">
 			<thead>
@@ -43,7 +55,7 @@
 		</table>
 	</div>
 
-	<div id="pnl_editdetilgrid-control" style="display: flex; justify-content: space-between; margin-bottom: 100px">
+	<div class="pnl_editdetilgrid-control" style="display: flex; justify-content: space-between; margin-bottom: 20px">
 		<div>
 			<a id="pnl_editdetilgrid-removechecked" href="javascript:void(0)" class="easyui-linkbutton c8">Hapus Checked</a>
 		</div>
@@ -51,9 +63,7 @@
 		<div>
 			<a id="pnl_editdetilgrid-addrow" href="javascript:void(0)" class="easyui-linkbutton c8">Tambah Baris</a>
 		</div>
-
-		<div>
-		</div>
+		<div></div>
 
 	</div>
 

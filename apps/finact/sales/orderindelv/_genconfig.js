@@ -93,7 +93,7 @@ module.exports = {
 				},		
 	
 				orderindelv_descr: { text: 'Descr', type: dbtype.varchar(255), null: true,  options: { required: true, invalidMessage: 'Descr harus diisi' } },
-				orderindelv_dt: {text:'Date Start', type: dbtype.date, null:false},
+				orderindelv_dt: {text:'Deliver Date', type: dbtype.date, null:false},
 	
 				site_id: {
 					text:'From', type: dbtype.varchar(30), null:true, suppresslist: true,
@@ -159,7 +159,7 @@ module.exports = {
 				ppn_taxtype_id: { 
 					section: section.Begin('Tax'),  //section.Begin('Related Dept', 'defbottomborder'),
 					text: 'PPN', type: dbtype.varchar(10), null: true, suppresslist: true,
-					options: { prompt: 'NONE' }, 
+					options: { prompt: 'NONE' , disabled: true}, 
 					comp: comp.Combo({
 						table: 'mst_taxtype', 
 						field_value: 'taxtype_id', field_display: 'taxtype_name', field_display_name: 'ppn_taxtype_name', 
@@ -171,7 +171,7 @@ module.exports = {
 	
 	
 				pph_taxtype_id: { text: 'PPh', type: dbtype.varchar(10), null: true, suppresslist: true,
-					options: { prompt: 'NONE' }, 
+					options: { prompt: 'NONE', disabled: true }, 
 					comp: comp.Combo({
 						table: 'mst_taxtype', 
 						field_value: 'taxtype_id', field_display: 'taxtype_name', field_display_name: 'pph_taxtype_name', 
@@ -187,7 +187,7 @@ module.exports = {
 				arunbill_coa_id: { 
 					section: section.Begin('Chart of Accounts'),  // , 'defbottomborder'
 					text: 'COA AR Unbill', type: dbtype.varchar(17), null: false, suppresslist: true,
-					options: { required: true, invalidMessage: 'AR harus diisi' }, 
+					options: { required: true, invalidMessage: 'AR harus diisi', disabled: true }, 
 					tips: '',
 					tipstype: 'visible',
 					comp: comp.Combo({
@@ -198,7 +198,7 @@ module.exports = {
 				},
 				ar_coa_id: { 
 					text: 'COA AR', type: dbtype.varchar(17), null: false, suppresslist: true,
-					options: { required: true, invalidMessage: 'AR harus diisi' }, 
+					options: { required: true, invalidMessage: 'AR harus diisi', disabled: true }, 
 					tips: '',
 					tipstype: 'visible',
 					comp: comp.Combo({
@@ -211,7 +211,7 @@ module.exports = {
 	
 				dp_coa_id: { 
 					text: 'COA Downpayment', type: dbtype.varchar(17), null: false, suppresslist: true,
-					options: { required: true, invalidMessage: 'OrderIn COA Downpayment harus diisi' }, 
+					options: { required: true, invalidMessage: 'OrderIn COA Downpayment harus diisi' , disabled: true}, 
 					tips: '',
 					tipstype: 'visible',
 					comp: comp.Combo({
@@ -223,7 +223,7 @@ module.exports = {
 	
 				sales_coa_id: { 
 					text: 'COA Sales', type: dbtype.varchar(10), null: false, suppresslist: true,
-					options: { required: true, invalidMessage: 'OrderIn Sales COA harus diisi' }, 
+					options: { required: true, invalidMessage: 'OrderIn Sales COA harus diisi', disabled: true }, 
 					tips: '',
 					tipstype: 'visible',
 					comp: comp.Combo({
@@ -235,7 +235,7 @@ module.exports = {
 				
 				salesdisc_coa_id: { 
 					text: 'COA Disc Sales', type: dbtype.varchar(10), null: true, suppresslist: true,
-					options: { prompt: 'NONE' }, 
+					options: { prompt: 'NONE', disabled: true }, 
 					tips: '',
 					tipstype: 'visible',
 					comp: comp.Combo({
@@ -246,7 +246,7 @@ module.exports = {
 	
 				ppn_coa_id: { 
 					text: 'COA PPN Payable', type: dbtype.varchar(10), null: true, suppresslist: true,
-					options: { prompt: 'NONE' }, 
+					options: { prompt: 'NONE' , disabled: true}, 
 					tips: '',
 					tipstype: 'visible',
 					comp: comp.Combo({
@@ -257,7 +257,7 @@ module.exports = {
 	
 				ppnsubsidi_coa_id: { 
 					text: 'COA Subsidi PPN', type: dbtype.varchar(10), null: true, suppresslist: true,
-					options: { prompt: 'NONE' }, 
+					options: { prompt: 'NONE' , disabled: true}, 
 					tips: 'Apabila PPN include COA ini perlu diisi',
 					tipstype: 'visible',
 					comp: comp.Combo({
@@ -269,7 +269,7 @@ module.exports = {
 				pph_coa_id: { 
 					section: section.End(),
 					text: 'COA PPH Prepaid', type: dbtype.varchar(10), null: true, suppresslist: true,
-					options: { prompt: 'NONE' }, 
+					options: { prompt: 'NONE' , disabled: true}, 
 					tips: '',
 					tipstype: 'visible',
 					comp: comp.Combo({

@@ -323,23 +323,30 @@ module.exports = {
 	schema: {
 		title: 'Penerimaan',
 		header: 'trn_tjurnalor',
-		editorHandler: 'ofrecv-edit-hnd.mjs',
-		listHandler: 'ofrecv-list-hnd.mjs',
 		xtions: {
 			post: {
 				api: 'xtion-post',
 				buttonname: 'btn_post',
 				buttontext: 'Post'
+			},
+			unpost: {
+				api: 'xtion-unpost',
+				buttonname: 'btn_unpost',
+				buttontext: 'UnPost'
 			}
 		},
-		autoload: false,
+
 
 		detils: {
 			'detil': {
 				title: 'Detil', table: 'trn_tjurnalordetil', form: true, headerview: 'jurnal_descr', 
-				editorHandler: 'ofrecv-detilform-hnd.mjs',
-				listHandler: 'ofrecv-detilgrid-hnd.mjs',
+				editorHandler: true,
+				listHandler: true,
 			},
+			'newdata' : {
+				title: 'New Data', table: 'trn_tjurnalordetil', form: false, headerview: 'jurnal_descr', 
+				tabvisible: false, overwrite: false
+			}
 		}
 
 	}

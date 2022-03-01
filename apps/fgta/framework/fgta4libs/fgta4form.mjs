@@ -24,6 +24,7 @@ export function fgta4form(frm, opt) {
 	self.primary = opt.primary
 	self.errordiv = frm[0].id + '-' + 'fgta4errordiv'
 	self.eventsuspended = false;
+	self.datachangemessage = '<div>Data Berubah, Apakah anda akan <b>membatalkan</b> perubahan ?</div>';
 
 
 	self.OnNewDataCanceled = typeof self.options.OnNewDataCanceled === 'function' ? self.options.OnNewDataCanceled : async ()=>{}
@@ -52,6 +53,20 @@ export function fgta4form(frm, opt) {
 	})
 
 
+	if (typeof self.buttons.edit.linkbutton!=='function') {
+		self.buttons.edit.linkbutton = (param) => {}
+	}
+
+	if (typeof self.buttons.save.linkbutton!=='function') {
+		self.buttons.save.linkbutton = (param) => {}
+	}
+
+	if (typeof self.buttons.delete.linkbutton!=='function') {
+		self.buttons.delete.linkbutton = (param) => {}
+	}
+	
+
+	
 	self.buttons.edit.linkbutton({
 		toggle: true,
 		onClick: () => { btn_edit_click(self) }
@@ -64,6 +79,7 @@ export function fgta4form(frm, opt) {
 	self.buttons.delete.linkbutton({
 		onClick: () => { btn_delete_click(self) }
 	})
+
 
 
 	self.customaboutinfo = [];
@@ -82,6 +98,11 @@ export function fgta4form(frm, opt) {
 			return self.options.autoid
 		},
 
+		setAutoId: (isautoid) => {
+			self.options.autoid = isautoid
+		},
+
+
 		getDefaultPrompt(ismandatory) {
 			if (ismandatory) {
 				return {
@@ -94,6 +115,14 @@ export function fgta4form(frm, opt) {
 					text:'NONE'
 				}
 			}
+		},
+
+		getDataChangeMessage: () => {
+			return self.datachangemessage;
+		},
+
+		setDataChangeMessage: (message) => {
+			self.datachangemessage = message;
 		},
 
 		setDisable: (obj, disabled) => { return setDisable(self, obj, disabled) } ,
@@ -858,7 +887,9 @@ function btn_save_click(self) {
 }
 
 function canceledit(self, fn_callback) {
-	$ui.ShowMessage('<div>Data Berubah, Apakah anda akan <b>membatalkan</b> perubahan ?</div>', {
+	var datachangemessage = self.fgta4form.getDataChangeMessage();
+	// $ui.ShowMessage('<div>Data Berubah, Apakah anda akan <b>membatalkan</b> perubahan ?</div>', {
+	$ui.ShowMessage(datachangemessage, {	
 		"Ya" : () => {
 			reset(self)
 			setViewMode(self, true)

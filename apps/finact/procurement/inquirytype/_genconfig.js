@@ -322,8 +322,8 @@ module.exports = {
 				
 				},
 				orderout_inquirytype_id: {
-					text:'Order Inquiry', type: dbtype.varchar(30), null:false,
-					options: {required:true, invalidMessage:'Order Inquiryrype harus diisi' },
+					text:'Order Inquiry', type: dbtype.varchar(30), null:true,
+					options:{prompt:'NONE'},
 					comp: comp.Combo({
 						table: 'mst_inquirytype',
 						field_value: 'inquirytype_id', field_display: 'inquirytype_name', field_display_name: 'orderout_inquirytype_name',
@@ -373,9 +373,15 @@ module.exports = {
 	schema: {
 		header: 'mst_inquirytype',
 		detils: {
-			'partnertype': {title: 'Partner Type', table: 'mst_inquirytypepartnertype', form: true, headerview: 'inquirytype_name' },
-			'modeltransaksi': {title: 'Model Transaksi', table: 'mst_inquirytypetrxmodel', form: true, headerview: 'inquirytype_name' },
-			'itemclass': {title: 'Item Class', table: 'mst_inquirytypeitemclass', form: true, headerview: 'inquirytype_name' },
+			'partnertype': {title: 'Partner Type', table: 'mst_inquirytypepartnertype', form: true, headerview: 'inquirytype_name' 
+		
+			},
+			'modeltransaksi': {title: 'Model Transaksi', table: 'mst_inquirytypetrxmodel', form: true, headerview: 'inquirytype_name' 
+		
+			},
+			'itemclass': {title: 'Item Class', table: 'mst_inquirytypeitemclass', form: true, headerview: 'inquirytype_name' 
+		
+			},
 		}
 	}
 }

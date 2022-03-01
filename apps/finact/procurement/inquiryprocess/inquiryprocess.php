@@ -14,7 +14,7 @@
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 28/12/2021
+ * tanggal 16/01/2022
  */
 $MODULE = new class extends WebModule {
 
@@ -32,6 +32,8 @@ $MODULE = new class extends WebModule {
 			$this->setup = (object)array(
 				'print_to_new_window' => false,
 				'username' => $userdata->username,
+				'dept_id' => $userdata->dept_id,
+				'dept_name' => $userdata->dept_name,
 			'doc_id' => 'INQUIRY',
 			);
 

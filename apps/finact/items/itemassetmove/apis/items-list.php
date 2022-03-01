@@ -7,6 +7,9 @@ if (!defined('FGTA4')) {
 require_once __ROOT_DIR.'/core/sqlutil.php';
 require_once __DIR__ . '/xapi.base.php';
 
+if (is_file(__DIR__ .'/data-items-handler.php')) {
+	require_once __DIR__ .'/data-items-handler.php';
+}
 
 use \FGTA4\exceptions\WebException;
 
@@ -24,13 +27,25 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 17/09/2021
+ * tanggal 03/01/2022
  */
 $API = new class extends itemassetmoveBase {
 
 	public function execute($options) {
 		$userdata = $this->auth->session_get_user();
 		
+		$handlerclassname = "\\FGTA4\\apis\\itemassetmove_itemsHandler";
+		if (class_exists($handlerclassname)) {
+			$hnd = new itemassetmove_itemsHandler($data, $options);
+			$hnd->caller = $this;
+			$hnd->db = $this->db;
+			$hnd->auth = $this->auth;
+			$hnd->reqinfo = $reqinfo->reqinfo;
+		} else {
+			$hnd = new \stdClass;
+		}
+
+
 		try {
 
 			// \FGTA4\utils\SqlUtility::setDefaultCriteria($options->criteria, '--fieldscriteria--', '--value--');
@@ -57,7 +72,7 @@ $API = new class extends itemassetmoveBase {
 			$limit = " LIMIT $maxrow OFFSET $offset ";
 			$stmt = $this->db->prepare("
 				select 
-				A.itemassetmovedetil_id, A.itemasset_id, A.itemassetmovedetil_descr, A.itemassetmove_id, A._createby, A._createdate, A._modifyby, A._modifydate 
+				A.itemassetmovedetil_id, A.itemasset_id, A.item_id, A.itemclass_id, A.itemassetmovedetil_qty, A.send_itemassetstatus_id, A.itemassetmovedetil_senddescr, A.recv_itemassetstatus_id, A.itemassetmovedetil_recvdescr, A.itemassetmove_id, A._createby, A._createdate, A._modifyby, A._modifydate 
 				from trn_itemassetmovedetil A
 			" . $where->sql . $limit);
 			$stmt->execute($where->params);
@@ -76,6 +91,10 @@ $API = new class extends itemassetmoveBase {
 				 	//'tambahan' => 'dta'
 
 					'itemasset_name' => \FGTA4\utils\SqlUtility::Lookup($record['itemasset_id'], $this->db, 'mst_itemasset', 'itemasset_id', 'itemasset_name'),
+					'item_name' => \FGTA4\utils\SqlUtility::Lookup($record['item_id'], $this->db, 'mst_item', 'item_id', 'item_name'),
+					'itemclass_name' => \FGTA4\utils\SqlUtility::Lookup($record['itemclass_id'], $this->db, 'mst_itemclass', 'itemclass_id', 'itemclass_name'),
+					'send_itemassetstatus_name' => \FGTA4\utils\SqlUtility::Lookup($record['send_itemassetstatus_id'], $this->db, 'mst_itemassetstatus', 'itemassetstatus_id', 'itemassetstatus_name'),
+					'recv_itemassetstatus_name' => \FGTA4\utils\SqlUtility::Lookup($record['recv_itemassetstatus_id'], $this->db, 'mst_itemassetstatus', 'itemassetstatus_id', 'itemassetstatus_name'),
 					 
 				]));
 			}

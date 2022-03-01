@@ -84,8 +84,10 @@ module.exports = async (fsd, genconfig) => {
 
 		var handlerrowrender = '';
 		if (detil.listHandler != undefined) {
-			handlerrowrender = `if (typeof hnd.grd_list_rowrender === 'function') {
-			hnd.grd_list_rowrender({tr:tr, td:td, record:record, mapping:mapping, dataid:dataid, i:i});
+			handlerrowrender = `if (typeof hnd!=='undefined') { 
+			if (typeof hnd.grd_list_rowrender === 'function') {
+				hnd.grd_list_rowrender({tr:tr, td:td, record:record, mapping:mapping, dataid:dataid, i:i});
+			}
 		}`;
 		}
 
@@ -113,12 +115,18 @@ module.exports = async (fsd, genconfig) => {
 			grd_list: grd_list,
 			opt: opt,
 			header_data: header_data
-		})
+		}, ()=>{})
 	}`;
 
 
-	handlercellrender = `if (typeof hnd.grd_list_cellrender === 'function') {
-		hnd.grd_list_cellrender({td:td, mapping:td.mapping, text:td.innerHTML});
+
+
+
+
+	handlercellrender = `if (typeof hnd!=='undefined') { 
+		if (typeof hnd.grd_list_cellrender === 'function') {
+			hnd.grd_list_cellrender({td:td, mapping:td.mapping, text:td.innerHTML});
+		}
 	}`;
 
 

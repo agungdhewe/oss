@@ -8,7 +8,7 @@
 
 	<form id="pnl_edititemsform-form">
 
-		<div class="form_row" >
+		<div class="form_row pnl_edititemsform_row txt_orderindelvitem_id" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">ID</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_edititemsform-txt_orderindelvitem_id" class="easyui-textbox" mapping="orderindelvitem_id"  maxlength="14"  style="width: 400px" data-options="multiline:false  ">
@@ -16,7 +16,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_edititemsform_row cbo_itemclass_id" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Item Class</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_edititemsform-cbo_itemclass_id" class="easyui-combo" style="width: 400px" mapping="itemclass_id" display="itemclass_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Itemclass harus diisi'"  validType="requiredcombo['pnl_edititemsform-cbo_itemclass_id']" >
@@ -24,7 +24,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_edititemsform_row txt_orderinitem_descr" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Descr</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_edititemsform-txt_orderinitem_descr" class="easyui-textbox" mapping="orderinitem_descr"  maxlength="90"  style="width: 400px" data-options="multiline:false , required: true, invalidMessage: 'Descr harus diisi' ">
@@ -32,7 +32,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_edititemsform_row txt_orderinitem_qty" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Qty</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_edititemsform-txt_orderinitem_qty" class="easyui-numberbox" mapping="orderinitem_qty" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  ">
@@ -40,7 +40,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_edititemsform_row txt_orderinitem_price" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Price</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_edititemsform-txt_orderinitem_price" class="easyui-numberbox" mapping="orderinitem_price" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  ">
@@ -48,7 +48,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_edititemsform_row txt_orderinitem_pricediscpercent" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Disc (%)</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_edititemsform-txt_orderinitem_pricediscpercent" class="easyui-numberbox" mapping="orderinitem_pricediscpercent" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  ">
@@ -56,7 +56,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_edititemsform_row txt_orderinitem_pricediscvalue" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Disc Value</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_edititemsform-txt_orderinitem_pricediscvalue" class="easyui-numberbox" mapping="orderinitem_pricediscvalue" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  ">
@@ -64,7 +64,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_edititemsform_row txt_orderinitem_subtotal" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Subtotal</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_edititemsform-txt_orderinitem_subtotal" class="easyui-numberbox" mapping="orderinitem_subtotal" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  , disabled: true">
@@ -72,7 +72,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_edititemsform_row cbo_accbudget_id" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Budget Account</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_edititemsform-cbo_accbudget_id" class="easyui-combo" style="width: 400px" mapping="accbudget_id" display="accbudget_name" data-options="editable:false, valueField:'id', textField:'text' , prompt: 'NONE', disabled: true" >
@@ -80,7 +80,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_edititemsform_row cbo_coa_id" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Account</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_edititemsform-cbo_coa_id" class="easyui-combo" style="width: 400px" mapping="coa_id" display="coa_name" data-options="editable:false, valueField:'id', textField:'text' , prompt: 'NONE', disabled: true" >
@@ -88,7 +88,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" style="display: none">
+		<div class="form_row pnl_edititemsform_row txt_orderindelv_id" style="display: none">
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">ID</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_edititemsform-txt_orderindelv_id" class="easyui-textbox" mapping="orderindelv_id"  maxlength="30"  style="width: 400px" data-options="multiline:false  , disabled: true">

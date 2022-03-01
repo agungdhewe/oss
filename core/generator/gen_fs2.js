@@ -43,7 +43,15 @@ async function PrepareFs(genconfig) {
 	genconfig.schema.editorHandler = `${basename}-edit-hnd.mjs`;
 	genconfig.schema.listHandler = `${basename}-list-hnd.mjs`;
 
-
+	for (var detilname in genconfig.schema.detils) {
+		var detil = genconfig.schema.detils[detilname];
+		if (detil.editorHandler!=null) {
+			detil.editorHandler = `${basename}-${detilname}form-hnd.mjs`;
+		}
+		if (detil.listHandler!=null) {
+			detil.listHandler = `${basename}-${detilname}grid-hnd.mjs`;
+		}
+	}
 
 
 	if (genconfig.approval===true) {
@@ -162,8 +170,9 @@ async function PrepareFs(genconfig) {
 		handlers.push({name: 'apis/data-header-handler.php', program:'gen_api_handler', identity:'header'})
 		for (var hndname of handlermod) {
 			if (genconfig.schema[hndname] != undefined) {
-				handlers.push({name:genconfig.schema[hndname], program:'gen_blank'});
-			}
+				var gen = hndname=='editorHandler' ? 'gen_blank_editor' : 'gen_blank_list'
+				handlers.push({name:genconfig.schema[hndname], program: gen});
+			} 
 		}
 
 		for (var detilname in genconfig.schema.detils) {
@@ -172,9 +181,15 @@ async function PrepareFs(genconfig) {
 				handlers.push({name:`apis/data-${detilname}-handler.php`, program:'gen_api_handler', identity:detilname})
 			}
 			for (var hndname of handlermod) {
+				var gen = hndname=='editorHandler' ? 'gen_blank_editor' : 'gen_blank_list'
+				var hndfname = hndname=='editorHandler' ? 'form' : 'grid';
 				if (detil[hndname]!=undefined) {
-					handlers.push({name:detil[hndname], program:'gen_blank'});
+					// handlers.push({name:detil[hndname], program: gen});
+					handlers.push({name:`${basename}-${detilname}${hndfname}-hnd.mjs`, program: gen});
 				}
+				//  else if (detil.handlers===true) {
+				// 	handlers.push({name:`${basename}-${detilname}${hndfname}-hnd.mjs`, program: gen});
+				// }
 			}
 		}
 

@@ -1,6 +1,7 @@
 var this_page_id;
 var this_page_options;
 
+
 const tbl_list = $('#pnl_editdetilgrid-tbl_list');
 const txt_title = $('#pnl_editdetilgrid-title');
 const pnl_control = $('#pnl_editdetilgrid-control');
@@ -23,6 +24,11 @@ export async function init(opt) {
 		OnCellRender: (td) => { grd_list_cellrender(td) },
 		OnRowRender: (tr) => { grd_list_rowrender(tr) }
 	});	
+	grd_list.doLoad = () => {
+		btn_load_click();
+	}
+
+
 
 	btn_removechecked.linkbutton({
 		onClick: () => { btn_removechecked_click() }
@@ -63,7 +69,10 @@ export async function init(opt) {
 				grd_list.nextpageload();
 			}			
 		}
-	});			
+	});	
+
+	
+
 }
 
 
@@ -163,11 +172,18 @@ function grd_list_cellclick(td, ev) {
 }
 
 function grd_list_cellrender(td) {
-
+	
 }
 
 function grd_list_rowrender(tr) {
 
+	var dataid = tr.getAttribute('dataid')
+	var record = grd_list.DATA[dataid]
+	$(tr).find('td').each((i, td) => {
+		var mapping = td.getAttribute('mapping')
+		
+	});
+		
 }
 
 

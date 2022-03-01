@@ -5,14 +5,17 @@ const comp = global.comp;
 
 module.exports = {
 	title: "Brand",
-	autoid: false,
+	autoid: true,
+	variance: {
+		"manual-id-input" : {"title":"Brand (Manual-ID)"}
+	},
 
 	persistent: {
 		'mst_brand' : {
 			primarykeys: ['brand_id'],
 			comment: 'Daftar Brand',
 			data: {
-				brand_id: {text:'ID', type: dbtype.varchar(10), null:false, uppercase: true},
+				brand_id: {text:'ID', type: dbtype.varchar(14), null:false},
 				brand_name: {text:'Brand', type: dbtype.varchar(60), null:false, uppercase: true},
 				brand_descr: {text:'Descr', type: dbtype.varchar(90), null:true, suppresslist: true},
 				brand_isdisabled: {text:'Disabled', type: dbtype.boolean, null:false, default:'0'},
@@ -73,7 +76,7 @@ module.exports = {
 						api: 'ent/mst/partner/list'})
 			
 				},
-				brand_id: {text:'Brand', type: dbtype.varchar(14), null:false, uppercase: true},				
+				brand_id: {text:'Brand', type: dbtype.varchar(14), null:false, hidden: true},				
 			},
 
 			uniques: {
@@ -86,7 +89,7 @@ module.exports = {
 			comment: 'Kode referensi brand untuk keperluan interfacing dengan system lain',
 			primarykeys: ['brandref_id'],		
 			data: {
-				brandref_id: {text:'ID', type: dbtype.varchar(14), null:false, uppercase: true, suppresslist: true},
+				brandref_id: {text:'ID', type: dbtype.varchar(14), null:false, suppresslist: true},
 				interface_id: { 
 					text: 'Interface', type: dbtype.varchar(7), uppercase: true, null: false, 
 					options: { required: true, invalidMessage: 'Interface harus diisi' }, 
@@ -96,12 +99,11 @@ module.exports = {
 						api: 'ent/general/interface/list'})				
 				
 				},
-				brandref_code: {text:'Code', type: dbtype.varchar(30), null:false, uppercase: true},			
-				brand_id: {text:'Partner', type: dbtype.varchar(14), null:false, uppercase: true},
+				brandref_code: {text:'Code', type: dbtype.varchar(30), null:false},			
+				brand_id: {text:'Partner', type: dbtype.varchar(14), null:false, hidden: true},
 			},
 			uniques: {
-				'brandref_pair': ['brand_id', 'interface_id'],
-				'brandref_code': ['interface_id', 'brandref_code'],
+				'brandref_pair': ['brand_id', 'interface_id']
 			},			
 		}
 
@@ -112,7 +114,7 @@ module.exports = {
 		header: 'mst_brand',
 		detils: {
 			'partner' : {title: 'Partners', table:'mst_brandpartner', form: true, headerview:'brand_name'},
-			'ref' : {title: 'Refernsi', table:'mst_brandref', form: true, headerview:'brand_name'},
+			'ref' : {title: 'Referensi', table:'mst_brandref', form: true, headerview:'brand_name', editorHandler: true, listHandler: true},
 		}
 	}
 }

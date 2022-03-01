@@ -45,7 +45,7 @@ module.exports = {
 				},
 
 
-				billout_isunreferenced: {text:'Unreferenced', type: dbtype.boolean, null:false, default:'0', suppresslist: true, options: {labelWidth:'300px', disabled: true}},
+				billout_isunreferenced: {text:'Unreferenced', type: dbtype.boolean, null:false, default:'0', suppresslist: true, options: {labelWidth:'300px'}},
 
 
 				orderin_id: { 

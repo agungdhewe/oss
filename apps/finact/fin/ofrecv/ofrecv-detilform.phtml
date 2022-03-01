@@ -8,7 +8,7 @@
 
 	<form id="pnl_editdetilform-form">
 
-		<div class="form_row" >
+		<div class="form_row pnl_editdetilform_row txt_jurnaldetil_id" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">ID</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-txt_jurnaldetil_id" class="easyui-textbox" mapping="jurnaldetil_id" uppercase="true" maxlength="14"  style="width: 400px" data-options="multiline:false  ">
@@ -16,7 +16,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editdetilform_row cbo_partner_id" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Partner</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-cbo_partner_id" class="easyui-combo" style="width: 400px" mapping="partner_id" display="partner_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Partner harus diisi', prompt: '-- PILIH --'"  validType="requiredcombo['pnl_editdetilform-cbo_partner_id']" >
@@ -24,7 +24,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editdetilform_row txt_jurnaldetil_descr" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Descr</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-txt_jurnaldetil_descr" class="easyui-textbox" mapping="jurnaldetil_descr"  maxlength="255"  style="width: 400px" data-options="multiline:false , required: true, invalidMessage: 'Descr harus diisi' ">
@@ -32,7 +32,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editdetilform_row txt_jurnaldetil_valfrg" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Valas</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-txt_jurnaldetil_valfrg" class="easyui-numberbox" mapping="jurnaldetil_valfrg" style="width: 400px; text-align:right" data-options="precision: 2, decimalSeparator:'.', groupSeparator:','  , required: true">
@@ -40,7 +40,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editdetilform_row cbo_curr_id" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Currency</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-cbo_curr_id" class="easyui-combo" style="width: 400px" mapping="curr_id" display="curr_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Currency harus diisi', prompt: '-- PILIH --'"  validType="requiredcombo['pnl_editdetilform-cbo_curr_id']" >
@@ -48,7 +48,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editdetilform_row txt_jurnaldetil_valfrgrate" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Rate</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-txt_jurnaldetil_valfrgrate" class="easyui-numberbox" mapping="jurnaldetil_valfrgrate" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  , required: true">
@@ -56,7 +56,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editdetilform_row txt_jurnaldetil_validr" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">IDR</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-txt_jurnaldetil_validr" class="easyui-numberbox" mapping="jurnaldetil_validr" style="width: 400px; text-align:right" data-options="precision: 2, decimalSeparator:'.', groupSeparator:','  , required: true, disabled: true">
@@ -64,7 +64,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editdetilform_row cbo_coa_id" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Account</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-cbo_coa_id" class="easyui-combo" style="width: 400px" mapping="coa_id" display="coa_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Account Biaya harus diisi', prompt: '-- PILIH --'"  validType="requiredcombo['pnl_editdetilform-cbo_coa_id']" >
@@ -72,7 +72,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editdetilform_row cbo_dept_id" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Dept</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-cbo_dept_id" class="easyui-combo" style="width: 400px" mapping="dept_id" display="dept_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Dept harus diisi', prompt: '-- PILIH --'"  validType="requiredcombo['pnl_editdetilform-cbo_dept_id']" >
@@ -80,7 +80,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editdetilform_row cbo_jurnaldetil_id_ref" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Ref</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-cbo_jurnaldetil_id_ref" class="easyui-combo" style="width: 400px" mapping="jurnaldetil_id_ref" display="jurnaldetil_descr" data-options="editable:false, valueField:'id', textField:'text' , prompt: 'NONE'" >
@@ -88,7 +88,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" style="display: none">
+		<div class="form_row pnl_editdetilform_row txt_jurnal_id" style="display: none">
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Jurnal</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-txt_jurnal_id" class="easyui-textbox" mapping="jurnal_id"  maxlength="14"  style="width: 400px" data-options="multiline:false  , disabled: true">

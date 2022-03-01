@@ -5,25 +5,37 @@ if (!defined('FGTA4')) {
 }
 
 require_once __ROOT_DIR.'/core/sqlutil.php';
+require_once __DIR__ . '/xapi.base.php';
 //require_once __ROOT_DIR . "/core/sequencer.php";
+
+
+if (is_file(__DIR__ .'/data-ref-handler.php')) {
+	require_once __DIR__ .'/data-ref-handler.php';
+}
+
+
 
 use \FGTA4\exceptions\WebException;
 //use \FGTA4\utils\Sequencer;
 
 
-class DataSave extends WebAPI {
-	function __construct() {
-		$this->debugoutput = true;
-		$DB_CONFIG = DB_CONFIG[$GLOBALS['MAINDB']];
-		$DB_CONFIG['param'] = DB_CONFIG_PARAM[$GLOBALS['MAINDBTYPE']];
-		$this->db = new \PDO(
-					$DB_CONFIG['DSN'], 
-					$DB_CONFIG['user'], 
-					$DB_CONFIG['pass'], 
-					$DB_CONFIG['param']
-		);	
 
-	}
+/**
+ * ent/affiliation/brand/apis/ref-save.php
+ *
+ * ==========
+ * Detil-Save
+ * ==========
+ * Menampilkan satu baris data/record sesuai PrimaryKey,
+ * dari tabel ref brand (mst_brand)
+ *
+ * Agung Nugroho <agung@fgta.net> http://www.fgta.net
+ * Tangerang, 26 Maret 2021
+ *
+ * digenerate dengan FGTA4 generator
+ * tanggal 04/01/2022
+ */
+$API = new class extends brandBase {
 	
 	public function execute($data, $options) {
 		$tablename = 'mst_brandref';
@@ -32,6 +44,17 @@ class DataSave extends WebAPI {
 		$datastate = $data->_state;
 
 		$userdata = $this->auth->session_get_user();
+
+		$handlerclassname = "\\FGTA4\\apis\\brand_refHandler";
+		if (class_exists($handlerclassname)) {
+			$hnd = new brand_refHandler($data, $options);
+			$hnd->caller = $this;
+			$hnd->db = $this->db;
+			$hnd->auth = $this->auth;
+			$hnd->reqinfo = $reqinfo->reqinfo;
+		} else {
+			$hnd = new \stdClass;
+		}
 
 		try {
 			$result = new \stdClass; 
@@ -50,10 +73,7 @@ class DataSave extends WebAPI {
 			// apabila ada tanggal, ubah ke format sql sbb:
 			// $obj->tanggal = (\DateTime::createFromFormat('d/m/Y',$obj->tanggal))->format('Y-m-d');
 
-			$obj->brandref_id = strtoupper($obj->brandref_id);
 			$obj->interface_id = strtoupper($obj->interface_id);
-			$obj->brandref_code = strtoupper($obj->brandref_code);
-			$obj->brand_id = strtoupper($obj->brand_id);
 
 
 
@@ -94,38 +114,51 @@ class DataSave extends WebAPI {
 					":user_id" => $userdata->username,
 					":$header_primarykey" => $obj->{$header_primarykey}
 				]);
-				
+
 				\FGTA4\utils\SqlUtility::WriteLog($this->db, $this->reqinfo->modulefullname, $tablename, $obj->{$primarykey}, $action, $userdata->username, (object)[]);
 				\FGTA4\utils\SqlUtility::WriteLog($this->db, $this->reqinfo->modulefullname, $header_table, $obj->{$header_primarykey}, $action . "_DETIL", $userdata->username, (object)[]);
 
+
+
+
+				// result
+				$where = \FGTA4\utils\SqlUtility::BuildCriteria((object)[$primarykey=>$obj->{$primarykey}], [$primarykey=>"$primarykey=:$primarykey"]);
+				$sql = \FGTA4\utils\SqlUtility::Select($tablename , [
+					$primarykey
+					, 'brandref_id', 'interface_id', 'brandref_code', 'brand_id', '_createby', '_createdate', '_modifyby', '_modifydate', '_createby', '_createdate', '_modifyby', '_modifydate'
+				], $where->sql);
+				$stmt = $this->db->prepare($sql);
+				$stmt->execute($where->params);
+				$row  = $stmt->fetch(\PDO::FETCH_ASSOC);			
+
+				$record = [];
+				foreach ($row as $key => $value) {
+					$record[$key] = $value;
+				}
+				$result->dataresponse = (object) array_merge($record, [
+					// untuk lookup atau modify response ditaruh disini
+					'interface_name' => \FGTA4\utils\SqlUtility::Lookup($record['interface_id'], $this->db, 'mst_interface', 'interface_id', 'interface_name'),
+
+					'_createby' => \FGTA4\utils\SqlUtility::Lookup($record['_createby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+					'_modifyby' => \FGTA4\utils\SqlUtility::Lookup($record['_modifyby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+				]);
+
+
+				if (is_object($hnd)) {
+					if (method_exists(get_class($hnd), 'DataSavedSuccess')) {
+						$hnd->DataSavedSuccess($result);
+					}
+				}
+
 				$this->db->commit();
+				return $result;
 			} catch (\Exception $ex) {
 				$this->db->rollBack();
 				throw $ex;
 			} finally {
 				$this->db->setAttribute(\PDO::ATTR_AUTOCOMMIT,1);
 			}
-
-
-			$where = \FGTA4\utils\SqlUtility::BuildCriteria((object)[$primarykey=>$obj->{$primarykey}], [$primarykey=>"$primarykey=:$primarykey"]);
-			$sql = \FGTA4\utils\SqlUtility::Select($tablename , [
-				$primarykey,  'brandref_id', 'interface_id', 'brandref_code', 'brand_id', '_createby', '_createdate', '_modifyby', '_modifydate', '_createby', '_createdate', '_modifyby', '_modifydate'
-			], $where->sql);
-			$stmt = $this->db->prepare($sql);
-			$stmt->execute($where->params);
-			$row  = $stmt->fetch(\PDO::FETCH_ASSOC);			
-
-			$dataresponse = [];
-			foreach ($row as $key => $value) {
-				$dataresponse[$key] = $value;
-			}
-			$result->dataresponse = (object) array_merge($dataresponse, [
-				// untuk lookup atau modify response ditaruh disini
-				'interface_name' => \FGTA4\utils\SqlUtility::Lookup($data->interface_id, $this->db, 'mst_interface', 'interface_id', 'interface_name'),
-				
-			]);
-
-			return $result;
+			
 		} catch (\Exception $ex) {
 			throw $ex;
 		}
@@ -141,6 +174,4 @@ class DataSave extends WebAPI {
 		return uniqid();
 	}
 
-}
-
-$API = new DataSave();
+};

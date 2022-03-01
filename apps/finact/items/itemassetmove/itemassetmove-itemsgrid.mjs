@@ -1,13 +1,12 @@
 var this_page_id;
 var this_page_options;
 
+
 const tbl_list = $('#pnl_edititemsgrid-tbl_list');
 const txt_title = $('#pnl_edititemsgrid-title');
 const pnl_control = $('#pnl_edititemsgrid-control');
 const btn_removechecked  = $('#pnl_edititemsgrid-removechecked');
 const btn_addrow = $('#pnl_edititemsgrid-addrow');
-const btn_addrowmulti = $('.pnl_edititemsgrid-addrow-multi');
-
 
 let grd_list = {};
 let header_data = {};
@@ -32,10 +31,6 @@ export async function init(opt) {
 
 	btn_addrow.linkbutton({
 		onClick: () => { btn_addrow_click() }
-	});
-
-	btn_addrowmulti.linkbutton({
-		onClick: () => { btn_addrowmulti_click() }
 	});
 
 	document.addEventListener('OnButtonBack', (ev) => {
@@ -69,7 +64,10 @@ export async function init(opt) {
 				grd_list.nextpageload();
 			}			
 		}
-	});			
+	});	
+
+	
+
 }
 
 
@@ -169,11 +167,18 @@ function grd_list_cellclick(td, ev) {
 }
 
 function grd_list_cellrender(td) {
-
+	
 }
 
 function grd_list_rowrender(tr) {
 
+	var dataid = tr.getAttribute('dataid')
+	var record = grd_list.DATA[dataid]
+	$(tr).find('td').each((i, td) => {
+		var mapping = td.getAttribute('mapping')
+		
+	});
+		
 }
 
 
@@ -201,10 +206,4 @@ function btn_addrow_click() {
 	$ui.getPages().show('pnl_edititemsform', ()=>{
 		$ui.getPages().ITEMS['pnl_edititemsform'].handler.createnew(header_data)
 	})	
-}
-
-function btn_addrowmulti_click() {
-	$ui.getPages().show('pnl_editmultiadd', ()=>{
-		$ui.getPages().ITEMS['pnl_editmultiadd'].handler.LoadData(header_data)
-	})
 }

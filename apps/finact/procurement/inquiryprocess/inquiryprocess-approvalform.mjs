@@ -411,7 +411,17 @@ function btn_prev_click() {
 	var dataid = prevode.attr('dataid')
 	var record = $ui.getPages().ITEMS['pnl_editapprovalgrid'].handler.getGrid().DATA[dataid]
 
-	open(record, trid, header_data)
+	if (form.isDataChanged()) {
+		var datachangemessage = form.getDataChangeMessage();
+		$ui.ShowMessage(datachangemessage, {
+			"Ya" : () => {
+				open(record, trid, header_data);
+			},
+			"Tidak" : () => {}
+		})
+	} else {
+		open(record, trid, header_data);
+	}
 }
 
 function btn_next_click() {
@@ -424,5 +434,15 @@ function btn_next_click() {
 	var dataid = nextode.attr('dataid')
 	var record = $ui.getPages().ITEMS['pnl_editapprovalgrid'].handler.getGrid().DATA[dataid]
 
-	open(record, trid, header_data)
+	if (form.isDataChanged()) {
+		var datachangemessage = form.getDataChangeMessage();
+		$ui.ShowMessage(datachangemessage, {
+			"Ya" : () => {
+				open(record, trid, header_data);
+			},
+			"Tidak" : () => {}
+		})
+	} else {
+		open(record, trid, header_data);
+	}
 }

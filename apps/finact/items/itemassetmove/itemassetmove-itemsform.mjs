@@ -2,6 +2,10 @@ var this_page_id;
 var this_page_options;
 
 import {fgta4slideselect} from  '../../../../../index.php/asset/fgta/framework/fgta4libs/fgta4slideselect.mjs'
+import * as hnd from  './itemassetmove-itemsform-hnd.mjs'
+
+const reload_header_modified = true;
+
 
 const txt_title = $('#pnl_edititemsform-title')
 const btn_edit = $('#pnl_edititemsform-btn_edit')
@@ -17,7 +21,13 @@ const pnl_form = $('#pnl_edititemsform-form')
 const obj = {
 	txt_itemassetmovedetil_id: $('#pnl_edititemsform-txt_itemassetmovedetil_id'),
 	cbo_itemasset_id: $('#pnl_edititemsform-cbo_itemasset_id'),
-	txt_itemassetmovedetil_descr: $('#pnl_edititemsform-txt_itemassetmovedetil_descr'),
+	cbo_item_id: $('#pnl_edititemsform-cbo_item_id'),
+	cbo_itemclass_id: $('#pnl_edititemsform-cbo_itemclass_id'),
+	txt_itemassetmovedetil_qty: $('#pnl_edititemsform-txt_itemassetmovedetil_qty'),
+	cbo_send_itemassetstatus_id: $('#pnl_edititemsform-cbo_send_itemassetstatus_id'),
+	txt_itemassetmovedetil_senddescr: $('#pnl_edititemsform-txt_itemassetmovedetil_senddescr'),
+	cbo_recv_itemassetstatus_id: $('#pnl_edititemsform-cbo_recv_itemassetstatus_id'),
+	txt_itemassetmovedetil_recvdescr: $('#pnl_edititemsform-txt_itemassetmovedetil_recvdescr'),
 	txt_itemassetmove_id: $('#pnl_edititemsform-txt_itemassetmove_id')
 }
 
@@ -46,13 +56,17 @@ export async function init(opt) {
 		OnDataDeleted: async (result, options) => { await form_deleted(result, options) },
 		OnIdSetup : (options) => { form_idsetup(options) },
 		OnViewModeChanged : (viewonly) => { form_viewmodechanged(viewonly) }
-	})	
+	});
+	form.getHeaderData = () => {
+		return header_data;
+	}	
 
 	form.AllowAddRecord = true
 	form.AllowRemoveRecord = true
 	form.AllowEditRecord = true
 	form.CreateRecordStatusPage(this_page_id)
 	form.CreateLogPage(this_page_id)
+
 
 
 
@@ -69,12 +83,155 @@ export async function init(opt) {
 			{mapping: 'itemasset_id', text: 'itemasset_id'},
 			{mapping: 'itemasset_name', text: 'itemasset_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria, options) => {
+				
+			if (typeof hnd.cbo_itemasset_id_dataloading === 'function') {
+				hnd.cbo_itemasset_id_dataloading(criteria);
+			}
+		},
 		OnDataLoaded : (result, options) => {
-			result.records.unshift({itemasset_id:'--NULL--', itemasset_name:'NONE'});	
+				
+			if (typeof hnd.cbo_itemasset_id_dataloaded === 'function') {
+				hnd.cbo_itemasset_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
 			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_itemasset_id_selected === 'function') {
+					hnd.cbo_itemasset_id_selected(value, display, record, args);
+				}
+			}			
+		}
+	})				
+			
+	obj.cbo_item_id.name = 'pnl_edititemsform-cbo_item_id'		
+	new fgta4slideselect(obj.cbo_item_id, {
+		title: 'Pilih item_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_item_id,
+		fieldValue: 'item_id',
+		fieldValueMap: 'item_id',
+		fieldDisplay: 'item_name',
+		fields: [
+			{mapping: 'item_id', text: 'item_id'},
+			{mapping: 'item_name', text: 'item_name'},
+		],
+		OnDataLoading: (criteria, options) => {
+				
+			if (typeof hnd.cbo_item_id_dataloading === 'function') {
+				hnd.cbo_item_id_dataloading(criteria);
+			}
+		},
+		OnDataLoaded : (result, options) => {
+			result.records.unshift({item_id:'--NULL--', item_name:'NONE'});	
+			if (typeof hnd.cbo_item_id_dataloaded === 'function') {
+				hnd.cbo_item_id_dataloaded(result, options);
+			}
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_item_id_selected === 'function') {
+					hnd.cbo_item_id_selected(value, display, record, args);
+				}
+			}			
+		}
+	})				
+			
+	obj.cbo_itemclass_id.name = 'pnl_edititemsform-cbo_itemclass_id'		
+	new fgta4slideselect(obj.cbo_itemclass_id, {
+		title: 'Pilih itemclass_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_itemclass_id,
+		fieldValue: 'itemclass_id',
+		fieldValueMap: 'itemclass_id',
+		fieldDisplay: 'itemclass_name',
+		fields: [
+			{mapping: 'itemclass_id', text: 'itemclass_id'},
+			{mapping: 'itemclass_name', text: 'itemclass_name'},
+		],
+		OnDataLoading: (criteria, options) => {
+				
+			if (typeof hnd.cbo_itemclass_id_dataloading === 'function') {
+				hnd.cbo_itemclass_id_dataloading(criteria);
+			}
+		},
+		OnDataLoaded : (result, options) => {
+			result.records.unshift({itemclass_id:'--NULL--', itemclass_name:'NONE'});	
+			if (typeof hnd.cbo_itemclass_id_dataloaded === 'function') {
+				hnd.cbo_itemclass_id_dataloaded(result, options);
+			}
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_itemclass_id_selected === 'function') {
+					hnd.cbo_itemclass_id_selected(value, display, record, args);
+				}
+			}			
+		}
+	})				
+			
+	obj.cbo_send_itemassetstatus_id.name = 'pnl_edititemsform-cbo_send_itemassetstatus_id'		
+	new fgta4slideselect(obj.cbo_send_itemassetstatus_id, {
+		title: 'Pilih send_itemassetstatus_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_send_itemassetstatus_id,
+		fieldValue: 'send_itemassetstatus_id',
+		fieldValueMap: 'itemassetstatus_id',
+		fieldDisplay: 'itemassetstatus_name',
+		fields: [
+			{mapping: 'itemassetstatus_id', text: 'itemassetstatus_id'},
+			{mapping: 'itemassetstatus_name', text: 'itemassetstatus_name'},
+		],
+		OnDataLoading: (criteria, options) => {
+				
+			if (typeof hnd.cbo_send_itemassetstatus_id_dataloading === 'function') {
+				hnd.cbo_send_itemassetstatus_id_dataloading(criteria);
+			}
+		},
+		OnDataLoaded : (result, options) => {
+				
+			if (typeof hnd.cbo_send_itemassetstatus_id_dataloaded === 'function') {
+				hnd.cbo_send_itemassetstatus_id_dataloaded(result, options);
+			}
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_send_itemassetstatus_id_selected === 'function') {
+					hnd.cbo_send_itemassetstatus_id_selected(value, display, record, args);
+				}
+			}			
+		}
+	})				
+			
+	obj.cbo_recv_itemassetstatus_id.name = 'pnl_edititemsform-cbo_recv_itemassetstatus_id'		
+	new fgta4slideselect(obj.cbo_recv_itemassetstatus_id, {
+		title: 'Pilih recv_itemassetstatus_id',
+		returnpage: this_page_id,
+		api: $ui.apis.load_recv_itemassetstatus_id,
+		fieldValue: 'recv_itemassetstatus_id',
+		fieldValueMap: 'itemassetstatus_id',
+		fieldDisplay: 'itemassetstatus_name',
+		fields: [
+			{mapping: 'itemassetstatus_id', text: 'itemassetstatus_id'},
+			{mapping: 'itemassetstatus_name', text: 'itemassetstatus_name'},
+		],
+		OnDataLoading: (criteria, options) => {
+				
+			if (typeof hnd.cbo_recv_itemassetstatus_id_dataloading === 'function') {
+				hnd.cbo_recv_itemassetstatus_id_dataloading(criteria);
+			}
+		},
+		OnDataLoaded : (result, options) => {
+			result.records.unshift({itemassetstatus_id:'--NULL--', itemassetstatus_name:'NONE'});	
+			if (typeof hnd.cbo_recv_itemassetstatus_id_dataloaded === 'function') {
+				hnd.cbo_recv_itemassetstatus_id_dataloaded(result, options);
+			}
+		},
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_recv_itemassetstatus_id_selected === 'function') {
+					hnd.cbo_recv_itemassetstatus_id_selected(value, display, record, args);
+				}
 			}			
 		}
 	})				
@@ -143,6 +300,9 @@ export async function init(opt) {
 			chk_autoadd.prop("checked", false);
 		}
 	})
+
+
+
 }
 
 
@@ -169,7 +329,9 @@ export function open(data, rowid, hdata) {
 		var record = result.record;
 		updatefilebox(result.record);
 /*
-		if (record.itemasset_id==null) { record.itemasset_id='--NULL--'; record.itemasset_name='NONE'; }
+		if (record.item_id==null) { record.item_id='--NULL--'; record.item_name='NONE'; }
+		if (record.itemclass_id==null) { record.itemclass_id='--NULL--'; record.itemclass_name='NONE'; }
+		if (record.recv_itemassetstatus_id==null) { record.recv_itemassetstatus_id='--NULL--'; record.recv_itemassetstatus_name='NONE'; }
 
 */
 		for (var objid in obj) {
@@ -186,6 +348,10 @@ export function open(data, rowid, hdata) {
 		form
 			.fill(record)
 			.setValue(obj.cbo_itemasset_id, record.itemasset_id, record.itemasset_name)
+			.setValue(obj.cbo_item_id, record.item_id, record.item_name)
+			.setValue(obj.cbo_itemclass_id, record.itemclass_id, record.itemclass_name)
+			.setValue(obj.cbo_send_itemassetstatus_id, record.send_itemassetstatus_id, record.send_itemassetstatus_name)
+			.setValue(obj.cbo_recv_itemassetstatus_id, record.recv_itemassetstatus_id, record.recv_itemassetstatus_name)
 			.setViewMode()
 			.rowid = rowid
 
@@ -195,7 +361,7 @@ export function open(data, rowid, hdata) {
 		   apabila ada rutin mengubah form dan tidak mau dijalankan pada saat opening,
 		   cek dengan form.isEventSuspended()
 		*/ 
-
+		
 
 
 		form.commit()
@@ -254,9 +420,18 @@ export function createnew(hdata) {
 		data.itemassetmove_id= hdata.itemassetmove_id
 		data.items_value = 0
 
+		data.itemassetmovedetil_qty = 0
 
-			data.itemasset_id = '--NULL--'
-			data.itemasset_name = 'NONE'
+		data.itemasset_id = '0'
+		data.itemasset_name = '-- PILIH --'
+		data.item_id = '--NULL--'
+		data.item_name = 'NONE'
+		data.itemclass_id = '--NULL--'
+		data.itemclass_name = 'NONE'
+		data.send_itemassetstatus_id = '0'
+		data.send_itemassetstatus_name = '-- PILIH --'
+		data.recv_itemassetstatus_id = '--NULL--'
+		data.recv_itemassetstatus_name = 'NONE'
 
 
 
@@ -272,7 +447,7 @@ export function createnew(hdata) {
 async function form_datasaving(data, options) {
 	options.api = `${global.modulefullname}/items-save`
 
-	// options.skipmappingresponse = ['itemasset_id', ];
+	// options.skipmappingresponse = ['item_id', 'itemclass_id', 'recv_itemassetstatus_id', ];
 	options.skipmappingresponse = [];
 	for (var objid in obj) {
 		var o = obj[objid]
@@ -281,7 +456,9 @@ async function form_datasaving(data, options) {
 			options.skipmappingresponse.push(id)
 			console.log(id)
 		}
-	}	
+	}
+
+		
 }
 
 async function form_datasaved(result, options) {
@@ -289,7 +466,9 @@ async function form_datasaved(result, options) {
 	Object.assign(data, form.getData(), result.dataresponse)
 
 	/*
-	form.setValue(obj.cbo_itemasset_id, result.dataresponse.itemasset_name!=='--NULL--' ? result.dataresponse.itemasset_id : '--NULL--', result.dataresponse.itemasset_name!=='--NULL--'?result.dataresponse.itemasset_name:'NONE')
+	form.setValue(obj.cbo_item_id, result.dataresponse.item_name!=='--NULL--' ? result.dataresponse.item_id : '--NULL--', result.dataresponse.item_name!=='--NULL--'?result.dataresponse.item_name:'NONE')
+	form.setValue(obj.cbo_itemclass_id, result.dataresponse.itemclass_name!=='--NULL--' ? result.dataresponse.itemclass_id : '--NULL--', result.dataresponse.itemclass_name!=='--NULL--'?result.dataresponse.itemclass_name:'NONE')
+	form.setValue(obj.cbo_recv_itemassetstatus_id, result.dataresponse.recv_itemassetstatus_name!=='--NULL--' ? result.dataresponse.recv_itemassetstatus_id : '--NULL--', result.dataresponse.recv_itemassetstatus_name!=='--NULL--'?result.dataresponse.recv_itemassetstatus_name:'NONE')
 
 	*/
 
@@ -314,17 +493,37 @@ async function form_datasaved(result, options) {
 			btn_addnew_click()
 		}, 1000)
 	}
+
+	if (reload_header_modified) {
+		var currentRowdata =  $ui.getPages().ITEMS['pnl_edit'].handler.getCurrentRowdata();
+		$ui.getPages().ITEMS['pnl_edit'].handler.open(currentRowdata.data, currentRowdata.rowid, false, (err, data)=>{
+			$ui.getPages().ITEMS['pnl_list'].handler.updategrid(data, currentRowdata.rowid);
+		});	
+	}
+
+	
+
 }
 
 async function form_deleting(data, options) {
 	options.api = `${global.modulefullname}/items-delete`
+	
 }
 
 async function form_deleted(result, options) {
 	options.suppressdialog = true
 	$ui.getPages().show('pnl_edititemsgrid', ()=>{
 		$ui.getPages().ITEMS['pnl_edititemsgrid'].handler.removerow(form.rowid)
-	})
+	});
+
+	if (reload_header_modified) {
+		var currentRowdata =  $ui.getPages().ITEMS['pnl_edit'].handler.getCurrentRowdata();
+		$ui.getPages().ITEMS['pnl_edit'].handler.open(currentRowdata.data, currentRowdata.rowid, false, (err, data)=>{
+			$ui.getPages().ITEMS['pnl_list'].handler.updategrid(data, currentRowdata.rowid);
+		});	
+	}
+
+	
 	
 }
 

@@ -78,20 +78,26 @@ export async function init(opt) {
 		],
 		OnDataLoading: (criteria, options) => {
 				
-			if (typeof hnd.cbo_trxmodel_id_dataloading === 'function') {
-				hnd.cbo_trxmodel_id_dataloading(criteria);
+			if (typeof hnd!=='undefined') { 
+				if (typeof hnd.cbo_trxmodel_id_dataloading === 'function') {
+					hnd.cbo_trxmodel_id_dataloading(criteria);
+				}
 			}
 		},
 		OnDataLoaded : (result, options) => {
 				
-			if (typeof hnd.cbo_trxmodel_id_dataloaded === 'function') {
-				hnd.cbo_trxmodel_id_dataloaded(result, options);
+			if (typeof hnd!=='undefined') { 
+				if (typeof hnd.cbo_trxmodel_id_dataloaded === 'function') {
+					hnd.cbo_trxmodel_id_dataloaded(result, options);
+				}
 			}
 		},
 		OnSelected: (value, display, record, args) => {
 			if (value!=args.PreviousValue ) {
-				if (typeof hnd.cbo_trxmodel_id_selected === 'function') {
-					hnd.cbo_trxmodel_id_selected(value, display, record, args);
+				if (typeof hnd!=='undefined') {  
+					if (typeof hnd.cbo_trxmodel_id_selected === 'function') {
+						hnd.cbo_trxmodel_id_selected(value, display, record, args);
+					}
 				}
 			}			
 		}
@@ -111,20 +117,26 @@ export async function init(opt) {
 		],
 		OnDataLoading: (criteria, options) => {
 				
-			if (typeof hnd.cbo_orderout_inquirytype_id_dataloading === 'function') {
-				hnd.cbo_orderout_inquirytype_id_dataloading(criteria);
+			if (typeof hnd!=='undefined') { 
+				if (typeof hnd.cbo_orderout_inquirytype_id_dataloading === 'function') {
+					hnd.cbo_orderout_inquirytype_id_dataloading(criteria);
+				}
 			}
 		},
 		OnDataLoaded : (result, options) => {
-				
-			if (typeof hnd.cbo_orderout_inquirytype_id_dataloaded === 'function') {
-				hnd.cbo_orderout_inquirytype_id_dataloaded(result, options);
+			result.records.unshift({inquirytype_id:'--NULL--', inquirytype_name:'NONE'});	
+			if (typeof hnd!=='undefined') { 
+				if (typeof hnd.cbo_orderout_inquirytype_id_dataloaded === 'function') {
+					hnd.cbo_orderout_inquirytype_id_dataloaded(result, options);
+				}
 			}
 		},
 		OnSelected: (value, display, record, args) => {
 			if (value!=args.PreviousValue ) {
-				if (typeof hnd.cbo_orderout_inquirytype_id_selected === 'function') {
-					hnd.cbo_orderout_inquirytype_id_selected(value, display, record, args);
+				if (typeof hnd!=='undefined') {  
+					if (typeof hnd.cbo_orderout_inquirytype_id_selected === 'function') {
+						hnd.cbo_orderout_inquirytype_id_selected(value, display, record, args);
+					}
 				}
 			}			
 		}
@@ -223,6 +235,7 @@ export function open(data, rowid, hdata) {
 		var record = result.record;
 		updatefilebox(result.record);
 /*
+		if (record.orderout_inquirytype_id==null) { record.orderout_inquirytype_id='--NULL--'; record.orderout_inquirytype_name='NONE'; }
 
 */
 		for (var objid in obj) {
@@ -311,8 +324,8 @@ export function createnew(hdata) {
 
 		data.trxmodel_id = '0'
 		data.trxmodel_name = '-- PILIH --'
-		data.orderout_inquirytype_id = '0'
-		data.orderout_inquirytype_name = '-- PILIH --'
+		data.orderout_inquirytype_id = '--NULL--'
+		data.orderout_inquirytype_name = 'NONE'
 
 
 
@@ -328,7 +341,7 @@ export function createnew(hdata) {
 async function form_datasaving(data, options) {
 	options.api = `${global.modulefullname}/modeltransaksi-save`
 
-	// options.skipmappingresponse = [];
+	// options.skipmappingresponse = ['orderout_inquirytype_id', ];
 	options.skipmappingresponse = [];
 	for (var objid in obj) {
 		var o = obj[objid]
@@ -347,6 +360,7 @@ async function form_datasaved(result, options) {
 	Object.assign(data, form.getData(), result.dataresponse)
 
 	/*
+	form.setValue(obj.cbo_orderout_inquirytype_id, result.dataresponse.orderout_inquirytype_name!=='--NULL--' ? result.dataresponse.orderout_inquirytype_id : '--NULL--', result.dataresponse.orderout_inquirytype_name!=='--NULL--'?result.dataresponse.orderout_inquirytype_name:'NONE')
 
 	*/
 

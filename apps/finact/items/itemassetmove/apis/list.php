@@ -7,6 +7,11 @@ if (!defined('FGTA4')) {
 require_once __ROOT_DIR.'/core/sqlutil.php';
 require_once __DIR__ . '/xapi.base.php';
 
+if (is_file(__DIR__ .'/data-header-handler.php')) {
+	require_once __DIR__ .'/data-header-handler.php';
+}
+
+
 
 use \FGTA4\exceptions\WebException;
 
@@ -23,13 +28,25 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 17/09/2021
+ * tanggal 03/01/2022
  */
 $API = new class extends itemassetmoveBase {
 
 	public function execute($options) {
 
 		$userdata = $this->auth->session_get_user();
+
+		$handlerclassname = "\\FGTA4\\apis\\itemassetmove_headerHandler";
+		if (class_exists($handlerclassname)) {
+			$hnd = new itemassetmove_headerHandler($data, $options);
+			$hnd->caller = $this;
+			$hnd->db = $this->db;
+			$hnd->auth = $this->auth;
+			$hnd->reqinfo = $reqinfo->reqinfo;
+		} else {
+			$hnd = new \stdClass;
+		}
+
 
 		try {
 		
@@ -58,11 +75,18 @@ $API = new class extends itemassetmoveBase {
 			$limit = " LIMIT $maxrow OFFSET $offset ";
 			$stmt = $this->db->prepare("
 				select 
-				A.itemassetmove_id, A.inquiry_id, A.itemassetmove_dtstart, A.itemassetmove_dtend, A.itemassetmove_descr, A.from_site_id, A.to_site_id, A.user_dept_id, A.empl_id, A.project_id, A.projecttask_id, A.projbudget_id, A.projbudgettask_id, A._createby, A._createdate, A._modifyby, A._modifydate 
+				A.itemassetmove_id, A.inquiry_id, A.itemassetmove_isunreferenced, A.itemassetmovemodel_id, A.itemassetmovetype_id, A.itemassetmove_dtstart, A.itemassetmove_dtexpected, A.itemassetmove_dtend, A.itemassetmove_descr, A.user_dept_id, A.from_site_id, A.from_room_id, A.from_empl_id, A.to_dept_id, A.to_site_id, A.to_room_id, A.to_empl_id, A.doc_id, A.itemassetmove_version, A.itemassetmove_isdateinterval, A.itemassetmove_isdept, A.itemassetmove_isemployee, A.itemassetmove_issite, A.itemassetmove_isroom, A.itemassetmove_isreturn, A.itemassetmove_iscommit, A.itemassetmove_commitby, A.itemassetmove_commitdate, A.itemassetmove_issend, A.itemassetmove_sendby, A.itemassetmove_senddate, A.itemassetmove_isrcv, A.itemassetmove_rcvby, A.itemassetmove_rcvdate, A._createby, A._createdate, A._modifyby, A._modifydate 
 				from trn_itemassetmove A
 			" . $where->sql . $limit);
 			$stmt->execute($where->params);
 			$rows  = $stmt->fetchall(\PDO::FETCH_ASSOC);
+
+			$beforeloopdata = new \stdClass;
+			if (is_object($hnd)) {
+				if (method_exists(get_class($hnd), 'DataListBeforeLoop')) {
+					$beforeloopdata = $hnd->DataListBeforeLoop((object[]));
+				}
+			}
 
 			$records = [];
 			foreach ($rows as $row) {
@@ -71,21 +95,37 @@ $API = new class extends itemassetmoveBase {
 					$record[$key] = $value;
 				}
 
+				if (is_object($hnd)) {
+					if (method_exists(get_class($hnd), 'DataListLooping')) {
+						$hnd->DataListLooping($record, $beforeloopdata);
+					}
+				}
+
 				array_push($records, array_merge($record, [
 					// // jikalau ingin menambah atau edit field di result record, dapat dilakukan sesuai contoh sbb: 
 					//'tanggal' => date("d/m/y", strtotime($record['tanggal'])),
 				 	//'tambahan' => 'dta'
 					'inquiry_descr' => \FGTA4\utils\SqlUtility::Lookup($record['inquiry_id'], $this->db, 'trn_inquiry', 'inquiry_id', 'inquiry_descr'),
-					'from_site_name' => \FGTA4\utils\SqlUtility::Lookup($record['from_site_id'], $this->db, 'mst_site', 'site_id', 'site_name'),
-					'to_site_name' => \FGTA4\utils\SqlUtility::Lookup($record['to_site_id'], $this->db, 'mst_site', 'site_id', 'site_name'),
+					'itemassetmovemodel_name' => \FGTA4\utils\SqlUtility::Lookup($record['itemassetmovemodel_id'], $this->db, 'mst_itemassetmovemodel', 'itemassetmovemodel_id', 'itemassetmovemodel_name'),
+					'itemassetmovetype_name' => \FGTA4\utils\SqlUtility::Lookup($record['itemassetmovetype_id'], $this->db, 'mst_itemassetmovetype', 'itemassetmovetype_id', 'itemassetmovetype_name'),
 					'user_dept_name' => \FGTA4\utils\SqlUtility::Lookup($record['user_dept_id'], $this->db, 'mst_dept', 'dept_id', 'dept_name'),
-					'empl_name' => \FGTA4\utils\SqlUtility::Lookup($record['empl_id'], $this->db, 'mst_empl', 'empl_id', 'empl_name'),
-					'project_name' => \FGTA4\utils\SqlUtility::Lookup($record['project_id'], $this->db, 'mst_project', 'project_id', 'project_name'),
-					'projecttask_name' => \FGTA4\utils\SqlUtility::Lookup($record['projecttask_id'], $this->db, 'mst_projecttask', 'projecttask_id', 'projecttask_name'),
-					'projbudget_name' => \FGTA4\utils\SqlUtility::Lookup($record['projbudget_id'], $this->db, 'mst_projbudget', 'projbudget_id', 'projbudget_name'),
-					'projbudgettask_name' => \FGTA4\utils\SqlUtility::Lookup($record['projbudgettask_id'], $this->db, 'mst_projbudgettask', 'projbudgettask_id', 'projecttask_notes'),
+					'from_site_name' => \FGTA4\utils\SqlUtility::Lookup($record['from_site_id'], $this->db, 'mst_site', 'site_id', 'site_name'),
+					'from_room_name' => \FGTA4\utils\SqlUtility::Lookup($record['from_room_id'], $this->db, 'mst_room', 'room_id', 'room_name'),
+					'from_empl_name' => \FGTA4\utils\SqlUtility::Lookup($record['from_empl_id'], $this->db, 'mst_empl', 'empl_id', 'empl_name'),
+					'to_dept_name' => \FGTA4\utils\SqlUtility::Lookup($record['to_dept_id'], $this->db, 'mst_dept', 'dept_id', 'dept_name'),
+					'to_site_name' => \FGTA4\utils\SqlUtility::Lookup($record['to_site_id'], $this->db, 'mst_site', 'site_id', 'site_name'),
+					'to_room_name' => \FGTA4\utils\SqlUtility::Lookup($record['to_room_id'], $this->db, 'mst_room', 'room_id', 'room_name'),
+					'to_empl_name' => \FGTA4\utils\SqlUtility::Lookup($record['to_empl_id'], $this->db, 'mst_empl', 'empl_id', 'empl_name'),
+					'doc_name' => \FGTA4\utils\SqlUtility::Lookup($record['doc_id'], $this->db, 'mst_doc', 'doc_id', 'doc_name'),
+					'itemassetmove_commitby' => \FGTA4\utils\SqlUtility::Lookup($record['itemassetmove_commitby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+					'itemassetmove_sendby' => \FGTA4\utils\SqlUtility::Lookup($record['itemassetmove_sendby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
+					'itemassetmove_rcvby' => \FGTA4\utils\SqlUtility::Lookup($record['itemassetmove_rcvby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
 					 
 				]));
+
+
+
+
 			}
 
 			// kembalikan hasilnya

@@ -46,10 +46,15 @@ export function fgta4slideselect(obj, options) {
 		OnDataLoaded : (result, options) => {},
 		OnSelecting: (value, display, record, arg) => {},
 		OnSelected: (value, display, record, arg) => {},
+
+
 		setEdit: (editmode) => { setEdit(self, editmode)  }
 	}, options)
 
 	CreatePanel(self)
+
+
+	obj.getOptions = () => { return self.options }
 
 	return {
 		obj: self.obj,
@@ -159,6 +164,16 @@ function CreateHandler(self) {
 
 
 	self.grd_list = new global.fgta4grid(self.tbl_list, {
+		OnCellRender: (td) => { 
+			if (typeof self.options.OnCellRender==='function') {
+				self.options.OnCellRender(td);
+			}
+		},
+		OnRowRender: (tr) => { 
+			if (typeof self.options.OnRowRender==='function') {
+				self.options.OnRowRender(tr);
+			}		
+		},
 		OnRowClick: (tr, ev) => { 
 			grd_list_rowclick(self, tr, ev)
 		},

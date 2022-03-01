@@ -242,7 +242,7 @@ module.exports = async (fsd, genconfig) => {
 				}`;
 
 				slideselect_on_dataloading_handler = `if (typeof hnd.${prefix}${fieldname}_dataloading === 'function') {
-				hnd.${prefix}${fieldname}_dataloading(criteria);
+				hnd.${prefix}${fieldname}_dataloading(criteria, options);
 			}`;
 
 				slideselect_on_dataloaded_handler = `if (typeof hnd.${prefix}${fieldname}_dataloaded === 'function') {

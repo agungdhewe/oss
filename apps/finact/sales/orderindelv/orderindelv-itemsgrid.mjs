@@ -1,9 +1,10 @@
 var this_page_id;
 var this_page_options;
 
+
 const tbl_list = $('#pnl_edititemsgrid-tbl_list');
 const txt_title = $('#pnl_edititemsgrid-title');
-const pnl_control = $('#pnl_edititemsgrid-control');
+const pnl_control = $('.pnl_edititemsgrid-control');
 const btn_removechecked  = $('#pnl_edititemsgrid-removechecked');
 const btn_addrow = $('#pnl_edititemsgrid-addrow');
 
@@ -23,6 +24,11 @@ export async function init(opt) {
 		OnCellRender: (td) => { grd_list_cellrender(td) },
 		OnRowRender: (tr) => { grd_list_rowrender(tr) }
 	});	
+	grd_list.doLoad = () => {
+		OpenDetil(header_data);
+	}
+
+
 
 	btn_removechecked.linkbutton({
 		onClick: () => { btn_removechecked_click() }
@@ -63,9 +69,20 @@ export async function init(opt) {
 				grd_list.nextpageload();
 			}			
 		}
-	});			
+	});	
+
+	
+
 }
 
+export function getObject(name) {
+	switch (name) {
+		case 'grd_list' : return grd_list;
+		case 'page_id' : return this_page_id;
+		case 'page_options' : return this_page_options;
+		case 'last_scrolltop' : return last_scrolltop;
+	}
+}
 
 export function OnSizeRecalculated(width, height) {
 }
@@ -110,6 +127,13 @@ export function OpenDetil(data) {
 		} else {
 			btn_removechecked.hide()
 		}
+
+		if (typeof hnd!=='undefined') { 
+			if (typeof hnd.OpenDetil === 'function') {
+				hnd.OpenDetil(data, result, options);
+			}
+		}
+
 
 	}
 
@@ -163,11 +187,18 @@ function grd_list_cellclick(td, ev) {
 }
 
 function grd_list_cellrender(td) {
-
+	
 }
 
 function grd_list_rowrender(tr) {
 
+	var dataid = tr.getAttribute('dataid')
+	var record = grd_list.DATA[dataid]
+	$(tr).find('td').each((i, td) => {
+		var mapping = td.getAttribute('mapping')
+		
+	});
+		
 }
 
 

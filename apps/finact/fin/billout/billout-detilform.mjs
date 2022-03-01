@@ -65,13 +65,17 @@ export async function init(opt) {
 		OnDataDeleted: async (result, options) => { await form_deleted(result, options) },
 		OnIdSetup : (options) => { form_idsetup(options) },
 		OnViewModeChanged : (viewonly) => { form_viewmodechanged(viewonly) }
-	})	
+	});
+	form.getHeaderData = () => {
+		return header_data;
+	}	
 
 	form.AllowAddRecord = true
 	form.AllowRemoveRecord = true
 	form.AllowEditRecord = true
 	form.CreateRecordStatusPage(this_page_id)
 	form.CreateLogPage(this_page_id)
+
 
 
 
@@ -90,12 +94,21 @@ export async function init(opt) {
 		],
 		OnDataLoading: (criteria, options) => {
 				
+			if (typeof hnd.cbo_billoutrowtype_id_dataloading === 'function') {
+				hnd.cbo_billoutrowtype_id_dataloading(criteria);
+			}
 		},
 		OnDataLoaded : (result, options) => {
 				
+			if (typeof hnd.cbo_billoutrowtype_id_dataloaded === 'function') {
+				hnd.cbo_billoutrowtype_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
 			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_billoutrowtype_id_selected === 'function') {
+					hnd.cbo_billoutrowtype_id_selected(value, display, record, args);
+				}
 			}			
 		}
 	})				
@@ -114,9 +127,15 @@ export async function init(opt) {
 		],
 		OnDataLoading: (criteria, options) => {
 				
+			if (typeof hnd.cbo_orderindelv_id_dataloading === 'function') {
+				hnd.cbo_orderindelv_id_dataloading(criteria);
+			}
 		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({orderindelv_id:'--NULL--', orderindelv_descr:'NONE'});	
+			if (typeof hnd.cbo_orderindelv_id_dataloaded === 'function') {
+				hnd.cbo_orderindelv_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
 			if (value!=args.PreviousValue ) {
@@ -155,6 +174,9 @@ export async function init(opt) {
 				form.setValue(obj.txt_billoutdetil_payment, record.orderindelv_payment);
 				
 						
+				if (typeof hnd.cbo_orderindelv_id_selected === 'function') {
+					hnd.cbo_orderindelv_id_selected(value, display, record, args);
+				}
 			}			
 		}
 	})				
@@ -173,9 +195,15 @@ export async function init(opt) {
 		],
 		OnDataLoading: (criteria, options) => {
 				
+			if (typeof hnd.cbo_itemclass_id_dataloading === 'function') {
+				hnd.cbo_itemclass_id_dataloading(criteria);
+			}
 		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({itemclass_id:'--NULL--', itemclass_name:'NONE'});	
+			if (typeof hnd.cbo_itemclass_id_dataloaded === 'function') {
+				hnd.cbo_itemclass_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
 			if (value!=args.PreviousValue ) {
@@ -187,6 +215,9 @@ export async function init(opt) {
 				form.setValue(obj.cbo_coa_id, record.settl_coa_id, record.settl_coa_name );
 							
 						
+				if (typeof hnd.cbo_itemclass_id_selected === 'function') {
+					hnd.cbo_itemclass_id_selected(value, display, record, args);
+				}
 			}			
 		}
 	})				
@@ -205,12 +236,21 @@ export async function init(opt) {
 		],
 		OnDataLoading: (criteria, options) => {
 				
+			if (typeof hnd.cbo_accbudget_id_dataloading === 'function') {
+				hnd.cbo_accbudget_id_dataloading(criteria);
+			}
 		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({accbudget_id:'--NULL--', accbudget_name:'NONE'});	
+			if (typeof hnd.cbo_accbudget_id_dataloaded === 'function') {
+				hnd.cbo_accbudget_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
 			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_accbudget_id_selected === 'function') {
+					hnd.cbo_accbudget_id_selected(value, display, record, args);
+				}
 			}			
 		}
 	})				
@@ -229,12 +269,21 @@ export async function init(opt) {
 		],
 		OnDataLoading: (criteria, options) => {
 				
+			if (typeof hnd.cbo_coa_id_dataloading === 'function') {
+				hnd.cbo_coa_id_dataloading(criteria);
+			}
 		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({coa_id:'--NULL--', coa_name:'NONE'});	
+			if (typeof hnd.cbo_coa_id_dataloaded === 'function') {
+				hnd.cbo_coa_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
 			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_coa_id_selected === 'function') {
+					hnd.cbo_coa_id_selected(value, display, record, args);
+				}
 			}			
 		}
 	})				
@@ -303,6 +352,9 @@ export async function init(opt) {
 			chk_autoadd.prop("checked", false);
 		}
 	})
+
+
+
 }
 
 
@@ -362,7 +414,7 @@ export function open(data, rowid, hdata) {
 		   apabila ada rutin mengubah form dan tidak mau dijalankan pada saat opening,
 		   cek dengan form.isEventSuspended()
 		*/ 
-
+		
 
 
 		form.commit()
@@ -434,16 +486,16 @@ export function createnew(hdata) {
 		data.billoutdetil_dp = 0
 		data.billoutdetil_payment = 0
 
-			data.billoutrowtype_id = '0'
-			data.billoutrowtype_name = '-- PILIH --'
-			data.orderindelv_id = '--NULL--'
-			data.orderindelv_descr = 'NONE'
-			data.itemclass_id = '--NULL--'
-			data.itemclass_name = 'NONE'
-			data.accbudget_id = '--NULL--'
-			data.accbudget_name = 'NONE'
-			data.coa_id = '--NULL--'
-			data.coa_name = 'NONE'
+		data.billoutrowtype_id = '0'
+		data.billoutrowtype_name = '-- PILIH --'
+		data.orderindelv_id = '--NULL--'
+		data.orderindelv_descr = 'NONE'
+		data.itemclass_id = '--NULL--'
+		data.itemclass_name = 'NONE'
+		data.accbudget_id = '--NULL--'
+		data.accbudget_name = 'NONE'
+		data.coa_id = '--NULL--'
+		data.coa_name = 'NONE'
 
 
 
@@ -468,7 +520,9 @@ async function form_datasaving(data, options) {
 			options.skipmappingresponse.push(id)
 			console.log(id)
 		}
-	}	
+	}
+
+		
 }
 
 async function form_datasaved(result, options) {
@@ -512,10 +566,13 @@ async function form_datasaved(result, options) {
 		});	
 	}
 
+	
+
 }
 
 async function form_deleting(data, options) {
 	options.api = `${global.modulefullname}/detil-delete`
+	
 }
 
 async function form_deleted(result, options) {
@@ -530,6 +587,8 @@ async function form_deleted(result, options) {
 			$ui.getPages().ITEMS['pnl_list'].handler.updategrid(data, currentRowdata.rowid);
 		});	
 	}
+
+	
 	
 }
 

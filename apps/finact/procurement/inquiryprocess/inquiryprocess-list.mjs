@@ -26,7 +26,9 @@ export async function init(opt) {
 		OnCellRender: (td) => { grd_list_cellrender(td) },
 		OnRowRender: (tr) => { grd_list_rowrender(tr) }
 	})
-
+	grd_list.doLoad = () => {
+		btn_load_click();
+	}
 
 	if (txt_search!=null) {
 		txt_search.textbox('textbox').bind('keypress', (evt)=>{
@@ -62,7 +64,7 @@ export async function init(opt) {
 
 
 	grd_list.autoload = true;
-		if (typeof hnd.init==='function') {
+	if (typeof hnd.init==='function') {
 			hnd.init({
 				grd_list: grd_list,
 				opt: opt,
@@ -77,6 +79,14 @@ export async function init(opt) {
 
 }
 
+export function getObject(name) {
+	switch (name) {
+		case 'grd_list' : return grd_list;
+		case 'page_id' : return this_page_id;
+		case 'page_options' : return this_page_options;
+		case 'last_scrolltop' : return last_scrolltop;
+	}
+}
 
 export function OnSizeRecalculated(width, height) {
 }

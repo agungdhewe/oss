@@ -4,7 +4,7 @@ var this_page_options;
 
 const tbl_list = $('#pnl_editpartnertypegrid-tbl_list');
 const txt_title = $('#pnl_editpartnertypegrid-title');
-const pnl_control = $('#pnl_editpartnertypegrid-control');
+const pnl_control = $('.pnl_editpartnertypegrid-control');
 const btn_removechecked  = $('#pnl_editpartnertypegrid-removechecked');
 const btn_addrow = $('#pnl_editpartnertypegrid-addrow');
 
@@ -24,6 +24,11 @@ export async function init(opt) {
 		OnCellRender: (td) => { grd_list_cellrender(td) },
 		OnRowRender: (tr) => { grd_list_rowrender(tr) }
 	});	
+	grd_list.doLoad = () => {
+		OpenDetil(header_data);
+	}
+
+
 
 	btn_removechecked.linkbutton({
 		onClick: () => { btn_removechecked_click() }
@@ -70,6 +75,14 @@ export async function init(opt) {
 
 }
 
+export function getObject(name) {
+	switch (name) {
+		case 'grd_list' : return grd_list;
+		case 'page_id' : return this_page_id;
+		case 'page_options' : return this_page_options;
+		case 'last_scrolltop' : return last_scrolltop;
+	}
+}
 
 export function OnSizeRecalculated(width, height) {
 }
@@ -114,6 +127,13 @@ export function OpenDetil(data) {
 		} else {
 			btn_removechecked.hide()
 		}
+
+		if (typeof hnd!=='undefined') { 
+			if (typeof hnd.OpenDetil === 'function') {
+				hnd.OpenDetil(data, result, options);
+			}
+		}
+
 
 	}
 

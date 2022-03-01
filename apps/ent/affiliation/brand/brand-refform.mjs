@@ -2,6 +2,10 @@ var this_page_id;
 var this_page_options;
 
 import {fgta4slideselect} from  '../../../../../index.php/asset/fgta/framework/fgta4libs/fgta4slideselect.mjs'
+import * as hnd from  './brand-refform-hnd.mjs'
+
+const reload_header_modified = true;
+
 
 const txt_title = $('#pnl_editrefform-title')
 const btn_edit = $('#pnl_editrefform-btn_edit')
@@ -12,6 +16,7 @@ const btn_next = $('#pnl_editrefform-btn_next')
 const btn_addnew = $('#pnl_editrefform-btn_addnew')
 const chk_autoadd = $('#pnl_editrefform-autoadd')
 
+
 const pnl_form = $('#pnl_editrefform-form')
 const obj = {
 	txt_brandref_id: $('#pnl_editrefform-txt_brandref_id'),
@@ -21,8 +26,8 @@ const obj = {
 }
 
 
-let form = {}
-let header_data = {}
+let form;
+let header_data;
 
 
 
@@ -45,13 +50,19 @@ export async function init(opt) {
 		OnDataDeleted: async (result, options) => { await form_deleted(result, options) },
 		OnIdSetup : (options) => { form_idsetup(options) },
 		OnViewModeChanged : (viewonly) => { form_viewmodechanged(viewonly) }
-	})	
+	});
+	form.getHeaderData = () => {
+		return header_data;
+	}	
 
 	form.AllowAddRecord = true
 	form.AllowRemoveRecord = true
 	form.AllowEditRecord = true
 	form.CreateRecordStatusPage(this_page_id)
 	form.CreateLogPage(this_page_id)
+
+
+
 
 
 	obj.cbo_interface_id.name = 'pnl_editrefform-cbo_interface_id'		
@@ -66,26 +77,38 @@ export async function init(opt) {
 			{mapping: 'interface_id', text: 'interface_id'},
 			{mapping: 'interface_name', text: 'interface_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria, options) => {
+				
+			if (typeof hnd!=='undefined') { 
+				if (typeof hnd.cbo_interface_id_dataloading === 'function') {
+					hnd.cbo_interface_id_dataloading(criteria);
+				}
+			}
+		},
 		OnDataLoaded : (result, options) => {
 				
+			if (typeof hnd!=='undefined') { 
+				if (typeof hnd.cbo_interface_id_dataloaded === 'function') {
+					hnd.cbo_interface_id_dataloaded(result, options);
+				}
+			}
 		},
-		OnSelected: (value, display, record) => {}
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd!=='undefined') {  
+					if (typeof hnd.cbo_interface_id_selected === 'function') {
+						hnd.cbo_interface_id_selected(value, display, record, args);
+					}
+				}
+			}			
+		}
 	})				
 			
 
 
-	btn_addnew.linkbutton({
-		onClick: () => { btn_addnew_click() }
-	})
-
-	btn_prev.linkbutton({
-		onClick: () => { btn_prev_click() }
-	})
-
-	btn_next.linkbutton({
-		onClick: () => { btn_next_click() }
-	})
+	btn_addnew.linkbutton({ onClick: () => { btn_addnew_click() }  })
+	btn_prev.linkbutton({ onClick: () => { btn_prev_click() } })
+	btn_next.linkbutton({ onClick: () => { btn_next_click() } })
 
 	document.addEventListener('keydown', (ev)=>{
 		if ($ui.getPages().getCurrentPage()==this_page_id) {
@@ -145,6 +168,15 @@ export async function init(opt) {
 			chk_autoadd.prop("checked", false);
 		}
 	})
+
+	if (typeof hnd.init==='function') {
+		hnd.init({
+			form: form,
+			obj: obj,
+			opt: opt
+		})
+	}
+
 }
 
 
@@ -161,23 +193,47 @@ export function open(data, rowid, hdata) {
 	txt_title.html(hdata.brand_name)
 	header_data = hdata
 
+	var pOpt = form.getDefaultPrompt(false)
 	var fn_dataopening = async (options) => {
 		options.api = `${global.modulefullname}/ref-open`
 		options.criteria[form.primary.mapping] = data[form.primary.mapping]
 	}
 
 	var fn_dataopened = async (result, options) => {
+		var record = result.record;
+		updatefilebox(result.record);
+/*
 
-
-
+*/
+		for (var objid in obj) {
+			let o = obj[objid]
+			if (o.isCombo() && !o.isRequired()) {
+				var value =  result.record[o.getFieldValueName()];
+				if (value==null ) {
+					record[o.getFieldValueName()] = pOpt.value;
+					record[o.getFieldDisplayName()] = pOpt.text;
+				}
+			}
+		}
 		form.SuspendEvent(true);
 		form
-			.fill(result.record)
-			.setValue(obj.cbo_interface_id, result.record.interface_id, result.record.interface_name)
-			.commit()
+			.fill(record)
+			.setValue(obj.cbo_interface_id, record.interface_id, record.interface_name)
 			.setViewMode()
 			.rowid = rowid
 
+
+
+		/* tambahkan event atau behaviour saat form dibuka
+		   apabila ada rutin mengubah form dan tidak mau dijalankan pada saat opening,
+		   cek dengan form.isEventSuspended()
+		*/ 
+		if (typeof hnd.form_dataopened == 'function') {
+			hnd.form_dataopened(result, options);
+		}
+
+
+		form.commit()
 		form.SuspendEvent(false);
 
 
@@ -234,9 +290,12 @@ export function createnew(hdata) {
 		data.ref_value = 0
 
 
-			data.interface_id = '0'
-			data.interface_name = '-- PILIH --'
+		data.interface_id = '0'
+		data.interface_name = '-- PILIH --'
 
+		if (typeof hnd.form_newdata == 'function') {
+			hnd.form_newdata(data, options);
+		}
 
 
 		form.rowid = null
@@ -250,15 +309,43 @@ export function createnew(hdata) {
 async function form_datasaving(data, options) {
 	options.api = `${global.modulefullname}/ref-save`
 
+	// options.skipmappingresponse = [];
+	options.skipmappingresponse = [];
+	for (var objid in obj) {
+		var o = obj[objid]
+		if (o.isCombo() && !o.isRequired()) {
+			var id = o.getFieldValueName()
+			options.skipmappingresponse.push(id)
+			console.log(id)
+		}
+	}
 
-
+	if (typeof hnd.form_datasaving == 'function') {
+		hnd.form_datasaving(data, options);
+	}	
 }
 
 async function form_datasaved(result, options) {
 	var data = {}
 	Object.assign(data, form.getData(), result.dataresponse)
 
+	/*
 
+	*/
+
+	var pOpt = form.getDefaultPrompt(false)
+	for (var objid in obj) {
+		var o = obj[objid]
+		if (o.isCombo() && !o.isRequired()) {
+			var value =  result.dataresponse[o.getFieldValueName()];
+			var text = result.dataresponse[o.getFieldDisplayName()];
+			if (value==null ) {
+				value = pOpt.value;
+				text = pOpt.text;
+			}
+			form.setValue(o, value, text);
+		}
+	}
 	form.rowid = $ui.getPages().ITEMS['pnl_editrefgrid'].handler.updategrid(data, form.rowid)
 
 	var autoadd = chk_autoadd.prop("checked")
@@ -267,18 +354,49 @@ async function form_datasaved(result, options) {
 			btn_addnew_click()
 		}, 1000)
 	}
+
+	if (reload_header_modified) {
+		var currentRowdata =  $ui.getPages().ITEMS['pnl_edit'].handler.getCurrentRowdata();
+		$ui.getPages().ITEMS['pnl_edit'].handler.open(currentRowdata.data, currentRowdata.rowid, false, (err, data)=>{
+			$ui.getPages().ITEMS['pnl_list'].handler.updategrid(data, currentRowdata.rowid);
+		});	
+	}
+
+	if (typeof hnd.form_datasaved == 'function') {
+		hnd.form_datasaved(result, rowdata, options);
+	}
+
 }
 
 async function form_deleting(data, options) {
 	options.api = `${global.modulefullname}/ref-delete`
+	if (typeof hnd.form_deleting == 'function') {
+		hnd.form_deleting(data);
+	}
 }
 
 async function form_deleted(result, options) {
 	options.suppressdialog = true
 	$ui.getPages().show('pnl_editrefgrid', ()=>{
 		$ui.getPages().ITEMS['pnl_editrefgrid'].handler.removerow(form.rowid)
-	})
+	});
+
+	if (reload_header_modified) {
+		var currentRowdata =  $ui.getPages().ITEMS['pnl_edit'].handler.getCurrentRowdata();
+		$ui.getPages().ITEMS['pnl_edit'].handler.open(currentRowdata.data, currentRowdata.rowid, false, (err, data)=>{
+			$ui.getPages().ITEMS['pnl_list'].handler.updategrid(data, currentRowdata.rowid);
+		});	
+	}
+
+	if (typeof hnd.form_deleted == 'function') {
+		hnd.form_deleted(result, options);
+	}
 	
+}
+
+function updatefilebox(record) {
+	// apabila ada keperluan untuk menampilkan data dari object storage
+
 }
 
 function form_viewmodechanged(viewonly) {

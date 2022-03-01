@@ -5,10 +5,12 @@ const tbl_list = $('#pnl_editdetilgrid-tbl_list');
 const txt_title = $('#pnl_editdetilgrid-title');
 const txt_title_dept = $('#pnl_editdetilgrid-title-dept');
 const txt_title_year = $('#pnl_editdetilgrid-title-year')
-const pnl_control = $('#pnl_editdetilgrid-control');
+const pnl_control = $('.pnl_editdetilgrid-control');
 const btn_removechecked  = $('#pnl_editdetilgrid-removechecked');
 const btn_addrow = $('#pnl_editdetilgrid-addrow');
 const txt_deptbudgetdet_total = $('.deptbudgetdet_total');
+const txt_copy_year = $('#pnl_editdetilgrid-txt_copy_year');
+const btn_copyyear = $('#pnl_editdetilgrid-btn_copyyear')
 
 let grd_list = {};
 let header_data = {};
@@ -34,6 +36,11 @@ export async function init(opt) {
 	btn_addrow.linkbutton({
 		onClick: () => { btn_addrow_click() }
 	});
+
+
+	btn_copyyear.linkbutton({
+		onClick: () => { btn_copyyear_click() }
+	})
 
 	document.addEventListener('OnButtonBack', (ev) => {
 		if ($ui.getPages().getCurrentPage()==this_page_id) {
@@ -90,6 +97,8 @@ export function OpenDetil(data) {
 	// saat di klik di edit utama, pada detil information
 	header_data = data;
 
+	console.log(header_data);
+
 
 	grd_list.clear();
 	txt_title.html(header_data.deptbudget_id);
@@ -118,6 +127,11 @@ export function OpenDetil(data) {
 		} else {
 			btn_removechecked.hide()
 		}
+
+
+		// isi copy budget
+		var lastyear = header_data.deptbudget_year;
+		txt_copy_year.textbox('setText', lastyear-1);
 
 	}
 
@@ -208,4 +222,27 @@ function btn_addrow_click() {
 	$ui.getPages().show('pnl_editdetilform', ()=>{
 		$ui.getPages().ITEMS['pnl_editdetilform'].handler.createnew(header_data)
 	})	
+}
+
+
+async function btn_copyyear_click() {
+	var apiurl = `${global.modulefullname}/xtion-copyyear`
+	var args = {
+		data: {
+			year: header_data.deptbudget_year - 1,
+			dept_id: header_data.dept_id,
+			deptbudget_id: header_data.deptbudget_id
+		}
+	}
+	try {
+		var result = await $ui.apicall(apiurl, args);
+
+		console.log(result);
+
+		OpenDetil(header_data);
+	} catch (err) {
+		console.log(err)
+	}
+
+
 }

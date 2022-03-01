@@ -199,7 +199,7 @@ export async function init(opt) {
 		OnDataLoading: (criteria) => {
 			
 			if (typeof hnd.cbo_inquirytype_id_dataloading === 'function') {
-				hnd.cbo_inquirytype_id_dataloading(criteria);
+				hnd.cbo_inquirytype_id_dataloading(criteria, options);
 			}	
 		},
 		OnDataLoaded : (result, options) => {
@@ -231,7 +231,7 @@ export async function init(opt) {
 		OnDataLoading: (criteria) => {
 			
 			if (typeof hnd.cbo_user_dept_id_dataloading === 'function') {
-				hnd.cbo_user_dept_id_dataloading(criteria);
+				hnd.cbo_user_dept_id_dataloading(criteria, options);
 			}	
 		},
 		OnDataLoaded : (result, options) => {
@@ -263,7 +263,7 @@ export async function init(opt) {
 		OnDataLoading: (criteria) => {
 			
 			if (typeof hnd.cbo_empl_id_dataloading === 'function') {
-				hnd.cbo_empl_id_dataloading(criteria);
+				hnd.cbo_empl_id_dataloading(criteria, options);
 			}	
 		},
 		OnDataLoaded : (result, options) => {
@@ -295,7 +295,7 @@ export async function init(opt) {
 		OnDataLoading: (criteria) => {
 			
 			if (typeof hnd.cbo_project_id_dataloading === 'function') {
-				hnd.cbo_project_id_dataloading(criteria);
+				hnd.cbo_project_id_dataloading(criteria, options);
 			}	
 		},
 		OnDataLoaded : (result, options) => {
@@ -327,7 +327,7 @@ export async function init(opt) {
 		OnDataLoading: (criteria) => {
 			
 			if (typeof hnd.cbo_projecttask_id_dataloading === 'function') {
-				hnd.cbo_projecttask_id_dataloading(criteria);
+				hnd.cbo_projecttask_id_dataloading(criteria, options);
 			}	
 		},
 		OnDataLoaded : (result, options) => {
@@ -359,7 +359,7 @@ export async function init(opt) {
 		OnDataLoading: (criteria) => {
 			
 			if (typeof hnd.cbo_projbudget_id_dataloading === 'function') {
-				hnd.cbo_projbudget_id_dataloading(criteria);
+				hnd.cbo_projbudget_id_dataloading(criteria, options);
 			}	
 		},
 		OnDataLoaded : (result, options) => {
@@ -391,7 +391,7 @@ export async function init(opt) {
 		OnDataLoading: (criteria) => {
 			
 			if (typeof hnd.cbo_projbudgettask_id_dataloading === 'function') {
-				hnd.cbo_projbudgettask_id_dataloading(criteria);
+				hnd.cbo_projbudgettask_id_dataloading(criteria, options);
 			}	
 		},
 		OnDataLoaded : (result, options) => {
@@ -423,7 +423,7 @@ export async function init(opt) {
 		OnDataLoading: (criteria) => {
 			
 			if (typeof hnd.cbo_site_id_dataloading === 'function') {
-				hnd.cbo_site_id_dataloading(criteria);
+				hnd.cbo_site_id_dataloading(criteria, options);
 			}	
 		},
 		OnDataLoaded : (result, options) => {
@@ -455,7 +455,7 @@ export async function init(opt) {
 		OnDataLoading: (criteria) => {
 			
 			if (typeof hnd.cbo_doc_id_dataloading === 'function') {
-				hnd.cbo_doc_id_dataloading(criteria);
+				hnd.cbo_doc_id_dataloading(criteria, options);
 			}	
 		},
 		OnDataLoaded : (result, options) => {
@@ -664,8 +664,8 @@ export function createnew() {
 
 		data.inquirytype_id = '0'
 		data.inquirytype_name = '-- PILIH --'
-		data.user_dept_id = '0'
-		data.user_dept_name = '-- PILIH --'
+		data.user_dept_id = global.setup.dept_id
+		data.user_dept_name = global.setup.dept_name
 		data.empl_id = '--NULL--'
 		data.empl_name = 'NONE'
 		data.project_id = '0'

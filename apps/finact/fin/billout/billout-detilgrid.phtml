@@ -19,6 +19,11 @@
 	<div style="margin-top: 10px; margin-bottom: 15px">
 		<table id="pnl_editdetilgrid-tbl_list" paging="true" cellspacing="0" width="100%" class="deftable">
 			<thead>
+				<?php
+				$customview = __DIR__.'/billout-detilgrid-customview.phtml'; 
+				if (is_file($customview)) {
+					include $customview;
+				} else { ?>
 				<tr>
 <th type="check">chk</th>					
 					<th mapping="billoutdetil_descr">billoutdetil_descr</th>
@@ -33,6 +38,7 @@
 
 					<td class="fgtable-head" style="border-bottom: 1px solid #000000; text-align: center">&nbsp;</td>
 				</tr>
+				<?php } ?>
 			</thead>
 		</table>
 	</div>

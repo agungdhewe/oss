@@ -76,3 +76,17 @@ export function customsearch(options) {
 
 
 }
+
+
+export function grd_list_rowrender(param) {
+	// console.log(param);
+	var tr = param.tr;
+	var td = param.td;
+	var mapping = param.mapping;
+
+	if (mapping=='partner_id') {
+		td.innerHTML = 'test';
+	}
+	
+
+}

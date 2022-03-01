@@ -41,6 +41,7 @@ module.exports = {
 
 				user_dept_id: {
 					text: 'User Dept', type: dbtype.varchar(30), null: false, suppresslist: true,
+					autobylogin: 'dept',
 					options: { required: true, invalidMessage: 'Departemen User harus diisi'},
 					comp: comp.Combo({
 						table: 'mst_dept',
@@ -214,10 +215,10 @@ module.exports = {
 				inquiry_declineby: { text: 'Decline By', type: dbtype.varchar(14), suppresslist: true, unset:true, options: { disabled: true }, hidden: true, lookup:'user' },
 				inquiry_declinedate: { text: 'Decline Date', type: dbtype.datetime, suppresslist: true, unset:true, comp: comp.Textbox(), options: { disabled: true }, hidden: true },
 				inquiry_ispreparing: {text:'Preparing', type: dbtype.boolean, null:false, default:'0', unset:true, suppresslist: true,options:{disabled:true}},
-				inquiry_isprepared: {text:'Prepared', type: dbtype.boolean, null:false, default:'0', unset:true, suppresslist: true,options:{disabled:true}},
+				inquiry_isprepared: {text:'Prepared', type: dbtype.boolean, null:false, default:'0', unset:true, options:{disabled:true}},
 				inquiry_preparedby: { text: 'Prepared By', type: dbtype.varchar(14), suppresslist: true, unset:true, options: { disabled: true }, hidden: true, lookup:'user' },
 				inquiry_prepareddate: { text: 'Prepared Date', type: dbtype.datetime, suppresslist: true, unset:true, comp: comp.Textbox(), options: { disabled: true } , hidden: true},
-				inquiry_isreject: {text:'Reject', type: dbtype.boolean, null:false, default:'0', unset:true, options:{disabled:true}},
+				inquiry_isreject: {text:'Reject', type: dbtype.boolean, null:false, default:'0', suppresslist: true, unset:true, options:{disabled:true}},
 				inquiry_rejectby: { text: 'Reject By', type: dbtype.varchar(14), suppresslist: true, unset:true, options: { disabled: true } , hidden: true, lookup:'user'},
 				inquiry_rejectdate: { text: 'Reject Date', type: dbtype.datetime, suppresslist: true, unset:true, comp: comp.Textbox(), options: { disabled: true } , hidden: true},
 				inquiry_iscomplete: {text:'Complete', type: dbtype.boolean, null:false, default:'0', unset:true, options:{disabled:true}},
@@ -297,12 +298,14 @@ module.exports = {
 
 				inquirydetil_qty: { text: 'Qty', type: dbtype.int(4), null:false, default:0, options: {disabled: true}},
 				inquirydetil_days: { text: 'Days', type: dbtype.int(4), null:false, default:0, options: {disabled: true}},
-				inquirydetil_task: { text: 'Task', type: dbtype.int(4), null:false, default:0, options: {disabled: true}},
+				inquirydetil_task: { text: 'Task', type: dbtype.int(4), null:false, suppresslist: true,  default:0, options: {disabled: true}},
 
 
 				inquirydetil_qty_proc: { text: 'Qty Process', type: dbtype.int(4), null:false, default:0},
+				// inquirydetil_days_proc: { text: 'Days Process', type: dbtype.int(4), null:false, default:0},
+				// inquirydetil_task_proc: { text: 'Task Process', type: dbtype.int(4), null:false, default:0},
 				proc_trxmodel_id: { 
-					text: 'Process Followup', type: dbtype.varchar(10), null: false, suppresslist: true,
+					text: 'Process Followup', type: dbtype.varchar(10), null: false,
 					options: { required: true, invalidMessage: 'Model Trx harus diisi' }, 
 					comp: comp.Combo({
 						table: 'mst_trxmodel',
@@ -313,8 +316,9 @@ module.exports = {
 
 
 
-
-				inquirydetil_qty_outstd: { text: 'Qty Outstanding', type: dbtype.int(4), null:false, default:0},
+				inquirydetil_qty_outstd: { text: 'Qty Outstanding', type: dbtype.int(4), null:false, default:0, suppresslist: true, },
+				// inquirydetil_days_outstd: { text: 'Days Outstanding', type: dbtype.int(4), null:false, default:0, suppresslist: true, },
+				// inquirydetil_task_outstd: { text: 'Task Outstanding', type: dbtype.int(4), null:false, default:0, suppresslist: true, },
 				outstd_trxmodel_id: { 
 					text: 'Outstanding Followup', type: dbtype.varchar(10), null: false, suppresslist: true,
 					options: { required: true, invalidMessage: 'Model Trx harus diisi' }, 
@@ -329,6 +333,7 @@ module.exports = {
 				inquirydetil_estrate: { text: 'Est.Rate', type: dbtype.decimal(12,0), null:false, default:0},
 				inquirydetil_estvalue: { text: 'Est.Value', type: dbtype.int(14,0), null:false, default:0},
 
+				inquiryitem_isconfirm: {text:'Confirm Followup', type: dbtype.boolean, null:false, default:'0', options:{labelWidth:'300px'}},
 
 				projbudgetdet_id: {
 					text: 'Budget Account', type: dbtype.varchar(30), null: true, suppresslist: true,
@@ -354,8 +359,8 @@ module.exports = {
 
 				inquiry_id: {text:'Inquiry', type: dbtype.varchar(14), null:false, hidden: true},		
 			}
-		},
 
+		},
 
 		'trn_inquirydetil' : {
 			comment: 'Itemclass yang akan di-inquiry',
@@ -470,7 +475,8 @@ module.exports = {
 			'item': {
 				title: 'Item', table: 'trn_inquiryitem', form: true, headerview: 'inquiry_descr',
 				editorHandler: 'inquiryprocess-itemform-hnd.mjs',
-				listHandler: 'inquiryprocess-itemgrid-hnd.mjs',
+				listHandler: 'inquiryprocess-itemgrid-hnd.mjs'
+			
 			},
 			'detil': {title: 'Detil', table: 'trn_inquirydetil', form: true, headerview: 'inquiry_descr' },
 			'files': {title: 'Files', table: 'trn_inquiryfiles', form: true, headerview: 'inquiry_descr' }

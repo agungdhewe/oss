@@ -7,6 +7,7 @@ import * as pList from './ofrecv-list.mjs'
 import * as pEdit from './ofrecv-edit.mjs'
 import * as pEditDetilgrid from './ofrecv-detilgrid.mjs'
 import * as pEditDetilform from './ofrecv-detilform.mjs'
+import * as pEditNewdata from './ofrecv-newdata.mjs'
 
 
 
@@ -14,6 +15,7 @@ const pnl_list = $('#pnl_list')
 const pnl_edit = $('#pnl_edit')
 const pnl_editdetilgrid = $('#pnl_editdetilgrid')
 const pnl_editdetilform = $('#pnl_editdetilform')
+const pnl_editnewdata = $('#pnl_editnewdata')
 
 
 
@@ -40,7 +42,8 @@ export async function init(opt) {
 			{panel: pnl_list, handler: pList},
 			{panel: pnl_edit, handler: pEdit},
 			{panel: pnl_editdetilgrid, handler: pEditDetilgrid},
-			{panel: pnl_editdetilform, handler: pEditDetilform}			
+			{panel: pnl_editdetilform, handler: pEditDetilform},
+			{panel: pnl_editnewdata, handler: pEditNewdata}			
 		], opt)
 
 	$ui.setPages(pages)

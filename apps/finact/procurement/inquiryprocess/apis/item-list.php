@@ -27,7 +27,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 28/12/2021
+ * tanggal 16/01/2022
  */
 $API = new class extends inquiryprocessBase {
 
@@ -72,7 +72,7 @@ $API = new class extends inquiryprocessBase {
 			$limit = " LIMIT $maxrow OFFSET $offset ";
 			$stmt = $this->db->prepare("
 				select 
-				A.inquiryitem_id, A.itemasset_id, A.item_id, A.itemstock_id, A.partner_id, A.itemclass_id, A.inquirydetil_descr, A.inquirydetil_qty, A.inquirydetil_days, A.inquirydetil_task, A.inquirydetil_qty_proc, A.proc_trxmodel_id, A.inquirydetil_qty_outstd, A.outstd_trxmodel_id, A.inquirydetil_estrate, A.inquirydetil_estvalue, A.projbudgetdet_id, A.inquirydetil_isunbudget, A.inquirydetil_isallowoverbudget, A.accbudget_id, A.coa_id, A.inquirydetil_id, A.inquiry_id, A._createby, A._createdate, A._modifyby, A._modifydate 
+				A.inquiryitem_id, A.itemasset_id, A.item_id, A.itemstock_id, A.partner_id, A.itemclass_id, A.inquirydetil_descr, A.inquirydetil_qty, A.inquirydetil_days, A.inquirydetil_task, A.inquirydetil_qty_proc, A.proc_trxmodel_id, A.inquirydetil_qty_outstd, A.outstd_trxmodel_id, A.inquirydetil_estrate, A.inquirydetil_estvalue, A.inquiryitem_isconfirm, A.projbudgetdet_id, A.inquirydetil_isunbudget, A.inquirydetil_isallowoverbudget, A.accbudget_id, A.coa_id, A.inquirydetil_id, A.inquiry_id, A._createby, A._createdate, A._modifyby, A._modifydate 
 				from trn_inquiryitem A
 			" . $where->sql . $limit);
 			$stmt->execute($where->params);

@@ -7,7 +7,6 @@ import * as pList from './itemassetmove-list.mjs'
 import * as pEdit from './itemassetmove-edit.mjs'
 import * as pEditItemsgrid from './itemassetmove-itemsgrid.mjs'
 import * as pEditItemsform from './itemassetmove-itemsform.mjs'
-import * as pEditMultiadd from './itemassetmove-multiadd.mjs'
 
 
 
@@ -15,7 +14,6 @@ const pnl_list = $('#pnl_list')
 const pnl_edit = $('#pnl_edit')
 const pnl_edititemsgrid = $('#pnl_edititemsgrid')
 const pnl_edititemsform = $('#pnl_edititemsform')
-const pnl_editmultiadd = $('#pnl_editmultiadd')
 
 
 
@@ -42,8 +40,7 @@ export async function init(opt) {
 			{panel: pnl_list, handler: pList},
 			{panel: pnl_edit, handler: pEdit},
 			{panel: pnl_edititemsgrid, handler: pEditItemsgrid},
-			{panel: pnl_edititemsform, handler: pEditItemsform},
-			{panel: pnl_editmultiadd, handler: pEditMultiadd}			
+			{panel: pnl_edititemsform, handler: pEditItemsform}			
 		], opt)
 
 	$ui.setPages(pages)

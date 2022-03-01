@@ -8,7 +8,7 @@
 
 	<form id="pnl_edititemsform-form">
 
-		<div class="form_row" >
+		<div class="form_row pnl_edititemsform_row txt_itemassetmovedetil_id" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">ID</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_edititemsform-txt_itemassetmovedetil_id" class="easyui-textbox" mapping="itemassetmovedetil_id"  maxlength="30"  style="width: 400px" data-options="multiline:false  ">
@@ -16,23 +16,71 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_edititemsform_row cbo_itemasset_id" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Item Asset</div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_edititemsform-cbo_itemasset_id" class="easyui-combo" style="width: 400px" mapping="itemasset_id" display="itemasset_name" data-options="editable:false, valueField:'id', textField:'text' , prompt: 'NONE'" >
+				<input id="pnl_edititemsform-cbo_itemasset_id" class="easyui-combo" style="width: 400px" mapping="itemasset_id" display="itemasset_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Item Asset harus diisi', prompt: '-- PILIH --'"  validType="requiredcombo['pnl_edititemsform-cbo_itemasset_id']" >
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>
 
-		<div class="form_row" >
-			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Descr</div>
+		<div class="form_row pnl_edititemsform_row cbo_item_id" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Item</div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_edititemsform-txt_itemassetmovedetil_descr" class="easyui-textbox" mapping="itemassetmovedetil_descr"  maxlength="90"  style="width: 400px" data-options="multiline:false  ">
+				<input id="pnl_edititemsform-cbo_item_id" class="easyui-combo" style="width: 400px" mapping="item_id" display="item_name" data-options="editable:false, valueField:'id', textField:'text' , disabled: true, prompt: 'NONE'" >
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_edititemsform_row cbo_itemclass_id" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Class</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edititemsform-cbo_itemclass_id" class="easyui-combo" style="width: 400px" mapping="itemclass_id" display="itemclass_name" data-options="editable:false, valueField:'id', textField:'text' , disabled: true, prompt: 'NONE'" >
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row pnl_edititemsform_row txt_itemassetmovedetil_qty" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Qty</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edititemsform-txt_itemassetmovedetil_qty" class="easyui-numberbox" mapping="itemassetmovedetil_qty" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  ">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row pnl_edititemsform_row cbo_send_itemassetstatus_id" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Send Status</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edititemsform-cbo_send_itemassetstatus_id" class="easyui-combo" style="width: 400px" mapping="send_itemassetstatus_id" display="itemassetstatus_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Send Status harus diisi', prompt: '-- PILIH --'"  validType="requiredcombo['pnl_edititemsform-cbo_send_itemassetstatus_id']" >
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row pnl_edititemsform_row txt_itemassetmovedetil_senddescr" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Send Descr</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edititemsform-txt_itemassetmovedetil_senddescr" class="easyui-textbox" mapping="itemassetmovedetil_senddescr"  maxlength="255"  style="width: 400px" data-options="multiline:false  ">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row pnl_edititemsform_row cbo_recv_itemassetstatus_id" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Recv Status</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edititemsform-cbo_recv_itemassetstatus_id" class="easyui-combo" style="width: 400px" mapping="recv_itemassetstatus_id" display="itemassetstatus_name" data-options="editable:false, valueField:'id', textField:'text' , prompt: 'NONE'" >
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row pnl_edititemsform_row txt_itemassetmovedetil_recvdescr" >
+			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Receive Descr</div>
+			<div class="form_input_col" style="border: 0px solid black">
+				<input id="pnl_edititemsform-txt_itemassetmovedetil_recvdescr" class="easyui-textbox" mapping="itemassetmovedetil_recvdescr"  maxlength="255"  style="width: 400px" data-options="multiline:false  ">
+				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
+			</div>
+		</div>
+
+		<div class="form_row pnl_edititemsform_row txt_itemassetmove_id" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Asset Move ID</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_edititemsform-txt_itemassetmove_id" class="easyui-textbox" mapping="itemassetmove_id"  maxlength="30"  style="width: 400px" data-options="multiline:false  , disabled: true">

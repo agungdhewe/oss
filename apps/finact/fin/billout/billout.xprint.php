@@ -40,7 +40,19 @@ class PrintForm extends WebModule {
 			$row = $rows[0];
 
 			$this->billout_id = $row['billout_id'];
+			$this->billout_descr= $row['billout_descr'];
 			$this->empl_name = $row['empl_name'];
+			$this->partner_name = $row['partner_name'];
+
+
+
+
+			$sql_item = $this->getSqlItems();
+			$stmt_item = $this->db->prepare($sql_item);
+			$stmt_item->execute([':billout_id' => $id]);
+			$itemrows  = $stmt_item->fetchall(\PDO::FETCH_ASSOC);
+			$this->itemrows = $itemrows; 
+
 
 		} catch (\Exception $ex) {
 			throw $ex;
@@ -53,10 +65,22 @@ class PrintForm extends WebModule {
 		return "
 			select 
 			A.*,
-			(select empl_name from mst_empl where empl_id =(select empl_id from mst_empluser where user_id = A._createby )) as empl_name
+			(select empl_name from mst_empl where empl_id =(select empl_id from mst_empluser where user_id = A._createby )) as empl_name,
+			(select partner_name from mst_partner where partner_id = A.partner_id) as partner_name
 			from trn_billout A where billout_id = :billout_id
 		";
 	}	
+
+
+	function getSqlItems() {
+		return "
+			select 
+			F.*
+			from trn_billoutdetil F 
+			where 
+			billout_id = :billout_id
+		";		
+	}
 
 
 }

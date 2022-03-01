@@ -26,7 +26,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 17/09/2021
+ * tanggal 03/01/2022
  */
 class itemassetmoveBase extends WebAPI {
 
@@ -34,6 +34,10 @@ class itemassetmoveBase extends WebAPI {
 	protected $main_primarykey = "itemassetmove_id";
 	protected $main_field_version = "itemassetmove_version";	
 	
+	protected $field_iscommit = "itemassetmove_iscommit";
+	protected $field_commitby = "itemassetmove_commitby";
+	protected $field_commitdate = "itemassetmove_commitdate";		
+			
 	
 
 

@@ -12,3 +12,14 @@
 	font-weight: bold;
 }				
 		
+.rptdata-col-qty {
+	text-align: right;
+	width: 1cm;
+	padding-right: 1mm;
+}
+
+.rptdata-col-subtotal {
+	text-align: right;
+	width: 2.5cm;
+	padding-right: 1mm;
+}

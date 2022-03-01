@@ -8,6 +8,13 @@ require_once __ROOT_DIR.'/core/sqlutil.php';
 require_once __DIR__ . '/xapi.base.php';
 //require_once __ROOT_DIR . "/core/sequencer.php";
 
+
+if (is_file(__DIR__ .'/data-detil-handler.php')) {
+	require_once __DIR__ .'/data-detil-handler.php';
+}
+
+
+
 use \FGTA4\exceptions\WebException;
 //use \FGTA4\utils\Sequencer;
 
@@ -26,7 +33,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 24/12/2021
+ * tanggal 28/12/2021
  */
 $API = new class extends billoutBase {
 	
@@ -37,6 +44,17 @@ $API = new class extends billoutBase {
 		$datastate = $data->_state;
 
 		$userdata = $this->auth->session_get_user();
+
+		$handlerclassname = "\\FGTA4\\apis\\billout_detilHandler";
+		if (class_exists($handlerclassname)) {
+			$hnd = new billout_detilHandler($data, $options);
+			$hnd->caller = $this;
+			$hnd->db = $this->db;
+			$hnd->auth = $this->auth;
+			$hnd->reqinfo = $reqinfo->reqinfo;
+		} else {
+			$hnd = new \stdClass;
+		}
 
 		try {
 			$result = new \stdClass; 
@@ -118,18 +136,24 @@ $API = new class extends billoutBase {
 				}
 				$result->dataresponse = (object) array_merge($record, [
 					// untuk lookup atau modify response ditaruh disini
-				'billoutrowtype_name' => \FGTA4\utils\SqlUtility::Lookup($record['billoutrowtype_id'], $this->db, 'mst_billoutrowtype', 'billoutrowtype_id', 'billoutrowtype_name'),
-				'orderindelv_descr' => \FGTA4\utils\SqlUtility::Lookup($record['orderindelv_id'], $this->db, 'trn_orderindelv', 'orderindelv_id', 'orderindelv_descr'),
-				'itemclass_name' => \FGTA4\utils\SqlUtility::Lookup($record['itemclass_id'], $this->db, 'mst_itemclass', 'itemclass_id', 'itemclass_name'),
-				'accbudget_name' => \FGTA4\utils\SqlUtility::Lookup($record['accbudget_id'], $this->db, 'mst_accbudget', 'accbudget_id', 'accbudget_name'),
-				'coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
+					'billoutrowtype_name' => \FGTA4\utils\SqlUtility::Lookup($record['billoutrowtype_id'], $this->db, 'mst_billoutrowtype', 'billoutrowtype_id', 'billoutrowtype_name'),
+					'orderindelv_descr' => \FGTA4\utils\SqlUtility::Lookup($record['orderindelv_id'], $this->db, 'trn_orderindelv', 'orderindelv_id', 'orderindelv_descr'),
+					'itemclass_name' => \FGTA4\utils\SqlUtility::Lookup($record['itemclass_id'], $this->db, 'mst_itemclass', 'itemclass_id', 'itemclass_name'),
+					'accbudget_name' => \FGTA4\utils\SqlUtility::Lookup($record['accbudget_id'], $this->db, 'mst_accbudget', 'accbudget_id', 'accbudget_name'),
+					'coa_name' => \FGTA4\utils\SqlUtility::Lookup($record['coa_id'], $this->db, 'mst_coa', 'coa_id', 'coa_name'),
 
 					'_createby' => \FGTA4\utils\SqlUtility::Lookup($record['_createby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
 					'_modifyby' => \FGTA4\utils\SqlUtility::Lookup($record['_modifyby'], $this->db, $GLOBALS['MAIN_USERTABLE'], 'user_id', 'user_fullname'),
 				]);
 
-				$this->db->commit();
 
+				if (is_object($hnd)) {
+					if (method_exists(get_class($hnd), 'DataSavedSuccess')) {
+						$hnd->DataSavedSuccess($result);
+					}
+				}
+
+				$this->db->commit();
 				return $result;
 			} catch (\Exception $ex) {
 				$this->db->rollBack();

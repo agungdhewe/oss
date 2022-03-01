@@ -15,6 +15,7 @@ const btn_uncommit = $('#pnl_edit-btn_uncommit')
 			
 
 const btn_post = $('#pnl_edit-btn_post')
+const btn_unpost = $('#pnl_edit-btn_unpost')
 
 
 
@@ -98,7 +99,10 @@ export async function init(opt) {
 		$('#pnl_edit_record_custom').show();		
 					
 		}		
-	})
+	});
+	form.getHeaderData = () => {
+		return getHeaderData();
+	}
 
 
 	btn_print.linkbutton({ onClick: () => { btn_print_click(); } });	
@@ -109,6 +113,7 @@ export async function init(opt) {
 			
 
 	btn_post.linkbutton({ onClick: () => { btn_action_click({ action: 'post' }); } });
+	btn_unpost.linkbutton({ onClick: () => { btn_action_click({ action: 'unpost' }); } });
 
 
 	obj.txt_jurnal_valfrg.numberbox({onChange: (newvalue, oldvalue) => { 
@@ -817,6 +822,14 @@ export function createnew() {
 }
 
 
+export function getHeaderData() {
+	var header_data = form.getData();
+	if (typeof hnd.form_getHeaderData == 'function') {
+		hnd.form_getHeaderData(header_data);
+	}
+	return header_data;
+}
+
 export function detil_open(pnlname) {
 	if (form.isDataChanged()) {
 		$ui.ShowMessage('Simpan dulu perubahan datanya.')
@@ -824,9 +837,23 @@ export function detil_open(pnlname) {
 	}
 
 	//$ui.getPages().show(pnlname)
-	$ui.getPages().show(pnlname, () => {
-		$ui.getPages().ITEMS[pnlname].handler.OpenDetil(form.getData())
-	})	
+	let header_data = getHeaderData();
+	if (typeof hnd.form_detil_opening == 'function') {
+		hnd.form_detil_opening(pnlname, (cancel)=>{
+			if (cancel===true) {
+				return;
+			}
+			$ui.getPages().show(pnlname, () => {
+				$ui.getPages().ITEMS[pnlname].handler.OpenDetil(header_data)
+			})
+		});
+	} else {
+		$ui.getPages().show(pnlname, () => {
+			$ui.getPages().ITEMS[pnlname].handler.OpenDetil(header_data)
+		})
+	}
+
+	
 }
 
 
@@ -1123,6 +1150,17 @@ async function btn_action_click(args) {
 			args.act_do = (result) => {
 				if (typeof hnd.xtion_post_success === 'function') {
 					hnd.xtion_post_success(result);
+				}
+			}
+			break;		
+				case 'unpost' :
+			args.act_url = `${global.modulefullname}/xtion-unpost`;
+			args.act_msg_quest = `Apakah anda yakin akan <b>${args.action}</b> ${docname} no ${args.id} ?`;
+			args.act_msg_result = `${docname} no ${args.id} telah di ${args.action}.`;
+			args.param = {}
+			args.act_do = (result) => {
+				if (typeof hnd.xtion_unpost_success === 'function') {
+					hnd.xtion_unpost_success(result);
 				}
 			}
 			break;		

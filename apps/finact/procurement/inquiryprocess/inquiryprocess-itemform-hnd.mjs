@@ -5,7 +5,17 @@ export function init(param) {
 	obj = param.obj;
 	opt = param.opt;
 
+	// form.setDataChangeMessage('<div>Data Berubah, Apakah anda akan <b>membatalkan</b> perubahan ?</div>');
 
+}
+
+
+export function cbo_proc_trxmodel_id_dataloading(criteria, options) {
+	var header_data = form.getHeaderData();
+
+	options.api = `finact/master/trxmodel/list-selector-byinquirytype`;
+	criteria.inquirytype_id = header_data.inquirytype_id;
+	
 }
 
 
@@ -26,6 +36,7 @@ export function form_dataopened(result, options) {
 		$('.pnl_edititemform_row.txt_inquirydetil_qty_outstd').show();
 		$('.pnl_edititemform_row.cbo_outstd_trxmodel_id').show();	
 	}
+
 
 	$('#pnl_edititemform-btn_edit').linkbutton('enable');
 	form.setViewMode(false);
@@ -130,6 +141,13 @@ export function form_dataopened(result, options) {
 		form.setDisable(obj.cbo_itemclass_id, true)
 	} else {
 		form.setDisable(obj.cbo_itemclass_id, false)
+	}
+
+	var isconfirm = form.getValue(obj.chk_inquiryitem_isconfirm);
+	if (!isconfirm) {
+		setTimeout(()=>{
+			form.markDataChanged();
+		}, 500);
 	}
 
 

@@ -257,6 +257,7 @@ CREATE TABLE IF NOT EXISTS `trn_inquiryitem` (
 	`outstd_trxmodel_id` varchar(10) NOT NULL , 
 	`inquirydetil_estrate` decimal(12, 0) NOT NULL DEFAULT 0, 
 	`inquirydetil_estvalue` int(14) NOT NULL DEFAULT 0, 
+	`inquiryitem_isconfirm` tinyint(1) NOT NULL DEFAULT 0, 
 	`projbudgetdet_id` varchar(30)  , 
 	`inquirydetil_isunbudget` tinyint(1) NOT NULL DEFAULT 0, 
 	`inquirydetil_isallowoverbudget` tinyint(1) NOT NULL DEFAULT 0, 
@@ -289,7 +290,8 @@ ALTER TABLE `trn_inquiryitem` ADD COLUMN IF NOT EXISTS  `inquirydetil_qty_outstd
 ALTER TABLE `trn_inquiryitem` ADD COLUMN IF NOT EXISTS  `outstd_trxmodel_id` varchar(10) NOT NULL  AFTER `inquirydetil_qty_outstd`;
 ALTER TABLE `trn_inquiryitem` ADD COLUMN IF NOT EXISTS  `inquirydetil_estrate` decimal(12, 0) NOT NULL DEFAULT 0 AFTER `outstd_trxmodel_id`;
 ALTER TABLE `trn_inquiryitem` ADD COLUMN IF NOT EXISTS  `inquirydetil_estvalue` int(14) NOT NULL DEFAULT 0 AFTER `inquirydetil_estrate`;
-ALTER TABLE `trn_inquiryitem` ADD COLUMN IF NOT EXISTS  `projbudgetdet_id` varchar(30)   AFTER `inquirydetil_estvalue`;
+ALTER TABLE `trn_inquiryitem` ADD COLUMN IF NOT EXISTS  `inquiryitem_isconfirm` tinyint(1) NOT NULL DEFAULT 0 AFTER `inquirydetil_estvalue`;
+ALTER TABLE `trn_inquiryitem` ADD COLUMN IF NOT EXISTS  `projbudgetdet_id` varchar(30)   AFTER `inquiryitem_isconfirm`;
 ALTER TABLE `trn_inquiryitem` ADD COLUMN IF NOT EXISTS  `inquirydetil_isunbudget` tinyint(1) NOT NULL DEFAULT 0 AFTER `projbudgetdet_id`;
 ALTER TABLE `trn_inquiryitem` ADD COLUMN IF NOT EXISTS  `inquirydetil_isallowoverbudget` tinyint(1) NOT NULL DEFAULT 0 AFTER `inquirydetil_isunbudget`;
 ALTER TABLE `trn_inquiryitem` ADD COLUMN IF NOT EXISTS  `accbudget_id` varchar(20)   AFTER `inquirydetil_isallowoverbudget`;
@@ -313,7 +315,8 @@ ALTER TABLE `trn_inquiryitem` MODIFY COLUMN IF EXISTS  `inquirydetil_qty_outstd`
 ALTER TABLE `trn_inquiryitem` MODIFY COLUMN IF EXISTS  `outstd_trxmodel_id` varchar(10) NOT NULL  AFTER `inquirydetil_qty_outstd`;
 ALTER TABLE `trn_inquiryitem` MODIFY COLUMN IF EXISTS  `inquirydetil_estrate` decimal(12, 0) NOT NULL DEFAULT 0 AFTER `outstd_trxmodel_id`;
 ALTER TABLE `trn_inquiryitem` MODIFY COLUMN IF EXISTS  `inquirydetil_estvalue` int(14) NOT NULL DEFAULT 0 AFTER `inquirydetil_estrate`;
-ALTER TABLE `trn_inquiryitem` MODIFY COLUMN IF EXISTS  `projbudgetdet_id` varchar(30)   AFTER `inquirydetil_estvalue`;
+ALTER TABLE `trn_inquiryitem` MODIFY COLUMN IF EXISTS  `inquiryitem_isconfirm` tinyint(1) NOT NULL DEFAULT 0 AFTER `inquirydetil_estvalue`;
+ALTER TABLE `trn_inquiryitem` MODIFY COLUMN IF EXISTS  `projbudgetdet_id` varchar(30)   AFTER `inquiryitem_isconfirm`;
 ALTER TABLE `trn_inquiryitem` MODIFY COLUMN IF EXISTS  `inquirydetil_isunbudget` tinyint(1) NOT NULL DEFAULT 0 AFTER `projbudgetdet_id`;
 ALTER TABLE `trn_inquiryitem` MODIFY COLUMN IF EXISTS  `inquirydetil_isallowoverbudget` tinyint(1) NOT NULL DEFAULT 0 AFTER `inquirydetil_isunbudget`;
 ALTER TABLE `trn_inquiryitem` MODIFY COLUMN IF EXISTS  `accbudget_id` varchar(20)   AFTER `inquirydetil_isallowoverbudget`;

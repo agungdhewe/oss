@@ -2,10 +2,16 @@ var this_page_id;
 var this_page_options;
 
 import {fgta4slideselect} from  '../../../../../index.php/asset/fgta/framework/fgta4libs/fgta4slideselect.mjs'
+import * as hnd from  './brand-edit-hnd.mjs'
+
 
 const btn_edit = $('#pnl_edit-btn_edit')
 const btn_save = $('#pnl_edit-btn_save')
 const btn_delete = $('#pnl_edit-btn_delete')
+
+
+
+
 
 
 const pnl_form = $('#pnl_edit-form')
@@ -21,25 +27,30 @@ const obj = {
 }
 
 
-let form = {}
+
+
+let form;
+let rowdata;
 
 export async function init(opt) {
 	this_page_id = opt.id;
 	this_page_options = opt;
 
 
-	var autoid = true;
 	var disableedit = false;
-	switch (this_page_options.variancename) {
-		case 'manual-id-input' :
-			autoid = false;
-			break;
-	}
+	// switch (this_page_options.variancename) {
+	// 	case 'commit' :
+	//		disableedit = true;
+	//		btn_edit.linkbutton('disable');
+	//		btn_save.linkbutton('disable');
+	//		btn_delete.linkbutton('disable');
+	//		break;
+	// }
 
 
 	form = new global.fgta4form(pnl_form, {
 		primary: obj.txt_brand_id,
-		autoid: autoid,
+		autoid: true,
 		logview: 'mst_brand',
 		btn_edit: disableedit==true? $('<a>edit</a>') : btn_edit,
 		btn_save: disableedit==true? $('<a>save</a>') : btn_save,
@@ -51,8 +62,21 @@ export async function init(opt) {
 		OnDataDeleting: async (data, options) => { await form_deleting(data, options) },
 		OnDataDeleted: async (result, options) => { await form_deleted(result, options) },
 		OnIdSetup : (options) => { form_idsetup(options) },
-		OnViewModeChanged : (viewonly) => { form_viewmodechanged(viewonly) }
-	})
+		OnViewModeChanged : (viewonly) => { form_viewmodechanged(viewonly) },
+		OnRecordStatusCreated: () => {
+			undefined			
+		}		
+	});
+	form.getHeaderData = () => {
+		return getHeaderData();
+	}
+
+
+
+
+
+
+
 
 
 
@@ -67,11 +91,25 @@ export async function init(opt) {
 			{mapping: 'brandtype_id', text: 'brandtype_id'},
 			{mapping: 'brandtype_name', text: 'brandtype_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+			
+			if (typeof hnd.cbo_brandtype_id_dataloading === 'function') {
+				hnd.cbo_brandtype_id_dataloading(criteria);
+			}	
+		},
 		OnDataLoaded : (result, options) => {
 				
+			if (typeof hnd.cbo_brandtype_id_dataloaded === 'function') {
+				hnd.cbo_brandtype_id_dataloaded(result, options);
+			}
 		},
-		OnSelected: (value, display, record) => {}
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_brandtype_id_selected === 'function') {
+					hnd.cbo_brandtype_id_selected(value, display, record, args);
+				}
+			}
+		}
 	})				
 				
 	new fgta4slideselect(obj.cbo_unit_id, {
@@ -85,11 +123,25 @@ export async function init(opt) {
 			{mapping: 'unit_id', text: 'unit_id'},
 			{mapping: 'unit_name', text: 'unit_name'},
 		],
-		OnDataLoading: (criteria) => {},
+		OnDataLoading: (criteria) => {
+			
+			if (typeof hnd.cbo_unit_id_dataloading === 'function') {
+				hnd.cbo_unit_id_dataloading(criteria);
+			}	
+		},
 		OnDataLoaded : (result, options) => {
 				
+			if (typeof hnd.cbo_unit_id_dataloaded === 'function') {
+				hnd.cbo_unit_id_dataloaded(result, options);
+			}
 		},
-		OnSelected: (value, display, record) => {}
+		OnSelected: (value, display, record, args) => {
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_unit_id_selected === 'function') {
+					hnd.cbo_unit_id_selected(value, display, record, args);
+				}
+			}
+		}
 	})				
 				
 
@@ -141,55 +193,96 @@ export async function init(opt) {
 		}
 	})
 
-
+	//button state
+	if (typeof hnd.init==='function') {
+		hnd.init({
+			form: form,
+			obj: obj,
+			opt: opt,
+		})
+	}
 
 }
-
 
 export function OnSizeRecalculated(width, height) {
 }
 
+export function getForm() {
+	return form
+}
 
-
+export function getCurrentRowdata() {
+	return rowdata;
+}
 
 export function open(data, rowid, viewmode=true, fn_callback) {
 
+	rowdata = {
+		data: data,
+		rowid: rowid
+	}
 
+	var pOpt = form.getDefaultPrompt(false)
 	var fn_dataopening = async (options) => {
 		options.criteria[form.primary.mapping] = data[form.primary.mapping]
 	}
 
 	var fn_dataopened = async (result, options) => {
+		var record = result.record;
+		updatefilebox(record);
 
+		/*
 
+		*/
+		for (var objid in obj) {
+			let o = obj[objid]
+			if (o.isCombo() && !o.isRequired()) {
+				var value =  result.record[o.getFieldValueName()];
+				if (value==null ) {
+					record[o.getFieldValueName()] = pOpt.value;
+					record[o.getFieldDisplayName()] = pOpt.text;
+				}
+			}
+		}
+  		updaterecordstatus(record)
 
 		form.SuspendEvent(true);
 		form
-			.fill(result.record)
-			.setValue(obj.cbo_brandtype_id, result.record.brandtype_id, result.record.brandtype_name)
-			.setValue(obj.cbo_unit_id, result.record.unit_id, result.record.unit_name)
-			.commit()
+			.fill(record)
+			.setValue(obj.cbo_brandtype_id, record.brandtype_id, record.brandtype_name)
+			.setValue(obj.cbo_unit_id, record.unit_id, record.unit_name)
 			.setViewMode(viewmode)
 			.lock(false)
 			.rowid = rowid
 
+
+		/* tambahkan event atau behaviour saat form dibuka
+		   apabila ada rutin mengubah form dan tidak mau dijalankan pada saat opening,
+		   cek dengan form.isEventSuspended()
+		*/   
+		if (typeof hnd.form_dataopened == 'function') {
+			hnd.form_dataopened(result, options);
+		}
+
+
+		/* commit form */
+		form.commit()
+		form.SuspendEvent(false); 
+		updatebuttonstate(record)
+
+
+		/* update rowdata */
+		for (var nv in rowdata.data) {
+			if (record[nv]!=undefined) {
+				rowdata.data[nv] = record[nv];
+			}
+		}
+
 		// tampilkan form untuk data editor
-		fn_callback()
-		form.SuspendEvent(false);
-
-
-		// fill data, bisa dilakukan secara manual dengan cara berikut:	
-		// form
-			// .setValue(obj.txt_id, result.record.id)
-			// .setValue(obj.txt_nama, result.record.nama)
-			// .setValue(obj.cbo_prov, result.record.prov_id, result.record.prov_nama)
-			// .setValue(obj.chk_isdisabled, result.record.disabled)
-			// .setValue(obj.txt_alamat, result.record.alamat)
-			// ....... dst dst
-			// .commit()
-			// .setViewMode()
-			// ....... dst dst
-
+		if (typeof fn_callback==='function') {
+			fn_callback(null, rowdata.data);
+		}
+		
 	}
 
 	var fn_dataopenerror = (err) => {
@@ -208,10 +301,17 @@ export function createnew() {
 		form.rowid = null
 
 		// set nilai-nilai default untuk form
+		data.brand_isdisabled = '0'
+
 		data.brandtype_id = '0'
 		data.brandtype_name = '-- PILIH --'
 		data.unit_id = '0'
 		data.unit_name = '-- PILIH --'
+
+		if (typeof hnd.form_newdata == 'function') {
+			hnd.form_newdata(data, options);
+		}
+
 
 
 
@@ -227,6 +327,14 @@ export function createnew() {
 }
 
 
+export function getHeaderData() {
+	var header_data = form.getData();
+	if (typeof hnd.form_getHeaderData == 'function') {
+		hnd.form_getHeaderData(header_data);
+	}
+	return header_data;
+}
+
 export function detil_open(pnlname) {
 	if (form.isDataChanged()) {
 		$ui.ShowMessage('Simpan dulu perubahan datanya.')
@@ -234,11 +342,45 @@ export function detil_open(pnlname) {
 	}
 
 	//$ui.getPages().show(pnlname)
-	$ui.getPages().show(pnlname, () => {
-		$ui.getPages().ITEMS[pnlname].handler.OpenDetil(form.getData())
-	})	
+	let header_data = getHeaderData();
+	if (typeof hnd.form_detil_opening == 'function') {
+		hnd.form_detil_opening(pnlname, (cancel)=>{
+			if (cancel===true) {
+				return;
+			}
+			$ui.getPages().show(pnlname, () => {
+				$ui.getPages().ITEMS[pnlname].handler.OpenDetil(header_data)
+			})
+		});
+	} else {
+		$ui.getPages().show(pnlname, () => {
+			$ui.getPages().ITEMS[pnlname].handler.OpenDetil(header_data)
+		})
+	}
+
+	
 }
 
+
+function updatefilebox(record) {
+	// apabila ada keperluan untuk menampilkan data dari object storage
+
+}
+
+function updaterecordstatus(record) {
+	// apabila ada keperluan untuk update status record di sini
+
+}
+
+function updatebuttonstate(record) {
+	// apabila ada keperluan untuk update state action button di sini
+	
+}
+
+function updategridstate(record) {
+	// apabila ada keperluan untuk update state grid list di sini
+	
+}
 
 function form_viewmodechanged(viewmode) {
 	var OnViewModeChangedEvent = new CustomEvent('OnViewModeChanged', {detail: {}})
@@ -277,7 +419,20 @@ async function form_datasaving(data, options) {
 	//    options.cancel = true
 
 	// Modifikasi object data, apabila ingin menambahkan variabel yang akan dikirim ke server
+	// options.skipmappingresponse = [];
+	options.skipmappingresponse = [];
+	for (var objid in obj) {
+		var o = obj[objid]
+		if (o.isCombo() && !o.isRequired()) {
+			var id = o.getFieldValueName()
+			options.skipmappingresponse.push(id)
+			console.log(id)
+		}
+	}
 
+	if (typeof hnd.form_datasaving == 'function') {
+		hnd.form_datasaving(data, options);
+	}
 
 }
 
@@ -305,19 +460,51 @@ async function form_datasaved(result, options) {
 
 	var data = {}
 	Object.assign(data, form.getData(), result.dataresponse)
+	/*
 
+	*/
 
+	var pOpt = form.getDefaultPrompt(false)
+	for (var objid in obj) {
+		var o = obj[objid]
+		if (o.isCombo() && !o.isRequired()) {
+			var value =  result.dataresponse[o.getFieldValueName()];
+			var text = result.dataresponse[o.getFieldDisplayName()];
+			if (value==null ) {
+				value = pOpt.value;
+				text = pOpt.text;
+			}
+			form.setValue(o, value, text);
+		}
+	}
 	form.rowid = $ui.getPages().ITEMS['pnl_list'].handler.updategrid(data, form.rowid)
+	rowdata = {
+		data: data,
+		rowid: form.rowid
+	}
+
+	if (typeof hnd.form_datasaved == 'function') {
+		hnd.form_datasaved(result, rowdata, options);
+	}
 }
 
 
 
 async function form_deleting(data) {
+	if (typeof hnd.form_deleting == 'function') {
+		hnd.form_deleting(data);
+	}
 }
 
 async function form_deleted(result, options) {
 	$ui.getPages().show('pnl_list')
 	$ui.getPages().ITEMS['pnl_list'].handler.removerow(form.rowid)
 
+	if (typeof hnd.form_deleted == 'function') {
+		hnd.form_deleted(result, options);
+	}
 }
+
+
+
 

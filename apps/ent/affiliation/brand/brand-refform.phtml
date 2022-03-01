@@ -1,6 +1,6 @@
 <div id="pnl_editrefform">
 	<div class="fgta-page-title" style="display: flex; align-items: center ">
-		<div>Edit Refernsi</div>
+		<div>Edit Referensi</div>
 		<a id="pnl_editrefform-btn_edit" href="javascript:void(0)" class="easyui-linkbutton" style="margin-left:10px;" data-options="plain:true,iconCls:'fgta-icon-edit'">edit</a>
 	</div>
 	<div id="pnl_editrefform-title" style="margin-top: 0px; margin-bottom: 30px; font-weight: bold; font-size: 1.2em">XXXXXXX</div>
@@ -8,15 +8,15 @@
 
 	<form id="pnl_editrefform-form">
 
-		<div class="form_row" >
+		<div class="form_row pnl_editrefform_row txt_brandref_id" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">ID</div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editrefform-txt_brandref_id" class="easyui-textbox" mapping="brandref_id" uppercase="true" maxlength="14"  style="width: 400px" data-options="multiline:false  ">
+				<input id="pnl_editrefform-txt_brandref_id" class="easyui-textbox" mapping="brandref_id"  maxlength="14"  style="width: 400px" data-options="multiline:false  ">
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editrefform_row cbo_interface_id" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Interface</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editrefform-cbo_interface_id" class="easyui-combo" style="width: 400px" mapping="interface_id" display="interface_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Interface harus diisi'"  validType="requiredcombo['pnl_editrefform-cbo_interface_id']" >
@@ -24,18 +24,18 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editrefform_row txt_brandref_code" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Code</div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editrefform-txt_brandref_code" class="easyui-textbox" mapping="brandref_code" uppercase="true" maxlength="30"  style="width: 400px" data-options="multiline:false  ">
+				<input id="pnl_editrefform-txt_brandref_code" class="easyui-textbox" mapping="brandref_code"  maxlength="30"  style="width: 400px" data-options="multiline:false  ">
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editrefform_row txt_brand_id" style="display: none">
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Partner</div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_editrefform-txt_brand_id" class="easyui-textbox" mapping="brand_id" uppercase="true" maxlength="14"  style="width: 400px" data-options="multiline:false  , disabled: true">
+				<input id="pnl_editrefform-txt_brand_id" class="easyui-textbox" mapping="brand_id"  maxlength="14"  style="width: 400px" data-options="multiline:false  , disabled: true">
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>

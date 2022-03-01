@@ -33,7 +33,7 @@ use \FGTA4\exceptions\WebException;
  * Tangerang, 26 Maret 2021
  *
  * digenerate dengan FGTA4 generator
- * tanggal 28/12/2021
+ * tanggal 16/01/2022
  */
 $API = new class extends inquiryprocessBase {
 	
@@ -127,7 +127,7 @@ $API = new class extends inquiryprocessBase {
 				$where = \FGTA4\utils\SqlUtility::BuildCriteria((object)[$primarykey=>$obj->{$primarykey}], [$primarykey=>"$primarykey=:$primarykey"]);
 				$sql = \FGTA4\utils\SqlUtility::Select($tablename , [
 					$primarykey
-					, 'inquiryitem_id', 'itemasset_id', 'item_id', 'itemstock_id', 'partner_id', 'itemclass_id', 'inquirydetil_descr', 'inquirydetil_qty', 'inquirydetil_days', 'inquirydetil_task', 'inquirydetil_qty_proc', 'proc_trxmodel_id', 'inquirydetil_qty_outstd', 'outstd_trxmodel_id', 'inquirydetil_estrate', 'inquirydetil_estvalue', 'projbudgetdet_id', 'inquirydetil_isunbudget', 'inquirydetil_isallowoverbudget', 'accbudget_id', 'coa_id', 'inquirydetil_id', 'inquiry_id', '_createby', '_createdate', '_modifyby', '_modifydate', '_createby', '_createdate', '_modifyby', '_modifydate'
+					, 'inquiryitem_id', 'itemasset_id', 'item_id', 'itemstock_id', 'partner_id', 'itemclass_id', 'inquirydetil_descr', 'inquirydetil_qty', 'inquirydetil_days', 'inquirydetil_task', 'inquirydetil_qty_proc', 'proc_trxmodel_id', 'inquirydetil_qty_outstd', 'outstd_trxmodel_id', 'inquirydetil_estrate', 'inquirydetil_estvalue', 'inquiryitem_isconfirm', 'projbudgetdet_id', 'inquirydetil_isunbudget', 'inquirydetil_isallowoverbudget', 'accbudget_id', 'coa_id', 'inquirydetil_id', 'inquiry_id', '_createby', '_createdate', '_modifyby', '_modifydate', '_createby', '_createdate', '_modifyby', '_modifydate'
 				], $where->sql);
 				$stmt = $this->db->prepare($sql);
 				$stmt->execute($where->params);

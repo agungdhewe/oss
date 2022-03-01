@@ -5,29 +5,48 @@ if (!defined('FGTA4')) {
 }
 
 require_once __ROOT_DIR.'/core/sqlutil.php';
+require_once __DIR__ . '/xapi.base.php';
+
+if (is_file(__DIR__ .'/data-header-handler.php')) {
+	require_once __DIR__ .'/data-header-handler.php';
+}
 
 
 
 use \FGTA4\exceptions\WebException;
 
-
-class DataList extends WebAPI {
-	function __construct() {
-		$this->debugoutput = true;
-		$DB_CONFIG = DB_CONFIG[$GLOBALS['MAINDB']];
-		$DB_CONFIG['param'] = DB_CONFIG_PARAM[$GLOBALS['MAINDBTYPE']];
-		$this->db = new \PDO(
-					$DB_CONFIG['DSN'], 
-					$DB_CONFIG['user'], 
-					$DB_CONFIG['pass'], 
-					$DB_CONFIG['param']
-		);
-
-	}
+/**
+ * ent/affiliation/brand/apis/list.php
+ *
+ * ========
+ * DataList
+ * ========
+ * Menampilkan data-data pada tabel header brand (mst_brand)
+ * sesuai dengan parameter yang dikirimkan melalui variable $option->criteria
+ *
+ * Agung Nugroho <agung@fgta.net> http://www.fgta.net
+ * Tangerang, 26 Maret 2021
+ *
+ * digenerate dengan FGTA4 generator
+ * tanggal 04/01/2022
+ */
+$API = new class extends brandBase {
 
 	public function execute($options) {
 
 		$userdata = $this->auth->session_get_user();
+
+		$handlerclassname = "\\FGTA4\\apis\\brand_headerHandler";
+		if (class_exists($handlerclassname)) {
+			$hnd = new brand_headerHandler($data, $options);
+			$hnd->caller = $this;
+			$hnd->db = $this->db;
+			$hnd->auth = $this->auth;
+			$hnd->reqinfo = $reqinfo->reqinfo;
+		} else {
+			$hnd = new \stdClass;
+		}
+
 
 		try {
 		
@@ -36,7 +55,7 @@ class DataList extends WebAPI {
 				throw new \Exception('your group authority is not allowed to do this action.');
 			}
 
-
+			// \FGTA4\utils\SqlUtility::setDefaultCriteria($options->criteria, '--fieldscriteria--', '--value--');
 			$where = \FGTA4\utils\SqlUtility::BuildCriteria(
 				$options->criteria,
 				[
@@ -56,17 +75,30 @@ class DataList extends WebAPI {
 			$limit = " LIMIT $maxrow OFFSET $offset ";
 			$stmt = $this->db->prepare("
 				select 
-				brand_id, brand_name, brand_descr, brand_isdisabled, brand_grouping01, brand_grouping02, brandtype_id, unit_id, _createby, _createdate, _modifyby, _modifydate 
+				A.brand_id, A.brand_name, A.brand_descr, A.brand_isdisabled, A.brand_grouping01, A.brand_grouping02, A.brandtype_id, A.unit_id, A._createby, A._createdate, A._modifyby, A._modifydate 
 				from mst_brand A
 			" . $where->sql . $limit);
 			$stmt->execute($where->params);
 			$rows  = $stmt->fetchall(\PDO::FETCH_ASSOC);
+
+			$beforeloopdata = new \stdClass;
+			if (is_object($hnd)) {
+				if (method_exists(get_class($hnd), 'DataListBeforeLoop')) {
+					$beforeloopdata = $hnd->DataListBeforeLoop((object[]));
+				}
+			}
 
 			$records = [];
 			foreach ($rows as $row) {
 				$record = [];
 				foreach ($row as $key => $value) {
 					$record[$key] = $value;
+				}
+
+				if (is_object($hnd)) {
+					if (method_exists(get_class($hnd), 'DataListLooping')) {
+						$hnd->DataListLooping($record, $beforeloopdata);
+					}
 				}
 
 				array_push($records, array_merge($record, [
@@ -77,6 +109,10 @@ class DataList extends WebAPI {
 					'unit_name' => \FGTA4\utils\SqlUtility::Lookup($record['unit_id'], $this->db, 'mst_unit', 'unit_id', 'unit_name'),
 					 
 				]));
+
+
+
+
 			}
 
 			// kembalikan hasilnya
@@ -90,6 +126,4 @@ class DataList extends WebAPI {
 		}
 	}
 
-}
-
-$API = new DataList();
+};

@@ -8,7 +8,7 @@
 
 	<form id="pnl_editdetilform-form">
 
-		<div class="form_row" >
+		<div class="form_row pnl_editdetilform_row txt_billoutdetil_id" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">ID</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-txt_billoutdetil_id" class="easyui-textbox" mapping="billoutdetil_id"  maxlength="14"  style="width: 400px" data-options="multiline:false  ">
@@ -16,7 +16,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editdetilform_row cbo_billoutrowtype_id" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Row Type</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-cbo_billoutrowtype_id" class="easyui-combo" style="width: 400px" mapping="billoutrowtype_id" display="billoutrowtype_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Row Type'"  validType="requiredcombo['pnl_editdetilform-cbo_billoutrowtype_id']" >
@@ -24,7 +24,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editdetilform_row cbo_orderindelv_id" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Deliver</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-cbo_orderindelv_id" class="easyui-combo" style="width: 400px" mapping="orderindelv_id" display="orderindelv_descr" data-options="editable:false, valueField:'id', textField:'text' , prompt: 'NONE'" >
@@ -32,7 +32,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editdetilform_row cbo_itemclass_id" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Class</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-cbo_itemclass_id" class="easyui-combo" style="width: 400px" mapping="itemclass_id" display="itemclass_name" data-options="editable:false, valueField:'id', textField:'text' , prompt: 'NONE'" >
@@ -40,7 +40,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editdetilform_row txt_billoutdetil_descr" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Descr</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-txt_billoutdetil_descr" class="easyui-textbox" mapping="billoutdetil_descr"  maxlength="255"  style="width: 400px" data-options="multiline:false , required: true, invalidMessage: 'Descr harus diisi' ">
@@ -48,7 +48,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editdetilform_row txt_billoutdetil_totalitem" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Total Item</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-txt_billoutdetil_totalitem" class="easyui-numberbox" mapping="billoutdetil_totalitem" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  ">
@@ -56,7 +56,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editdetilform_row txt_billoutdetil_totalqty" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Total Qty</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-txt_billoutdetil_totalqty" class="easyui-numberbox" mapping="billoutdetil_totalqty" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  ">
@@ -64,7 +64,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editdetilform_row txt_billoutdetil_salesgross" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Gross Sales</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-txt_billoutdetil_salesgross" class="easyui-numberbox" mapping="billoutdetil_salesgross" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  ">
@@ -72,7 +72,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editdetilform_row txt_billoutdetil_discount" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Dicount</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-txt_billoutdetil_discount" class="easyui-numberbox" mapping="billoutdetil_discount" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  ">
@@ -80,7 +80,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editdetilform_row txt_billoutdetil_subtotal" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Sub Total</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-txt_billoutdetil_subtotal" class="easyui-numberbox" mapping="billoutdetil_subtotal" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  ">
@@ -88,7 +88,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editdetilform_row txt_billoutdetil_pph" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">PPh</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-txt_billoutdetil_pph" class="easyui-numberbox" mapping="billoutdetil_pph" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  ">
@@ -96,7 +96,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editdetilform_row txt_billoutdetil_nett" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Sales Nett</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-txt_billoutdetil_nett" class="easyui-numberbox" mapping="billoutdetil_nett" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  ">
@@ -104,7 +104,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editdetilform_row txt_billoutdetil_ppn" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">PPN</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-txt_billoutdetil_ppn" class="easyui-numberbox" mapping="billoutdetil_ppn" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  ">
@@ -112,7 +112,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editdetilform_row txt_billoutdetil_total" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Total</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-txt_billoutdetil_total" class="easyui-numberbox" mapping="billoutdetil_total" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  ">
@@ -120,7 +120,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editdetilform_row txt_billoutdetil_totaladdcost" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Additional Cost</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-txt_billoutdetil_totaladdcost" class="easyui-numberbox" mapping="billoutdetil_totaladdcost" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  ">
@@ -128,7 +128,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editdetilform_row txt_billoutdetil_dp" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Paid</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-txt_billoutdetil_dp" class="easyui-numberbox" mapping="billoutdetil_dp" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  ">
@@ -136,7 +136,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editdetilform_row txt_billoutdetil_payment" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Payment Outstanding</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-txt_billoutdetil_payment" class="easyui-numberbox" mapping="billoutdetil_payment" style="width: 400px; text-align:right" data-options="precision: 0, decimalSeparator:'.', groupSeparator:','  ">
@@ -147,7 +147,7 @@
 		<?=$this->Section('Item Accounts', true, true)?>
 		<div class="fgta_section_collapsible " style="display: none">
 					
-		<div class="form_row" >
+		<div class="form_row pnl_editdetilform_row cbo_accbudget_id" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Budget Account</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-cbo_accbudget_id" class="easyui-combo" style="width: 400px" mapping="accbudget_id" display="accbudget_name" data-options="editable:false, valueField:'id', textField:'text' , prompt: 'NONE', disabled: true" >
@@ -155,7 +155,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_editdetilform_row cbo_coa_id" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Item COA</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-cbo_coa_id" class="easyui-combo" style="width: 400px" mapping="coa_id" display="coa_name" data-options="editable:false, valueField:'id', textField:'text' , prompt: 'NONE', disabled: true" >
@@ -165,7 +165,7 @@
 
 		</div>
 					
-		<div class="form_row" style="display: none">
+		<div class="form_row pnl_editdetilform_row txt_billout_id" style="display: none">
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Bill ID</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_editdetilform-txt_billout_id" class="easyui-textbox" mapping="billout_id"  maxlength="30"  style="width: 400px" data-options="multiline:false  , disabled: true">

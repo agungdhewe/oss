@@ -77,20 +77,26 @@ export async function init(opt) {
 		],
 		OnDataLoading: (criteria, options) => {
 				
-			if (typeof hnd.cbo_partnertype_id_dataloading === 'function') {
-				hnd.cbo_partnertype_id_dataloading(criteria);
+			if (typeof hnd!=='undefined') { 
+				if (typeof hnd.cbo_partnertype_id_dataloading === 'function') {
+					hnd.cbo_partnertype_id_dataloading(criteria);
+				}
 			}
 		},
 		OnDataLoaded : (result, options) => {
 				
-			if (typeof hnd.cbo_partnertype_id_dataloaded === 'function') {
-				hnd.cbo_partnertype_id_dataloaded(result, options);
+			if (typeof hnd!=='undefined') { 
+				if (typeof hnd.cbo_partnertype_id_dataloaded === 'function') {
+					hnd.cbo_partnertype_id_dataloaded(result, options);
+				}
 			}
 		},
 		OnSelected: (value, display, record, args) => {
 			if (value!=args.PreviousValue ) {
-				if (typeof hnd.cbo_partnertype_id_selected === 'function') {
-					hnd.cbo_partnertype_id_selected(value, display, record, args);
+				if (typeof hnd!=='undefined') {  
+					if (typeof hnd.cbo_partnertype_id_selected === 'function') {
+						hnd.cbo_partnertype_id_selected(value, display, record, args);
+					}
 				}
 			}			
 		}

@@ -237,7 +237,7 @@ ALTER TABLE `mst_inquirytypepartnertype` ADD CONSTRAINT `fk_mst_inquirytypepartn
 CREATE TABLE IF NOT EXISTS `mst_inquirytypetrxmodel` (
 	`inquirytypetrxmodel_id` varchar(14) NOT NULL , 
 	`trxmodel_id` varchar(10) NOT NULL , 
-	`orderout_inquirytype_id` varchar(30) NOT NULL , 
+	`orderout_inquirytype_id` varchar(30)  , 
 	`inquirytype_id` varchar(14) NOT NULL , 
 	`_createby` varchar(13) NOT NULL , 
 	`_createdate` datetime NOT NULL DEFAULT current_timestamp(), 
@@ -251,12 +251,12 @@ COMMENT='Model transaksi yang diapply ke suatu tipe inquiry';
 
 
 ALTER TABLE `mst_inquirytypetrxmodel` ADD COLUMN IF NOT EXISTS  `trxmodel_id` varchar(10) NOT NULL  AFTER `inquirytypetrxmodel_id`;
-ALTER TABLE `mst_inquirytypetrxmodel` ADD COLUMN IF NOT EXISTS  `orderout_inquirytype_id` varchar(30) NOT NULL  AFTER `trxmodel_id`;
+ALTER TABLE `mst_inquirytypetrxmodel` ADD COLUMN IF NOT EXISTS  `orderout_inquirytype_id` varchar(30)   AFTER `trxmodel_id`;
 ALTER TABLE `mst_inquirytypetrxmodel` ADD COLUMN IF NOT EXISTS  `inquirytype_id` varchar(14) NOT NULL  AFTER `orderout_inquirytype_id`;
 
 
 ALTER TABLE `mst_inquirytypetrxmodel` MODIFY COLUMN IF EXISTS  `trxmodel_id` varchar(10) NOT NULL  AFTER `inquirytypetrxmodel_id`;
-ALTER TABLE `mst_inquirytypetrxmodel` MODIFY COLUMN IF EXISTS  `orderout_inquirytype_id` varchar(30) NOT NULL  AFTER `trxmodel_id`;
+ALTER TABLE `mst_inquirytypetrxmodel` MODIFY COLUMN IF EXISTS  `orderout_inquirytype_id` varchar(30)   AFTER `trxmodel_id`;
 ALTER TABLE `mst_inquirytypetrxmodel` MODIFY COLUMN IF EXISTS  `inquirytype_id` varchar(14) NOT NULL  AFTER `orderout_inquirytype_id`;
 
 

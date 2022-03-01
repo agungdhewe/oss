@@ -5,31 +5,50 @@ if (!defined('FGTA4')) {
 }
 
 require_once __ROOT_DIR.'/core/sqlutil.php';
+require_once __DIR__ . '/xapi.base.php';
 
-
+if (is_file(__DIR__ .'/data-ref-handler.php')) {
+	require_once __DIR__ .'/data-ref-handler.php';
+}
 
 use \FGTA4\exceptions\WebException;
 
 
-class DataList extends WebAPI {
-	function __construct() {
-		$this->debugoutput = true;
-		$DB_CONFIG = DB_CONFIG[$GLOBALS['MAINDB']];
-		$DB_CONFIG['param'] = DB_CONFIG_PARAM[$GLOBALS['MAINDBTYPE']];
-		$this->db = new \PDO(
-					$DB_CONFIG['DSN'], 
-					$DB_CONFIG['user'], 
-					$DB_CONFIG['pass'], 
-					$DB_CONFIG['param']
-		);
-
-	}
+/**
+ * ent/affiliation/brand/apis/ref-list.php
+ *
+ * ==============
+ * Detil-DataList
+ * ==============
+ * Menampilkan data-data pada tabel ref brand (mst_brand)
+ * sesuai dengan parameter yang dikirimkan melalui variable $option->criteria
+ *
+ * Agung Nugroho <agung@fgta.net> http://www.fgta.net
+ * Tangerang, 26 Maret 2021
+ *
+ * digenerate dengan FGTA4 generator
+ * tanggal 04/01/2022
+ */
+$API = new class extends brandBase {
 
 	public function execute($options) {
 		$userdata = $this->auth->session_get_user();
 		
+		$handlerclassname = "\\FGTA4\\apis\\brand_refHandler";
+		if (class_exists($handlerclassname)) {
+			$hnd = new brand_refHandler($data, $options);
+			$hnd->caller = $this;
+			$hnd->db = $this->db;
+			$hnd->auth = $this->auth;
+			$hnd->reqinfo = $reqinfo->reqinfo;
+		} else {
+			$hnd = new \stdClass;
+		}
+
+
 		try {
 
+			// \FGTA4\utils\SqlUtility::setDefaultCriteria($options->criteria, '--fieldscriteria--', '--value--');
 			$where = \FGTA4\utils\SqlUtility::BuildCriteria(
 				$options->criteria,
 				[
@@ -53,7 +72,7 @@ class DataList extends WebAPI {
 			$limit = " LIMIT $maxrow OFFSET $offset ";
 			$stmt = $this->db->prepare("
 				select 
-				brandref_id, interface_id, brandref_code, brand_id, _createby, _createdate, _modifyby, _modifydate 
+				A.brandref_id, A.interface_id, A.brandref_code, A.brand_id, A._createby, A._createdate, A._modifyby, A._modifydate 
 				from mst_brandref A
 			" . $where->sql . $limit);
 			$stmt->execute($where->params);
@@ -87,6 +106,4 @@ class DataList extends WebAPI {
 		}
 	}
 
-}
-
-$API = new DataList();
+};

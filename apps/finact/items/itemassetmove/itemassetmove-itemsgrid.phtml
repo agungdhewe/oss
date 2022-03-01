@@ -15,27 +15,21 @@
 		</div>
 	</div>	
 	//-->
-	<div class="pnl_edititemsgrid-control" style="display: flex; justify-content: space-between;">
-		<div>
-			<a href="javascript:void(0)" class="pnl_edititemsgrid-removechecked easyui-linkbutton c8">Hapus Checked</a>
-		</div>
-		<div>
-			<a href="javascript:void(0)" class="pnl_edititemsgrid-addrow easyui-linkbutton c8">Tambah Baris</a>
-			<a href="javascript:void(0)" class="pnl_edititemsgrid-addrow-multi easyui-linkbutton c8">Tambah Baris Multi</a>
-		</div>
-		<div>
-		</div>
-	</div>
-
 
 	<div style="margin-top: 10px; margin-bottom: 15px">
 		<table id="pnl_edititemsgrid-tbl_list" paging="true" cellspacing="0" width="100%" class="deftable">
 			<thead>
+				<?php
+				$customview = __DIR__.'/itemassetmove-itemsgrid-customview.phtml'; 
+				if (is_file($customview)) {
+					include $customview;
+				} else { ?>
 				<tr>
 <th type="check">chk</th>					
 					<th mapping="itemassetmovedetil_id">itemassetmovedetil_id</th>
 					<th mapping="itemasset_name">itemasset_name</th>
-					<th mapping="itemassetmovedetil_descr">itemassetmovedetil_descr</th>
+					<th mapping="itemassetmovedetil_qty" style="text-align: right" formatter="row_format_number">itemassetmovedetil_qty</th>
+					<th mapping="send_itemassetstatus_name">send_itemassetstatus_name</th>
 
 					<th mapping=""></th>
 				</tr>
@@ -43,10 +37,12 @@
 <td class="fgtable-head" style="width: 30px; border-bottom: 1px solid #000000; text-align: center">*</td>
 					<td class="fgtable-head" style="width: 100px; border-bottom: 1px solid #000000">ID</td>
 					<td class="fgtable-head" style="width: 100px; border-bottom: 1px solid #000000">Item Asset</td>
-					<td class="fgtable-head" style="width: 100px; border-bottom: 1px solid #000000">Descr</td>
+					<td class="fgtable-head" style="width: 100px; text-align: right; border-bottom: 1px solid #000000">Qty</td>
+					<td class="fgtable-head" style="width: 100px; border-bottom: 1px solid #000000">Send Status</td>
 
 					<td class="fgtable-head" style="border-bottom: 1px solid #000000; text-align: center">&nbsp;</td>
 				</tr>
+				<?php } ?>
 			</thead>
 		</table>
 	</div>
@@ -58,7 +54,6 @@
 
 		<div>
 			<a id="pnl_edititemsgrid-addrow" href="javascript:void(0)" class="easyui-linkbutton c8">Tambah Baris</a>
-			<a href="javascript:void(0)" class="pnl_edititemsgrid-addrow-multi easyui-linkbutton c8">Tambah Baris Multi</a>
 		</div>
 
 		<div>

@@ -2,6 +2,7 @@ var this_page_id;
 var this_page_options;
 
 import {fgta4slideselect} from  '../../../../../index.php/asset/fgta/framework/fgta4libs/fgta4slideselect.mjs'
+import * as hnd from  './billout-edit-hnd.mjs'
 
 
 const btn_edit = $('#pnl_edit-btn_edit')
@@ -12,6 +13,8 @@ const btn_print = $('#pnl_edit-btn_print');
 const btn_commit = $('#pnl_edit-btn_commit')
 const btn_uncommit = $('#pnl_edit-btn_uncommit')
 			
+
+const undefined = $('#pnl_edit-undefined')
 
 
 
@@ -112,21 +115,21 @@ export async function init(opt) {
 		$('#pnl_edit_record_custom').show();		
 					
 		}		
-	})
+	});
+	form.getHeaderData = () => {
+		return getHeaderData();
+	}
 
 
-
-	btn_print.linkbutton({
-		onClick: () => {
-			btn_print_click();
-		}
-	});	
-	
+	btn_print.linkbutton({ onClick: () => { btn_print_click(); } });	
 	
 
 	btn_commit.linkbutton({ onClick: () => { btn_action_click({ action: 'commit' }); } });
 	btn_uncommit.linkbutton({ onClick: () => { btn_action_click({ action: 'uncommit' }); } });			
 			
+
+	undefined.linkbutton({ onClick: () => { btn_action_click({ action: 'post' }); } });
+
 
 
 
@@ -144,13 +147,22 @@ export async function init(opt) {
 			{mapping: 'billtype_name', text: 'billtype_name'},
 		],
 		OnDataLoading: (criteria) => {
-			criteria.billtype_direction = 'OUT'			
+			criteria.billtype_direction = 'OUT'
+			if (typeof hnd.cbo_billtype_id_dataloading === 'function') {
+				hnd.cbo_billtype_id_dataloading(criteria);
+			}	
 		},
 		OnDataLoaded : (result, options) => {
 				
+			if (typeof hnd.cbo_billtype_id_dataloaded === 'function') {
+				hnd.cbo_billtype_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_billtype_id_selected === 'function') {
+					hnd.cbo_billtype_id_selected(value, display, record, args);
+				}
 			}
 		}
 	})				
@@ -167,13 +179,22 @@ export async function init(opt) {
 			{mapping: 'dept_name', text: 'dept_name'},
 		],
 		OnDataLoading: (criteria) => {
-						
+			
+			if (typeof hnd.cbo_dept_id_dataloading === 'function') {
+				hnd.cbo_dept_id_dataloading(criteria);
+			}	
 		},
 		OnDataLoaded : (result, options) => {
 				
+			if (typeof hnd.cbo_dept_id_dataloaded === 'function') {
+				hnd.cbo_dept_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_dept_id_selected === 'function') {
+					hnd.cbo_dept_id_selected(value, display, record, args);
+				}
 			}
 		}
 	})				
@@ -190,10 +211,16 @@ export async function init(opt) {
 			{mapping: 'orderin_descr', text: 'orderin_descr'},
 		],
 		OnDataLoading: (criteria) => {
-			criteria.dept_id = form.getValue(obj.cbo_dept_id);			
+			criteria.dept_id = form.getValue(obj.cbo_dept_id);
+			if (typeof hnd.cbo_orderin_id_dataloading === 'function') {
+				hnd.cbo_orderin_id_dataloading(criteria);
+			}	
 		},
 		OnDataLoaded : (result, options) => {
 				
+			if (typeof hnd.cbo_orderin_id_dataloaded === 'function') {
+				hnd.cbo_orderin_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
 			if (value!=args.PreviousValue ) {
@@ -224,7 +251,10 @@ export async function init(opt) {
 
 
 
-										
+						
+				if (typeof hnd.cbo_orderin_id_selected === 'function') {
+					hnd.cbo_orderin_id_selected(value, display, record, args);
+				}
 			}
 		}
 	})				
@@ -241,17 +271,26 @@ export async function init(opt) {
 			{mapping: 'orderinterm_descr', text: 'orderinterm_descr'},
 		],
 		OnDataLoading: (criteria) => {
-			criteria.id = form.getValue(obj.cbo_orderin_id);			
+			criteria.id = form.getValue(obj.cbo_orderin_id);
+			if (typeof hnd.cbo_orderinterm_id_dataloading === 'function') {
+				hnd.cbo_orderinterm_id_dataloading(criteria);
+			}	
 		},
 		OnDataLoaded : (result, options) => {
 				
+			if (typeof hnd.cbo_orderinterm_id_dataloaded === 'function') {
+				hnd.cbo_orderinterm_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
 			if (value!=args.PreviousValue ) {
 				console.log(record);
 				form.setValue(obj.chk_billout_isdp, record.orderinterm_isdp=='1' ? true : false);
 
-										
+						
+				if (typeof hnd.cbo_orderinterm_id_selected === 'function') {
+					hnd.cbo_orderinterm_id_selected(value, display, record, args);
+				}
 			}
 		}
 	})				
@@ -268,13 +307,22 @@ export async function init(opt) {
 			{mapping: 'partner_name', text: 'partner_name'},
 		],
 		OnDataLoading: (criteria) => {
-						
+			
+			if (typeof hnd.cbo_partner_id_dataloading === 'function') {
+				hnd.cbo_partner_id_dataloading(criteria);
+			}	
 		},
 		OnDataLoaded : (result, options) => {
 				
+			if (typeof hnd.cbo_partner_id_dataloaded === 'function') {
+				hnd.cbo_partner_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_partner_id_selected === 'function') {
+					hnd.cbo_partner_id_selected(value, display, record, args);
+				}
 			}
 		}
 	})				
@@ -291,13 +339,22 @@ export async function init(opt) {
 			{mapping: 'taxtype_name', text: 'taxtype_name'},
 		],
 		OnDataLoading: (criteria) => {
-						
+			
+			if (typeof hnd.cbo_ppn_taxtype_id_dataloading === 'function') {
+				hnd.cbo_ppn_taxtype_id_dataloading(criteria);
+			}	
 		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({taxtype_id:'--NULL--', taxtype_name:'NONE'});	
+			if (typeof hnd.cbo_ppn_taxtype_id_dataloaded === 'function') {
+				hnd.cbo_ppn_taxtype_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_ppn_taxtype_id_selected === 'function') {
+					hnd.cbo_ppn_taxtype_id_selected(value, display, record, args);
+				}
 			}
 		}
 	})				
@@ -314,13 +371,22 @@ export async function init(opt) {
 			{mapping: 'taxtype_name', text: 'taxtype_name'},
 		],
 		OnDataLoading: (criteria) => {
-						
+			
+			if (typeof hnd.cbo_pph_taxtype_id_dataloading === 'function') {
+				hnd.cbo_pph_taxtype_id_dataloading(criteria);
+			}	
 		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({taxtype_id:'--NULL--', taxtype_name:'NONE'});	
+			if (typeof hnd.cbo_pph_taxtype_id_dataloaded === 'function') {
+				hnd.cbo_pph_taxtype_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_pph_taxtype_id_selected === 'function') {
+					hnd.cbo_pph_taxtype_id_selected(value, display, record, args);
+				}
 			}
 		}
 	})				
@@ -337,13 +403,22 @@ export async function init(opt) {
 			{mapping: 'coa_name', text: 'coa_name'},
 		],
 		OnDataLoading: (criteria) => {
-						
+			
+			if (typeof hnd.cbo_arunbill_coa_id_dataloading === 'function') {
+				hnd.cbo_arunbill_coa_id_dataloading(criteria);
+			}	
 		},
 		OnDataLoaded : (result, options) => {
 				
+			if (typeof hnd.cbo_arunbill_coa_id_dataloaded === 'function') {
+				hnd.cbo_arunbill_coa_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_arunbill_coa_id_selected === 'function') {
+					hnd.cbo_arunbill_coa_id_selected(value, display, record, args);
+				}
 			}
 		}
 	})				
@@ -360,13 +435,22 @@ export async function init(opt) {
 			{mapping: 'coa_name', text: 'coa_name'},
 		],
 		OnDataLoading: (criteria) => {
-						
+			
+			if (typeof hnd.cbo_ar_coa_id_dataloading === 'function') {
+				hnd.cbo_ar_coa_id_dataloading(criteria);
+			}	
 		},
 		OnDataLoaded : (result, options) => {
 				
+			if (typeof hnd.cbo_ar_coa_id_dataloaded === 'function') {
+				hnd.cbo_ar_coa_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_ar_coa_id_selected === 'function') {
+					hnd.cbo_ar_coa_id_selected(value, display, record, args);
+				}
 			}
 		}
 	})				
@@ -383,13 +467,22 @@ export async function init(opt) {
 			{mapping: 'coa_name', text: 'coa_name'},
 		],
 		OnDataLoading: (criteria) => {
-						
+			
+			if (typeof hnd.cbo_dp_coa_id_dataloading === 'function') {
+				hnd.cbo_dp_coa_id_dataloading(criteria);
+			}	
 		},
 		OnDataLoaded : (result, options) => {
 				
+			if (typeof hnd.cbo_dp_coa_id_dataloaded === 'function') {
+				hnd.cbo_dp_coa_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_dp_coa_id_selected === 'function') {
+					hnd.cbo_dp_coa_id_selected(value, display, record, args);
+				}
 			}
 		}
 	})				
@@ -406,13 +499,22 @@ export async function init(opt) {
 			{mapping: 'coa_name', text: 'coa_name'},
 		],
 		OnDataLoading: (criteria) => {
-						
+			
+			if (typeof hnd.cbo_sales_coa_id_dataloading === 'function') {
+				hnd.cbo_sales_coa_id_dataloading(criteria);
+			}	
 		},
 		OnDataLoaded : (result, options) => {
 				
+			if (typeof hnd.cbo_sales_coa_id_dataloaded === 'function') {
+				hnd.cbo_sales_coa_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_sales_coa_id_selected === 'function') {
+					hnd.cbo_sales_coa_id_selected(value, display, record, args);
+				}
 			}
 		}
 	})				
@@ -429,13 +531,22 @@ export async function init(opt) {
 			{mapping: 'coa_name', text: 'coa_name'},
 		],
 		OnDataLoading: (criteria) => {
-						
+			
+			if (typeof hnd.cbo_salesdisc_coa_id_dataloading === 'function') {
+				hnd.cbo_salesdisc_coa_id_dataloading(criteria);
+			}	
 		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({coa_id:'--NULL--', coa_name:'NONE'});	
+			if (typeof hnd.cbo_salesdisc_coa_id_dataloaded === 'function') {
+				hnd.cbo_salesdisc_coa_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_salesdisc_coa_id_selected === 'function') {
+					hnd.cbo_salesdisc_coa_id_selected(value, display, record, args);
+				}
 			}
 		}
 	})				
@@ -452,13 +563,22 @@ export async function init(opt) {
 			{mapping: 'coa_name', text: 'coa_name'},
 		],
 		OnDataLoading: (criteria) => {
-						
+			
+			if (typeof hnd.cbo_ppn_coa_id_dataloading === 'function') {
+				hnd.cbo_ppn_coa_id_dataloading(criteria);
+			}	
 		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({coa_id:'--NULL--', coa_name:'NONE'});	
+			if (typeof hnd.cbo_ppn_coa_id_dataloaded === 'function') {
+				hnd.cbo_ppn_coa_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_ppn_coa_id_selected === 'function') {
+					hnd.cbo_ppn_coa_id_selected(value, display, record, args);
+				}
 			}
 		}
 	})				
@@ -475,13 +595,22 @@ export async function init(opt) {
 			{mapping: 'coa_name', text: 'coa_name'},
 		],
 		OnDataLoading: (criteria) => {
-						
+			
+			if (typeof hnd.cbo_ppnsubsidi_coa_id_dataloading === 'function') {
+				hnd.cbo_ppnsubsidi_coa_id_dataloading(criteria);
+			}	
 		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({coa_id:'--NULL--', coa_name:'NONE'});	
+			if (typeof hnd.cbo_ppnsubsidi_coa_id_dataloaded === 'function') {
+				hnd.cbo_ppnsubsidi_coa_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_ppnsubsidi_coa_id_selected === 'function') {
+					hnd.cbo_ppnsubsidi_coa_id_selected(value, display, record, args);
+				}
 			}
 		}
 	})				
@@ -498,13 +627,22 @@ export async function init(opt) {
 			{mapping: 'coa_name', text: 'coa_name'},
 		],
 		OnDataLoading: (criteria) => {
-						
+			
+			if (typeof hnd.cbo_pph_coa_id_dataloading === 'function') {
+				hnd.cbo_pph_coa_id_dataloading(criteria);
+			}	
 		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({coa_id:'--NULL--', coa_name:'NONE'});	
+			if (typeof hnd.cbo_pph_coa_id_dataloaded === 'function') {
+				hnd.cbo_pph_coa_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_pph_coa_id_selected === 'function') {
+					hnd.cbo_pph_coa_id_selected(value, display, record, args);
+				}
 			}
 		}
 	})				
@@ -521,13 +659,22 @@ export async function init(opt) {
 			{mapping: 'unit_name', text: 'unit_name'},
 		],
 		OnDataLoading: (criteria) => {
-						
+			
+			if (typeof hnd.cbo_unit_id_dataloading === 'function') {
+				hnd.cbo_unit_id_dataloading(criteria);
+			}	
 		},
 		OnDataLoaded : (result, options) => {
 			result.records.unshift({unit_id:'--NULL--', unit_name:'NONE'});	
+			if (typeof hnd.cbo_unit_id_dataloaded === 'function') {
+				hnd.cbo_unit_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_unit_id_selected === 'function') {
+					hnd.cbo_unit_id_selected(value, display, record, args);
+				}
 			}
 		}
 	})				
@@ -544,13 +691,22 @@ export async function init(opt) {
 			{mapping: 'dept_name', text: 'dept_name'},
 		],
 		OnDataLoading: (criteria) => {
-						
+			
+			if (typeof hnd.cbo_owner_dept_id_dataloading === 'function') {
+				hnd.cbo_owner_dept_id_dataloading(criteria);
+			}	
 		},
 		OnDataLoaded : (result, options) => {
 				
+			if (typeof hnd.cbo_owner_dept_id_dataloaded === 'function') {
+				hnd.cbo_owner_dept_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_owner_dept_id_selected === 'function') {
+					hnd.cbo_owner_dept_id_selected(value, display, record, args);
+				}
 			}
 		}
 	})				
@@ -567,13 +723,22 @@ export async function init(opt) {
 			{mapping: 'trxmodel_name', text: 'trxmodel_name'},
 		],
 		OnDataLoading: (criteria) => {
-						
+			
+			if (typeof hnd.cbo_trxmodel_id_dataloading === 'function') {
+				hnd.cbo_trxmodel_id_dataloading(criteria);
+			}	
 		},
 		OnDataLoaded : (result, options) => {
 				
+			if (typeof hnd.cbo_trxmodel_id_dataloaded === 'function') {
+				hnd.cbo_trxmodel_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_trxmodel_id_selected === 'function') {
+					hnd.cbo_trxmodel_id_selected(value, display, record, args);
+				}
 			}
 		}
 	})				
@@ -590,17 +755,29 @@ export async function init(opt) {
 			{mapping: 'doc_name', text: 'doc_name'},
 		],
 		OnDataLoading: (criteria) => {
-						
+			
+			if (typeof hnd.cbo_doc_id_dataloading === 'function') {
+				hnd.cbo_doc_id_dataloading(criteria);
+			}	
 		},
 		OnDataLoaded : (result, options) => {
 				
+			if (typeof hnd.cbo_doc_id_dataloaded === 'function') {
+				hnd.cbo_doc_id_dataloaded(result, options);
+			}
 		},
 		OnSelected: (value, display, record, args) => {
-			if (value!=args.PreviousValue ) {				
+			if (value!=args.PreviousValue ) {
+				if (typeof hnd.cbo_doc_id_selected === 'function') {
+					hnd.cbo_doc_id_selected(value, display, record, args);
+				}
 			}
 		}
 	})				
 				
+
+
+
 
 	document.addEventListener('keydown', (ev)=>{
 		if ($ui.getPages().getCurrentPage()==this_page_id) {
@@ -648,6 +825,13 @@ export async function init(opt) {
 	})
 
 	//button state
+	if (typeof hnd.init==='function') {
+		hnd.init({
+			form: form,
+			obj: obj,
+			opt: opt,
+		})
+	}
 
 }
 
@@ -731,7 +915,9 @@ export function open(data, rowid, viewmode=true, fn_callback) {
 		   apabila ada rutin mengubah form dan tidak mau dijalankan pada saat opening,
 		   cek dengan form.isEventSuspended()
 		*/   
-
+		if (typeof hnd.form_dataopened == 'function') {
+			hnd.form_dataopened(result, options);
+		}
 
 
 		/* commit form */
@@ -832,21 +1018,20 @@ export function createnew() {
 		data.doc_id = 'BILLOUT'
 		data.doc_name = 'BILLOUT'
 
+		if (typeof hnd.form_newdata == 'function') {
+			hnd.form_newdata(data, options);
+		}
 
 		rec_commitby.html('');
 		rec_commitdate.html('');
 		
 
 
-
-
-	var button_commit_on = true;
-	var button_uncommit_on = false;
-	btn_commit.linkbutton(button_commit_on ? 'enable' : 'disable');
-	btn_uncommit.linkbutton(button_uncommit_on ? 'enable' : 'disable');
+		var button_commit_on = true;
+		var button_uncommit_on = false;
+		btn_commit.linkbutton(button_commit_on ? 'enable' : 'disable');
+		btn_uncommit.linkbutton(button_uncommit_on ? 'enable' : 'disable');
 		
-
-
 
 		options.OnCanceled = () => {
 			$ui.getPages().show('pnl_list')
@@ -859,6 +1044,14 @@ export function createnew() {
 }
 
 
+export function getHeaderData() {
+	var header_data = form.getData();
+	if (typeof hnd.form_getHeaderData == 'function') {
+		hnd.form_getHeaderData(header_data);
+	}
+	return header_data;
+}
+
 export function detil_open(pnlname) {
 	if (form.isDataChanged()) {
 		$ui.ShowMessage('Simpan dulu perubahan datanya.')
@@ -866,9 +1059,23 @@ export function detil_open(pnlname) {
 	}
 
 	//$ui.getPages().show(pnlname)
-	$ui.getPages().show(pnlname, () => {
-		$ui.getPages().ITEMS[pnlname].handler.OpenDetil(form.getData())
-	})	
+	let header_data = getHeaderData();
+	if (typeof hnd.form_detil_opening == 'function') {
+		hnd.form_detil_opening(pnlname, (cancel)=>{
+			if (cancel===true) {
+				return;
+			}
+			$ui.getPages().show(pnlname, () => {
+				$ui.getPages().ITEMS[pnlname].handler.OpenDetil(header_data)
+			})
+		});
+	} else {
+		$ui.getPages().show(pnlname, () => {
+			$ui.getPages().ITEMS[pnlname].handler.OpenDetil(header_data)
+		})
+	}
+
+	
 }
 
 
@@ -968,6 +1175,10 @@ async function form_datasaving(data, options) {
 		}
 	}
 
+	if (typeof hnd.form_datasaving == 'function') {
+		hnd.form_datasaving(data, options);
+	}
+
 }
 
 async function form_datasaveerror(err, options) {
@@ -1023,17 +1234,27 @@ async function form_datasaved(result, options) {
 		data: data,
 		rowid: form.rowid
 	}
+
+	if (typeof hnd.form_datasaved == 'function') {
+		hnd.form_datasaved(result, rowdata, options);
+	}
 }
 
 
 
 async function form_deleting(data) {
+	if (typeof hnd.form_deleting == 'function') {
+		hnd.form_deleting(data);
+	}
 }
 
 async function form_deleted(result, options) {
 	$ui.getPages().show('pnl_list')
 	$ui.getPages().ITEMS['pnl_list'].handler.removerow(form.rowid)
 
+	if (typeof hnd.form_deleted == 'function') {
+		hnd.form_deleted(result, options);
+	}
 }
 
 
@@ -1143,7 +1364,22 @@ async function btn_action_click(args) {
 			}
 			break;
 
+		
+
+		case 'post' :
+			args.act_url = `${global.modulefullname}/xtion-post`;
+			args.act_msg_quest = `Apakah anda yakin akan <b>${args.action}</b> ${docname} no ${args.id} ?`;
+			args.act_msg_result = `${docname} no ${args.id} telah di ${args.action}.`;
+			args.param = {}
+			args.act_do = (result) => {
+				if (typeof hnd.xtion_post_success === 'function') {
+					hnd.xtion_post_success(result);
+				}
+			}
+			break;		
 			
+		
+
 	}
 
 
@@ -1154,10 +1390,13 @@ async function btn_action_click(args) {
 			if (err) {
 				$ui.ShowMessage('[WARNING]' + err.message);	
 			} else {
-				updaterecordstatus(result.dataresponse);
+				if (result.dataresponse!=undefined) { updaterecordstatus(result.dataresponse) };
 				args.act_do(result);
-				updatebuttonstate(result.dataresponse);
-				updategridstate(result.dataresponse);
+
+				if (result.dataresponse!=undefined) {
+					updatebuttonstate(result.dataresponse);
+					updategridstate(result.dataresponse);
+				}
 				if (args.act_msg_result!=='') $ui.ShowMessage('[INFO]' + args.act_msg_result);	
 			}
 		});

@@ -93,7 +93,7 @@ $API = new class extends requestBase {
 
 			try {
 
-				$ret = $this->approve($currentdata, $param);
+				$ret = $this->approve($currentdata, $param, 'request_dept_id');
 
 				$record = []; $row = $this->get_header_row($id);
 				foreach ($row as $key => $value) { $record[$key] = $value; }
@@ -153,18 +153,21 @@ $API = new class extends requestBase {
 
 
 
-	public function approve($currentdata, $param) {
+	public function approve($currentdata, $param, $dept_id_field) {
 		try {
-			StandartApproval::CheckAuthoriryToApprove($this->db, $param);	
-			StandartApproval::CheckPendingApproval($this->db, $param);
+			StandartApproval::CheckAuthoriryToApprove($this->db, $param, $dept_id_field);	
+			StandartApproval::CheckPendingApproval($this->db, $param, $dept_id_field);
 
 			$ret = (object)['isfinalapproval'=>false];
 			if ($param->approve) {
 				// echo "approving...\r\n";
-				$ret = StandartApproval::Approve($this->db, $param);
+				$ret = StandartApproval::Approve($this->db, $param, $dept_id_field);
+				if ($ret->isfinalapproval) {
+					$this->finalize($currentdata, $param, $dept_id_field);
+				}
 			} else {
 				// echo "declining...\r\n";
-				StandartApproval::Decline($this->db, $param);
+				StandartApproval::Decline($this->db, $param, $dept_id_field);
 			}
 
 			return $ret;
@@ -173,7 +176,9 @@ $API = new class extends requestBase {
 		}		
 	}
 
+	public function finalize($currentdata, $param, $dept_id_field) {
 
+	}
 
 
 };

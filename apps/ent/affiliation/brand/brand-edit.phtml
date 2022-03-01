@@ -7,15 +7,15 @@
 
 	<form id="pnl_edit-form">
 
-		<div class="form_row" >
+		<div class="form_row pnl_edit_row txt_brand_id" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">ID</div>
 			<div class="form_input_col" style="border: 0px solid black">
-				<input id="pnl_edit-txt_brand_id" class="easyui-textbox" mapping="brand_id" maxlength="14" style="width: 400px" data-options="multiline: false  ">
+				<input id="pnl_edit-txt_brand_id" class="easyui-textbox" mapping="brand_id"  maxlength="14" style="width: 400px" data-options="multiline: false  ">
 				<div style="margin-top: 3px; margin-bottom: 5px; font-size: 0.75em; font-style: italic; color:#54381d;"></div>
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_edit_row txt_brand_name" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Brand</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_edit-txt_brand_name" class="easyui-textbox" mapping="brand_name" uppercase="true" maxlength="60" style="width: 400px" data-options="multiline: false  ">
@@ -23,7 +23,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_edit_row txt_brand_descr" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Descr</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_edit-txt_brand_descr" class="easyui-textbox" mapping="brand_descr"  maxlength="90" style="width: 400px" data-options="multiline: false  ">
@@ -31,14 +31,14 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_edit_row chk_brand_isdisabled" >
 			<div class="form_label_col"></div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_edit-chk_brand_isdisabled" class="easyui-checkbox c1" mapping="brand_isdisabled" data-options="label: 'Disabled', labelPosition: 'after', checked: false ">
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_edit_row txt_brand_grouping01" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Grouping 01</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_edit-txt_brand_grouping01" class="easyui-textbox" mapping="brand_grouping01" uppercase="true" maxlength="60" style="width: 400px" data-options="multiline: false  ">
@@ -46,7 +46,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_edit_row txt_brand_grouping02" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Grouping 02</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_edit-txt_brand_grouping02" class="easyui-textbox" mapping="brand_grouping02" uppercase="true" maxlength="60" style="width: 400px" data-options="multiline: false  ">
@@ -54,7 +54,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_edit_row cbo_brandtype_id" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Type</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_edit-cbo_brandtype_id" class="easyui-combo" style="width: 400px" mapping="brandtype_id" display="brandtype_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Type harus diisi'"   validType="requiredcombo['pnl_edit-cbo_brandtype_id']" >
@@ -62,7 +62,7 @@
 			</div>
 		</div>
 
-		<div class="form_row" >
+		<div class="form_row pnl_edit_row cbo_unit_id" >
 			<div class="form_label_col"  style="border: 0px solid black; vertical-align: top; margin-top: 7px;">Unit</div>
 			<div class="form_input_col" style="border: 0px solid black">
 				<input id="pnl_edit-cbo_unit_id" class="easyui-combo" style="width: 400px" mapping="unit_id" display="unit_name" data-options="editable:false, valueField:'id', textField:'text' , required: true, invalidMessage: 'Unit harus diisi'"   validType="requiredcombo['pnl_edit-cbo_unit_id']" >
@@ -84,14 +84,14 @@
 
 		<div id="pnl_edit-detil" class="form_row" style="margin-top: 30px">
 			<div class="form_label_col"></div>
-			<div class="form_input_col" style="border: 0px solid black">
+			<div class="form_input_col detilbox" style="border: 0px solid black">
 				<div class="fgtable-head" style="height: 25px; padding: 5px 0px 0px 5px">Detil Informations</div>
-				<div class="fgtable-head-drow" style="height: 25px; padding: 5px 5px 0px 5px" onclick="$ui.getPages().ITEMS['pnl_edit'].handler.detil_open('pnl_editpartnergrid')">
+				<div class="fgtable-head-drow" style="height: 25px; padding: 5px 5px 0px 5px; " onclick="$ui.getPages().ITEMS['pnl_edit'].handler.detil_open('pnl_editpartnergrid')">
 					<div id="pnl_edit-txt_partner_title" class="detilgrid-text">Partners</div>
 					<div id="pnl_edit-txt_partner_value" class="detilgrid-value">&nbsp;</div>
 				</div>
-				<div class="fgtable-head-drow" style="height: 25px; padding: 5px 5px 0px 5px" onclick="$ui.getPages().ITEMS['pnl_edit'].handler.detil_open('pnl_editrefgrid')">
-					<div id="pnl_edit-txt_ref_title" class="detilgrid-text">Refernsi</div>
+				<div class="fgtable-head-drow" style="height: 25px; padding: 5px 5px 0px 5px; " onclick="$ui.getPages().ITEMS['pnl_edit'].handler.detil_open('pnl_editrefgrid')">
+					<div id="pnl_edit-txt_ref_title" class="detilgrid-text">Referensi</div>
 					<div id="pnl_edit-txt_ref_value" class="detilgrid-value">&nbsp;</div>
 				</div>
 
@@ -101,13 +101,16 @@
 		
 
 
-	<div style="margin-top: 30px; margin-left:-5px; margin-right: -5px; background-color: #cccccc; height: 40px; display: flex; justify-content: space-between; padding: 5px 2px 2px 2px ">
+	<div style="margin-top: 30px; margin-left:-5px; margin-right: -5px; background-color: #cccccc; display: flex; justify-content: space-between; padding: 10px 2px 2px 2px ">
 		<div>
 			<!-- letakkan tombol yang lin disini -->
-		
+			
+			
+			
+			
 		</div>
 		<div>
-			<a id="pnl_edit-btn_delete" class="easyui-linkbutton c5" style="width">Hapus</a>
+			<a id="pnl_edit-btn_delete" class="easyui-linkbutton c5" style="margin-bottom: 10px; margin-right: 10px">Hapus</a>
 		</div>
 	</div>
 
